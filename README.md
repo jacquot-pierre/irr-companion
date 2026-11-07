@@ -7,6 +7,13 @@ One portable `.exe`, nothing to install, nothing written to the game's files.
 
 ![The AI preset editor](docs/editor.png)
 
+| Tab | What it does |
+|---|---|
+| **EDIT** | Create AI presets from the game difficulties, with the same settings as the in-game menu, and get the share code to paste in the game. |
+| **COMPARE** | Compare two presets setting by setting. |
+| **COMMANDS** | Build any of the game's 151 console commands with a few clicks, copy it, keep your favorites. |
+| **HIDEOUT** | See the cost of every hideout upgrade with the game icons, track your progress and get a shopping list. |
+
 ## Download
 
 1. Download **`IRRCompanion.exe`** from the [latest release](../../releases/latest).
@@ -95,8 +102,32 @@ Stash, Repair Station, Gunsmith, Terminal, Intel Center, Shooting Range:
 
 **Plan your hideout**
 1. Open the **HIDEOUT** tab and set your player level and faction loyalty on the left.
-2. Select each unit and click its current level (**MY LEVEL**).
+2. Select each unit and click its current level (**MY LEVEL**). Everything is saved at once.
 3. Open **SHOPPING LIST** to see everything you still need to collect.
+4. Units marked *Can upgrade* in green meet every requirement; open a unit marked *locked* to see what is
+   missing (click a required unit to jump to it).
+
+### Your data
+
+Everything the app saves is in `%APPDATA%\IRR Companion` (the **Open data folder** link at the bottom
+right of the window opens it):
+
+| File | Content |
+|---|---|
+| `presets.json` | your AI presets |
+| `favorites.json` | your favorite console commands |
+| `hideout.json` | your hideout progress: level of each unit, player level, faction loyalty |
+
+Each file keeps a `.bak` copy of its previous version. Copy this folder to keep a backup or to move your data
+to another PC. Users of the former *IRR Preset Tool*:
+your presets and favorites are copied from `%APPDATA%\IRR Preset Tool` on the first start.
+
+### After a game update
+
+The app contains data read from a given version of the game (shown in the header: *game data YYYY-MM-DD*).
+After a game patch, values, commands or hideout costs may have changed until a new release of the app
+updates them. If something differs from the game, please
+[open an issue](../../issues).
 
 ### Good to know
 
@@ -120,6 +151,17 @@ dotnet build src -c Release
 
 The exe is `src/bin/Release/net462/IRRCompanion.exe`. A Debug build adds test helpers:
 `--screenshot <prefix>` renders every view to PNG files and `--roundtrip <in> <out>` re-exports a share code.
+
+### Project layout
+
+| Path | Content |
+|---|---|
+| `src/` | the WinForms app (C# 7.3, .NET Framework 4.6.2): `MainForm.cs` (EDIT / COMPARE), `CommandsPanel.cs`, `HideoutPanel.cs`, data models (`Preset.cs`, `Commands.cs`, `Hideout.cs`), `ShareCode.cs`, `Theme.cs` / `Controls.cs` (dark UI) |
+| `src/Resources/` | data generated from the game: `defaults.json`, `commands.json`, `hideout.json`, `icons/` |
+| `tools/` | Python scripts that read the game files and check the app (see below), test share codes in `tools/testdata/` |
+| `.claude/skills/update-irr-tool/` | step-by-step procedure to update the app after a game patch |
+| `.github/workflows/build.yml` | builds the exe on every push, publishes a release for `v*` tags |
+| `docs/` | README screenshots and release notes (`docs/release-notes/<tag>.md`) |
 
 ### Updating after a game patch
 
@@ -163,7 +205,15 @@ A custom simulation adds `{ "c": "Simulation", "n": "my_preset", "hv": 1, "doc":
 
 ### Releasing
 
-Push a tag `vX.Y.Z`: the GitHub Actions workflow builds the exe and publishes the release with it.
+1. Set `<Version>` in `src/IRRCompanion.csproj` and write `docs/release-notes/vX.Y.Z.md` (optional, added at
+   the top of the release notes).
+2. Push a tag `vX.Y.Z`: the GitHub Actions workflow builds the exe and publishes the release with it and its
+   SHA-256 hash.
+
+### Contributing
+
+Issues and pull requests are welcome: wrong values after a game update, a console command that does not
+work as described, missing icons, translations… For a game update, the skill above lists every check.
 
 ## Status
 
