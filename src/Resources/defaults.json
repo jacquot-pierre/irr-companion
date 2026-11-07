@@ -1,0 +1,1126 @@
+{
+ "gameBuild": "2026-11-06",
+ "aiHardVersion": 2,
+ "aiSoftVersion": 3,
+ "simHardVersion": 1,
+ "simSoftVersion": 1,
+ "aiOrder": [
+  "Easy",
+  "Normal",
+  "Hard",
+  "Extreme"
+ ],
+ "aiLabels": {
+  "Easy": "Recruit",
+  "Normal": "Regular",
+  "Hard": "Veteran",
+  "Extreme": "Elite"
+ },
+ "simOrder": [
+  "Potato",
+  "Low",
+  "Normal",
+  "High"
+ ],
+ "ai": {
+  "Easy": {
+   "aIMultiplier": 0.9,
+   "equipmentLevel": 0.75,
+   "aggressiveness": 0.25,
+   "aIMemoryLength": 120.0,
+   "behaviorConfig": {
+    "behaviorStateEffects": {
+     "(TagName=\"AI.Stance.Patrol\")": {
+      "duration": -1,
+      "sense": {
+       "visionSpeedModifier": 0.4,
+       "visionDistanceModifier": 0.5,
+       "hearingDistanceModifier": 0.8,
+       "perceptionDelayModifier": 1.33
+      },
+      "combat": {
+       "aimSpeedModifier": 1,
+       "aimAccuracyModifier": 1
+      },
+      "tempo": {
+       "postCoverActionDelayModifier": 1
+      },
+      "timeCreated": -1
+     },
+     "(TagName=\"AI.Stance.Investigate\")": {
+      "duration": -1,
+      "sense": {
+       "visionSpeedModifier": 0.8,
+       "visionDistanceModifier": 0.85,
+       "hearingDistanceModifier": 0.9,
+       "perceptionDelayModifier": 1.1
+      },
+      "combat": {
+       "aimSpeedModifier": 1,
+       "aimAccuracyModifier": 1
+      },
+      "tempo": {
+       "postCoverActionDelayModifier": 1
+      },
+      "timeCreated": -1
+     },
+     "(TagName=\"AI.Stance.Combat\")": {
+      "duration": -1,
+      "sense": {
+       "visionSpeedModifier": 1,
+       "visionDistanceModifier": 1,
+       "hearingDistanceModifier": 1,
+       "perceptionDelayModifier": 1
+      },
+      "combat": {
+       "aimSpeedModifier": 1,
+       "aimAccuracyModifier": 1
+      },
+      "tempo": {
+       "postCoverActionDelayModifier": 1
+      },
+      "timeCreated": -1
+     }
+    }
+   },
+   "maxSearchDistance": 80,
+   "maxSearchersPerTarget": 2,
+   "maxSearchersAtOnce": 6,
+   "maxSearchAreaSize": 0,
+   "firedUponSearchTime": 10,
+   "searchCasualtyHoldTime": 90,
+   "perceptionBaseTimeToSee": 0.75,
+   "perceptionGainDecayCoef": 0.5,
+   "perceptionMinVisibleBoneScore": 0.25,
+   "perceptionRange": 12000,
+   "perceptionDistanceFalloff": 1.4,
+   "perceptionAngle": 20,
+   "perceptionMinScore": 0.05,
+   "peripheralVisionDistance": 1500.0,
+   "peripheralVisionAngle": 85,
+   "perceptionLookTowardsCoef": 0.66,
+   "coordination_PerceptionShareRadius": 3000,
+   "coordination_PerceptionShareMaxDistance": 5000.0,
+   "repeatSenseDistanceScaleEnd": 500,
+   "repeatSenseMaxCoef": 1.5,
+   "maxFootstepSoundRange": 0,
+   "perceptionBaseDelay": 0.3,
+   "perceptionInitialContactAdditionalDelay": 0.15,
+   "perceptionUnderFireDelay": 0.05,
+   "underFireGlanceDuration": 2,
+   "bFlashlightDetectionToggle": false,
+   "bLaserDetectionToggle": false,
+   "lightReportCooldown": 1.5,
+   "laserReportCooldown": 1,
+   "laserDotSightRange": 3000.0,
+   "laserDotSightHalfAngle": 60.0,
+   "lasedBacktrackDistance": 1500.0,
+   "designationCompromiseRadius": 4000.0,
+   "onTargetAimThreshold": 1.5,
+   "deliberateMissTime": 4,
+   "deliberateMissChanceTime": 6,
+   "deliberateMissChance": 0.6,
+   "deliberateMissPersistentChance": 0.15,
+   "bDisableDeliberateMissTimerVsAI": false,
+   "bCanAimForHead": false,
+   "bCanThrowGrenades": false,
+   "grenadeInaccuracy": 400,
+   "grenadeMinThrowDistance": 600.0,
+   "grenadeMaxThrowDistance": 3500.0,
+   "bGrenadeRequireClearArc": true,
+   "grenadeMaxLandingError": 300.0,
+   "grenadeMinAimTime": 0.4,
+   "grenadeMaxReleaseYawError": 20.0,
+   "grenadeMaxTurnTime": 1.2,
+   "grenadeReleaseCheckInterval": 0.2,
+   "damageMap": {
+    "boss": 1.25,
+    "player": 1,
+    "aI": 0.3
+   },
+   "aimInitialDelayMultiplier": 2,
+   "aimRecoveryDelayMultiplier": 2,
+   "triggerSignalDelay": 0.4,
+   "watchWarmthCap": 0.5,
+   "bAISuppressTargets": true,
+   "suppress_Point_Max_Distance": 3000.0,
+   "suppress_Point_Always_Distance": 100.0,
+   "suppress_Point_Max_PathLength": 3000.0,
+   "suppress_Point_Always_PathLength": 100.0,
+   "fullAutoDistanceThreshold": 30,
+   "fullAutoBurstLengthMultiplier": 0.66,
+   "aimTimeBetweenShotsMin": 0.15,
+   "aimTimeBetweenShotsMax": 3,
+   "muzzleFlashScale": 2,
+   "friendlyFireRadius": 20.0,
+   "friendlyFireOnsetDelay": 0.35,
+   "schemaSoftVersion": 3,
+   "schemaHardVersion": 2
+  },
+  "Normal": {
+   "aIMultiplier": 1,
+   "equipmentLevel": 0.75,
+   "aggressiveness": 0.4,
+   "aIMemoryLength": 120.0,
+   "behaviorConfig": {
+    "behaviorStateEffects": {
+     "(TagName=\"AI.Stance.Patrol\")": {
+      "duration": -1,
+      "sense": {
+       "visionSpeedModifier": 0.4,
+       "visionDistanceModifier": 0.5,
+       "hearingDistanceModifier": 0.8,
+       "perceptionDelayModifier": 1.33
+      },
+      "combat": {
+       "aimSpeedModifier": 1,
+       "aimAccuracyModifier": 1
+      },
+      "tempo": {
+       "postCoverActionDelayModifier": 1
+      },
+      "timeCreated": -1
+     },
+     "(TagName=\"AI.Stance.Investigate\")": {
+      "duration": -1,
+      "sense": {
+       "visionSpeedModifier": 0.8,
+       "visionDistanceModifier": 0.85,
+       "hearingDistanceModifier": 0.9,
+       "perceptionDelayModifier": 1.1
+      },
+      "combat": {
+       "aimSpeedModifier": 1,
+       "aimAccuracyModifier": 1
+      },
+      "tempo": {
+       "postCoverActionDelayModifier": 1
+      },
+      "timeCreated": -1
+     },
+     "(TagName=\"AI.Stance.Combat\")": {
+      "duration": -1,
+      "sense": {
+       "visionSpeedModifier": 1,
+       "visionDistanceModifier": 1,
+       "hearingDistanceModifier": 1,
+       "perceptionDelayModifier": 1
+      },
+      "combat": {
+       "aimSpeedModifier": 1,
+       "aimAccuracyModifier": 1
+      },
+      "tempo": {
+       "postCoverActionDelayModifier": 1
+      },
+      "timeCreated": -1
+     }
+    }
+   },
+   "maxSearchDistance": 80,
+   "maxSearchersPerTarget": 3,
+   "maxSearchersAtOnce": 10,
+   "maxSearchAreaSize": 0,
+   "firedUponSearchTime": 10,
+   "searchCasualtyHoldTime": 90,
+   "perceptionBaseTimeToSee": 0.5,
+   "perceptionGainDecayCoef": 0.5,
+   "perceptionMinVisibleBoneScore": 0.15,
+   "perceptionRange": 15000.0,
+   "perceptionDistanceFalloff": 1.2,
+   "perceptionAngle": 25,
+   "perceptionMinScore": 0.05,
+   "peripheralVisionDistance": 1500.0,
+   "peripheralVisionAngle": 85,
+   "perceptionLookTowardsCoef": 0.5,
+   "coordination_PerceptionShareRadius": 4000.0,
+   "coordination_PerceptionShareMaxDistance": 5000.0,
+   "repeatSenseDistanceScaleEnd": 800.0,
+   "repeatSenseMaxCoef": 1.75,
+   "maxFootstepSoundRange": 0,
+   "perceptionBaseDelay": 0.2,
+   "perceptionInitialContactAdditionalDelay": 0.1,
+   "perceptionUnderFireDelay": 0.05,
+   "underFireGlanceDuration": 2,
+   "bFlashlightDetectionToggle": true,
+   "bLaserDetectionToggle": true,
+   "lightReportCooldown": 1.5,
+   "laserReportCooldown": 1,
+   "laserDotSightRange": 3000.0,
+   "laserDotSightHalfAngle": 60.0,
+   "lasedBacktrackDistance": 1500.0,
+   "designationCompromiseRadius": 4000.0,
+   "onTargetAimThreshold": 1.25,
+   "deliberateMissTime": 1.5,
+   "deliberateMissChanceTime": 5,
+   "deliberateMissChance": 0.5,
+   "deliberateMissPersistentChance": 0.1,
+   "bDisableDeliberateMissTimerVsAI": false,
+   "bCanAimForHead": false,
+   "bCanThrowGrenades": true,
+   "grenadeInaccuracy": 120,
+   "grenadeMinThrowDistance": 600.0,
+   "grenadeMaxThrowDistance": 3500.0,
+   "bGrenadeRequireClearArc": true,
+   "grenadeMaxLandingError": 300.0,
+   "grenadeMinAimTime": 0.4,
+   "grenadeMaxReleaseYawError": 20.0,
+   "grenadeMaxTurnTime": 1.2,
+   "grenadeReleaseCheckInterval": 0.2,
+   "damageMap": {
+    "boss": 1.25,
+    "player": 1,
+    "aI": 0.4
+   },
+   "aimInitialDelayMultiplier": 1,
+   "aimRecoveryDelayMultiplier": 1,
+   "triggerSignalDelay": 0.275,
+   "watchWarmthCap": 0.7,
+   "bAISuppressTargets": true,
+   "suppress_Point_Max_Distance": 3000.0,
+   "suppress_Point_Always_Distance": 100.0,
+   "suppress_Point_Max_PathLength": 3000.0,
+   "suppress_Point_Always_PathLength": 100.0,
+   "fullAutoDistanceThreshold": 40.0,
+   "fullAutoBurstLengthMultiplier": 1,
+   "aimTimeBetweenShotsMin": 0.15,
+   "aimTimeBetweenShotsMax": 3,
+   "muzzleFlashScale": 1.8,
+   "friendlyFireRadius": 20.0,
+   "friendlyFireOnsetDelay": 0.35,
+   "schemaSoftVersion": 3,
+   "schemaHardVersion": 2
+  },
+  "Hard": {
+   "aIMultiplier": 1,
+   "equipmentLevel": 0.75,
+   "aggressiveness": 0.6,
+   "aIMemoryLength": 150,
+   "behaviorConfig": {
+    "behaviorStateEffects": {
+     "(TagName=\"AI.Stance.Patrol\")": {
+      "duration": -1,
+      "sense": {
+       "visionSpeedModifier": 0.4,
+       "visionDistanceModifier": 0.5,
+       "hearingDistanceModifier": 0.8,
+       "perceptionDelayModifier": 1.33
+      },
+      "combat": {
+       "aimSpeedModifier": 1,
+       "aimAccuracyModifier": 1
+      },
+      "tempo": {
+       "postCoverActionDelayModifier": 1
+      },
+      "timeCreated": -1
+     },
+     "(TagName=\"AI.Stance.Investigate\")": {
+      "duration": -1,
+      "sense": {
+       "visionSpeedModifier": 0.8,
+       "visionDistanceModifier": 0.85,
+       "hearingDistanceModifier": 0.9,
+       "perceptionDelayModifier": 1.1
+      },
+      "combat": {
+       "aimSpeedModifier": 1,
+       "aimAccuracyModifier": 1
+      },
+      "tempo": {
+       "postCoverActionDelayModifier": 1
+      },
+      "timeCreated": -1
+     },
+     "(TagName=\"AI.Stance.Combat\")": {
+      "duration": -1,
+      "sense": {
+       "visionSpeedModifier": 1,
+       "visionDistanceModifier": 1,
+       "hearingDistanceModifier": 1,
+       "perceptionDelayModifier": 1
+      },
+      "combat": {
+       "aimSpeedModifier": 1,
+       "aimAccuracyModifier": 1
+      },
+      "tempo": {
+       "postCoverActionDelayModifier": 1
+      },
+      "timeCreated": -1
+     }
+    }
+   },
+   "maxSearchDistance": 80,
+   "maxSearchersPerTarget": 4,
+   "maxSearchersAtOnce": 14,
+   "maxSearchAreaSize": 0,
+   "firedUponSearchTime": 10,
+   "searchCasualtyHoldTime": 90,
+   "perceptionBaseTimeToSee": 0.4,
+   "perceptionGainDecayCoef": 0.5,
+   "perceptionMinVisibleBoneScore": 0.1,
+   "perceptionRange": 17500,
+   "perceptionDistanceFalloff": 1.0,
+   "perceptionAngle": 30,
+   "perceptionMinScore": 0.05,
+   "peripheralVisionDistance": 1500.0,
+   "peripheralVisionAngle": 85,
+   "perceptionLookTowardsCoef": 0.4,
+   "coordination_PerceptionShareRadius": 4500,
+   "coordination_PerceptionShareMaxDistance": 5000.0,
+   "repeatSenseDistanceScaleEnd": 800.0,
+   "repeatSenseMaxCoef": 2,
+   "maxFootstepSoundRange": 0,
+   "perceptionBaseDelay": 0.15,
+   "perceptionInitialContactAdditionalDelay": 0.05,
+   "perceptionUnderFireDelay": 0.05,
+   "underFireGlanceDuration": 2,
+   "bFlashlightDetectionToggle": true,
+   "bLaserDetectionToggle": true,
+   "lightReportCooldown": 1.5,
+   "laserReportCooldown": 1,
+   "laserDotSightRange": 3000.0,
+   "laserDotSightHalfAngle": 60.0,
+   "lasedBacktrackDistance": 1500.0,
+   "designationCompromiseRadius": 4000.0,
+   "onTargetAimThreshold": 0.9,
+   "deliberateMissTime": 0.75,
+   "deliberateMissChanceTime": 4.5,
+   "deliberateMissChance": 0.45,
+   "deliberateMissPersistentChance": 0.08,
+   "bDisableDeliberateMissTimerVsAI": false,
+   "bCanAimForHead": false,
+   "bCanThrowGrenades": true,
+   "grenadeInaccuracy": 50,
+   "grenadeMinThrowDistance": 600.0,
+   "grenadeMaxThrowDistance": 3500.0,
+   "bGrenadeRequireClearArc": true,
+   "grenadeMaxLandingError": 300.0,
+   "grenadeMinAimTime": 0.4,
+   "grenadeMaxReleaseYawError": 20.0,
+   "grenadeMaxTurnTime": 1.2,
+   "grenadeReleaseCheckInterval": 0.2,
+   "damageMap": {
+    "boss": 1.25,
+    "player": 1,
+    "aI": 0.6
+   },
+   "aimInitialDelayMultiplier": 0.66,
+   "aimRecoveryDelayMultiplier": 0.65,
+   "triggerSignalDelay": 0.2,
+   "watchWarmthCap": 0.85,
+   "bAISuppressTargets": true,
+   "suppress_Point_Max_Distance": 3000.0,
+   "suppress_Point_Always_Distance": 100.0,
+   "suppress_Point_Max_PathLength": 3000.0,
+   "suppress_Point_Always_PathLength": 100.0,
+   "fullAutoDistanceThreshold": 50,
+   "fullAutoBurstLengthMultiplier": 1.25,
+   "aimTimeBetweenShotsMin": 0.15,
+   "aimTimeBetweenShotsMax": 3,
+   "muzzleFlashScale": 1.6,
+   "friendlyFireRadius": 20.0,
+   "friendlyFireOnsetDelay": 0.35,
+   "schemaSoftVersion": 3,
+   "schemaHardVersion": 2
+  },
+  "Extreme": {
+   "aIMultiplier": 1.25,
+   "equipmentLevel": 0.75,
+   "aggressiveness": 0.8,
+   "aIMemoryLength": 180,
+   "behaviorConfig": {
+    "behaviorStateEffects": {
+     "(TagName=\"AI.Stance.Patrol\")": {
+      "duration": -1,
+      "sense": {
+       "visionSpeedModifier": 0.4,
+       "visionDistanceModifier": 0.5,
+       "hearingDistanceModifier": 0.8,
+       "perceptionDelayModifier": 1.33
+      },
+      "combat": {
+       "aimSpeedModifier": 1,
+       "aimAccuracyModifier": 1
+      },
+      "tempo": {
+       "postCoverActionDelayModifier": 1
+      },
+      "timeCreated": -1
+     },
+     "(TagName=\"AI.Stance.Investigate\")": {
+      "duration": -1,
+      "sense": {
+       "visionSpeedModifier": 0.8,
+       "visionDistanceModifier": 0.85,
+       "hearingDistanceModifier": 0.9,
+       "perceptionDelayModifier": 1.1
+      },
+      "combat": {
+       "aimSpeedModifier": 1,
+       "aimAccuracyModifier": 1
+      },
+      "tempo": {
+       "postCoverActionDelayModifier": 1
+      },
+      "timeCreated": -1
+     },
+     "(TagName=\"AI.Stance.Combat\")": {
+      "duration": -1,
+      "sense": {
+       "visionSpeedModifier": 1,
+       "visionDistanceModifier": 1,
+       "hearingDistanceModifier": 1,
+       "perceptionDelayModifier": 1
+      },
+      "combat": {
+       "aimSpeedModifier": 1,
+       "aimAccuracyModifier": 1
+      },
+      "tempo": {
+       "postCoverActionDelayModifier": 1
+      },
+      "timeCreated": -1
+     }
+    }
+   },
+   "maxSearchDistance": 80,
+   "maxSearchersPerTarget": 6,
+   "maxSearchersAtOnce": 24,
+   "maxSearchAreaSize": 0,
+   "firedUponSearchTime": 10,
+   "searchCasualtyHoldTime": 90,
+   "perceptionBaseTimeToSee": 0.3,
+   "perceptionGainDecayCoef": 0.5,
+   "perceptionMinVisibleBoneScore": 0.05,
+   "perceptionRange": 20000,
+   "perceptionDistanceFalloff": 0.8,
+   "perceptionAngle": 35,
+   "perceptionMinScore": 0.05,
+   "peripheralVisionDistance": 1500.0,
+   "peripheralVisionAngle": 85,
+   "perceptionLookTowardsCoef": 0.33,
+   "coordination_PerceptionShareRadius": 5000,
+   "coordination_PerceptionShareMaxDistance": 5000.0,
+   "repeatSenseDistanceScaleEnd": 1000,
+   "repeatSenseMaxCoef": 2,
+   "maxFootstepSoundRange": 0,
+   "perceptionBaseDelay": 0.1,
+   "perceptionInitialContactAdditionalDelay": 0.01,
+   "perceptionUnderFireDelay": 0.05,
+   "underFireGlanceDuration": 2,
+   "bFlashlightDetectionToggle": true,
+   "bLaserDetectionToggle": true,
+   "lightReportCooldown": 1.5,
+   "laserReportCooldown": 1,
+   "laserDotSightRange": 3000.0,
+   "laserDotSightHalfAngle": 60.0,
+   "lasedBacktrackDistance": 1500.0,
+   "designationCompromiseRadius": 4000.0,
+   "onTargetAimThreshold": 0.75,
+   "deliberateMissTime": 0.5,
+   "deliberateMissChanceTime": 4,
+   "deliberateMissChance": 0.4,
+   "deliberateMissPersistentChance": 0.06,
+   "bDisableDeliberateMissTimerVsAI": false,
+   "bCanAimForHead": true,
+   "bCanThrowGrenades": true,
+   "grenadeInaccuracy": 0,
+   "grenadeMinThrowDistance": 600.0,
+   "grenadeMaxThrowDistance": 3500.0,
+   "bGrenadeRequireClearArc": true,
+   "grenadeMaxLandingError": 300.0,
+   "grenadeMinAimTime": 0.4,
+   "grenadeMaxReleaseYawError": 20.0,
+   "grenadeMaxTurnTime": 1.2,
+   "grenadeReleaseCheckInterval": 0.2,
+   "damageMap": {
+    "boss": 1.25,
+    "player": 0.9,
+    "aI": 1
+   },
+   "aimInitialDelayMultiplier": 0.5,
+   "aimRecoveryDelayMultiplier": 0.25,
+   "triggerSignalDelay": 0.15,
+   "watchWarmthCap": 1,
+   "bAISuppressTargets": true,
+   "suppress_Point_Max_Distance": 3000.0,
+   "suppress_Point_Always_Distance": 100.0,
+   "suppress_Point_Max_PathLength": 3000.0,
+   "suppress_Point_Always_PathLength": 100.0,
+   "fullAutoDistanceThreshold": 75,
+   "fullAutoBurstLengthMultiplier": 1.5,
+   "aimTimeBetweenShotsMin": 0.15,
+   "aimTimeBetweenShotsMax": 3,
+   "muzzleFlashScale": 1.4,
+   "friendlyFireRadius": 20.0,
+   "friendlyFireOnsetDelay": 0.35,
+   "schemaSoftVersion": 3,
+   "schemaHardVersion": 2
+  }
+ },
+ "sim": {
+  "Potato": {
+   "optimizationRanges": {
+    "1": 3000,
+    "2": 6000,
+    "3": 10000,
+    "4": 16000,
+    "5": 20000
+   },
+   "botMovementTicksPerSec": 5
+  },
+  "Low": {
+   "optimizationRanges": {
+    "1": 4000,
+    "2": 8000,
+    "3": 12000,
+    "4": 20000,
+    "5": 24000
+   },
+   "botMovementTicksPerSec": 5
+  },
+  "Normal": {
+   "optimizationRanges": {
+    "1": 4000,
+    "2": 10000,
+    "3": 16000,
+    "4": 24000,
+    "5": 32000
+   },
+   "botMovementTicksPerSec": 8
+  },
+  "High": {
+   "optimizationRanges": {
+    "1": 6000,
+    "2": 12000,
+    "3": 20000,
+    "4": 40000,
+    "5": 40000
+   },
+   "botMovementTicksPerSec": 30
+  }
+ },
+ "params": [
+  {
+   "key": "AIMultiplier",
+   "docKey": "aIMultiplier",
+   "cat": "AISettings",
+   "section": "General",
+   "name": "AI Multiplier",
+   "desc": "Scales the map's enemy count, including solo. Each extra coop player adds a further share on top.",
+   "warn": "Be careful — more enemies can hurt performance. Values over 2.0 are not recommended for normal gameplay.",
+   "type": "number",
+   "precision": 2,
+   "min": 0.5,
+   "max": 3
+  },
+  {
+   "key": "Aggressiveness",
+   "docKey": "aggressiveness",
+   "cat": "AISettings",
+   "section": "Behavior",
+   "name": "Aggression",
+   "desc": "Controls multiple behaviors, such as how long bots wait before searching for enemies, how likely they are to return fire on first contact, and how likely they take aggressive positions when given the opportunity.",
+   "warn": "Low values can cause overly passive bots who sit and wait. High values can cause swarming in some situations.",
+   "type": "number",
+   "precision": 2,
+   "min": 0.01,
+   "max": 1
+  },
+  {
+   "key": "AIMemoryLength",
+   "docKey": "aIMemoryLength",
+   "cat": "AISettings",
+   "section": "Behavior",
+   "name": "AI Memory Length",
+   "desc": "How long after a bot searches your last known location before it returns to a peaceful state and de-aggros. Bots that are not allowed to search for you de-aggro this long after they last sensed you.",
+   "warn": "",
+   "type": "number",
+   "precision": 0,
+   "min": 60,
+   "max": 600
+  },
+  {
+   "key": "Coordination_PerceptionShareRadius",
+   "docKey": "coordination_PerceptionShareRadius",
+   "cat": "AISettings",
+   "section": "Behavior",
+   "name": "Perception Share Radius",
+   "desc": "How far bots automatically share what they perceive with friendly bots. A bot that spots an enemy tells every friendly within this radius.",
+   "warn": "",
+   "type": "number",
+   "precision": 0,
+   "uiMin": 0,
+   "uiMax": 10000
+  },
+  {
+   "key": "bAISuppressTargets",
+   "docKey": "bAISuppressTargets",
+   "cat": "AISettings",
+   "section": "Behavior",
+   "name": "Suppress Targets",
+   "desc": "Enable or disable bots suppressing the last known location of their enemy. If disabled, bots only shoot when they can see their enemy.",
+   "warn": "",
+   "type": "bool",
+   "precision": 2
+  },
+  {
+   "key": "bCanThrowGrenades",
+   "docKey": "bCanThrowGrenades",
+   "cat": "AISettings",
+   "section": "Behavior",
+   "name": "Throw Grenades",
+   "desc": "Lets bots throw the grenades they carry at you.",
+   "warn": "",
+   "type": "bool",
+   "precision": 2
+  },
+  {
+   "key": "GrenadeInaccuracy",
+   "docKey": "grenadeInaccuracy",
+   "cat": "AISettings",
+   "section": "Behavior",
+   "name": "Grenade Inaccuracy",
+   "desc": "How far a bot's grenade can land from where it aimed, in centimeters per 10 meters of throw distance. 0 lands every throw on target.",
+   "warn": "Higher = grenades land further off.",
+   "type": "number",
+   "precision": 0,
+   "uiMin": 0,
+   "uiMax": 600,
+   "step": 10
+  },
+  {
+   "key": "DamageMap.Boss",
+   "docKey": "damageMap.boss",
+   "cat": "AISettings",
+   "section": "Damage",
+   "name": "Boss Damage Multiplier",
+   "desc": "Damage multiplier applied to boss hits.",
+   "warn": "",
+   "type": "number",
+   "precision": 2,
+   "uiMin": 0,
+   "uiMax": 3
+  },
+  {
+   "key": "DamageMap.AI",
+   "docKey": "damageMap.aI",
+   "cat": "AISettings",
+   "section": "Damage",
+   "name": "Standard AI Damage Multiplier",
+   "desc": "Damage multiplier applied when bots hit other bots.",
+   "warn": "",
+   "type": "number",
+   "precision": 2,
+   "uiMin": 0,
+   "uiMax": 3
+  },
+  {
+   "key": "DamageMap.Player",
+   "docKey": "damageMap.player",
+   "cat": "AISettings",
+   "section": "Damage",
+   "name": "Player Damage Multiplier",
+   "desc": "Damage multiplier applied when bots hit players.",
+   "warn": "",
+   "type": "number",
+   "precision": 2,
+   "uiMin": 0,
+   "uiMax": 3
+  },
+  {
+   "key": "OnTargetAimThreshold",
+   "docKey": "onTargetAimThreshold",
+   "cat": "AISettings",
+   "section": "Aim and Shoot",
+   "name": "Target Aim Threshold",
+   "desc": "Controls the randomized spread bots have when shooting.",
+   "warn": "Higher values = more spread and randomization.",
+   "type": "number",
+   "precision": 2,
+   "min": 0.1,
+   "max": 2
+  },
+  {
+   "key": "AimInitialDelayMultiplier",
+   "docKey": "aimInitialDelayMultiplier",
+   "cat": "AISettings",
+   "section": "Aim and Shoot",
+   "name": "Aim Initial Delay Multiplier",
+   "desc": "Increase or decrease how long bots wait before they can fire their first shots when aiming. Linear multiplier, so a value of 2.0 doubles the wait.",
+   "warn": "",
+   "type": "number",
+   "precision": 2,
+   "min": 0.1,
+   "max": 3
+  },
+  {
+   "key": "AimRecoveryDelayMultiplier",
+   "docKey": "aimRecoveryDelayMultiplier",
+   "cat": "AISettings",
+   "section": "Aim and Shoot",
+   "name": "Aim Recovery Delay Multiplier",
+   "desc": "Increase or decrease how long bots wait between firing single shots or bursts. Linear multiplier, so a value of 2.0 doubles the wait.",
+   "warn": "Higher = slower fire rate.",
+   "type": "number",
+   "precision": 2,
+   "min": 0.1,
+   "max": 3
+  },
+  {
+   "key": "DeliberateMissTime",
+   "docKey": "deliberateMissTime",
+   "cat": "AISettings",
+   "section": "Aim and Shoot",
+   "name": "Deliberate Miss Time",
+   "desc": "When a bot starts shooting at a target, its shots are guaranteed to miss until it has aimed at that target for this many seconds. Starts over when the bot switches targets.",
+   "warn": "",
+   "type": "number",
+   "precision": 2,
+   "uiMin": 0,
+   "uiMax": 5
+  },
+  {
+   "key": "DeliberateMissChance",
+   "docKey": "deliberateMissChance",
+   "cat": "AISettings",
+   "section": "Aim and Shoot",
+   "name": "Deliberate Miss Chance",
+   "desc": "After the guaranteed misses, each shot still has this chance (0 to 1) to miss on purpose for the next few seconds, so bots walk their fire onto a target instead of landing the first hits.",
+   "warn": "",
+   "type": "number",
+   "precision": 2,
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "FullAutoDistanceThreshold",
+   "docKey": "fullAutoDistanceThreshold",
+   "cat": "AISettings",
+   "section": "Aim and Shoot",
+   "name": "Full Auto Max Distance",
+   "desc": "If a bot is shooting at someone further than this distance, in meters, it switches to semi-auto. Closer than that it uses full auto when the weapon has it.",
+   "warn": "",
+   "type": "number",
+   "precision": 0,
+   "uiMin": 0,
+   "uiMax": 150
+  },
+  {
+   "key": "FullAutoBurstLengthMultiplier",
+   "docKey": "fullAutoBurstLengthMultiplier",
+   "cat": "AISettings",
+   "section": "Aim and Shoot",
+   "name": "Full Auto Burst Length Multiplier",
+   "desc": "Increase or decrease how long bots hold the trigger on full auto before they need to recover and re-aim.",
+   "warn": "Higher = longer full-auto bursts.",
+   "type": "number",
+   "precision": 2,
+   "min": 0.1,
+   "max": 3
+  },
+  {
+   "key": "bCanAimForHead",
+   "docKey": "bCanAimForHead",
+   "cat": "AISettings",
+   "section": "Aim and Shoot",
+   "name": "Can Aim For Head",
+   "desc": "Allows bots to pick the head as the point they aim at.",
+   "warn": "",
+   "type": "bool",
+   "precision": 2
+  },
+  {
+   "key": "MuzzleFlashScale",
+   "docKey": "muzzleFlashScale",
+   "cat": "AISettings",
+   "section": "Aim and Shoot",
+   "name": "AI Muzzle Flash Size",
+   "desc": "",
+   "warn": "",
+   "type": "number",
+   "precision": 1,
+   "min": 0.5,
+   "max": 3,
+   "step": 0.1
+  },
+  {
+   "key": "PerceptionBaseDelay",
+   "docKey": "perceptionBaseDelay",
+   "cat": "AISettings",
+   "section": "Perception and Senses",
+   "name": "Base Sense Delay",
+   "desc": "Every sense on a bot has an enforced delay before it actually registers what it sensed. This is the base time for that delay, in seconds.",
+   "warn": "",
+   "type": "number",
+   "precision": 2,
+   "uiMin": 0,
+   "uiMax": 1
+  },
+  {
+   "key": "PerceptionInitialContactAdditionalDelay",
+   "docKey": "perceptionInitialContactAdditionalDelay",
+   "cat": "AISettings",
+   "section": "Perception and Senses",
+   "name": "First Contact Additional Delay",
+   "desc": "When a bot goes from being at peace or on patrol to combat, this is added on top of the base sense delay, so the first contact takes longer to react to.",
+   "warn": "",
+   "type": "number",
+   "precision": 2,
+   "uiMin": 0,
+   "uiMax": 1
+  },
+  {
+   "key": "PerceptionBaseTimeToSee",
+   "docKey": "perceptionBaseTimeToSee",
+   "cat": "AISettings",
+   "section": "Perception and Senses",
+   "name": "Time To See",
+   "desc": "How long, in seconds, a target has to stay in view before a bot reacts to it. Distance, light and weather make this longer or shorter.",
+   "warn": "",
+   "type": "number",
+   "precision": 2,
+   "min": 0.1,
+   "max": 2
+  },
+  {
+   "key": "PerceptionRange",
+   "docKey": "perceptionRange",
+   "cat": "AISettings",
+   "section": "Vision",
+   "name": "Perception Range",
+   "desc": "The maximum distance, in centimeters (100 = 1 m), at which a bot can perceive an enemy.",
+   "warn": "",
+   "type": "number",
+   "precision": 0,
+   "min": 0,
+   "uiMin": 5000,
+   "uiMax": 30000,
+   "step": 500
+  },
+  {
+   "key": "PerceptionAngle",
+   "docKey": "perceptionAngle",
+   "cat": "AISettings",
+   "section": "Vision",
+   "name": "Perception Angle",
+   "desc": "Angle in degrees from where a bot is looking within which it can see a target.",
+   "warn": "",
+   "type": "number",
+   "precision": 0,
+   "uiMin": 5,
+   "uiMax": 90
+  },
+  {
+   "key": "PerceptionMinScore",
+   "docKey": "perceptionMinScore",
+   "cat": "AISettings",
+   "section": "Vision",
+   "name": "Perception Min Score",
+   "desc": "How much of a target has to be visible before a bot can see it at all. Lower values let bots spot targets that are barely peeking out.",
+   "warn": "",
+   "type": "number",
+   "precision": 2,
+   "uiMin": 0,
+   "uiMax": 0.5
+  },
+  {
+   "key": "RepeatSenseMaxCoef",
+   "docKey": "repeatSenseMaxCoef",
+   "cat": "AISettings",
+   "section": "Vision",
+   "name": "Repeat Sense Coef",
+   "desc": "When you are in or near the spot a bot thinks you are, whether it heard or saw you there, it gains sight of you faster. This is how much faster, at most; the effect fades the further you are from that spot.",
+   "warn": "",
+   "type": "number",
+   "precision": 2,
+   "uiMin": 1,
+   "uiMax": 3
+  },
+  {
+   "key": "bFlashlightDetectionToggle",
+   "docKey": "bFlashlightDetectionToggle",
+   "cat": "AISettings",
+   "section": "Vision",
+   "name": "Light Detection",
+   "desc": "Lets bots notice an enemy's flashlight.",
+   "warn": "",
+   "type": "bool",
+   "precision": 2
+  },
+  {
+   "key": "bLaserDetectionToggle",
+   "docKey": "bLaserDetectionToggle",
+   "cat": "AISettings",
+   "section": "Vision",
+   "name": "Laser Detection",
+   "desc": "Lets bots notice an enemy's weapon laser.",
+   "warn": "",
+   "type": "bool",
+   "precision": 2
+  },
+  {
+   "key": "PerceptionDistanceFalloff",
+   "docKey": "perceptionDistanceFalloff",
+   "cat": "AISettings",
+   "section": "Vision",
+   "name": "Distance Sight Falloff",
+   "desc": "How much harder a target is to spot as it gets further away, inside the perception range. 1 follows the base distance curve. Higher values make a distant target take longer to notice, values below 1 make it quicker. How far a bot can see does not change.",
+   "warn": "",
+   "type": "number",
+   "precision": 2,
+   "min": 0.5,
+   "max": 2.5,
+   "step": 0.05
+  },
+  {
+   "key": "MaxSearchDistance",
+   "docKey": "maxSearchDistance",
+   "cat": "AISettings",
+   "section": "Search",
+   "name": "Max Search Distance",
+   "desc": "The farthest walking distance, in meters, from a squad to your last known location for that squad to come searching for you. Squads farther away hold their area.",
+   "warn": "High values make bots from across the map converge on every fight.",
+   "type": "number",
+   "precision": 0,
+   "min": 0,
+   "max": 200
+  },
+  {
+   "key": "MaxSearchersPerTarget",
+   "docKey": "maxSearchersPerTarget",
+   "cat": "AISettings",
+   "section": "Search",
+   "name": "Max Searchers Per Enemy",
+   "desc": "How many bots of one faction can search for the same enemy at once. Squads are sent whole, so a squad can go slightly over this limit.",
+   "warn": "",
+   "type": "number",
+   "precision": 0,
+   "min": 0,
+   "max": 12
+  },
+  {
+   "key": "MaxSearchersAtOnce",
+   "docKey": "maxSearchersAtOnce",
+   "cat": "AISettings",
+   "section": "Search",
+   "name": "Max Searchers At Once",
+   "desc": "How many bots can search at once across the whole map, for all enemies combined.",
+   "warn": "High values can cause swarming and cost performance.",
+   "type": "number",
+   "precision": 0,
+   "min": 0,
+   "max": 40
+  },
+  {
+   "key": "MaxSearchAreaSize",
+   "docKey": "maxSearchAreaSize",
+   "cat": "AISettings",
+   "section": "Search",
+   "name": "Max Search Area Size",
+   "desc": "How far, in meters of walking distance, a search can spread out from where bots last sensed you. 0 means no limit.",
+   "warn": "",
+   "type": "number",
+   "precision": 0,
+   "min": 0,
+   "max": 150
+  },
+  {
+   "key": "FiredUponSearchTime",
+   "docKey": "firedUponSearchTime",
+   "cat": "AISettings",
+   "section": "Search",
+   "name": "Fired Upon Search Time",
+   "desc": "For how many seconds after a bot is hit or a bullet passes close by its squad will search for the shooter, ignoring the search distance and searcher limits. 0 turns this off.",
+   "warn": "",
+   "type": "number",
+   "precision": 1,
+   "min": 0,
+   "max": 30
+  },
+  {
+   "key": "SearchCasualtyHoldTime",
+   "docKey": "searchCasualtyHoldTime",
+   "cat": "AISettings",
+   "section": "Search",
+   "name": "Casualty Hold Time",
+   "desc": "For how many seconds a bot killed while searching for you still counts toward the searcher limits on you. Stops the next squad in line from walking into the same spot right away. 0 turns this off.",
+   "warn": "",
+   "type": "number",
+   "precision": 0,
+   "min": 0,
+   "max": 300
+  },
+  {
+   "key": "BotMovementTicksPerSec",
+   "docKey": "botMovementTicksPerSec",
+   "cat": "Simulation",
+   "section": "AI Optimization Ranges",
+   "name": "Max Movement Tick Rate",
+   "desc": "The lowest rate, in updates per second, at which distant bots still move. Higher values make bots look smoother at range at the cost of performance.",
+   "warn": "",
+   "type": "number",
+   "precision": 0,
+   "uiMin": 1,
+   "uiMax": 60
+  },
+  {
+   "key": "OptimizationRanges.1",
+   "docKey": "optimizationRanges.1",
+   "cat": "Simulation",
+   "section": "AI Optimization Ranges",
+   "name": "Level 1 Range",
+   "desc": "Distance (cm) of AI optimization level 1. Bots beyond this distance are simulated with less detail. Higher values look better at range but cost performance.",
+   "warn": "",
+   "type": "number",
+   "precision": 0,
+   "uiMin": 1000,
+   "uiMax": 50000,
+   "step": 500
+  },
+  {
+   "key": "OptimizationRanges.2",
+   "docKey": "optimizationRanges.2",
+   "cat": "Simulation",
+   "section": "AI Optimization Ranges",
+   "name": "Level 2 Range",
+   "desc": "Distance (cm) of AI optimization level 2. Bots beyond this distance are simulated with less detail. Higher values look better at range but cost performance.",
+   "warn": "",
+   "type": "number",
+   "precision": 0,
+   "uiMin": 1000,
+   "uiMax": 50000,
+   "step": 500
+  },
+  {
+   "key": "OptimizationRanges.3",
+   "docKey": "optimizationRanges.3",
+   "cat": "Simulation",
+   "section": "AI Optimization Ranges",
+   "name": "Level 3 Range",
+   "desc": "Distance (cm) of AI optimization level 3. Bots beyond this distance are simulated with less detail. Higher values look better at range but cost performance.",
+   "warn": "",
+   "type": "number",
+   "precision": 0,
+   "uiMin": 1000,
+   "uiMax": 50000,
+   "step": 500
+  },
+  {
+   "key": "OptimizationRanges.4",
+   "docKey": "optimizationRanges.4",
+   "cat": "Simulation",
+   "section": "AI Optimization Ranges",
+   "name": "Level 4 Range",
+   "desc": "Distance (cm) of AI optimization level 4. Bots beyond this distance are simulated with less detail. Higher values look better at range but cost performance.",
+   "warn": "",
+   "type": "number",
+   "precision": 0,
+   "uiMin": 1000,
+   "uiMax": 50000,
+   "step": 500
+  }
+ ]
+}

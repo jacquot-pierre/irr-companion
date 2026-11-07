@@ -1,0 +1,149 @@
+{
+	"aIMultiplier": 3,
+	"equipmentLevel": 0.75,
+	"aggressiveness": 0.6,
+	"aIMemoryLength": 426.2234,
+	"behaviorConfig":
+	{
+		"behaviorStateEffects":
+		{
+			"(TagName=\"AI.Stance.Patrol\")":
+			{
+				"duration": -1,
+				"sense":
+				{
+					"visionSpeedModifier": 0.4,
+					"visionDistanceModifier": 0.5,
+					"hearingDistanceModifier": 0.8,
+					"perceptionDelayModifier": 1.33
+				},
+				"combat":
+				{
+					"aimSpeedModifier": 1,
+					"aimAccuracyModifier": 1
+				},
+				"tempo":
+				{
+					"postCoverActionDelayModifier": 1
+				},
+				"timeCreated": -1
+			},
+			"(TagName=\"AI.Stance.Investigate\")":
+			{
+				"duration": -1,
+				"sense":
+				{
+					"visionSpeedModifier": 0.8,
+					"visionDistanceModifier": 0.85,
+					"hearingDistanceModifier": 0.9,
+					"perceptionDelayModifier": 1.1
+				},
+				"combat":
+				{
+					"aimSpeedModifier": 1,
+					"aimAccuracyModifier": 1
+				},
+				"tempo":
+				{
+					"postCoverActionDelayModifier": 1
+				},
+				"timeCreated": -1
+			},
+			"(TagName=\"AI.Stance.Combat\")":
+			{
+				"duration": -1,
+				"sense":
+				{
+					"visionSpeedModifier": 1,
+					"visionDistanceModifier": 1,
+					"hearingDistanceModifier": 1,
+					"perceptionDelayModifier": 1
+				},
+				"combat":
+				{
+					"aimSpeedModifier": 1,
+					"aimAccuracyModifier": 1
+				},
+				"tempo":
+				{
+					"postCoverActionDelayModifier": 1
+				},
+				"timeCreated": -1
+			}
+		}
+	},
+	"maxSearchDistance": 8e+01,
+	"maxSearchersPerTarget": 4,
+	"maxSearchersAtOnce": 14,
+	"maxSearchAreaSize": 0,
+	"firedUponSearchTime": 1e+01,
+	"searchCasualtyHoldTime": 9e+01,
+	"perceptionBaseTimeToSee": 0.4,
+	"perceptionGainDecayCoef": 0.5,
+	"perceptionMinVisibleBoneScore": 0.1,
+	"perceptionRange": 1.75e+04,
+	"perceptionDistanceFalloff": 1,
+	"perceptionAngle": 3e+01,
+	"perceptionMinScore": 0.05,
+	"peripheralVisionDistance": 1.5e+03,
+	"peripheralVisionAngle": 85,
+	"perceptionLookTowardsCoef": 0.4,
+	"coordination_PerceptionShareRadius": 4.5e+03,
+	"coordination_PerceptionShareMaxDistance": 5e+03,
+	"repeatSenseDistanceScaleEnd": 8e+02,
+	"repeatSenseMaxCoef": 2,
+	"maxFootstepSoundRange": 0,
+	"perceptionBaseDelay": 0.15,
+	"perceptionInitialContactAdditionalDelay": 0.05,
+	"perceptionUnderFireDelay": 0.05,
+	"underFireGlanceDuration": 2,
+	"bFlashlightDetectionToggle": true,
+	"bLaserDetectionToggle": true,
+	"lightReportCooldown": 1.5,
+	"laserReportCooldown": 1,
+	"laserDotSightRange": 3e+03,
+	"laserDotSightHalfAngle": 6e+01,
+	"lasedBacktrackDistance": 1.5e+03,
+	"designationCompromiseRadius": 4e+03,
+	"onTargetAimThreshold": 0.9,
+	"deliberateMissTime": 3.9361703,
+	"deliberateMissChanceTime": 4.5,
+	"deliberateMissChance": 0.45,
+	"deliberateMissPersistentChance": 0.08,
+	"bDisableDeliberateMissTimerVsAI": false,
+	"bCanAimForHead": false,
+	"bCanThrowGrenades": true,
+	"grenadeInaccuracy": 496.27658,
+	"grenadeMinThrowDistance": 6e+02,
+	"grenadeMaxThrowDistance": 3.5e+03,
+	"bGrenadeRequireClearArc": true,
+	"grenadeMaxLandingError": 3e+02,
+	"grenadeMinAimTime": 0.4,
+	"grenadeMaxReleaseYawError": 2e+01,
+	"grenadeMaxTurnTime": 1.2,
+	"grenadeReleaseCheckInterval": 0.2,
+	"damageMap":
+	{
+		"boss": 1.25,
+		"player": 2.3218083,
+		"aI": 0.6
+	},
+	"aimInitialDelayMultiplier": 0.66,
+	"aimRecoveryDelayMultiplier": 2.1670213,
+	"triggerSignalDelay": 0.2,
+	"watchWarmthCap": 0.85,
+	"bAISuppressTargets": true,
+	"suppress_Point_Max_Distance": 3e+03,
+	"suppress_Point_Always_Distance": 1e+02,
+	"suppress_Point_Max_PathLength": 3e+03,
+	"suppress_Point_Always_PathLength": 1e+02,
+	"fullAutoDistanceThreshold": 5e+01,
+	"fullAutoBurstLengthMultiplier": 1.25,
+	"aimTimeBetweenShotsMin": 0.15,
+	"aimTimeBetweenShotsMax": 3,
+	"muzzleFlashScale": 1.6,
+	"friendlyFireRadius": 2e+01,
+	"friendlyFireOnsetDelay": 0.35,
+	"schemaSoftVersion": 3,
+	"schemaHardVersion": 2
+}

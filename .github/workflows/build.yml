@@ -1,0 +1,60 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Version
+        id: version
+        shell: pwsh
+        run: |
+          if ($env:GITHUB_REF -like 'refs/tags/v*') { $v = $env:GITHUB_REF_NAME.Substring(1) } else { $v = '0.0.0-dev' }
+          "version=$v" >> $env:GITHUB_OUTPUT
+
+      - name: Build
+        run: dotnet build src -c Release -nologo -p:Version=${{ steps.version.outputs.version }}
+
+      - name: Hash
+        id: hash
+        shell: pwsh
+        run: |
+          $exe = 'src/bin/Release/net462/IRRPresetTool.exe'
+          $h = (Get-FileHash $exe -Algorithm SHA256).Hash
+          "sha256=$h" >> $env:GITHUB_OUTPUT
+          Write-Host "SHA-256: $h"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: IRRPresetTool
+          path: src/bin/Release/net462/IRRPresetTool.exe
+
+      - name: Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $notes = @"
+          Download **IRRPresetTool.exe** below and run it (no installation needed, Windows 10/11).
+
+          If Windows SmartScreen shows "Windows protected your PC", click **More info → Run anyway**.
+
+          SHA-256: ``${{ steps.hash.outputs.sha256 }}``
+          "@
+          gh release create $env:GITHUB_REF_NAME src/bin/Release/net462/IRRPresetTool.exe --title "IRR Preset Tool $env:GITHUB_REF_NAME" --notes $notes
