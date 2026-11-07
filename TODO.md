@@ -72,7 +72,8 @@ The interface was only checked on screenshots; nothing was clicked yet.
 
 ## Repository and releases
 
-- [ ] First GitHub Actions run: the build passes and the `v1.0.0` release has the exe and the notes.
+- [x] First GitHub Actions run: the build passes and the `v1.0.0` release has the exe and the notes.
+- [ ] `v1.1.0` release: the exe and the notes are on the release page.
 - [ ] Delete the old local folder `Documents\IRRPresetTool` once everything is in this repository.
 - [ ] Before making the repository public: the test codes in `tools/testdata/` contain the author name of the
       presets; decide whether to keep them.
