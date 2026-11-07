@@ -163,6 +163,7 @@ namespace IRRCompanion
         {
             _tip = tip;
             _status = status;
+            _loading = true; // no save while the fields get their initial values
             Dock = DockStyle.Fill;
             BackColor = Theme.Back;
             HideoutData.Load();
@@ -226,6 +227,7 @@ namespace IRRCompanion
             Controls.Add(_content);
             Controls.Add(left);
             _units.SelectedIndex = 0;
+            _loading = false;
         }
 
         public ListBox List { get { return _units; } }
