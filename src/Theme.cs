@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace IRRPresetTool
+namespace IRRCompanion
 {
     /// <summary>Dark palette inspired by the in-game settings menu.</summary>
     public static class Theme

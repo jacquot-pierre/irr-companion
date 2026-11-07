@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace IRRPresetTool
+namespace IRRCompanion
 {
     internal static class Program
     {
@@ -24,12 +24,13 @@ namespace IRRPresetTool
                 ShowError(ex);
                 return;
             }
+            Library.MigrateOldFolder();
             Application.Run(new MainForm());
         }
 
         private static void ShowError(Exception ex)
         {
-            MessageBox.Show("Unexpected error:\n\n" + (ex == null ? "unknown" : ex.ToString()), "IRR Preset Tool",
+            MessageBox.Show("Unexpected error:\n\n" + (ex == null ? "unknown" : ex.ToString()), "IRR Companion",
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }

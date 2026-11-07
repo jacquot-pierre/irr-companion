@@ -34,15 +34,15 @@ jobs:
         id: hash
         shell: pwsh
         run: |
-          $exe = 'src/bin/Release/net462/IRRPresetTool.exe'
+          $exe = 'src/bin/Release/net462/IRRCompanion.exe'
           $h = (Get-FileHash $exe -Algorithm SHA256).Hash
           "sha256=$h" >> $env:GITHUB_OUTPUT
           Write-Host "SHA-256: $h"
 
       - uses: actions/upload-artifact@v4
         with:
-          name: IRRPresetTool
-          path: src/bin/Release/net462/IRRPresetTool.exe
+          name: IRRCompanion
+          path: src/bin/Release/net462/IRRCompanion.exe
 
       - name: Release
         if: startsWith(github.ref, 'refs/tags/v')
@@ -50,11 +50,15 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          $notes = @"
-          Download **IRRPresetTool.exe** below and run it (no installation needed, Windows 10/11).
+          # Optional hand-written notes: docs/release-notes/<tag>.md
+          $file = "docs/release-notes/$env:GITHUB_REF_NAME.md"
+          $intro = ''
+          if (Test-Path $file) { $intro = (Get-Content $file -Raw) + "`n`n---`n`n" }
+          $notes = $intro + @"
+          Download **IRRCompanion.exe** below and run it (no installation needed, Windows 10/11).
 
           If Windows SmartScreen shows "Windows protected your PC", click **More info → Run anyway**.
 
           SHA-256: ``${{ steps.hash.outputs.sha256 }}``
           "@
-          gh release create $env:GITHUB_REF_NAME src/bin/Release/net462/IRRPresetTool.exe --title "IRR Preset Tool $env:GITHUB_REF_NAME" --notes $notes
+          gh release create $env:GITHUB_REF_NAME src/bin/Release/net462/IRRCompanion.exe --title "IRR Companion $env:GITHUB_REF_NAME" --notes $notes

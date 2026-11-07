@@ -5,7 +5,7 @@ using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.Windows.Forms;
 
-namespace IRRPresetTool
+namespace IRRCompanion
 {
     /// <summary>Flat slider drawn like the in-game menu.</summary>
     public sealed class Slider : Control

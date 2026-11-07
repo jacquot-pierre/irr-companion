@@ -21,8 +21,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 ---------------------------------------------------------------------------
-This license covers the source code of this tool only. The file
-src/Resources/defaults.json contains default values, ranges and setting
-descriptions taken from the game Incursion Red River; they remain the property
-of their respective owners and are included only so the tool can show the
-game's default presets.
+This license covers the source code of IRR Companion only. The files in
+src/Resources/ (defaults.json, commands.json) contain default values, ranges,
+setting descriptions, console command help texts, map weather lists and item
+names taken from the game Incursion Red River; they remain the property of
+their respective owners and are included only so the tool can show them.

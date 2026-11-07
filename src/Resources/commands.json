@@ -1,0 +1,5927 @@
+{
+ "weatherIndexBase": 1,
+ "maps": [
+  {
+   "name": "Delta",
+   "weathers": [
+    {
+     "name": "Clear skies",
+     "weight": 3.0
+    },
+    {
+     "name": "Cloudy",
+     "weight": 1.0
+    },
+    {
+     "name": "Foggy",
+     "weight": 0.5
+    },
+    {
+     "name": "Overcast",
+     "weight": 1.0
+    },
+    {
+     "name": "Rain",
+     "weight": 0.8
+    },
+    {
+     "name": "Thunderstorm",
+     "weight": 0.6
+    }
+   ]
+  },
+  {
+   "name": "Quarry",
+   "weathers": [
+    {
+     "name": "Clear skies",
+     "weight": 3.0
+    },
+    {
+     "name": "Cloudy",
+     "weight": 1.0
+    },
+    {
+     "name": "Foggy",
+     "weight": 0.5
+    },
+    {
+     "name": "Overcast",
+     "weight": 1.0
+    },
+    {
+     "name": "Rain",
+     "weight": 0.8
+    },
+    {
+     "name": "Thunderstorm",
+     "weight": 0.6
+    }
+   ]
+  },
+  {
+   "name": "Outskirts",
+   "weathers": [
+    {
+     "name": "Clear skies",
+     "weight": 3.0
+    },
+    {
+     "name": "Cloudy",
+     "weight": 0.5
+    },
+    {
+     "name": "Foggy",
+     "weight": 1.0
+    },
+    {
+     "name": "Partly cloudy",
+     "weight": 2.0
+    },
+    {
+     "name": "Rain",
+     "weight": 1.0
+    },
+    {
+     "name": "Thunderstorm",
+     "weight": 2.0
+    }
+   ]
+  },
+  {
+   "name": "Bunker",
+   "weathers": [
+    {
+     "name": "Clear skies",
+     "weight": 3.0
+    },
+    {
+     "name": "Cloudy",
+     "weight": 0.5
+    },
+    {
+     "name": "Foggy",
+     "weight": 1.0
+    },
+    {
+     "name": "Partly cloudy",
+     "weight": 2.0
+    }
+   ]
+  },
+  {
+   "name": "Hideout",
+   "weathers": [
+    {
+     "name": "Clear skies",
+     "weight": 3.0
+    },
+    {
+     "name": "Cloudy",
+     "weight": 1.0
+    },
+    {
+     "name": "Foggy",
+     "weight": 1.0
+    },
+    {
+     "name": "Overcast",
+     "weight": 1.0
+    }
+   ]
+  }
+ ],
+ "categories": [
+  "World & Raid",
+  "Player",
+  "Items & Progression",
+  "Missions & Operations",
+  "AI",
+  "Cameras & Menus",
+  "Graphics & Audio",
+  "Debug"
+ ],
+ "essentials": [
+  "irr.World.SetWeather",
+  "irr.World.SetTimeOfDay",
+  "irr.Player.ForceExtraction",
+  "irr.Item.Spawn",
+  "irr.Item.Give",
+  "irr.Player.Invulnerable",
+  "irr.Player.Invisible",
+  "irr.Player.InfiniteAmmo",
+  "irr.Player.KeepInventory",
+  "irr.Player.CheatMoveSpeed",
+  "irr.Item.SetDurability",
+  "irr.Raid.TimerAdd",
+  "irr.Raid.TimerPause",
+  "irr.AI.KillAll",
+  "irr.AI.Enable",
+  "irr.Player.Perspective",
+  "irr.AI.Headlamps",
+  "irr.Menu.Freecam",
+  "irr.CineCam",
+  "irr.Menu.SpawnMenu",
+  "irr.Menu.CommandMenu"
+ ],
+ "commands": [
+  {
+   "cmd": "irr.World.SetWeather",
+   "cat": "World & Raid",
+   "title": "Set weather",
+   "desc": "Set weather type with optional transition. The weather number depends on the map: pick the map and the weather, the tool writes the number.",
+   "args": [
+    {
+     "name": "Weather",
+     "kind": "weather",
+     "default": "Delta:0"
+    },
+    {
+     "name": "Transition",
+     "kind": "float",
+     "min": 0,
+     "max": 120,
+     "default": 10,
+     "step": 1,
+     "unit": "s",
+     "help": "Duration of the change, in seconds.",
+     "optional": true
+    }
+   ],
+   "host": true
+  },
+  {
+   "cmd": "irr.World.SetTimeOfDay",
+   "cat": "World & Raid",
+   "title": "Set time of day",
+   "desc": "Set time of day (24h hour).",
+   "args": [
+    {
+     "name": "Hour",
+     "kind": "int",
+     "min": 0,
+     "max": 23,
+     "default": 12,
+     "step": 1,
+     "unit": "h"
+    }
+   ],
+   "host": true
+  },
+  {
+   "cmd": "irr.Player.ForceExtraction",
+   "cat": "World & Raid",
+   "title": "Force extraction",
+   "desc": "Force extraction.",
+   "args": []
+  },
+  {
+   "cmd": "irr.Raid.Timer",
+   "cat": "World & Raid",
+   "title": "Raid timer",
+   "desc": "Raid time limit; out of time = missing in action. Saved per user.",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON"
+    }
+   ]
+  },
+  {
+   "cmd": "irr.Raid.TimerDuration",
+   "cat": "World & Raid",
+   "title": "Raid duration",
+   "desc": "Raid length in minutes (restarts a running clock).",
+   "args": [
+    {
+     "name": "Minutes",
+     "kind": "int",
+     "min": 1,
+     "max": 180,
+     "default": 45,
+     "step": 1,
+     "unit": "min"
+    }
+   ]
+  },
+  {
+   "cmd": "irr.Raid.TimerAdd",
+   "cat": "World & Raid",
+   "title": "Add raid time",
+   "desc": "Add minutes to the running clock (negative removes).",
+   "args": [
+    {
+     "name": "Minutes",
+     "kind": "int",
+     "min": -60,
+     "max": 120,
+     "default": 10,
+     "step": 1,
+     "unit": "min"
+    }
+   ]
+  },
+  {
+   "cmd": "irr.Raid.TimerPause",
+   "cat": "World & Raid",
+   "title": "Pause raid timer",
+   "desc": "Pause/resume the running clock.",
+   "args": []
+  },
+  {
+   "cmd": "irr.Raid.TimerRestart",
+   "cat": "World & Raid",
+   "title": "Restart raid timer",
+   "desc": "Restart the running clock at the full duration.",
+   "args": []
+  },
+  {
+   "cmd": "irr.World.EnableLoot",
+   "cat": "World & Raid",
+   "title": "Enable loot",
+   "desc": "Enable/disable loot.",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON"
+    }
+   ]
+  },
+  {
+   "cmd": "irr.World.EnableStreamingVolumes",
+   "cat": "World & Raid",
+   "title": "Streaming volumes",
+   "desc": "Enable/disable streaming volumes.",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON"
+    }
+   ]
+  },
+  {
+   "cmd": "irr.World.ToggleExtendedParty",
+   "cat": "World & Raid",
+   "title": "Extended party",
+   "desc": "Toggle extended party.",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON"
+    }
+   ]
+  },
+  {
+   "cmd": "irr.World.Reset",
+   "cat": "World & Raid",
+   "title": "Reset world",
+   "desc": "Reset world state.",
+   "args": [],
+   "warn": "Resets the world state of your save."
+  },
+  {
+   "cmd": "irr.World.ResetSafehouse",
+   "cat": "World & Raid",
+   "title": "Reset safehouse",
+   "desc": "Reset safehouse.",
+   "args": [],
+   "warn": "Resets your safehouse."
+  },
+  {
+   "cmd": "irr.Player.Invulnerable",
+   "cat": "Player",
+   "title": "Invulnerable",
+   "desc": "Make the local character invincible.",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON"
+    }
+   ]
+  },
+  {
+   "cmd": "irr.Player.TechnicalInvulnerable",
+   "cat": "Player",
+   "title": "Technical invulnerable",
+   "desc": "Hits still open bleeds and fractures, but health is not reduced.",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON"
+    }
+   ]
+  },
+  {
+   "cmd": "irr.Player.Invisible",
+   "cat": "Player",
+   "title": "Invisible to AI",
+   "desc": "Hide the local player from AI sensing.",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON"
+    }
+   ]
+  },
+  {
+   "cmd": "irr.Player.InfiniteAmmo",
+   "cat": "Player",
+   "title": "Infinite ammo",
+   "desc": "Infinite ammunition (+ durability). Always on in hideout.",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON"
+    }
+   ]
+  },
+  {
+   "cmd": "irr.Player.KeepInventory",
+   "cat": "Player",
+   "title": "Keep inventory",
+   "desc": "Keep inventory on death.",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON"
+    }
+   ]
+  },
+  {
+   "cmd": "irr.Player.CheatMoveSpeed",
+   "cat": "Player",
+   "title": "Fast movement",
+   "desc": "Boost local movement speed.",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON"
+    }
+   ]
+  },
+  {
+   "cmd": "irr.Player.Perspective",
+   "cat": "Player",
+   "title": "First / third person",
+   "desc": "First/third person perspective.",
+   "args": [
+    {
+     "name": "View",
+     "kind": "toggle",
+     "default": 1,
+     "off": "THIRD PERSON",
+     "on": "FIRST PERSON"
+    }
+   ]
+  },
+  {
+   "cmd": "irr.Player.DealDamage",
+   "cat": "Player",
+   "title": "Deal damage to yourself",
+   "desc": "Deal damage to the local player.",
+   "args": [
+    {
+     "name": "Amount",
+     "kind": "float",
+     "min": 0,
+     "max": 200,
+     "default": 50,
+     "step": 1
+    },
+    {
+     "name": "Wound",
+     "kind": "toggle",
+     "default": 0,
+     "off": "NO",
+     "on": "YES",
+     "help": "Also open a wound."
+    }
+   ]
+  },
+  {
+   "cmd": "irr.Player.ForceDanger",
+   "cat": "Player",
+   "title": "Force danger state",
+   "desc": "Overrides every local server-side player's danger state.",
+   "args": [
+    {
+     "name": "State",
+     "kind": "choice",
+     "options": [
+      [
+       "1",
+       "IN DANGER"
+      ],
+      [
+       "0",
+       "SAFE"
+      ],
+      [
+       "-1",
+       "NORMAL"
+      ]
+     ],
+     "default": "1"
+    }
+   ]
+  },
+  {
+   "cmd": "irr.Player.CinematicCamera",
+   "cat": "Player",
+   "title": "Cinematic camera (pawn)",
+   "desc": "Toggle cinematic camera (re-possess pawn when leaving).",
+   "args": []
+  },
+  {
+   "cmd": "irr.Menu.CharacterDebug",
+   "cat": "Player",
+   "title": "Character debug menu",
+   "desc": "Toggle the character debug menu (deal damage, apply/clear status effects on the local player).",
+   "args": []
+  },
+  {
+   "cmd": "irr.Item.Spawn",
+   "cat": "Items & Progression",
+   "title": "Spawn item",
+   "desc": "Spawn item pickup(s) in front of you. The name can be part of the item name; if several items match, the game lists them in the console.",
+   "args": [
+    {
+     "name": "Item",
+     "kind": "item",
+     "default": "Bandage"
+    },
+    {
+     "name": "Count",
+     "kind": "int",
+     "min": 1,
+     "max": 100,
+     "default": 1,
+     "step": 1
+    }
+   ],
+   "host": true
+  },
+  {
+   "cmd": "irr.Item.Give",
+   "cat": "Items & Progression",
+   "title": "Give item",
+   "desc": "Add an item to stash/inventory by name/tag. The name can be part of the item name; if several items match, the game lists them in the console.",
+   "args": [
+    {
+     "name": "Item",
+     "kind": "item",
+     "default": "Bandage"
+    },
+    {
+     "name": "Count",
+     "kind": "int",
+     "min": 1,
+     "max": 100,
+     "default": 1,
+     "step": 1
+    }
+   ]
+  },
+  {
+   "cmd": "irr.Item.Categories",
+   "cat": "Items & Progression",
+   "title": "List item categories",
+   "desc": "Log spawnable item categories (in the console).",
+   "args": []
+  },
+  {
+   "cmd": "irr.Item.List",
+   "cat": "Items & Progression",
+   "title": "List items",
+   "desc": "Log items in a category (paged), with the names to use in Spawn / Give.",
+   "args": [
+    {
+     "name": "Category",
+     "kind": "text",
+     "default": "All"
+    },
+    {
+     "name": "Page",
+     "kind": "int",
+     "min": 1,
+     "max": 50,
+     "default": 1,
+     "step": 1
+    }
+   ]
+  },
+  {
+   "cmd": "irr.Item.AddResource",
+   "cat": "Items & Progression",
+   "title": "Add resource",
+   "desc": "Add a resource.",
+   "args": [
+    {
+     "name": "Resource",
+     "kind": "choice",
+     "options": [
+      [
+       "Concrete",
+       "Concrete"
+      ],
+      [
+       "Food",
+       "Food"
+      ],
+      [
+       "Metal",
+       "Metal"
+      ],
+      [
+       "Oil",
+       "Oil"
+      ]
+     ],
+     "default": "Food",
+     "editable": true
+    },
+    {
+     "name": "Amount",
+     "kind": "int",
+     "min": 1,
+     "max": 10000,
+     "default": 100,
+     "step": 10
+    }
+   ]
+  },
+  {
+   "cmd": "irr.Item.SetDurability",
+   "cat": "Items & Progression",
+   "title": "Set durability",
+   "desc": "Set durability of all weapons & armor.",
+   "args": [
+    {
+     "name": "Percent",
+     "kind": "float",
+     "min": 0,
+     "max": 100,
+     "default": 100,
+     "step": 5,
+     "unit": "%"
+    }
+   ]
+  },
+  {
+   "cmd": "irr.Item.ResetInventory",
+   "cat": "Items & Progression",
+   "title": "Reset inventory",
+   "desc": "Reset inventory to default.",
+   "args": [],
+   "warn": "Your inventory goes back to the default one."
+  },
+  {
+   "cmd": "irr.Item.ResetResources",
+   "cat": "Items & Progression",
+   "title": "Reset resources",
+   "desc": "Reset resources.",
+   "args": [],
+   "warn": "Your resources are reset."
+  },
+  {
+   "cmd": "irr.Item.ResetVendor",
+   "cat": "Items & Progression",
+   "title": "Reset vendor",
+   "desc": "Reset vendor stock.",
+   "args": []
+  },
+  {
+   "cmd": "irr.Item.Add",
+   "cat": "Items & Progression",
+   "title": "Add item (legacy)",
+   "desc": "Legacy vendor-table AddItemByRowName. Prefer Give item.",
+   "args": [
+    {
+     "name": "Row name",
+     "kind": "text",
+     "default": "Bandage"
+    }
+   ]
+  },
+  {
+   "cmd": "irr.Menu.SpawnMenu",
+   "cat": "Items & Progression",
+   "title": "Spawn menu",
+   "desc": "Toggle the debug item spawn/give menu.",
+   "args": []
+  },
+  {
+   "cmd": "irr.SpawnMenu.AllowClients",
+   "cat": "Items & Progression",
+   "title": "Spawn menu for clients",
+   "desc": "Server: accept debug spawn menu spawn/give requests from remote clients.",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON"
+    }
+   ]
+  },
+  {
+   "cmd": "irr.World.SetLevel",
+   "cat": "Items & Progression",
+   "title": "Set player level",
+   "desc": "Set player level and XP.",
+   "args": [
+    {
+     "name": "Level",
+     "kind": "int",
+     "min": 1,
+     "max": 100,
+     "default": 10,
+     "step": 1
+    },
+    {
+     "name": "XP",
+     "kind": "float",
+     "min": 0,
+     "max": 1000000,
+     "default": 0,
+     "step": 100
+    }
+   ]
+  },
+  {
+   "cmd": "irr.World.SetHideoutUnitLevel",
+   "cat": "Items & Progression",
+   "title": "Set hideout unit level",
+   "desc": "Set a hideout unit's level.",
+   "args": [
+    {
+     "name": "Unit",
+     "kind": "choice",
+     "options": [
+      [
+       "Generator",
+       "Generator"
+      ],
+      [
+       "Gunsmith",
+       "Gunsmith"
+      ],
+      [
+       "Intel Center",
+       "Intel Center"
+      ],
+      [
+       "Lighting",
+       "Lighting"
+      ],
+      [
+       "Repair Station",
+       "Repair Station"
+      ],
+      [
+       "Shooting Range",
+       "Shooting Range"
+      ],
+      [
+       "Stash",
+       "Stash"
+      ],
+      [
+       "Structure",
+       "Structure"
+      ],
+      [
+       "Terminal",
+       "Terminal"
+      ]
+     ],
+     "default": "Stash",
+     "editable": true
+    },
+    {
+     "name": "Level",
+     "kind": "int",
+     "min": 0,
+     "max": 10,
+     "default": 1,
+     "step": 1
+    }
+   ]
+  },
+  {
+   "cmd": "irr.World.SetSuccessRate",
+   "cat": "Items & Progression",
+   "title": "Set success rate",
+   "desc": "Set success rate of the last 8 missions.",
+   "args": [
+    {
+     "name": "Rate",
+     "kind": "float",
+     "min": 0,
+     "max": 100,
+     "default": 100,
+     "step": 5,
+     "unit": "%"
+    }
+   ]
+  },
+  {
+   "cmd": "irr.World.SetOverallFactionReputation",
+   "cat": "Items & Progression",
+   "title": "Set overall reputation",
+   "desc": "Set overall faction reputation.",
+   "args": [
+    {
+     "name": "Reputation",
+     "kind": "float",
+     "min": -100,
+     "max": 100,
+     "default": 50,
+     "step": 1
+    }
+   ]
+  },
+  {
+   "cmd": "irr.World.SetFactionReputation",
+   "cat": "Items & Progression",
+   "title": "Set faction reputation",
+   "desc": "Set reputation for one faction.",
+   "args": [
+    {
+     "name": "Reputation",
+     "kind": "float",
+     "min": -100,
+     "max": 100,
+     "default": 50,
+     "step": 1
+    },
+    {
+     "name": "Faction",
+     "kind": "choice",
+     "options": [
+      [
+       "BLUEFOR",
+       "BLUEFOR"
+      ],
+      [
+       "OPFOR",
+       "OPFOR"
+      ],
+      [
+       "GREYFOR",
+       "GREYFOR"
+      ],
+      [
+       "FANG",
+       "FANG"
+      ],
+      [
+       "IGC",
+       "IGC"
+      ],
+      [
+       "UICS",
+       "UICS"
+      ],
+      [
+       "VLF",
+       "VLF"
+      ]
+     ],
+     "default": "OPFOR",
+     "editable": true
+    }
+   ]
+  },
+  {
+   "cmd": "irr.Mission.Start",
+   "cat": "Missions & Operations",
+   "title": "Start mission",
+   "desc": "Start a debug mission by name (Project Settings > Mission System > DebugMissions).",
+   "args": [
+    {
+     "name": "Mission name",
+     "kind": "text",
+     "default": ""
+    }
+   ]
+  },
+  {
+   "cmd": "irr.Mission.CompleteTracked",
+   "cat": "Missions & Operations",
+   "title": "Complete tracked missions",
+   "desc": "Complete currently tracked missions.",
+   "args": []
+  },
+  {
+   "cmd": "irr.Mission.FailTracked",
+   "cat": "Missions & Operations",
+   "title": "Fail tracked missions",
+   "desc": "Fail currently tracked missions.",
+   "args": []
+  },
+  {
+   "cmd": "irr.Mission.ResetTracked",
+   "cat": "Missions & Operations",
+   "title": "Reset tracked missions",
+   "desc": "Reset currently tracked missions.",
+   "args": []
+  },
+  {
+   "cmd": "irr.Mission.ResetSystem",
+   "cat": "Missions & Operations",
+   "title": "Reset mission system",
+   "desc": "Reset mission system (optional progress wipe).",
+   "args": [
+    {
+     "name": "Reset progress",
+     "kind": "toggle",
+     "default": 1,
+     "off": "KEEP",
+     "on": "WIPE"
+    }
+   ],
+   "warn": "Can wipe your mission progress."
+  },
+  {
+   "cmd": "irr.Mission.Regenerate",
+   "cat": "Missions & Operations",
+   "title": "Regenerate missions",
+   "desc": "Regenerate missions.",
+   "args": []
+  },
+  {
+   "cmd": "irr.Operations.Start",
+   "cat": "Missions & Operations",
+   "title": "Start operation",
+   "desc": "Start one start point of the level manager's entry with this id now, skipping the roll, the gate and the pacing rules. No arguments lists the ids.",
+   "args": [
+    {
+     "name": "Operation id",
+     "kind": "text",
+     "default": "",
+     "optional": true
+    },
+    {
+     "name": "Start point",
+     "kind": "text",
+     "default": "",
+     "optional": true
+    }
+   ]
+  },
+  {
+   "cmd": "irr.Operations.StartSelected",
+   "cat": "Missions & Operations",
+   "title": "Start armed operations",
+   "desc": "Start every automatic operation the level manager armed for this raid, now.",
+   "args": []
+  },
+  {
+   "cmd": "irr.Operations.StartAll",
+   "cat": "Missions & Operations",
+   "title": "Start all operations",
+   "desc": "Start every placed operation start point that has not already fired, including points the raid never armed. Can put several operations on the same route.",
+   "args": []
+  },
+  {
+   "cmd": "irr.AI.Spawn.TestReinforcements",
+   "cat": "Missions & Operations",
+   "title": "Call reinforcements",
+   "desc": "Request director reinforcements around the first player.",
+   "args": [
+    {
+     "name": "Allegiance",
+     "kind": "choice",
+     "options": [
+      [
+       "IGC",
+       "IGC"
+      ],
+      [
+       "UICS",
+       "UICS"
+      ],
+      [
+       "VLF",
+       "VLF"
+      ],
+      [
+       "FANG",
+       "FANG"
+      ]
+     ],
+     "default": "IGC",
+     "editable": true,
+     "optional": true
+    }
+   ]
+  },
+  {
+   "cmd": "irr.AI.Enable",
+   "cat": "AI",
+   "title": "Enable AI",
+   "desc": "Enable/disable AI.",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON"
+    }
+   ]
+  },
+  {
+   "cmd": "irr.AI.KillAll",
+   "cat": "AI",
+   "title": "Kill all AI",
+   "desc": "Kill every AI pawn.",
+   "args": []
+  },
+  {
+   "cmd": "irr.AI.HideAll",
+   "cat": "AI",
+   "title": "Hide all AI",
+   "desc": "Show/hide all AI characters.",
+   "args": [
+    {
+     "name": "Hidden",
+     "kind": "toggle",
+     "default": 1,
+     "off": "SHOW",
+     "on": "HIDE"
+    }
+   ]
+  },
+  {
+   "cmd": "irr.AI.ShowAll",
+   "cat": "AI",
+   "title": "Show AI count",
+   "desc": "Print AI count and debug locations.",
+   "args": []
+  },
+  {
+   "cmd": "irr.AI.Optimization",
+   "cat": "AI",
+   "title": "AI optimization",
+   "desc": "Enable/disable AI LOD optimization.",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON"
+    }
+   ]
+  },
+  {
+   "cmd": "irr.AI.OptimizationLevel",
+   "cat": "AI",
+   "title": "Force AI optimization level",
+   "desc": "Force AI optimization level.",
+   "args": [
+    {
+     "name": "Level",
+     "kind": "int",
+     "min": 0,
+     "max": 4,
+     "default": 1,
+     "step": 1
+    }
+   ]
+  },
+  {
+   "cmd": "irr.AI.OptimizationMinMax",
+   "cat": "AI",
+   "title": "AI optimization min/max",
+   "desc": "Clamp AI optimization min/max levels.",
+   "args": [
+    {
+     "name": "Min",
+     "kind": "int",
+     "min": 0,
+     "max": 4,
+     "default": 0,
+     "step": 1
+    },
+    {
+     "name": "Max",
+     "kind": "int",
+     "min": 0,
+     "max": 4,
+     "default": 4,
+     "step": 1
+    }
+   ]
+  },
+  {
+   "cmd": "irr.AI.Headlamps",
+   "cat": "AI",
+   "title": "Bot headlamps",
+   "desc": "Bot headlamps. Applies on the next visibility tick.",
+   "args": [
+    {
+     "name": "Mode",
+     "kind": "choice",
+     "options": [
+      [
+       "0",
+       "OFF"
+      ],
+      [
+       "1",
+       "TIME OF DAY"
+      ],
+      [
+       "2",
+       "ALWAYS ON"
+      ]
+     ],
+     "default": "1",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.AI.TreeCrowns",
+   "cat": "AI",
+   "title": "Tree crown concealment",
+   "desc": "Tree crown concealment for AI sight. 0 = crowns ignored.",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.AI.SpawnDirector",
+   "cat": "AI",
+   "title": "Spawn director",
+   "desc": "Native AI spawn director. 0 = off (legacy spawner only), 1 = on (director spawns too, in parallel).",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.Menu.AISettings",
+   "cat": "AI",
+   "title": "AI settings menu",
+   "desc": "Toggle the AI settings menu (preset selection + value editor).",
+   "args": []
+  },
+  {
+   "cmd": "irr.Menu.AIDebug",
+   "cat": "AI",
+   "title": "AI debug menu",
+   "desc": "Toggle the AI debug overlay menu (per-category show/detail + global overlay settings).",
+   "args": []
+  },
+  {
+   "cmd": "irr.AIDebug.Overlay",
+   "cat": "AI",
+   "title": "AI state overlay",
+   "desc": "AI state overlay, works in packaged builds.",
+   "args": [
+    {
+     "name": "Mode",
+     "kind": "choice",
+     "options": [
+      [
+       "0",
+       "OFF"
+      ],
+      [
+       "1",
+       "LABELS"
+      ],
+      [
+       "2",
+       "+ PERCEPTION"
+      ]
+     ],
+     "default": "1",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.AI.Allegiances.List",
+   "cat": "AI",
+   "title": "List allegiances",
+   "desc": "Dump registered allegiances.",
+   "args": []
+  },
+  {
+   "cmd": "irr.AI.BotTypes.List",
+   "cat": "AI",
+   "title": "List bot types",
+   "desc": "Dump registered bot types.",
+   "args": []
+  },
+  {
+   "cmd": "irr.AI.Zones.List",
+   "cat": "AI",
+   "title": "List zones",
+   "desc": "Dump zone documents for the level.",
+   "args": []
+  },
+  {
+   "cmd": "irr.AI.Zones.Reload",
+   "cat": "AI",
+   "title": "Reload zones",
+   "desc": "Reload the AI zones of the level.",
+   "args": []
+  },
+  {
+   "cmd": "irr.Menu.Freecam",
+   "cat": "Cameras & Menus",
+   "title": "Free camera",
+   "desc": "Toggle the engine debug free camera (flying spectator; works in the released game).",
+   "args": []
+  },
+  {
+   "cmd": "irr.CineCam",
+   "cat": "Cameras & Menus",
+   "title": "Cinematic camera",
+   "desc": "Toggle the cinematic trailer camera (Tab in the camera opens every setting, H shows the keys).",
+   "args": []
+  },
+  {
+   "cmd": "irr.CineCam.Menu",
+   "cat": "Cameras & Menus",
+   "title": "Cinematic camera settings",
+   "desc": "Open/close the cinematic camera settings menu.",
+   "args": []
+  },
+  {
+   "cmd": "irr.CineCam.AddKey",
+   "cat": "Cameras & Menus",
+   "title": "Add camera keyframe",
+   "desc": "Add a path keyframe at the current camera pose.",
+   "args": []
+  },
+  {
+   "cmd": "irr.CineCam.Play",
+   "cat": "Cameras & Menus",
+   "title": "Play camera path",
+   "desc": "Play/stop the keyframed camera path.",
+   "args": []
+  },
+  {
+   "cmd": "irr.CineCam.ClearKeys",
+   "cat": "Cameras & Menus",
+   "title": "Clear camera keyframes",
+   "desc": "Delete every path keyframe.",
+   "args": []
+  },
+  {
+   "cmd": "irr.CineCam.Pause",
+   "cat": "Cameras & Menus",
+   "title": "Pause world",
+   "desc": "Pause/resume the world while the camera keeps flying.",
+   "args": [],
+   "host": true
+  },
+  {
+   "cmd": "irr.CineCam.TimeDilation",
+   "cat": "Cameras & Menus",
+   "title": "World speed (camera)",
+   "desc": "World speed while the camera runs (1 = normal; restored on exit).",
+   "args": [
+    {
+     "name": "Speed",
+     "kind": "float",
+     "min": 0.05,
+     "max": 4,
+     "default": 0.5,
+     "step": 0.05,
+     "unit": "x"
+    }
+   ]
+  },
+  {
+   "cmd": "irr.CineCam.ResetSettings",
+   "cat": "Cameras & Menus",
+   "title": "Reset camera settings",
+   "desc": "Reset every cinematic camera setting to its default.",
+   "args": []
+  },
+  {
+   "cmd": "irr.Spectator.Helmet",
+   "cat": "Cameras & Menus",
+   "title": "Bot eye view",
+   "desc": "PROTOTYPE spectator. Watch a bot from its own eye. No argument = closest, then next farther.",
+   "args": [
+    {
+     "name": "Target",
+     "kind": "choice",
+     "options": [
+      [
+       "next",
+       "NEXT"
+      ],
+      [
+       "prev",
+       "PREVIOUS"
+      ],
+      [
+       "off",
+       "OFF"
+      ]
+     ],
+     "default": "next",
+     "editable": true,
+     "optional": true
+    }
+   ]
+  },
+  {
+   "cmd": "irr.Spectator.List",
+   "cat": "Cameras & Menus",
+   "title": "List spectate targets",
+   "desc": "PROTOTYPE spectator. List spectate targets closest-first.",
+   "args": []
+  },
+  {
+   "cmd": "irr.Spectator.Engaged",
+   "cat": "Cameras & Menus",
+   "title": "Jump to engaged bot",
+   "desc": "PROTOTYPE spectator. Jump to the bot most recently in contact.",
+   "args": []
+  },
+  {
+   "cmd": "irr.Spectator.Mode",
+   "cat": "Cameras & Menus",
+   "title": "Spectator framing",
+   "desc": "PROTOTYPE spectator. Framing for the active spectate.",
+   "args": [
+    {
+     "name": "Mode",
+     "kind": "choice",
+     "options": [
+      [
+       "helmet",
+       "HELMET"
+      ],
+      [
+       "sensor",
+       "SENSOR"
+      ],
+      [
+       "chase",
+       "CHASE"
+      ]
+     ],
+     "default": "helmet"
+    }
+   ]
+  },
+  {
+   "cmd": "irr.Menu.Spectator",
+   "cat": "Cameras & Menus",
+   "title": "Spectator settings",
+   "desc": "PROTOTYPE spectator. Toggle the spectator settings overlay.",
+   "args": []
+  },
+  {
+   "cmd": "irr.Menu.Watermark",
+   "cat": "Cameras & Menus",
+   "title": "Watermark",
+   "desc": "Show/hide the watermark overlay.",
+   "args": [
+    {
+     "name": "Visible",
+     "kind": "toggle",
+     "default": 0,
+     "off": "HIDE",
+     "on": "SHOW"
+    }
+   ]
+  },
+  {
+   "cmd": "irr.Menu.CommandMenu",
+   "cat": "Cameras & Menus",
+   "title": "Command menu",
+   "desc": "Toggle the debug console command menu (most commands, with a search field).",
+   "args": []
+  },
+  {
+   "cmd": "irr.Menu.LogMenu",
+   "cat": "Cameras & Menus",
+   "title": "Log menu",
+   "desc": "Toggle the debug log category menu (Verbose on/off).",
+   "args": []
+  },
+  {
+   "cmd": "irr.Menu.VoiceChat",
+   "cat": "Cameras & Menus",
+   "title": "Voice chat menu",
+   "desc": "Toggle the voice chat debug menu (devices, push-to-talk, processing, mic level).",
+   "args": []
+  },
+  {
+   "cmd": "irr.ui.ThemeEditor",
+   "cat": "Cameras & Menus",
+   "title": "Theme editor",
+   "desc": "Toggle the Theme Editor (menu styling: palette, typography, row layout).",
+   "args": []
+  },
+  {
+   "cmd": "irr.Graphics.LumenLow",
+   "cat": "Graphics & Audio",
+   "title": "Lumen low",
+   "desc": "Set Lumen scalability low/normal.",
+   "args": [
+    {
+     "name": "Quality",
+     "kind": "toggle",
+     "default": 1,
+     "off": "NORMAL",
+     "on": "LOW"
+    }
+   ]
+  },
+  {
+   "cmd": "irr.Graphics.MeshPack",
+   "cat": "Graphics & Audio",
+   "title": "MeshPack actors",
+   "desc": "Toggle actors tagged MeshPackActor. No argument toggles.",
+   "args": [
+    {
+     "name": "Mode",
+     "kind": "choice",
+     "options": [
+      [
+       "hide",
+       "HIDE"
+      ],
+      [
+       "show",
+       "SHOW"
+      ]
+     ],
+     "default": "hide",
+     "optional": true
+    }
+   ]
+  },
+  {
+   "cmd": "irr.TextureQuality.VRAMCap",
+   "cat": "Graphics & Audio",
+   "title": "Texture VRAM cap",
+   "desc": "Texture quality capped by dedicated video memory (<=4.5 GB Low, <=8.5 GB Medium, <=12.5 GB High). 0: no cap.",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.FrameGen.Status",
+   "cat": "Graphics & Audio",
+   "title": "Frame generation status",
+   "desc": "Logs frame generation support, the session swap chain and the vendor cvars.",
+   "args": []
+  },
+  {
+   "cmd": "irr.UDS.SkyTickInterval",
+   "cat": "Graphics & Audio",
+   "title": "Sky tick interval",
+   "desc": "Tick interval (s) for the sky actor. < 0 keeps the Blueprint's own interval.",
+   "args": [
+    {
+     "name": "Seconds",
+     "kind": "float",
+     "min": -1,
+     "max": 5,
+     "default": 0.1,
+     "step": 0.05,
+     "unit": "s",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.UDS.WeatherTickInterval",
+   "cat": "Graphics & Audio",
+   "title": "Weather tick interval",
+   "desc": "Tick interval (s) for the weather actor. < 0 keeps the Blueprint's own interval.",
+   "args": [
+    {
+     "name": "Seconds",
+     "kind": "float",
+     "min": -1,
+     "max": 5,
+     "default": 0.1,
+     "step": 0.05,
+     "unit": "s",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.FX.CosmeticBullets",
+   "cat": "Graphics & Audio",
+   "title": "Cosmetic bullets",
+   "desc": "Client master switch for the cosmetic bullet system (tracers/whiz cosmetics).",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.FX.ImpactFX.CullDistance",
+   "cat": "Graphics & Audio",
+   "title": "Impact FX distance",
+   "desc": "Bullet impact FX farther than this from every camera are skipped. <= 0 disables.",
+   "args": [
+    {
+     "name": "Distance",
+     "kind": "float",
+     "min": 0,
+     "max": 50000,
+     "default": 10000,
+     "step": 500,
+     "unit": "cm",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.FX.ImpactFX.MaxPerWeaponPerFrame",
+   "cat": "Graphics & Audio",
+   "title": "Impact FX per frame",
+   "desc": "Max bullet impact FX one weapon plays per frame. <= 0 = unlimited.",
+   "args": [
+    {
+     "name": "Count",
+     "kind": "int",
+     "min": 0,
+     "max": 32,
+     "default": 4,
+     "step": 1,
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.FX.BulletDebugTraces",
+   "cat": "Graphics & Audio",
+   "title": "Bullet debug traces",
+   "desc": "Toggle bullet debug traces.",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON"
+    }
+   ]
+  },
+  {
+   "cmd": "irr.Audio.TPSoundsOnly",
+   "cat": "Graphics & Audio",
+   "title": "Third-person sounds only",
+   "desc": "Only play third-person weapon sounds.",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON"
+    }
+   ]
+  },
+  {
+   "cmd": "irr.Audio.LocalPlayerWeaponSounds",
+   "cat": "Graphics & Audio",
+   "title": "Own weapon sounds",
+   "desc": "Toggle local player weapon sounds.",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON"
+    }
+   ]
+  },
+  {
+   "cmd": "irr.Audio.ResetEngine",
+   "cat": "Graphics & Audio",
+   "title": "Reset sound engine",
+   "desc": "Reset the sound engine (if the sound stops working).",
+   "args": []
+  },
+  {
+   "cmd": "irr.Audio.UnregisterMainDevice",
+   "cat": "Graphics & Audio",
+   "title": "Unregister audio device",
+   "desc": "Unregister the main audio device.",
+   "args": []
+  },
+  {
+   "cmd": "irr.Audio.RegisterMainDevice",
+   "cat": "Graphics & Audio",
+   "title": "Register audio device",
+   "desc": "Register the main audio device.",
+   "args": []
+  },
+  {
+   "cmd": "irr.Perf.TickHygiene",
+   "cat": "Graphics & Audio",
+   "title": "Tick hygiene",
+   "desc": "Turn off ticks that do no work. 0 restores them.",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.Perf.TickHygiene.Report",
+   "cat": "Graphics & Audio",
+   "title": "Tick hygiene report",
+   "desc": "Print what the tick hygiene subsystem has turned off in this world.",
+   "args": []
+  },
+  {
+   "cmd": "irr.Outfit.MergesPerFrame",
+   "cat": "Graphics & Audio",
+   "title": "Outfit merges per frame",
+   "desc": "Outfit merges built per frame; each is a few ms of game-thread work.",
+   "args": [
+    {
+     "name": "Count",
+     "kind": "int",
+     "min": 1,
+     "max": 16,
+     "default": 2,
+     "step": 1,
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.AIDebug.CoverCache",
+   "cat": "Debug",
+   "title": "Cover cache overlay",
+   "desc": "Faction cover cache overlay, colored by protection.",
+   "args": [
+    {
+     "name": "Mode",
+     "kind": "choice",
+     "options": [
+      [
+       "0",
+       "OFF"
+      ],
+      [
+       "1",
+       "MARKERS"
+      ],
+      [
+       "2",
+       "+ DETAIL"
+      ]
+     ],
+     "default": "1",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.AIDebug.SearchGrid",
+   "cat": "Debug",
+   "title": "Search grid overlay",
+   "desc": "Shared search-grid overlay (green = searched, red = open).",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.AIDebug.TreeCrowns",
+   "cat": "Debug",
+   "title": "Tree crowns overlay",
+   "desc": "Tree crown concealment volumes.",
+   "args": [
+    {
+     "name": "Mode",
+     "kind": "choice",
+     "options": [
+      [
+       "0",
+       "OFF"
+      ],
+      [
+       "1",
+       "CROWNS"
+      ],
+      [
+       "2",
+       "+ DENSITY"
+      ]
+     ],
+     "default": "1",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.AIDebug.DoorLinks",
+   "cat": "Debug",
+   "title": "Door links overlay",
+   "desc": "Smart nav links (doors) vs the navmesh.",
+   "args": [
+    {
+     "name": "Mode",
+     "kind": "choice",
+     "options": [
+      [
+       "0",
+       "OFF"
+      ],
+      [
+       "1",
+       "LINKS"
+      ],
+      [
+       "2",
+       "+ DETAIL"
+      ]
+     ],
+     "default": "1",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.AIDebug.Overlay.Range",
+   "cat": "Debug",
+   "title": "AI overlay range",
+   "desc": "AI overlay cull distance from the view origin.",
+   "args": [
+    {
+     "name": "Range",
+     "kind": "int",
+     "min": 500,
+     "max": 30000,
+     "default": 6000,
+     "step": 500,
+     "unit": "cm",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.AIDebug.Overlay.MaxBots",
+   "cat": "Debug",
+   "title": "AI overlay max bots",
+   "desc": "Max labeled bots per frame, nearest first.",
+   "args": [
+    {
+     "name": "Bots",
+     "kind": "int",
+     "min": 1,
+     "max": 100,
+     "default": 20,
+     "step": 1,
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.AIDebug.SpawnRally",
+   "cat": "Debug",
+   "title": "Spawn rally gizmo",
+   "desc": "Draw reinforcement rally solves.",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.AIDebug.SpawnValidation",
+   "cat": "Debug",
+   "title": "Spawn validation gizmo",
+   "desc": "Draw held spawn-validation candidates (colour = reject reason).",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.AI.Headlamps.Dump",
+   "cat": "Debug",
+   "title": "Dump headlamps",
+   "desc": "Dump the headlamp hardware state of the first few registered bots.",
+   "args": []
+  },
+  {
+   "cmd": "irr.AI.LightSense.Dump",
+   "cat": "Debug",
+   "title": "Dump light sources",
+   "desc": "Logs every light source, each bot's sighted beams and the players' visible lasers.",
+   "args": []
+  },
+  {
+   "cmd": "irr.AI.TreeCrowns.Stats",
+   "cat": "Debug",
+   "title": "Tree crown stats",
+   "desc": "Logs the tree crown index of the current world.",
+   "args": []
+  },
+  {
+   "cmd": "irr.AI.Nav.CheckDoorLinks",
+   "cat": "Debug",
+   "title": "Check door links",
+   "desc": "Checks every door nav link against the navmesh.",
+   "args": [
+    {
+     "name": "Owner filter",
+     "kind": "text",
+     "default": "",
+     "optional": true
+    }
+   ]
+  },
+  {
+   "cmd": "irr.AI.Spawn.DumpChassis",
+   "cat": "Debug",
+   "title": "Dump AI bodies",
+   "desc": "Dump chassis/clothing render state for every AI character (invisible-body hunt).",
+   "args": []
+  },
+  {
+   "cmd": "irr.AI.AvoidanceMode",
+   "cat": "Debug",
+   "title": "Bot avoidance mode",
+   "desc": "Global avoidance mode override for all bots, for A/B testing.",
+   "args": [
+    {
+     "name": "Mode",
+     "kind": "choice",
+     "options": [
+      [
+       "-1",
+       "PER BOT"
+      ],
+      [
+       "0",
+       "NONE"
+      ],
+      [
+       "1",
+       "DETOUR CROWD"
+      ]
+     ],
+     "default": "-1",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.AI.TurnInertia",
+   "cat": "Debug",
+   "title": "Bot turn inertia",
+   "desc": "Global override for the AI turn-inertia yaw spring.",
+   "args": [
+    {
+     "name": "Mode",
+     "kind": "choice",
+     "options": [
+      [
+       "-1",
+       "PER BOT"
+      ],
+      [
+       "0",
+       "OFF"
+      ],
+      [
+       "1",
+       "ON"
+      ]
+     ],
+     "default": "-1",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.AI.AtAngleRotation",
+   "cat": "Debug",
+   "title": "Bot at-angle rotation",
+   "desc": "Global override for the AI at-angle body rotation mode.",
+   "args": [
+    {
+     "name": "Mode",
+     "kind": "choice",
+     "options": [
+      [
+       "-1",
+       "PER BOT"
+      ],
+      [
+       "0",
+       "FOLLOW DESIRED"
+      ],
+      [
+       "1",
+       "TURN AT ANGLE"
+      ]
+     ],
+     "default": "-1",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.AI.OffMeshRecovery",
+   "cat": "Debug",
+   "title": "Off-navmesh recovery",
+   "desc": "Push bots back toward the last valid nav location.",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.AI.SimpleAim",
+   "cat": "Debug",
+   "title": "Bot aim mode",
+   "desc": "Bone-free bot aiming.",
+   "args": [
+    {
+     "name": "Mode",
+     "kind": "choice",
+     "options": [
+      [
+       "-1",
+       "AUTO"
+      ],
+      [
+       "0",
+       "PRECISE"
+      ],
+      [
+       "1",
+       "SIMPLE"
+      ]
+     ],
+     "default": "-1",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.AI.AimCommitLog",
+   "cat": "Debug",
+   "title": "Aim commit log",
+   "desc": "Log the aim commitment lifecycle per bot.",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.AI.SharedNoiseEstimate",
+   "cat": "Debug",
+   "title": "Shared noise estimate",
+   "desc": "All AI listeners of one noise share a single location estimate.",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.AI.PerceptionSharing.SkipIdleTeams",
+   "cat": "Debug",
+   "title": "Skip idle teams",
+   "desc": "Skip cluster building for teams with no contact reports.",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.AI.NewTargetPaths.Debug",
+   "cat": "Debug",
+   "title": "Target paths debug",
+   "desc": "Path manager debug.",
+   "args": [
+    {
+     "name": "Mode",
+     "kind": "choice",
+     "options": [
+      [
+       "0",
+       "OFF"
+      ],
+      [
+       "1",
+       "STATS"
+      ],
+      [
+       "2",
+       "+ DRAW"
+      ],
+      [
+       "3",
+       "+ FAILURES"
+      ]
+     ],
+     "default": "1",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.AI.VisCache.Debug",
+   "cat": "Debug",
+   "title": "Visibility cache debug",
+   "desc": "Draw traced directions: green = clear, red = blocked.",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.Avoidance.Debug",
+   "cat": "Debug",
+   "title": "Avoidance claims",
+   "desc": "Draw all avoidance claims, color-coded by type.",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.Nav.DebugRooms",
+   "cat": "Debug",
+   "title": "Navmesh rooms",
+   "desc": "Room map debug drawing.",
+   "args": [
+    {
+     "name": "Mode",
+     "kind": "choice",
+     "options": [
+      [
+       "0",
+       "OFF"
+      ],
+      [
+       "1",
+       "ROOMS"
+      ],
+      [
+       "2",
+       "+ OPEN SPACE"
+      ]
+     ],
+     "default": "1",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.Nav.BuildRooms",
+   "cat": "Debug",
+   "title": "Build navmesh rooms",
+   "desc": "Forces a (re)build of the navmesh room map.",
+   "args": []
+  },
+  {
+   "cmd": "irr.Vehicle.Debug",
+   "cat": "Debug",
+   "title": "Vehicle debug",
+   "desc": "Every vehicle debug draw at once.",
+   "args": [
+    {
+     "name": "Mode",
+     "kind": "choice",
+     "options": [
+      [
+       "-1",
+       "OFF"
+      ],
+      [
+       "0",
+       "PER COMPONENT"
+      ],
+      [
+       "1",
+       "ON"
+      ]
+     ],
+     "default": "1",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.Traversal.Debug",
+   "cat": "Debug",
+   "title": "Traversal debug",
+   "desc": "Traversal obstacle scan debug.",
+   "args": [
+    {
+     "name": "Mode",
+     "kind": "choice",
+     "options": [
+      [
+       "0",
+       "OFF"
+      ],
+      [
+       "1",
+       "LOG"
+      ],
+      [
+       "2",
+       "+ DRAW"
+      ]
+     ],
+     "default": "1",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.FireSupport.Debug",
+   "cat": "Debug",
+   "title": "Fire support debug",
+   "desc": "Show the designation state machine.",
+   "args": [
+    {
+     "name": "Mode",
+     "kind": "choice",
+     "options": [
+      [
+       "0",
+       "OFF"
+      ],
+      [
+       "1",
+       "DRAW"
+      ],
+      [
+       "2",
+       "DRAW + LOG"
+      ]
+     ],
+     "default": "1",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.FX.CosmeticBullets.Debug",
+   "cat": "Debug",
+   "title": "Cosmetic bullets debug",
+   "desc": "Cosmetic bullet debug drawing.",
+   "args": [
+    {
+     "name": "Mode",
+     "kind": "choice",
+     "options": [
+      [
+       "0",
+       "OFF"
+      ],
+      [
+       "1",
+       "LINES"
+      ],
+      [
+       "2",
+       "+ LOG"
+      ]
+     ],
+     "default": "1",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.Laser.DotDebug",
+   "cat": "Debug",
+   "title": "Laser dot debug",
+   "desc": "On-screen readout per laser dot.",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.Inventory.SwapLog",
+   "cat": "Debug",
+   "title": "Item swap log",
+   "desc": "Log every item-swap decision with the reason it was declined.",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.Audio.DebugRooms",
+   "cat": "Debug",
+   "title": "Audio rooms overlay",
+   "desc": "Wwise room/portal/ambient overlay.",
+   "args": [
+    {
+     "name": "Mode",
+     "kind": "choice",
+     "options": [
+      [
+       "0",
+       "OFF"
+      ],
+      [
+       "1",
+       "WIREFRAMES"
+      ],
+      [
+       "2",
+       "+ LINKS"
+      ]
+     ],
+     "default": "1",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.Audio.AcousticDebug",
+   "cat": "Debug",
+   "title": "Acoustic debug",
+   "desc": "Draws the Wwise room and indoor/outdoor state above every pawn.",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.Audio.DebugVoice",
+   "cat": "Debug",
+   "title": "Voice input overlay",
+   "desc": "Voice chat input overlay (mic level / PTT / talking players).",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.Perf.ObjectTickTiming",
+   "cat": "Debug",
+   "title": "Object tick timing",
+   "desc": "Time every IRR object tick by class. Read with Dump object ticks.",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON",
+     "optional": true
+    }
+   ],
+   "cvar": true
+  },
+  {
+   "cmd": "irr.Perf.DumpObjectTicks",
+   "cat": "Debug",
+   "title": "Dump object ticks",
+   "desc": "Print per-class timings gathered by Object tick timing, sorted by cost.",
+   "args": [
+    {
+     "name": "Action",
+     "kind": "choice",
+     "options": [
+      [
+       "reset",
+       "RESET"
+      ]
+     ],
+     "default": "reset",
+     "optional": true
+    }
+   ]
+  },
+  {
+   "cmd": "irr.Showcase.Profile",
+   "cat": "Debug",
+   "title": "Showcase profile",
+   "desc": "Separate showcase loadout/stash/progress; real saves untouched. Reloads the level, not in a raid.",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON"
+    }
+   ]
+  },
+  {
+   "cmd": "irr.Showcase.Reset",
+   "cat": "Debug",
+   "title": "Reset showcase",
+   "desc": "Restore the showcase saves from the template. Reloads the level.",
+   "args": []
+  },
+  {
+   "cmd": "irr.Showcase.CaptureTemplate",
+   "cat": "Debug",
+   "title": "Capture showcase template",
+   "desc": "Save the current showcase state as what Reset restores. Use it in the hideout.",
+   "args": []
+  },
+  {
+   "cmd": "irr.Showcase.Status",
+   "cat": "Debug",
+   "title": "Showcase status",
+   "desc": "Log showcase profile + raid timer state.",
+   "args": []
+  },
+  {
+   "cmd": "irr.Spectator.Debug",
+   "cat": "Debug",
+   "title": "Spectator debug",
+   "desc": "PROTOTYPE spectator. Dump world/controller/roster resolution.",
+   "args": []
+  },
+  {
+   "cmd": "irr.Debug.Operations",
+   "cat": "Debug",
+   "title": "Debug operations flag",
+   "desc": "Enable debug operations flag.",
+   "args": [
+    {
+     "name": "Enabled",
+     "kind": "toggle",
+     "default": 1,
+     "off": "OFF",
+     "on": "ON"
+    }
+   ]
+  },
+  {
+   "cmd": "irr.Debug.EnableGCLogging",
+   "cat": "Debug",
+   "title": "Enable GC logging",
+   "desc": "Enable GC logger.",
+   "args": []
+  },
+  {
+   "cmd": "irr.Debug.DisableGCLogging",
+   "cat": "Debug",
+   "title": "Disable GC logging",
+   "desc": "Disable GC logger.",
+   "args": []
+  },
+  {
+   "cmd": "irr.Debug.ResetAchievements",
+   "cat": "Debug",
+   "title": "Reset achievements",
+   "desc": "Reset achievements.",
+   "args": [],
+   "warn": "Resets your achievements."
+  }
+ ],
+ "items": [
+  [
+   "12x70_Buckshot",
+   "Ammunition"
+  ],
+  [
+   "12x70_Slug",
+   "Ammunition"
+  ],
+  [
+   "45ACP_HS",
+   "Ammunition"
+  ],
+  [
+   "545x39_BP",
+   "Ammunition"
+  ],
+  [
+   "545x39_PS",
+   "Ammunition"
+  ],
+  [
+   "556x45_FMJ",
+   "Ammunition"
+  ],
+  [
+   "556x45_M855",
+   "Ammunition"
+  ],
+  [
+   "57x28_SS197LF",
+   "Ammunition"
+  ],
+  [
+   "762x39_BP",
+   "Ammunition"
+  ],
+  [
+   "762x39_HP",
+   "Ammunition"
+  ],
+  [
+   "762x39_PS",
+   "Ammunition"
+  ],
+  [
+   "762x51_M62",
+   "Ammunition"
+  ],
+  [
+   "762x51_M80",
+   "Ammunition"
+  ],
+  [
+   "762x54_R_PS",
+   "Ammunition"
+  ],
+  [
+   "9x19_AP6x3",
+   "Ammunition"
+  ],
+  [
+   "9x19_PSO",
+   "Ammunition"
+  ],
+  [
+   "9x39_BP",
+   "Ammunition"
+  ],
+  [
+   "9x39_SP-5",
+   "Ammunition"
+  ],
+  [
+   "x300_Blackout_M62",
+   "Ammunition"
+  ],
+  [
+   "x300_Blackout_ME3",
+   "Ammunition"
+  ],
+  [
+   "x338_AP",
+   "Ammunition"
+  ],
+  [
+   "AR-15_10x5_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "AR-15_11x5_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "AR-15_14x5_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "AR-15_16_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "AR-15_18_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "AR-15_20_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "AUG_A3_Barrel_15_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "AUG_A3_Barrel_16x4_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "AUG_A3_Barrel_20_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "FAL_13_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "FAL_16_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "FAL_21_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "Five_Seven_Standard_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "Five_Seven_Threaded_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "Glock_19_Standard_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "Glock_19_Threaded_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "Honey_Badger_12_Inch_barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "Honey_Badger_7_Inch_barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "Honey_Badger_9_Inch_barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "KRISS_Vector_45ACP_12_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "KRISS_Vector_45ACP_5x5_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "KRISS_Vector_45ACP_9_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "M14_16_Inch_762x51_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "M14_22_Inch_762x51_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "M2_14_Inch_Tactical_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "M2_18x5_Inch_Field_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "M2_18x5_Inch_Tactical_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "M2_21_Inch_Field_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "M700_14_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "M700_16_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "M700_18_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "M700_20_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "M700_22_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "M700_24_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "M700_26_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "M700_28_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "M700_PGW_Defense_C14_26_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "M9A3_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "MCX_11x5_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "MCX_16_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "MCX_6x75_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "MCX_9_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "MCX_Rattler_5x5_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "MK-47_10-Inch_762x39_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "MK-47_16-Inch_762x39_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "MPX_10x5_Inch_9x19_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "MPX_14_Inch_9x19_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "MPX_4x5_Inch_9x19_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "MPX_6x5_Inch_9x19_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "MPX_8_Inch_9x19_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "MPX_Ronin_6_Inch_9x19_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "P320_13x5mm_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "P320_Compact_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "P320_Threaded_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "P90_10x4_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "P90_14x25_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "P90_16_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "QSZ-92_Standard_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "RFB_18_Inch_762x51_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "RFB_24_Inch_762x51_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "SCAR-L_Barrel_10_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "SCAR-L_Barrel_14_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "SCAR-L_Barrel_18_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "SCAR_H_16_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "SR-25_16_Inch_762x51_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "SR-25_20_Inch_762x51_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "SRS_A2_16_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "SRS_A2_18_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "SRS_A2_22_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "SRS_A2_24_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "SRS_A2_26_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "VR80_20_Inch_Barrel",
+   "Attachments / Barrel"
+  ],
+  [
+   "VR80_Barrel_Nut",
+   "Attachments / Barrel"
+  ],
+  [
+   "VR80_Barrel_Shroud",
+   "Attachments / Barrel"
+  ],
+  [
+   "AK-12_Dust_Cover",
+   "Attachments / DustCover"
+  ],
+  [
+   "AK_Izhmash_Dust_Cover",
+   "Attachments / DustCover"
+  ],
+  [
+   "AK_SAG_MK3_Krink_Dust_Cover",
+   "Attachments / DustCover"
+  ],
+  [
+   "AK_SAG_MK3_Upper_Rail_Dust_Cover",
+   "Attachments / DustCover"
+  ],
+  [
+   "AK_Zenitco_B-33_Dust_Cover",
+   "Attachments / DustCover"
+  ],
+  [
+   "AKS-74U_Dust_Cover",
+   "Attachments / DustCover"
+  ],
+  [
+   "AS_VAL_Dust_Cover",
+   "Attachments / DustCover"
+  ],
+  [
+   "FAL_Advanced_Dust_Cover",
+   "Attachments / DustCover"
+  ],
+  [
+   "FAL_Standard_Dust_Cover",
+   "Attachments / DustCover"
+  ],
+  [
+   "PP-19_Dust_Cover",
+   "Attachments / DustCover"
+  ],
+  [
+   "QBZ-97_Carry_Handle",
+   "Attachments / DustCover"
+  ],
+  [
+   "QBZ-97_Longbow_Carry_Handle",
+   "Attachments / DustCover"
+  ],
+  [
+   "RPK_Gun_Power_Nation_Dust_Cover",
+   "Attachments / DustCover"
+  ],
+  [
+   "Saiga_12K_Dust_Cover",
+   "Attachments / DustCover"
+  ],
+  [
+   "SKS_UTG_Leapers_U640_Dust_Cover",
+   "Attachments / DustCover"
+  ],
+  [
+   "VSS_Dust_Cover",
+   "Attachments / DustCover"
+  ],
+  [
+   "AUG_Vertical_Foregrip",
+   "Attachments / Foregrip"
+  ],
+  [
+   "BCM_Gunfighter_Mod3_Foregrip",
+   "Attachments / Foregrip"
+  ],
+  [
+   "BT_QuickDetach_Unigrip",
+   "Attachments / Foregrip"
+  ],
+  [
+   "Daniel_Defense_M-LOK_Vertical_Foregrip",
+   "Attachments / Foregrip"
+  ],
+  [
+   "Daniel_Defense_Picatinny_Foregrip",
+   "Attachments / Foregrip"
+  ],
+  [
+   "Fortis_SHIFT_Short_M-LOK_Angled_Foregrip",
+   "Attachments / Foregrip"
+  ],
+  [
+   "Fortis_SHIFT_Vertical_Foregrip",
+   "Attachments / Foregrip"
+  ],
+  [
+   "IMI_Defense_FSG2_Foregrip",
+   "Attachments / Foregrip"
+  ],
+  [
+   "Kingarms_Lite_Angled_Grip",
+   "Attachments / Foregrip"
+  ],
+  [
+   "Magpul_MOE_RVG_Forerip",
+   "Attachments / Foregrip"
+  ],
+  [
+   "Magpul_MVG_M-LOK_FDE_Vertical_Grip",
+   "Attachments / Foregrip"
+  ],
+  [
+   "Stark_SE3_Foregrip",
+   "Attachments / Foregrip"
+  ],
+  [
+   "STV-380_Handguard_Panel",
+   "Attachments / Foregrip"
+  ],
+  [
+   "TangoDown_Stubby_Vertical_Foregrip",
+   "Attachments / Foregrip"
+  ],
+  [
+   "Troy_Modular_Combat_Grip",
+   "Attachments / Foregrip"
+  ],
+  [
+   "Zenitco_RK-1_45deg_Foregrip",
+   "Attachments / Foregrip"
+  ],
+  [
+   "AK-74_Gas_Tube",
+   "Attachments / GasTube"
+  ],
+  [
+   "AKS-74U_Gas_Tube",
+   "Attachments / GasTube"
+  ],
+  [
+   "AR-10_Low_Profile_Gas_Block",
+   "Attachments / GasTube"
+  ],
+  [
+   "Daniel_Defense_MK12_Low_Profile_Gas_Block",
+   "Attachments / GasTube"
+  ],
+  [
+   "Honey_Badger_Gas_Tube",
+   "Attachments / GasTube"
+  ],
+  [
+   "M4A1_Front_Sight_With_Gas_Block",
+   "Attachments / GasTube"
+  ],
+  [
+   "MCX_Long_Gas_Tube",
+   "Attachments / GasTube"
+  ],
+  [
+   "MCX_Short_Gas_Tube",
+   "Attachments / GasTube"
+  ],
+  [
+   "PP-19_Gas_Tube",
+   "Attachments / GasTube"
+  ],
+  [
+   "RPK-74_Gas_Tube",
+   "Attachments / GasTube"
+  ],
+  [
+   "Saiga_12K_Gas_Tube",
+   "Attachments / GasTube"
+  ],
+  [
+   "SR-25_HTX_Concepts_Low_Profile_Gas_Block",
+   "Attachments / GasTube"
+  ],
+  [
+   "SR-25_M110_Gas_Block",
+   "Attachments / GasTube"
+  ],
+  [
+   "SVDS_Gas_Tube",
+   "Attachments / GasTube"
+  ],
+  [
+   "AK-12_Handguard_Polymer",
+   "Attachments / Handguard"
+  ],
+  [
+   "AK_CAF_WASR_Wooden_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "AK_Izhmash_Polymer_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "AK_Magpul_MOE_M-LOK_FDE_Hanguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "AK_SAG_MK1_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "AK_SAG_MK2x1_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "AK_SAG_MK3_Lower_M-LOK_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "AK_SAG_MK3_Lower_Rail_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "AK_Zenitco_B-10_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "AK_Zenitco_B-11_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "AK_Zenitco_B-30_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "AKS-74U_Alfa_Arms_Goliaf_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "AKS-74U_Wooden_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "AR-10_CMMG_MK3_RML15_15_Inch_Ghillie_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "AR-10_CMMG_MK3_RML15_15_Inch_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "AR-10_CMMG_MK3_RML9_9_Inch_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "AR-10_Lancer_LCH7_M-LOK_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "AR-10_Noveske_Quadrail_10x5_Inch_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "AR-10_URX_4_14x5_Inch_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "AR-15_Colt_A2_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "AR-15_Daniel_Defense_RIS_II_9x5_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "AR-15_Geissele_MK16_M-LOK_10x5_Inch_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "AR-15_Geissele_MK16_M-LOK_9x3_Inch_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "AR-15_Geissele_MK8_M-LOK_13_Inch_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "AR-15_Geissele_MK8_M-LOK_7_Inch_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "AR-15_Geissele_MK8_M-LOK_9x5_Inch_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "AR-15_KAC_URX_4_10x75_Inch_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "AR-15_KAC_URX_4_14_Inch_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "AR-15_KAC_URX_4_8x5_Inch_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "AUG_A3_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "FAL_M-LOK_Short_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "FAL_Quad_Rail_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "FAL_Standard_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "FAL_VLTOR_Short_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "Geissele_MK16_M-LOK_13x5_Inch_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "Honey_Badger_12_Inch_handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "Honey_Badger_6_Inch_handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "Honey_Badger_9_Inch_handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "KPYK_CRC_1U008_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "KPYK_CRC_1U040_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "KRISS_Vector_11_Inch_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "KRISS_Vector_MK1_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "LAMG_M-LOK_Standard_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "LAMG_Picatinny_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "M14_Norinco_Black_Top",
+   "Attachments / Handguard"
+  ],
+  [
+   "M14_Springfield_Armory_Brown_Top",
+   "Attachments / Handguard"
+  ],
+  [
+   "M2_Agency_Arms_Benelli_M-LOK_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "M2_Field_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "M700_MDT_ESS_12_Inch_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "M700_MDT_ESS_15_Inch_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "M700_MDT_ESS_18_Inch_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "MCX_10_Inch_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "MCX_12_Inch_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "MCX_16_Inch_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "MCX_8_Inch_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "MCX_Canebrake_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "MCX_Rattler_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "MCX_SD_10_Inch_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "MCX_SD_12_Inch_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "MCX_SD_16_Inch_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "MP5_ICS_With_Flashlight_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "MP5_Polymer_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "MP5_PTR_Tri-Rail_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "MP5_Slim_Polymer_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "MP5K_M-LOK_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "MP5K_Polymer_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "MP5K_Polymer_With_Foregrip_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "MPX_Lancer_M-LOK_14_Inch_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "MPX_Lancer_M-LOK_16_Inch_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "MPX_M-LOK_4_Inch_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "MPX_M-LOK_6_Inch_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "MPX_M-LOK_8_Inch_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "MPX_Midwest_M-LOK_10x5_Inch_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "MPX_Midwest_M-LOK_14_Inch_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "MPX_Midwest_M-LOK_6x5_Inch_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "P90_DHD_M-LOK_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "P90_Quad_Rail_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "RPK-74_Handguard_Polymer",
+   "Attachments / Handguard"
+  ],
+  [
+   "RPK_Gun_Power_Nation_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "Saiga_12K_Bravo-18_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "Saiga_12K_Custom_Guns_Type-340_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "Saiga_12K_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "SRS-A2_Covert_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "SRS-A2_Full_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "SVD_Quad_Rail_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "SVD_SAG_Mk1_Chassis",
+   "Attachments / Handguard"
+  ],
+  [
+   "SVDS_Polymer_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "VAL_Black_Polymer_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "VAL_Plum_Polymer_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "VR80_Handguard",
+   "Attachments / Handguard"
+  ],
+  [
+   "AK-12_545x39_Polymer_30Rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "AK_545x39_60rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "AK_545x39_Bakelite_30rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "AK_545x39_Drum_95rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "AK_545x39_Polymer_45Rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "AK_545x39_PS_30rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "AK_556x45_Black_30rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "AK_762x39_Bakelite_30rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "AK_762x39_Star_20Rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "AK_Magpul_PMAG_GEN_M3_762x39_30Rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "AK_Molot_556x45_45Rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "AK_Molot_Arms_762x39_75Rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "AR-10_762x51_Stanag_20Rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "AR-10_X-Products_X-25_762x51_50Rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "AR-15_Colt_A2_Stanag_556x45_20Rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "AR-15_Colt_A2_Stanag_556x45_30Rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "AR-15_MagPul_PMAG_556x45_60rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "AR-15_SureFire_MAG5_Stanag_556x45_60Rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "AUG_556x45_30rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "AUG_556x45_42rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "FAL_762x51_20rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "FAL_762x51_30rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "FAL_762x51_50rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "Five_Seven_57x28_20rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "Five_Seven_57x28_30rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "Glock_19_9x19_15rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "Glock_19_9x19_20rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "HK_MP5_9x19_30rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "KRISS_Vector_45ACP_13Rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "KRISS_Vector_45ACP_30rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "LAMG_Box_556x45_150Rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "M14_Standard_762x51_10Rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "M14_Standard_762x51_20Rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "M14_X-Products_X-14_Drum_762x51_50Rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "M2_Agency_Arms_18x5_Inch_12ga_7-shell",
+   "Attachments / Mag"
+  ],
+  [
+   "M2_Agency_Arms_21_Inch_12ga_8-shell",
+   "Attachments / Mag"
+  ],
+  [
+   "M2_Nordic_14_inch_12ga_5-shell",
+   "Attachments / Mag"
+  ],
+  [
+   "M700_x338_5rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "M700_x338_8rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "M9A3_9x19_17rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "M9A3_9x19_20rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "Magpul_PMAG_20_LR_SR_762x51_20Rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "MP5_KCI_9x19_20Rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "MP5_X-Products_X-5_9x19_50Rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "MPX_9x19_25Rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "MPX_9x19_35Rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "MPX_F5_9x19_50Rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "P320_9x19_17rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "P320_9x19_21rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "P90_57x28_50rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "PP-19_9x19_30rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "PP-19_F5MFG_9mm_50Rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "QSZ-92_9x19_15Rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "Saiga_12K_Powermag_Drum_20Rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "Saiga_12K_SAI-02_10Rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "Saiga_12K_Sb5_5Rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "SCAR-H_762x51_20rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "SCAR-L_556x45_30rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "SKS_Standard_762x39_10rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "SKS_Star_762x39_20rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "SKS_Tapco_762x39_20rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "SRS-A2_x338_5rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "SRS-A2_x338_8rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "SVD_762x54_10rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "VAL_9x39_Plum_10Rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "VAL_9x39_Plum_20Rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "VR80_12ga_10rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "VR80_12ga_5rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "Z111_762x39_30Rnd",
+   "Attachments / Mag"
+  ],
+  [
+   "AAC_762-SDN-6_Suppressor",
+   "Attachments / Muzzle"
+  ],
+  [
+   "AK-12_545x39_Muzzle",
+   "Attachments / Muzzle"
+  ],
+  [
+   "AK-74_Steel_PATRIOT_Silencer",
+   "Attachments / Muzzle"
+  ],
+  [
+   "AK-74M_Muzzle_Brake",
+   "Attachments / Muzzle"
+  ],
+  [
+   "AKS-74U_Muzzle",
+   "Attachments / Muzzle"
+  ],
+  [
+   "AR-10_CMMG_SV_762x51_Muzzle_Device",
+   "Attachments / Muzzle"
+  ],
+  [
+   "AR-10_M110_762x51_Muzzle_Brake",
+   "Attachments / Muzzle"
+  ],
+  [
+   "AR-15_Griffin_Armament_Gate-LOK_Hammer_Flash_Hider",
+   "Attachments / Muzzle"
+  ],
+  [
+   "AR-15_Griffin_Armament_M4SD_II_Silencer",
+   "Attachments / Muzzle"
+  ],
+  [
+   "AS_VAL_Integral_Suppressor",
+   "Attachments / Muzzle"
+  ],
+  [
+   "AUG_A3_Flash_Hider",
+   "Attachments / Muzzle"
+  ],
+  [
+   "AUG_Ase_Utra_S_Series_SL7i_Suppressor",
+   "Attachments / Muzzle"
+  ],
+  [
+   "AUG_RAT_Worx_Muzzle_Adapter",
+   "Attachments / Muzzle"
+  ],
+  [
+   "CMB_Helical_Baffle_12_Gauge_Muzzle_Brake",
+   "Attachments / Muzzle"
+  ],
+  [
+   "Colt_USGI_A2_Flash_Hider",
+   "Attachments / Muzzle"
+  ],
+  [
+   "DT338_Muzzle_Brake",
+   "Attachments / Muzzle"
+  ],
+  [
+   "DT338_Suppressor",
+   "Attachments / Muzzle"
+  ],
+  [
+   "FAL_Standard_Muzzle",
+   "Attachments / Muzzle"
+  ],
+  [
+   "Galil_ACE_II_762x51_Muzzle",
+   "Attachments / Muzzle"
+  ],
+  [
+   "Honey_Badger_Cherry_Bomb_Muzzle_Brake",
+   "Attachments / Muzzle"
+  ],
+  [
+   "Honey_Badger_Standard_Suppressor",
+   "Attachments / Muzzle"
+  ],
+  [
+   "Honey_Badger_Trash_PANDA_Suppressor",
+   "Attachments / Muzzle"
+  ],
+  [
+   "Honey_Badger_Whistletip_Muzzle_Brake",
+   "Attachments / Muzzle"
+  ],
+  [
+   "Jmac_Customs_RRD-4C_545x39_Muzzle_Brake",
+   "Attachments / Muzzle"
+  ],
+  [
+   "KAC_QDC_3-Prong_Eliminator_556x45_Muzzle_Device",
+   "Attachments / Muzzle"
+  ],
+  [
+   "KVP_XL_45ACP_Suppressor",
+   "Attachments / Muzzle"
+  ],
+  [
+   "M14_16_Inch_762x51_Muzzle_Adapter",
+   "Attachments / Muzzle"
+  ],
+  [
+   "M14_22_Inch_762x51_Muzzle_Adapter",
+   "Attachments / Muzzle"
+  ],
+  [
+   "M14_National_Match_762x51_Muzzle_Brake",
+   "Attachments / Muzzle"
+  ],
+  [
+   "M14_Smith_Enterprise_SOCOM_16_762x51_Muzzle_Brake",
+   "Attachments / Muzzle"
+  ],
+  [
+   "M700_PGW_Timberwolf_Muzzle_Brake",
+   "Attachments / Muzzle"
+  ],
+  [
+   "M700_PGW_Timberwolf_Suppressor",
+   "Attachments / Muzzle"
+  ],
+  [
+   "M9A3_Compensator",
+   "Attachments / Muzzle"
+  ],
+  [
+   "M9A3_Thread_Protector",
+   "Attachments / Muzzle"
+  ],
+  [
+   "MP5_PDW_Suppressor",
+   "Attachments / Muzzle"
+  ],
+  [
+   "MPX_9x19_Flash_Hider",
+   "Attachments / Muzzle"
+  ],
+  [
+   "MPX_Ronin_12_Inch_9x19_Suppressor",
+   "Attachments / Muzzle"
+  ],
+  [
+   "MPX_Ronin_8_Inch_9x19_Suppressor",
+   "Attachments / Muzzle"
+  ],
+  [
+   "P320_Compact_Compensator",
+   "Attachments / Muzzle"
+  ],
+  [
+   "P90_Flash_Hider",
+   "Attachments / Muzzle"
+  ],
+  [
+   "PBS-4_545x39_Suppressor",
+   "Attachments / Muzzle"
+  ],
+  [
+   "PP-19_Muzzle",
+   "Attachments / Muzzle"
+  ],
+  [
+   "QBZ-97_556x45_Suppressor",
+   "Attachments / Muzzle"
+  ],
+  [
+   "RFB_762x51_Muzzle_Device",
+   "Attachments / Muzzle"
+  ],
+  [
+   "RS_Putnik_Multi-Caliber_Suppressor",
+   "Attachments / Muzzle"
+  ],
+  [
+   "Rugged_Obsidian_9mm_Suppressor",
+   "Attachments / Muzzle"
+  ],
+  [
+   "Saiga_12K_12ga_Muzzle_Device",
+   "Attachments / Muzzle"
+  ],
+  [
+   "Saiga_12K_GK-02_12ga_Muzzle_Device",
+   "Attachments / Muzzle"
+  ],
+  [
+   "Saiga_12K_Tromix_Monster_Claw_12ga_Muzzle_Device",
+   "Attachments / Muzzle"
+  ],
+  [
+   "SCAR-L_AAC_SD_51T_Flash_Hider",
+   "Attachments / Muzzle"
+  ],
+  [
+   "SCAR_H_AAC_SD_51T_Flash_Hider",
+   "Attachments / Muzzle"
+  ],
+  [
+   "Sig_Sauer_SRD762_Suppressor",
+   "Attachments / Muzzle"
+  ],
+  [
+   "SilencerCo_Hybrid_46_Suppressor",
+   "Attachments / Muzzle"
+  ],
+  [
+   "SilencerCo_Omega_45k_Suppressor",
+   "Attachments / Muzzle"
+  ],
+  [
+   "SilencerCo_Osprey_45K_Suppressor",
+   "Attachments / Muzzle"
+  ],
+  [
+   "SilencerCo_Salvo12_Suppressor",
+   "Attachments / Muzzle"
+  ],
+  [
+   "SKS_OSS_HX-QD_762_Suppressor",
+   "Attachments / Muzzle"
+  ],
+  [
+   "Surefire_Ryder_9M_TI_Suppressor",
+   "Attachments / Muzzle"
+  ],
+  [
+   "Surefire_SD3P-556_3_Flash_Hider",
+   "Attachments / Muzzle"
+  ],
+  [
+   "Surefire_SOCOM338-TI_Muzzle_Brake",
+   "Attachments / Muzzle"
+  ],
+  [
+   "Surefire_SOCOM338-TI_Suppressor",
+   "Attachments / Muzzle"
+  ],
+  [
+   "Surefire_SOCOM556-MONSTER_Suppressor",
+   "Attachments / Muzzle"
+  ],
+  [
+   "SVD_Rotor43_762x54_Suppressor",
+   "Attachments / Muzzle"
+  ],
+  [
+   "SVD_Rotor43_Thread_Adapter",
+   "Attachments / Muzzle"
+  ],
+  [
+   "TGP-A_545x39_Suppressor",
+   "Attachments / Muzzle"
+  ],
+  [
+   "VSS_Integral_Suppressor",
+   "Attachments / Muzzle"
+  ],
+  [
+   "Zenitco_DTK-1_545x39_Muzzle_Brake",
+   "Attachments / Muzzle"
+  ],
+  [
+   "AK-12_Pistolgrip_Polymer",
+   "Attachments / PistolGrip"
+  ],
+  [
+   "AK_Izhmash_Polymer_PistolGrip",
+   "Attachments / PistolGrip"
+  ],
+  [
+   "AK_Magpul_MOE_FDE_Pistolgrip",
+   "Attachments / PistolGrip"
+  ],
+  [
+   "AKM_Wooden_Pistol_Grip",
+   "Attachments / PistolGrip"
+  ],
+  [
+   "AR-15_Colt_A2_Pistol_Grip",
+   "Attachments / PistolGrip"
+  ],
+  [
+   "AR-15_Colt_A2_Tan_Pistol_Grip",
+   "Attachments / PistolGrip"
+  ],
+  [
+   "AR-15_Daniel_Defense_Pistol_Grip",
+   "Attachments / PistolGrip"
+  ],
+  [
+   "AR-15_ERGO_Pistol_Grip",
+   "Attachments / PistolGrip"
+  ],
+  [
+   "AR-15_MDT_Pistol_Grip",
+   "Attachments / PistolGrip"
+  ],
+  [
+   "FAL_ERGO_Pistol_Grip",
+   "Attachments / PistolGrip"
+  ],
+  [
+   "FAL_Standard_Pistol_Grip",
+   "Attachments / PistolGrip"
+  ],
+  [
+   "FAL_Wooden_Pistol_Grip",
+   "Attachments / PistolGrip"
+  ],
+  [
+   "MCX_Rattler_Pistol_Grip",
+   "Attachments / PistolGrip"
+  ],
+  [
+   "MCX_Virtus_Pistol_Grip",
+   "Attachments / PistolGrip"
+  ],
+  [
+   "PP-19_Pistol_Grip",
+   "Attachments / PistolGrip"
+  ],
+  [
+   "SVDS_Polymer_Pistol_Grip",
+   "Attachments / PistolGrip"
+  ],
+  [
+   "VAL_Plum_Polymer_Pistolgrip",
+   "Attachments / PistolGrip"
+  ],
+  [
+   "VR80_Stock_And_Pistol_Grip",
+   "Attachments / PistolGrip"
+  ],
+  [
+   "AK_Doublestar_AR-15_Pistol_Grip_Adapter",
+   "Attachments / Rail"
+  ],
+  [
+   "AK_Zenitco_B-13_Rail",
+   "Attachments / Rail"
+  ],
+  [
+   "AUG_A3_M1_1x5_Optic_Sight",
+   "Attachments / Rail"
+  ],
+  [
+   "AUG_A3_M1_High_Sight_Mount",
+   "Attachments / Rail"
+  ],
+  [
+   "AUG_A3_M1_Low_Sight_Mount",
+   "Attachments / Rail"
+  ],
+  [
+   "AUG_A3_Vertical_Grip_Rail",
+   "Attachments / Rail"
+  ],
+  [
+   "Five_Seven_MRD_Mount",
+   "Attachments / Rail"
+  ],
+  [
+   "GBRS_Hydra_Mount",
+   "Attachments / Rail"
+  ],
+  [
+   "KRISS_Vector_Rail",
+   "Attachments / Rail"
+  ],
+  [
+   "Leupold_DeltaPoint_Mount",
+   "Attachments / Rail"
+  ],
+  [
+   "M14_Leapers_UTG_Sight_Mount",
+   "Attachments / Rail"
+  ],
+  [
+   "M14_SAGE_International_Sight_Mount",
+   "Attachments / Rail"
+  ],
+  [
+   "M2_Picatinny_Rail",
+   "Attachments / Rail"
+  ],
+  [
+   "M700_Badger_Ordnance_Embedded_Front_Rail",
+   "Attachments / Rail"
+  ],
+  [
+   "M9A3_MRDS_Mount",
+   "Attachments / Rail"
+  ],
+  [
+   "Magpul_M-LOK_2x1_Inch_Rail",
+   "Attachments / Rail"
+  ],
+  [
+   "Magpul_M-LOK_4x1_Inch_Rail",
+   "Attachments / Rail"
+  ],
+  [
+   "MP5_Picanny_Scope_Mount",
+   "Attachments / Rail"
+  ],
+  [
+   "NCSTAR_MPR45_45_Degrees_Offset_Rail",
+   "Attachments / Rail"
+  ],
+  [
+   "QBZ-97_Front_Rail_Mount",
+   "Attachments / Rail"
+  ],
+  [
+   "QBZ-97_Scorpio_FK-HM95C_Rail_Mount",
+   "Attachments / Rail"
+  ],
+  [
+   "RFB_Quad_Rail_Mount",
+   "Attachments / Rail"
+  ],
+  [
+   "SKS_EST_Tula_Dovetail",
+   "Attachments / Rail"
+  ],
+  [
+   "Trijicon_RMR_Mount",
+   "Attachments / Rail"
+  ],
+  [
+   "VAL_Aftermarket_Picatinny_Rail_Long",
+   "Attachments / Rail"
+  ],
+  [
+   "VAL_Kings_Arms_Picatinny_Basic_Rail",
+   "Attachments / Rail"
+  ],
+  [
+   "Five_Seven_Pistol_Slide",
+   "Attachments / Receiver"
+  ],
+  [
+   "M700_AICS_Chassis",
+   "Attachments / Receiver"
+  ],
+  [
+   "M700_McMillan_A5_Chassis",
+   "Attachments / Receiver"
+  ],
+  [
+   "M700_MDT_ESS_Chassis",
+   "Attachments / Receiver"
+  ],
+  [
+   "M9A3_Pistol_Slide",
+   "Attachments / Receiver"
+  ],
+  [
+   "P320_Compact_Pistol_Slide",
+   "Attachments / Receiver"
+  ],
+  [
+   "P320_Pistol_Slide",
+   "Attachments / Receiver"
+  ],
+  [
+   "QSZ-92_Pistol_Slide",
+   "Attachments / Receiver"
+  ],
+  [
+   "TRIARC_Glock_19_Slide",
+   "Attachments / Receiver"
+  ],
+  [
+   "Aimpoint_ACRO_P2_Reflex_Sight",
+   "Attachments / Sight"
+  ],
+  [
+   "Aimpoint_Micro_T1_Sight",
+   "Attachments / Sight"
+  ],
+  [
+   "AR-15_Colt_A2_Rear_Sight",
+   "Attachments / Sight"
+  ],
+  [
+   "CQ_Carry_Handle",
+   "Attachments / Sight"
+  ],
+  [
+   "Elcan_SpecterDR_15x_6x_Scope",
+   "Attachments / Sight"
+  ],
+  [
+   "Elcan_SpecterDR_1x-4x_Scope",
+   "Attachments / Sight"
+  ],
+  [
+   "EOTECH_CNVDT_1x_Thermal_Scope",
+   "Attachments / Sight"
+  ],
+  [
+   "EOTECH_EXPS3_Holographic_Sight",
+   "Attachments / Sight"
+  ],
+  [
+   "EOTECH_HHS-1_Hybrid_Sight",
+   "Attachments / Sight"
+  ],
+  [
+   "EOTECH_Vudu_1-6x_Scope",
+   "Attachments / Sight"
+  ],
+  [
+   "FAL_Para_Rear_Ironsight",
+   "Attachments / Sight"
+  ],
+  [
+   "FAL_Standard_Rear_Ironsight",
+   "Attachments / Sight"
+  ],
+  [
+   "Five_Seven_Rear_Sight",
+   "Attachments / Sight"
+  ],
+  [
+   "Hensoldt_Wetzlar_Fero-Z_4x24_Scope",
+   "Attachments / Sight"
+  ],
+  [
+   "KAC_Folding_Micro_Front_Sight",
+   "Attachments / Sight"
+  ],
+  [
+   "KAC_Folding_Micro_Rear_Sight",
+   "Attachments / Sight"
+  ],
+  [
+   "Leupold_Carbine_Optic_Reflex_Sight",
+   "Attachments / Sight"
+  ],
+  [
+   "Leupold_DeltaPoint_Reflex_Sight",
+   "Attachments / Sight"
+  ],
+  [
+   "Leupold_HAMR_4x24_Hybrid_Scope",
+   "Attachments / Sight"
+  ],
+  [
+   "M14_Front_Iron_Sight",
+   "Attachments / Sight"
+  ],
+  [
+   "M14_Rear_Iron_Sight",
+   "Attachments / Sight"
+  ],
+  [
+   "M2_Tactical_Rear_Sight",
+   "Attachments / Sight"
+  ],
+  [
+   "M9A3_Sights_Short",
+   "Attachments / Sight"
+  ],
+  [
+   "M9A3_Sights_Tall",
+   "Attachments / Sight"
+  ],
+  [
+   "Nightforce_ATACR_4-16x42_Scope",
+   "Attachments / Sight"
+  ],
+  [
+   "OKP-77_Reflex_Sight",
+   "Attachments / Sight"
+  ],
+  [
+   "OKP-7_Reflex_Sight",
+   "Attachments / Sight"
+  ],
+  [
+   "PSO-1_4x24_Scope",
+   "Attachments / Sight"
+  ],
+  [
+   "QBZ-97_Y-MA-95-1-600_3x_Scope",
+   "Attachments / Sight"
+  ],
+  [
+   "RFB_Front_Sight",
+   "Attachments / Sight"
+  ],
+  [
+   "RFB_Rear_Sight",
+   "Attachments / Sight"
+  ],
+  [
+   "SCAR_Front_Sight",
+   "Attachments / Sight"
+  ],
+  [
+   "SCAR_Rear_Sight",
+   "Attachments / Sight"
+  ],
+  [
+   "Schmidt_and_Bender_1-8x24_PM_II_ShortDot_Scope",
+   "Attachments / Sight"
+  ],
+  [
+   "SIG_Sauer_BRAVO4_4x30_Scope",
+   "Attachments / Sight"
+  ],
+  [
+   "STV-380_Rear_Sight",
+   "Attachments / Sight"
+  ],
+  [
+   "Trijicon_ACOG_4x24_Scope",
+   "Attachments / Sight"
+  ],
+  [
+   "Trijicon_ACOG_6x48_Scope",
+   "Attachments / Sight"
+  ],
+  [
+   "Trijicon_MRO_Reflex_Sight",
+   "Attachments / Sight"
+  ],
+  [
+   "Trijicon_RMR_Miniature_Reflex_Sight",
+   "Attachments / Sight"
+  ],
+  [
+   "Trijicon_SkeetIR_1x_Thermal_Scope",
+   "Attachments / Sight"
+  ],
+  [
+   "VAL_Rear_Iron_Sight",
+   "Attachments / Sight"
+  ],
+  [
+   "Vortex_RAZOR_AMG_UH-1_Gen_II_Sight",
+   "Attachments / Sight"
+  ],
+  [
+   "Zenitco_BelOMO_PK-06_Reflex_Sight",
+   "Attachments / Sight"
+  ],
+  [
+   "AK-12_Collapsible_Stock",
+   "Attachments / Stock"
+  ],
+  [
+   "AK-74_Wooden_Stock",
+   "Attachments / Stock"
+  ],
+  [
+   "AK_Izhmash_Polymer_Stock",
+   "Attachments / Stock"
+  ],
+  [
+   "AK_SAG_ACR_Stock",
+   "Attachments / Stock"
+  ],
+  [
+   "AK_SAG_Buffertube",
+   "Attachments / Stock"
+  ],
+  [
+   "AKS-74U_Stock",
+   "Attachments / Stock"
+  ],
+  [
+   "AR-15_ACE_Ultra_Lite_Stock",
+   "Attachments / Stock"
+  ],
+  [
+   "AR-15_BCMGUNFIGHTER_Mod_0_Buttstock",
+   "Attachments / Stock"
+  ],
+  [
+   "AR-15_CMMG_Ripstock_Buttstock",
+   "Attachments / Stock"
+  ],
+  [
+   "AR-15_Colt_A2_Buffertube",
+   "Attachments / Stock"
+  ],
+  [
+   "AR-15_Daniel_Defense_Buttstock",
+   "Attachments / Stock"
+  ],
+  [
+   "AR-15_LMT_Sopmod_Ghillie_Stock",
+   "Attachments / Stock"
+  ],
+  [
+   "AR-15_LMT_Sopmod_Stock",
+   "Attachments / Stock"
+  ],
+  [
+   "AR-15_Magpul_CTR_Buttstock",
+   "Attachments / Stock"
+  ],
+  [
+   "AR-15_Magpul_UBR_Buttstock",
+   "Attachments / Stock"
+  ],
+  [
+   "AR-15_Odin_Works_Zulu_2_Buttstock",
+   "Attachments / Stock"
+  ],
+  [
+   "AR-15_PWS_Enhanced_Buffertube",
+   "Attachments / Stock"
+  ],
+  [
+   "AR-15_Standard_M4SS_Buttstock",
+   "Attachments / Stock"
+  ],
+  [
+   "AR-15_Strike_Industries_Viper_Mod_1_Buttstock",
+   "Attachments / Stock"
+  ],
+  [
+   "AR-15_Strike_SI_AR_Advanced_Buffertube",
+   "Attachments / Stock"
+  ],
+  [
+   "AR-15_VLTOR_IMOD_Buttstock",
+   "Attachments / Stock"
+  ],
+  [
+   "AS_VAL_Skeleton_Stock",
+   "Attachments / Stock"
+  ],
+  [
+   "FAL_Folding_Buffertube",
+   "Attachments / Stock"
+  ],
+  [
+   "FAL_Folding_Para_Stock",
+   "Attachments / Stock"
+  ],
+  [
+   "FAL_Series_X_Stock",
+   "Attachments / Stock"
+  ],
+  [
+   "FAL_Standard_Stock",
+   "Attachments / Stock"
+  ],
+  [
+   "FAL_Wooden_Stock",
+   "Attachments / Stock"
+  ],
+  [
+   "Honey_Badger_Stock",
+   "Attachments / Stock"
+  ],
+  [
+   "KPYK_CRC-5002-9033_Stock",
+   "Attachments / Stock"
+  ],
+  [
+   "KRISS_Vector_Folding_Stock",
+   "Attachments / Stock"
+  ],
+  [
+   "KRISS_Vector_Sling_Adapter",
+   "Attachments / Stock"
+  ],
+  [
+   "KRISS_Vector_Stock_Adapter",
+   "Attachments / Stock"
+  ],
+  [
+   "LAMG_Buffer_Tube_Stock",
+   "Attachments / Stock"
+  ],
+  [
+   "M14_Norinco_M305_Polymer_Chassis",
+   "Attachments / Stock"
+  ],
+  [
+   "M14_SAGE_International_Chassis",
+   "Attachments / Stock"
+  ],
+  [
+   "M14_Springfield_Armory_Wooden_Chassis",
+   "Attachments / Stock"
+  ],
+  [
+   "M14_Troy_SASS_Chassis",
+   "Attachments / Stock"
+  ],
+  [
+   "M2_ComforTech_Field_Stock",
+   "Attachments / Stock"
+  ],
+  [
+   "M2_Tactical_Pistol_Grip_Stock",
+   "Attachments / Stock"
+  ],
+  [
+   "M700_MDT_ESS_Stock",
+   "Attachments / Stock"
+  ],
+  [
+   "M700_MDT_ESS_Stock_Adapter",
+   "Attachments / Stock"
+  ],
+  [
+   "MCX_Collapsible_Stock",
+   "Attachments / Stock"
+  ],
+  [
+   "MCX_Folding_Buffer_Mount",
+   "Attachments / Stock"
+  ],
+  [
+   "MCX_Folding_Collapsible_Tube",
+   "Attachments / Stock"
+  ],
+  [
+   "MCX_Folding_Mini_Skeleton_Stock",
+   "Attachments / Stock"
+  ],
+  [
+   "MCX_Folding_Skeleton_Stock",
+   "Attachments / Stock"
+  ],
+  [
+   "MCX_Folding_Visor",
+   "Attachments / Stock"
+  ],
+  [
+   "MP5_A2_Fixed_Buttstock",
+   "Attachments / Stock"
+  ],
+  [
+   "MP5_A3_F_Retractable_Buttstock",
+   "Attachments / Stock"
+  ],
+  [
+   "MP5_A3_Fixed_Buttstock",
+   "Attachments / Stock"
+  ],
+  [
+   "MP5_End-Cap_Buttstock",
+   "Attachments / Stock"
+  ],
+  [
+   "PP-19_Stock",
+   "Attachments / Stock"
+  ],
+  [
+   "QBZ-97_Cheek_Rest",
+   "Attachments / Stock"
+  ],
+  [
+   "RPK-74_Folding_Stock",
+   "Attachments / Stock"
+  ],
+  [
+   "SKS_ATI_Monte_Carlo_Chassis",
+   "Attachments / Stock"
+  ],
+  [
+   "SKS_SAGE_International_SKSALCS_Telescoping_Stock",
+   "Attachments / Stock"
+  ],
+  [
+   "SKS_SAGE_International_SKSALCV_Chassis",
+   "Attachments / Stock"
+  ],
+  [
+   "SKS_Wooden_Stock",
+   "Attachments / Stock"
+  ],
+  [
+   "SVDS_Folding_Stock",
+   "Attachments / Stock"
+  ],
+  [
+   "SVDS_Lynx_Buffer_Tube_Adapter",
+   "Attachments / Stock"
+  ],
+  [
+   "VAL_Aftermarket_PT-1_PT-3_Zenitco_Stock_Adapter",
+   "Attachments / Stock"
+  ],
+  [
+   "val_buffertube_adapter",
+   "Attachments / Stock"
+  ],
+  [
+   "VSS_Wooden_Stock",
+   "Attachments / Stock"
+  ],
+  [
+   "Zenitco_PT-1_Stock",
+   "Attachments / Stock"
+  ],
+  [
+   "Zenitco_PT-3_Stock",
+   "Attachments / Stock"
+  ],
+  [
+   "Inforce_APLc_Compact_Flashlight",
+   "Attachments / Tactical"
+  ],
+  [
+   "Inforce_WMLx_Flashlight",
+   "Attachments / Tactical"
+  ],
+  [
+   "l3Harris_NGAL_Laser",
+   "Attachments / Tactical"
+  ],
+  [
+   "PEQ-15_LA-5_Tactical_Device",
+   "Attachments / Tactical"
+  ],
+  [
+   "Steiner_CQBL-1_Laser",
+   "Attachments / Tactical"
+  ],
+  [
+   "Streamlight_TLR1-HL_Flashlight",
+   "Attachments / Tactical"
+  ],
+  [
+   "SureFire_Mini_Scout_Flashight",
+   "Attachments / Tactical"
+  ],
+  [
+   "Zenitco_Klesch_2IKS3_Laser",
+   "Attachments / Tactical"
+  ],
+  [
+   "Angle_Grinder",
+   "Barter"
+  ],
+  [
+   "Antique_Water_Pitcher",
+   "Barter"
+  ],
+  [
+   "AntiquePlate",
+   "Barter"
+  ],
+  [
+   "Basketball",
+   "Barter"
+  ],
+  [
+   "BathroomCleaner",
+   "Barter"
+  ],
+  [
+   "Battery_18650",
+   "Barter"
+  ],
+  [
+   "Battery_Car",
+   "Barter"
+  ],
+  [
+   "Battery_PP3",
+   "Barter"
+  ],
+  [
+   "BedRoll",
+   "Barter"
+  ],
+  [
+   "Boardgame",
+   "Barter"
+  ],
+  [
+   "BoltCutter",
+   "Barter"
+  ],
+  [
+   "Book",
+   "Barter"
+  ],
+  [
+   "Brandy",
+   "Barter"
+  ],
+  [
+   "Bronze_Temple_Bell",
+   "Barter"
+  ],
+  [
+   "CandleHolder",
+   "Barter"
+  ],
+  [
+   "Candlestick",
+   "Barter"
+  ],
+  [
+   "Canteen",
+   "Barter"
+  ],
+  [
+   "Captured_Documents",
+   "Barter"
+  ],
+  [
+   "Cassette_Tape",
+   "Barter"
+  ],
+  [
+   "CatFigure",
+   "Barter"
+  ],
+  [
+   "Clamp",
+   "Barter"
+  ],
+  [
+   "Collagen",
+   "Barter"
+  ],
+  [
+   "Compass",
+   "Barter"
+  ],
+  [
+   "Copper_Wire_Spool",
+   "Barter"
+  ],
+  [
+   "Cracked_Binoculars",
+   "Barter"
+  ],
+  [
+   "Cuban_Cigar",
+   "Barter"
+  ],
+  [
+   "DLSR_Camera",
+   "Barter"
+  ],
+  [
+   "Dog_Tag",
+   "Barter"
+  ],
+  [
+   "Drone_Airframe",
+   "Barter"
+  ],
+  [
+   "Duct_Tape",
+   "Barter"
+  ],
+  [
+   "Earth_Globe",
+   "Barter"
+  ],
+  [
+   "Empty_Ammo_Can",
+   "Barter"
+  ],
+  [
+   "Engraved_Zippo_Lighter",
+   "Barter"
+  ],
+  [
+   "Fan",
+   "Barter"
+  ],
+  [
+   "FieldRadio",
+   "Barter"
+  ],
+  [
+   "FilmCase",
+   "Barter"
+  ],
+  [
+   "Fire_Extinguisher",
+   "Barter"
+  ],
+  [
+   "Fish_Sauce_Bottle",
+   "Barter"
+  ],
+  [
+   "FoodContainer",
+   "Barter"
+  ],
+  [
+   "Fuel",
+   "Barter"
+  ],
+  [
+   "GasCan",
+   "Barter"
+  ],
+  [
+   "Generator",
+   "Barter"
+  ],
+  [
+   "GoldenBangle",
+   "Barter"
+  ],
+  [
+   "GoldenMirror",
+   "Barter"
+  ],
+  [
+   "GoldenRing",
+   "Barter"
+  ],
+  [
+   "GoldenWateringCan",
+   "Barter"
+  ],
+  [
+   "Graphics_Card",
+   "Barter"
+  ],
+  [
+   "Hammer",
+   "Barter"
+  ],
+  [
+   "Hard_Drive",
+   "Barter"
+  ],
+  [
+   "HDMICable",
+   "Barter"
+  ],
+  [
+   "Hesco_Armor_Plate",
+   "Barter"
+  ],
+  [
+   "Hydraulic_Jack",
+   "Barter"
+  ],
+  [
+   "IncaVase",
+   "Barter"
+  ],
+  [
+   "Jade_Buddha_Statuette",
+   "Barter"
+  ],
+  [
+   "Lacquer_Jewelry_Box",
+   "Barter"
+  ],
+  [
+   "Luxury_Tobacco_Cigar",
+   "Barter"
+  ],
+  [
+   "Marker",
+   "Barter"
+  ],
+  [
+   "Marlboro_Red_Cigarettes",
+   "Barter"
+  ],
+  [
+   "Matryoshka",
+   "Barter"
+  ],
+  [
+   "Megaphone",
+   "Barter"
+  ],
+  [
+   "Military_Laptop",
+   "Barter"
+  ],
+  [
+   "Military_Radio",
+   "Barter"
+  ],
+  [
+   "Mining_Battery",
+   "Barter"
+  ],
+  [
+   "Mosquito_Net",
+   "Barter"
+  ],
+  [
+   "Motherboard",
+   "Barter"
+  ],
+  [
+   "Nails",
+   "Barter"
+  ],
+  [
+   "Nylon_Fabric",
+   "Barter"
+  ],
+  [
+   "OldChemicalBottle",
+   "Barter"
+  ],
+  [
+   "OldCommunicator",
+   "Barter"
+  ],
+  [
+   "OldFlashlight",
+   "Barter"
+  ],
+  [
+   "OldRadio",
+   "Barter"
+  ],
+  [
+   "Paintbrush",
+   "Barter"
+  ],
+  [
+   "PlasticWireSpool",
+   "Barter"
+  ],
+  [
+   "Pliers",
+   "Barter"
+  ],
+  [
+   "PolishingOil",
+   "Barter"
+  ],
+  [
+   "Polyester_Fabric",
+   "Barter"
+  ],
+  [
+   "PowerCable",
+   "Barter"
+  ],
+  [
+   "PreppedMeal",
+   "Barter"
+  ],
+  [
+   "PuzzleCube",
+   "Barter"
+  ],
+  [
+   "Radio_Handset",
+   "Barter"
+  ],
+  [
+   "RebarCutter",
+   "Barter"
+  ],
+  [
+   "Rope",
+   "Barter"
+  ],
+  [
+   "Satellite_Phone",
+   "Barter"
+  ],
+  [
+   "Saw",
+   "Barter"
+  ],
+  [
+   "Sewing_Kit",
+   "Barter"
+  ],
+  [
+   "Shampoo",
+   "Barter"
+  ],
+  [
+   "ShavingCream",
+   "Barter"
+  ],
+  [
+   "SilverPearls",
+   "Barter"
+  ],
+  [
+   "Soap",
+   "Barter"
+  ],
+  [
+   "SoccerTrophy",
+   "Barter"
+  ],
+  [
+   "SovietFigure",
+   "Barter"
+  ],
+  [
+   "Spotlight",
+   "Barter"
+  ],
+  [
+   "SprayCan",
+   "Barter"
+  ],
+  [
+   "StapleGun",
+   "Barter"
+  ],
+  [
+   "Tea_Tin",
+   "Barter"
+  ],
+  [
+   "Thang_Long_Cigarettes",
+   "Barter"
+  ],
+  [
+   "Toolbox",
+   "Barter"
+  ],
+  [
+   "USB_Hacking_Device_IGC",
+   "Barter"
+  ],
+  [
+   "USB_Hacking_Device_UICS",
+   "Barter"
+  ],
+  [
+   "USB_Hacking_Device_VLF",
+   "Barter"
+  ],
+  [
+   "Vodka",
+   "Barter"
+  ],
+  [
+   "WalkieTalkie",
+   "Barter"
+  ],
+  [
+   "WD40_Spray",
+   "Barter"
+  ],
+  [
+   "Weather_Device",
+   "Barter"
+  ],
+  [
+   "Ammo_Case",
+   "Containers"
+  ],
+  [
+   "Attachment_Case",
+   "Containers"
+  ],
+  [
+   "Item_Case",
+   "Containers"
+  ],
+  [
+   "Key_Intel_Case",
+   "Containers"
+  ],
+  [
+   "Medical_Case",
+   "Containers"
+  ],
+  [
+   "Weapon_Case",
+   "Containers"
+  ],
+  [
+   "M1050_LRF_Binoculars",
+   "Gadgets"
+  ],
+  [
+   "TactiNav_Communicator_X-7",
+   "Gadgets"
+  ],
+  [
+   "AVS_PL_SGT_Armored_Rig",
+   "Gear / ArmoredRig"
+  ],
+  [
+   "AVS_Rifleman_V4_Armored_Rig",
+   "Gear / ArmoredRig"
+  ],
+  [
+   "AVS_SL_Armored_Rig",
+   "Gear / ArmoredRig"
+  ],
+  [
+   "JTAC_V1_Armored_Rig",
+   "Gear / ArmoredRig"
+  ],
+  [
+   "JTAC_V1_Nguyin_Edition_Armored_Rig",
+   "Gear / ArmoredRig"
+  ],
+  [
+   "LBT_Breacher_V1_Armored_Rig",
+   "Gear / ArmoredRig"
+  ],
+  [
+   "LBT_MED_V1_Armored_Rig",
+   "Gear / ArmoredRig"
+  ],
+  [
+   "Spiritus_LV119_Armored_Rig",
+   "Gear / ArmoredRig"
+  ],
+  [
+   "Warrior_Assault_DCS_Armored_Rig",
+   "Gear / ArmoredRig"
+  ],
+  [
+   "Wartech-TV-110_Armored_Rig",
+   "Gear / ArmoredRig"
+  ],
+  [
+   "ADA_Assault_Backpack",
+   "Gear / Backpack"
+  ],
+  [
+   "ADA_Assault_Backpack_Rollup",
+   "Gear / Backpack"
+  ],
+  [
+   "ALICE_pack",
+   "Gear / Backpack"
+  ],
+  [
+   "ALICE_pack_Rollup",
+   "Gear / Backpack"
+  ],
+  [
+   "AVS_CRYE_Precision_Backpack",
+   "Gear / Backpack"
+  ],
+  [
+   "AVS_CRYE_Precision_Backpack_Rollup",
+   "Gear / Backpack"
+  ],
+  [
+   "AVS_Delta_Back",
+   "Gear / Backpack"
+  ],
+  [
+   "AVS_Delta_Back_Rollup",
+   "Gear / Backpack"
+  ],
+  [
+   "AVS_Mini_Backpack",
+   "Gear / Backpack"
+  ],
+  [
+   "AVS_Mini_Backpack_Rollup",
+   "Gear / Backpack"
+  ],
+  [
+   "CamelBak_Backpack",
+   "Gear / Backpack"
+  ],
+  [
+   "CamelBak_Backpack_Rollup",
+   "Gear / Backpack"
+  ],
+  [
+   "F2_Bergen_Backpack",
+   "Gear / Backpack"
+  ],
+  [
+   "F2_Bergen_Backpack_Rollup",
+   "Gear / Backpack"
+  ],
+  [
+   "Mystery_Ranch_3_Day_Assault_Pack",
+   "Gear / Backpack"
+  ],
+  [
+   "Mystery_Ranch_3_Day_Assault_Pack_Rollup",
+   "Gear / Backpack"
+  ],
+  [
+   "Mystery_Ranch_SALT_Backpack",
+   "Gear / Backpack"
+  ],
+  [
+   "Mystery_Ranch_SALT_Backpack_Rollup",
+   "Gear / Backpack"
+  ],
+  [
+   "Recording_Backpack",
+   "Gear / Backpack"
+  ],
+  [
+   "SSO_Smersh_Backpack",
+   "Gear / Backpack"
+  ],
+  [
+   "SSO_Smersh_Backpack_Rollup",
+   "Gear / Backpack"
+  ],
+  [
+   "Galvion_Caiman_Ballistic_Helmet",
+   "Gear / Helmet"
+  ],
+  [
+   "HHV_Helmet",
+   "Gear / Helmet"
+  ],
+  [
+   "High_Cut_LSHZ_Helmet",
+   "Gear / Helmet"
+  ],
+  [
+   "IHPS_Helmet",
+   "Gear / Helmet"
+  ],
+  [
+   "Kiver_RSP_Helmet",
+   "Gear / Helmet"
+  ],
+  [
+   "Kiver_RSP_Nguyin_Edition_Helmet",
+   "Gear / Helmet"
+  ],
+  [
+   "MICH_2000_Helmet",
+   "Gear / Helmet"
+  ],
+  [
+   "Ops-Core_FAST_Bump_Helmet",
+   "Gear / Helmet"
+  ],
+  [
+   "SESTAN-BUSCH_BK-3",
+   "Gear / Helmet"
+  ],
+  [
+   "Super_High_Cut_Ops-Core_Fast_MT_V1_Helmet",
+   "Gear / Helmet"
+  ],
+  [
+   "Team_Wendy_EXFIL_Helmet",
+   "Gear / Helmet"
+  ],
+  [
+   "L3_GPNVG18",
+   "Gear / NightVision"
+  ],
+  [
+   "PVS_31s_Night_Vision_Goggles",
+   "Gear / NightVision"
+  ],
+  [
+   "AVS_Plate_Carrier",
+   "Gear / PlateCarrier"
+  ],
+  [
+   "Ferro_Concepts_FCPC_V5_Plate_Carrier",
+   "Gear / PlateCarrier"
+  ],
+  [
+   "JPC_Plate_Carrier",
+   "Gear / PlateCarrier"
+  ],
+  [
+   "MSV_Plate_Carrier",
+   "Gear / PlateCarrier"
+  ],
+  [
+   "Paraclete_Origin_Plate_Carrier",
+   "Gear / PlateCarrier"
+  ],
+  [
+   "The_Slickster_Plate_Carrier",
+   "Gear / PlateCarrier"
+  ],
+  [
+   "D3CRM_Unarmored_Rig",
+   "Gear / UnarmoredRig"
+  ],
+  [
+   "D3CRX_Unarmored_Rig",
+   "Gear / UnarmoredRig"
+  ],
+  [
+   "Spiritus_Micro_Fight_Chest_Rig",
+   "Gear / UnarmoredRig"
+  ],
+  [
+   "Vest_Virtus_Unarmored_Rig",
+   "Gear / UnarmoredRig"
+  ],
+  [
+   "F-1_Hand_Grenade",
+   "Grenades"
+  ],
+  [
+   "M67",
+   "Grenades"
+  ],
+  [
+   "RGD_Smoke_Grenade",
+   "Grenades"
+  ],
+  [
+   "RGO_Grenade",
+   "Grenades"
+  ],
+  [
+   "RGR_Gas_Grenade",
+   "Grenades"
+  ],
+  [
+   "Zarya_Flash_Grenade",
+   "Grenades"
+  ],
+  [
+   "Bunker_Compact_Safe_Key",
+   "Keys"
+  ],
+  [
+   "Bunker_Elevator_Room_Key",
+   "Keys"
+  ],
+  [
+   "Bunker_Extraction_Room_Key",
+   "Keys"
+  ],
+  [
+   "Bunker_General_key",
+   "Keys"
+  ],
+  [
+   "Bunker_Large_Safe_key",
+   "Keys"
+  ],
+  [
+   "Delta_Compact_Safe_Key",
+   "Keys"
+  ],
+  [
+   "Delta_General_Key",
+   "Keys"
+  ],
+  [
+   "Delta_Large_Safe_Key",
+   "Keys"
+  ],
+  [
+   "HAS_Large_Key",
+   "Keys"
+  ],
+  [
+   "HAS_Medium_Key",
+   "Keys"
+  ],
+  [
+   "HAS_Small_Key",
+   "Keys"
+  ],
+  [
+   "Outskirts_Compact_Large_Key",
+   "Keys"
+  ],
+  [
+   "Outskirts_Compact_Safe_Key",
+   "Keys"
+  ],
+  [
+   "Outskirts_General_Key",
+   "Keys"
+  ],
+  [
+   "Quarry_Compact_Safe_key",
+   "Keys"
+  ],
+  [
+   "Quarry_General_Key",
+   "Keys"
+  ],
+  [
+   "Quarry_Large_Safe_key",
+   "Keys"
+  ],
+  [
+   "Adrenaline_Injector",
+   "Medical"
+  ],
+  [
+   "Aluminium_Splint",
+   "Medical"
+  ],
+  [
+   "Bandage",
+   "Medical"
+  ],
+  [
+   "Blood_IV",
+   "Medical"
+  ],
+  [
+   "CAT_Tourniquet",
+   "Medical"
+  ],
+  [
+   "Compression_Bandage",
+   "Medical"
+  ],
+  [
+   "Health_Injector",
+   "Medical"
+  ],
+  [
+   "IFAK",
+   "Medical"
+  ],
+  [
+   "Improv_Splint",
+   "Medical"
+  ],
+  [
+   "MFAK",
+   "Medical"
+  ],
+  [
+   "Morphine_Injector",
+   "Medical"
+  ],
+  [
+   "Painkiller",
+   "Medical"
+  ],
+  [
+   "Revive_Syringe",
+   "Medical"
+  ],
+  [
+   "Saline_IV",
+   "Medical"
+  ],
+  [
+   "M-9_Bayonet_Knife",
+   "Melee"
+  ],
+  [
+   "Machete",
+   "Melee"
+  ],
+  [
+   "Melee_Temporary",
+   "Melee"
+  ],
+  [
+   "Tomahawk",
+   "Melee"
+  ],
+  [
+   "Cash",
+   "Money"
+  ],
+  [
+   "MarkedCoin",
+   "Money"
+  ],
+  [
+   "Beer_BiaSaigon_Bottle",
+   "Provisions"
+  ],
+  [
+   "Beer_Biere_Larue_Can",
+   "Provisions"
+  ],
+  [
+   "Canned_BeefStew",
+   "Provisions"
+  ],
+  [
+   "Canned_Corn",
+   "Provisions"
+  ],
+  [
+   "Canned_PorkPatey",
+   "Provisions"
+  ],
+  [
+   "Canned_Sardines",
+   "Provisions"
+  ],
+  [
+   "Canned_Soup",
+   "Provisions"
+  ],
+  [
+   "Canned_Squid",
+   "Provisions"
+  ],
+  [
+   "Canned_TunaMix",
+   "Provisions"
+  ],
+  [
+   "Chips",
+   "Provisions"
+  ],
+  [
+   "Condensed_Milk",
+   "Provisions"
+  ],
+  [
+   "Cornflakes",
+   "Provisions"
+  ],
+  [
+   "Milk",
+   "Provisions"
+  ],
+  [
+   "Misprinted_Condensed_Milk",
+   "Provisions"
+  ],
+  [
+   "Peanut_Butter",
+   "Provisions"
+  ],
+  [
+   "Squid_Chips",
+   "Provisions"
+  ],
+  [
+   "Water_Bottle",
+   "Provisions"
+  ],
+  [
+   "520TVL_CCTV_Mini_Camera",
+   "Quest"
+  ],
+  [
+   "Antenna_Piece_1",
+   "Quest"
+  ],
+  [
+   "Antenna_Piece_2",
+   "Quest"
+  ],
+  [
+   "Antenna_Piece_3",
+   "Quest"
+  ],
+  [
+   "Bomb",
+   "Quest"
+  ],
+  [
+   "Bug",
+   "Quest"
+  ],
+  [
+   "Chemical_Crate",
+   "Quest"
+  ],
+  [
+   "Classified_Document-IGC",
+   "Quest"
+  ],
+  [
+   "Classified_Document-UICS",
+   "Quest"
+  ],
+  [
+   "Classified_Document-VLF",
+   "Quest"
+  ],
+  [
+   "Construction_HxAxS_Blueprint_Layout_Guide",
+   "Quest"
+  ],
+  [
+   "Construction_HxAxS_Blueprint_Materials_List",
+   "Quest"
+  ],
+  [
+   "Data_Storage_Crate",
+   "Quest"
+  ],
+  [
+   "DefenseIntelA",
+   "Quest"
+  ],
+  [
+   "DefenseIntelC",
+   "Quest"
+  ],
+  [
+   "DefenseIntelD",
+   "Quest"
+  ],
+  [
+   "DefenseIntelFANG",
+   "Quest"
+  ],
+  [
+   "Jammer",
+   "Quest"
+  ],
+  [
+   "KeyCardA",
+   "Quest"
+  ],
+  [
+   "Missing_Supplies",
+   "Quest"
+  ],
+  [
+   "OperationPlanA",
+   "Quest"
+  ],
+  [
+   "OperationPlanB",
+   "Quest"
+  ],
+  [
+   "OperationPlanC",
+   "Quest"
+  ],
+  [
+   "Poison",
+   "Quest"
+  ],
+  [
+   "Shipping_Manifest",
+   "Quest"
+  ],
+  [
+   "Troop_Movement_Paper",
+   "Quest"
+  ],
+  [
+   "USB_Drive",
+   "Quest"
+  ],
+  [
+   "Weapon_Crate",
+   "Quest"
+  ],
+  [
+   "AK-101",
+   "Weapons"
+  ],
+  [
+   "AK-102",
+   "Weapons"
+  ],
+  [
+   "AK-103",
+   "Weapons"
+  ],
+  [
+   "AK-104",
+   "Weapons"
+  ],
+  [
+   "AK-105",
+   "Weapons"
+  ],
+  [
+   "AK-12",
+   "Weapons"
+  ],
+  [
+   "AK-74M",
+   "Weapons"
+  ],
+  [
+   "AKS-74",
+   "Weapons"
+  ],
+  [
+   "AKS-74U",
+   "Weapons"
+  ],
+  [
+   "AS_Val",
+   "Weapons"
+  ],
+  [
+   "AUG_A3",
+   "Weapons"
+  ],
+  [
+   "Benelli_M2",
+   "Weapons"
+  ],
+  [
+   "Colt_M4A1",
+   "Weapons"
+  ],
+  [
+   "FN_FAL",
+   "Weapons"
+  ],
+  [
+   "FN_Five_Seven",
+   "Weapons"
+  ],
+  [
+   "FN_P90",
+   "Weapons"
+  ],
+  [
+   "FN_SCAR-H",
+   "Weapons"
+  ],
+  [
+   "FN_SCAR-L",
+   "Weapons"
+  ],
+  [
+   "Galil_Ace",
+   "Weapons"
+  ],
+  [
+   "Glock_19",
+   "Weapons"
+  ],
+  [
+   "Honey_Badger",
+   "Weapons"
+  ],
+  [
+   "KAC_LAMG",
+   "Weapons"
+  ],
+  [
+   "Kel_Tec_RFB",
+   "Weapons"
+  ],
+  [
+   "KRISS_Vector_45ACP",
+   "Weapons"
+  ],
+  [
+   "M14",
+   "Weapons"
+  ],
+  [
+   "M9A3",
+   "Weapons"
+  ],
+  [
+   "MK-47",
+   "Weapons"
+  ],
+  [
+   "MP5",
+   "Weapons"
+  ],
+  [
+   "MP5K",
+   "Weapons"
+  ],
+  [
+   "MP5SD",
+   "Weapons"
+  ],
+  [
+   "MPX",
+   "Weapons"
+  ],
+  [
+   "Norinco_CQ",
+   "Weapons"
+  ],
+  [
+   "Norinco_M305",
+   "Weapons"
+  ],
+  [
+   "P320",
+   "Weapons"
+  ],
+  [
+   "PP-19_Vitayz",
+   "Weapons"
+  ],
+  [
+   "QBZ-97",
+   "Weapons"
+  ],
+  [
+   "QSZ-92",
+   "Weapons"
+  ],
+  [
+   "Remington_M700",
+   "Weapons"
+  ],
+  [
+   "RIA_VR80",
+   "Weapons"
+  ],
+  [
+   "RPK-74",
+   "Weapons"
+  ],
+  [
+   "Saiga-12K",
+   "Weapons"
+  ],
+  [
+   "Sig_Sauer_MCX_Rattler",
+   "Weapons"
+  ],
+  [
+   "Sig_Sauer_MCX_Virtus",
+   "Weapons"
+  ],
+  [
+   "Simonov_SKS",
+   "Weapons"
+  ],
+  [
+   "SR-25",
+   "Weapons"
+  ],
+  [
+   "SRS-A2",
+   "Weapons"
+  ],
+  [
+   "STV-380",
+   "Weapons"
+  ],
+  [
+   "SVDS",
+   "Weapons"
+  ],
+  [
+   "VSS_Vintorez",
+   "Weapons"
+  ]
+ ],
+ "omitted": [
+  "irr.Debug.ForceCrash",
+  "irr.AI.NewTargetPaths.TestSplice",
+  "irr.Traversal.CompareLegacyScan",
+  "irr.Audio.VoiceLoopbackPlay",
+  "irr.AI.VisCache.BinDegrees",
+  "irr.AI.VisCache.Lifetime",
+  "irr.AI.VisCache.MaxOrigins",
+  "irr.AI.VisCache.OriginCellSize",
+  "irr.AICover.ClaimedReTraceDistance",
+  "irr.AICover.EscalationRadius",
+  "irr.AICover.FailedScopeRetryInterval",
+  "irr.AICover.FullColumnChunkRays",
+  "irr.AICover.FullReTraceDistance",
+  "irr.AICover.MaxScopedCovers",
+  "irr.AICover.MinScopedCovers",
+  "irr.AICover.QueryLeaseSeconds",
+  "irr.AICover.RescopeDistance",
+  "irr.AICover.ReservationSeconds",
+  "irr.AICover.ScopeRadius",
+  "irr.AICover.TraceBudgetPerTick",
+  "irr.AICover.UpdateInterval",
+  "irr.AIDebug.CoverCache.Range",
+  "irr.AIDebug.DoorLinks.Range",
+  "irr.AIDebug.SearchGrid.Range",
+  "irr.AIDebug.TreeCrowns.Range",
+  "irr.Audio.AcousticDebug.Range",
+  "irr.Audio.DebugRooms.Range",
+  "irr.Nav.DebugRooms.Range",
+  "irr.Nav.DebugRooms.Actors",
+  "irr.Avoidance.EnemyKnownLocation",
+  "irr.Avoidance.FriendlyPosition",
+  "irr.Avoidance.FriendlyPositionPeaceGate",
+  "irr.FX.CosmeticBullets.Send",
+  "irr.Net.ContainedItemCullDistance",
+  "irr.Outfit.MergeKeepAlive",
+  "irr.Perf.TickHygiene.Interval",
+  "irr.SpawnQueue.ActivationBudgetMs",
+  "irr.SpawnQueue.CharacterSpawnBudgetMs",
+  "irr.SpawnQueue.EquipBudgetMs",
+  "irr.SpawnQueue.PossessionBudgetMs",
+  "irr.SpawnQueue.ValidationBudgetMs",
+  "irr.SpawnQueue.ValidationHoldSeconds",
+  "irr.SpawnQueue.ValidationRecheckSeconds",
+  "irr.Spectator.Bone",
+  "irr.Spectator.HeadOffset",
+  "irr.Spectator.Menu",
+  "irr.Spectator.Mount"
+ ]
+}

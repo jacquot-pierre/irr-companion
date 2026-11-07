@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
-namespace IRRPresetTool
+namespace IRRCompanion
 {
     /// <summary>JSON object that keeps key order (the game writes keys in a fixed order).</summary>
     public sealed class JObj

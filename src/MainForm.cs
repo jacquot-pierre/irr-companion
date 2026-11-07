@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace IRRPresetTool
+namespace IRRCompanion
 {
     /// <summary>Row with a label and a segmented choice (AI SIMULATION / AI DIFFICULTY).</summary>
     public sealed class ChoiceRow : Panel
@@ -59,7 +59,8 @@ namespace IRRPresetTool
 
         private readonly ToolTip _tip = new ToolTip { AutoPopDelay = 30000, InitialDelay = 400, ReshowDelay = 100 };
         private ListBox _list;
-        private Panel _editPanel, _comparePanel, _rowsPanel;
+        private Panel _editPanel, _comparePanel, _rowsPanel, _side;
+        private CommandsPanel _commandsPanel;
         private Segmented _viewSwitch;
         private TextBox _name, _author, _desc;
         private Label _banner, _status;
@@ -74,7 +75,7 @@ namespace IRRPresetTool
         public MainForm()
         {
             Theme.Init(this);
-            Text = "IRR Preset Tool";
+            Text = "IRR Companion";
             BackColor = Theme.Back;
             ForeColor = Theme.Text;
             Font = Theme.Body;
@@ -125,12 +126,12 @@ namespace IRRPresetTool
         {
             // ---- header
             var header = new Panel { Dock = DockStyle.Top, Height = Theme.S(64), BackColor = Theme.Panel };
-            var title = Theme.Lbl("IRR PRESET TOOL", Theme.Title, Theme.Accent);
+            var title = Theme.Lbl("IRR COMPANION", Theme.Title, Theme.Accent);
             title.Location = new Point(Theme.S(18), Theme.S(8));
-            var sub = Theme.Lbl("AI presets for Incursion Red River · game data " + GameData.GameBuild, Theme.Small, Theme.TextDim);
+            var sub = Theme.Lbl("AI presets and console commands for Incursion Red River · game data " + GameData.GameBuild, Theme.Small, Theme.TextDim);
             sub.Location = new Point(Theme.S(20), Theme.S(40));
-            _viewSwitch = new Segmented("EDIT", "COMPARE") { Selected = 0, BackColor = Theme.Row };
-            _viewSwitch.Size = new Size(Theme.S(260), Theme.S(36));
+            _viewSwitch = new Segmented("EDIT", "COMPARE", "COMMANDS") { Selected = 0, BackColor = Theme.Row };
+            _viewSwitch.Size = new Size(Theme.S(390), Theme.S(36));
             _viewSwitch.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             _viewSwitch.OptionClicked += (s, e) => ShowView(_viewSwitch.ClickedIndex);
             header.Controls.Add(title);
@@ -157,7 +158,7 @@ namespace IRRPresetTool
             statusBar.Resize += (s, e) => folder.Location = new Point(statusBar.Width - folder.Width - Theme.S(12), Theme.S(6));
 
             // ---- sidebar
-            var side = new Panel { Dock = DockStyle.Left, Width = Theme.S(260), BackColor = Theme.Panel, Padding = new Padding(Theme.S(12)) };
+            var side = _side = new Panel { Dock = DockStyle.Left, Width = Theme.S(260), BackColor = Theme.Panel, Padding = new Padding(Theme.S(12)) };
             var sideTitle = new SectionHeader("Presets") { BackColor = Theme.Panel };
             _list = new ListBox
             {
@@ -196,9 +197,11 @@ namespace IRRPresetTool
             _editPanel = BuildEditPanel();
             _comparePanel = BuildComparePanel();
             _comparePanel.Visible = false;
+            _commandsPanel = new CommandsPanel(_tip, SetStatus) { Visible = false };
 
             Controls.Add(_editPanel);
             Controls.Add(_comparePanel);
+            Controls.Add(_commandsPanel);
             Controls.Add(side);
             Controls.Add(statusBar);
             Controls.Add(header);
@@ -760,6 +763,9 @@ namespace IRRPresetTool
             _viewSwitch.Selected = index;
             _editPanel.Visible = index == 0;
             _comparePanel.Visible = index == 1;
+            _commandsPanel.Visible = index == 2;
+            _side.Visible = index != 2;
+            if (index == 2) ActiveControl = _commandsPanel.List;
             if (index == 1)
             {
                 RefreshCombos();
@@ -769,7 +775,7 @@ namespace IRRPresetTool
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            if (keyData == (Keys.Control | Keys.S)) { SaveCurrent(); return true; }
+            if (keyData == (Keys.Control | Keys.S) && _editPanel.Visible) { SaveCurrent(); return true; }
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
@@ -800,18 +806,21 @@ namespace IRRPresetTool
             Action<string> shot = name =>
             {
                 Application.DoEvents();
-                using (var bmp = new Bitmap(ClientSize.Width, ClientSize.Height))
+                using (var bmp = new Bitmap(Width, Height))
                 {
-                    DrawToBitmap(bmp, new Rectangle(Point.Empty, ClientSize));
+                    DrawToBitmap(bmp, new Rectangle(Point.Empty, Size));
                     bmp.Save(prefix + "_" + name + ".png", System.Drawing.Imaging.ImageFormat.Png);
                 }
             };
             // a user preset to look at
-            var p = _presets[2].CloneAs("Screenshot test");
+            var p = _presets[2].CloneAs("Night ops");
+            p.Author = "IRR Companion";
+            p.Description = "Veteran bots, more aggressive, aiming for the head, wider simulation range.";
             p.Set(GameData.Params.First(x => x.Key == "Aggressiveness"), 0.75);
             p.Set(GameData.Params.First(x => x.Key == "bCanAimForHead"), true);
             p.Set(GameData.Params.First(x => x.Key == "OptimizationRanges.1"), 44787.234);
             p.Set(GameData.Params.First(x => x.Key == "GrenadeInaccuracy"), 700.0);
+            p.MarkSaved();
             _presets.Add(p);
             RefreshList();
             RefreshCombos();
@@ -827,6 +836,26 @@ namespace IRRPresetTool
             shot("compare");
             _onlyDiff.Checked = true;
             shot("compare_diff");
+            _cmpA.SelectedItem = _presets[0];
+            _cmpB.SelectedItem = _presets[3];
+            _onlyDiff.Checked = false;
+            shot("compare_difficulties");
+            ShowView(2);
+            _commandsPanel.TestSelect(1, "irr.World.SetWeather", "5", "30");
+            shot("commands_weather");
+            _commandsPanel.TestSelect(1, "irr.Item.Spawn", "Glock_19", "3");
+            shot("commands_item");
+            _commandsPanel.TestSelect(3, "irr.Player.Invulnerable");
+            shot("commands_player");
+            _commandsPanel.TestSelect(6, "irr.AI.Headlamps", "2");
+            shot("commands_cvar");
+            _commandsPanel.TestAddFavorite("Thunderstorm on Delta", "irr.World.SetWeather 6 30", "Delta");
+            _commandsPanel.TestAddFavorite("Noon", "irr.World.SetTimeOfDay 12", null);
+            _commandsPanel.TestAddFavorite("God mode", "irr.Player.Invulnerable 1", null);
+            _commandsPanel.TestAddFavorite("Extract now", "irr.Player.ForceExtraction", null);
+            _commandsPanel.TestAddFavorite("Spawn 5 bandages", "irr.Item.Spawn Bandage 5", null);
+            shot("commands_favorites");
+            ShowView(0);
             _presets.Remove(p);
             foreach (var x in _presets) x.Dirty = false;
         }

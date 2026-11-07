@@ -1,9 +1,12 @@
 r"""Builds src/Resources/defaults.json from the files extracted from the game pak.
 
-Usage: python -I tools/build_defaults.py <extracted AISettings dir> <reference full preset doc>
+Usage: python -I tools/build_defaults.py <extracted AISettings dir> <reference full preset doc> [game build label]
   - extracted dir   : ...\IRR_AISettings\Test_C\Content\AISettings
   - reference doc   : a full AISettings doc saved by the game (gives key order and
                       the engine defaults for keys that Normal.json does not set)
+  - game build label: shown in the tool's header, e.g. "2026-11-06" (default: keep the current one)
+
+Prints what changed compared with the previous defaults.json (parameters, ranges, difficulty values).
 """
 import json
 import os
@@ -11,6 +14,11 @@ import sys
 
 src, ref_path = sys.argv[1], sys.argv[2]
 out = os.path.join(os.path.dirname(__file__), "..", "src", "Resources", "defaults.json")
+previous = None
+if os.path.exists(out):
+    with open(out, encoding="utf-8") as f:
+        previous = json.load(f)
+game_build = sys.argv[3] if len(sys.argv) > 3 else (previous or {}).get("gameBuild", "unknown")
 
 
 def load(*p):
@@ -120,7 +128,12 @@ AI_LABELS = {"Easy": "Recruit", "Normal": "Regular", "Hard": "Veteran", "Extreme
 menu = [k for k, v in schema.items() if not k.startswith("__") and isinstance(v, dict) and v.get("ShowInSettingsMenu")]
 listed = [k for _, ks in SECTIONS for k in ks]
 missing = set(menu) - set(listed) - {"EquipmentLevel"}
-assert not missing, f"menu params not placed in a section: {missing}"
+assert not missing, f"new menu params, add them to NAMES and SECTIONS: {missing}"
+gone = [k for k in listed if k.split(".")[0] not in schema]
+assert not gone, f"params of SECTIONS no longer in the game schema, remove them: {gone}"
+hidden = [k for k in listed if k.split(".")[0] in schema and k.split(".")[0] not in menu and not k.startswith("DamageMap.")]  # DamageMap is shown although not flagged
+if hidden:
+    print("WARNING: in SECTIONS but no longer shown in the game menu (ShowInSettingsMenu):", hidden)
 
 
 def param(key, s, l, section, cat):
@@ -160,7 +173,7 @@ for i in range(1, 5):  # the game menu shows levels 1-4; level 5 is kept as-is i
     sim_params.append(p)
 
 data = {
-    "gameBuild": "2026-11-06",
+    "gameBuild": game_build,
     "aiHardVersion": normal["schemaHardVersion"],
     "aiSoftVersion": normal["schemaSoftVersion"],
     "simHardVersion": 1,
@@ -175,5 +188,46 @@ data = {
 os.makedirs(os.path.dirname(out), exist_ok=True)
 with open(out, "w", encoding="utf-8", newline="\n") as f:
     json.dump(data, f, indent=1, ensure_ascii=False)
+
+
+def report(old, new):
+    """Human-readable summary of the differences with the previous defaults.json."""
+    if old is None:
+        return ["(no previous defaults.json)"]
+    lines = []
+    for k in ("aiHardVersion", "aiSoftVersion", "aiOrder", "simOrder"):
+        if old.get(k) != new.get(k):
+            lines.append(f"{k}: {old.get(k)} -> {new.get(k)}")
+    op = {p["key"]: p for p in old["params"]}
+    np_ = {p["key"]: p for p in new["params"]}
+    for k in np_.keys() - op.keys():
+        lines.append(f"new param: {k}")
+    for k in op.keys() - np_.keys():
+        lines.append(f"removed param: {k}")
+    for k in np_.keys() & op.keys():
+        for f in ("min", "max", "uiMin", "uiMax", "step", "precision", "desc", "warn", "section"):
+            if op[k].get(f) != np_[k].get(f):
+                lines.append(f"{k}.{f}: {op[k].get(f)!r} -> {np_[k].get(f)!r}")
+
+    def flat(d, prefix=""):
+        r = {}
+        for kk, v in d.items():
+            if isinstance(v, dict):
+                r.update(flat(v, prefix + kk + "."))
+            else:
+                r[prefix + kk] = v
+        return r
+    for group in ("ai", "sim"):
+        for variant in new[group]:
+            a, b = flat(old[group].get(variant, {})), flat(new[group][variant])
+            for kk in sorted(a.keys() | b.keys()):
+                if a.get(kk) != b.get(kk):
+                    lines.append(f"{group}.{variant}.{kk}: {a.get(kk)!r} -> {b.get(kk)!r}")
+    return lines or ["no change"]
+
+
+print("Changes compared with the previous defaults.json:")
+for line in report(previous, data):
+    print("  " + line)
 print("wrote", os.path.abspath(out), "-", len(params), "AI params,", len(sim_params), "sim params,",
       len(base), "doc keys")

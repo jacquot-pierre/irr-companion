@@ -4,11 +4,11 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net462</TargetFramework>
     <LangVersion>7.3</LangVersion>
-    <AssemblyName>IRRPresetTool</AssemblyName>
-    <RootNamespace>IRRPresetTool</RootNamespace>
+    <AssemblyName>IRRCompanion</AssemblyName>
+    <RootNamespace>IRRCompanion</RootNamespace>
     <Version>1.0.0</Version>
-    <Product>IRR Preset Tool</Product>
-    <Description>AI preset editor for Incursion Red River</Description>
+    <Product>IRR Companion</Product>
+    <Description>AI preset editor and console command builder for Incursion Red River</Description>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Resources\app.ico</ApplicationIcon>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\defaults.json" LogicalName="defaults.json" />
+    <EmbeddedResource Include="Resources\commands.json" LogicalName="commands.json" />
   </ItemGroup>
 
 </Project>

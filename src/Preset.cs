@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace IRRPresetTool
+namespace IRRCompanion
 {
     public sealed class Preset
     {
@@ -238,15 +238,34 @@ namespace IRRPresetTool
         public override string ToString() { return (Dirty ? "● " : "") + Name; }
     }
 
-    /// <summary>The user's own presets, stored in %APPDATA%\IRR Preset Tool\presets.json.</summary>
+    /// <summary>The user's own presets, stored in %APPDATA%\IRR Companion\presets.json.</summary>
     public static class Library
     {
         public static string Folder
         {
-            get { return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "IRR Preset Tool"); }
+            get { return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "IRR Companion"); }
         }
 
         public static string FilePath { get { return Path.Combine(Folder, "presets.json"); } }
+
+        /// <summary>Folder used before the tool was renamed (IRR Preset Tool).</summary>
+        private static string OldFolder
+        {
+            get { return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "IRR Preset Tool"); }
+        }
+
+        /// <summary>First start after the rename: copies presets and favorites from the old folder.</summary>
+        public static void MigrateOldFolder()
+        {
+            try
+            {
+                if (Directory.Exists(Folder) || !Directory.Exists(OldFolder)) return;
+                Directory.CreateDirectory(Folder);
+                foreach (var f in Directory.GetFiles(OldFolder, "*.json"))
+                    File.Copy(f, Path.Combine(Folder, Path.GetFileName(f)), false);
+            }
+            catch (Exception) { /* the old files stay where they are */ }
+        }
 
         public static List<Preset> Load()
         {
@@ -268,7 +287,7 @@ namespace IRRPresetTool
         {
             Directory.CreateDirectory(Folder);
             var root = new JObj();
-            root["format"] = "IRRPresetTool";
+            root["format"] = "IRRCompanion";
             root["version"] = 1.0;
             var arr = new List<object>();
             // Only the last saved state of each preset is written; unsaved edits stay in memory.

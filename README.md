@@ -1,48 +1,125 @@
-# IRR Preset Tool
+# IRR Companion
 
-An unofficial editor for **Incursion Red River** AI presets. One small portable `.exe`, nothing to install.
+**A small companion app for [Incursion Red River](https://store.steampowered.com/app/2116120/): create and
+compare AI presets, and build console commands without typing them.**
 
-![Editor](docs/editor.png)
+One portable `.exe`, nothing to install, nothing written to the game's files.
+
+![The AI preset editor](docs/editor.png)
 
 ## Download
 
-Grab `IRRPresetTool.exe` from the [latest release](../../releases/latest) and run it.
-It needs .NET Framework 4.6.2 or newer, which is built into Windows 10 and Windows 11.
+1. Download **`IRRCompanion.exe`** from the [latest release](../../releases/latest).
+2. Run it. That's it: no installer, no admin rights.
 
-> **Windows SmartScreen:** the exe is not code-signed, so Windows may show *"Windows protected your PC"*
-> the first time. Click **More info → Run anyway**. Every release is built by GitHub Actions from the
-> source in this repository, and its SHA-256 hash is listed in the release notes.
+Requires Windows 10 or 11 (it uses .NET Framework 4.6.2, already part of Windows).
+
+> **Windows SmartScreen:** the exe is not code-signed, so the first launch may show *"Windows protected
+> your PC"*. Click **More info → Run anyway**. Every release is built by GitHub Actions from the source in
+> this repository; its SHA-256 hash is in the release notes.
 
 ## Features
 
-- **Game presets built in**: the difficulties *Recruit, Regular, Veteran, Elite* and the simulation
-  levels *Potato, Low, Normal, High*.
-- **Same settings as the in-game menu**: the 35 AI settings and the simulation settings, in the game's
-  order, with the game's descriptions as tooltips. Values outside the recommended range are shown in orange.
-- **Reference values**: next to each setting, the value of a preset of your choice (▲ above / ▼ below).
-- **Compare** two presets side by side: differences highlighted, change in value and %, and a range bar
-  showing both values.
-- **Your presets stay in the tool** (`%APPDATA%\IRR Preset Tool\presets.json`). Nothing is written to
-  the game's files.
-- **Share codes**: *Copy code* gives an `IRR1-...` code to paste in the game's preset import;
-  *Import code* reads a code exported by the game or by another player.
+### AI preset editor
 
-![Compare](docs/compare.png)
+- **Every game difficulty built in**: *Recruit, Regular, Veteran, Elite*, and the simulation levels
+  *Potato, Low, Normal, High*.
+- **The same 35 settings as the in-game AI menu**, in the same sections and order, with the game's
+  descriptions as tooltips. Values outside the recommended range turn orange.
+- **Reference values**: next to each setting, see the value of another preset (▲ above / ▼ below).
+- **Custom simulation**: AI optimization ranges and movement tick rate.
+- **Share codes**: **COPY CODE** gives an `IRR1-…` code to paste in the game's preset import;
+  **IMPORT CODE** reads a code exported by the game or shared by another player.
+- **Your presets stay in the app** (`%APPDATA%\IRR Companion\presets.json`). The game only sees what you
+  paste into it.
+
+### Compare presets
+
+Pick two presets and see every setting side by side: values, change in value and percent, and a bar showing
+both values on the setting's range. Tick *Only differences* to hide what is identical.
+
+![Comparing Recruit and Elite](docs/compare.png)
+
+### Console command builder
+
+The **COMMANDS** tab lists the game's `irr.*` console commands (151 of them), with their description:
+
+- **Essentials**: the commands you use while playing - weather, time of day, force extraction, spawn or
+  give items, god mode, invisible to AI, infinite ammo, raid timer, kill all AI, free camera…
+- **Categories**: World & Raid, Player, Items & Progression, Missions & Operations, AI, Cameras & Menus,
+  Graphics & Audio, Debug - plus a search field.
+- **A control for each argument**: ON/OFF switches, lists of values, sliders, a map + weather picker (the
+  app writes the weather number of that map), and an item picker with the 840 items of the game.
+- **COPY** puts the complete command in the clipboard: open the in-game console (`²` / `~`, `^` or `F10`)
+  and paste it with `Ctrl+V`.
+
+![Building the weather command](docs/commands.png)
+
+![Picking an item to spawn](docs/commands-items.png)
+
+**Favorites**: save a command with its values under your own name ("Thunderstorm on Delta", "Noon"…),
+reorder them, and copy them in one click. They are stored in `%APPDATA%\IRR Companion\favorites.json`.
+
+![Favorite commands](docs/favorites.png)
 
 ## How to use
 
+**Make an AI preset**
 1. Select a game difficulty and click **DUPLICATE** (or **NEW**).
-2. Change the settings, give the preset a name, click **SAVE**.
-3. Click **COPY CODE** and paste the code in the game's AI settings preset import.
+2. Change the settings, give the preset a name, click **SAVE** (`Ctrl+S`).
+3. Click **COPY CODE**, then in the game paste the code in the AI settings preset import.
 
-## Share code format
+**Run a console command**
+1. Open the **COMMANDS** tab and pick a command (or search for it).
+2. Set its arguments on the right and click **COPY** (or double-click the command).
+3. In the game, open the console and paste with `Ctrl+V`, then press Enter.
 
-`IRR1-` + base64 of the compact JSON document (no `=` padding) + `-` + checksum.
-The checksum is djb2-xor (`h = 5381; h = (h * 33) ^ c`, 32-bit) computed over the base64 text and
-written as 4 base-36 digits (`0-9A-Z`), least significant digit first.
-`tools/irr_sharecode.py` encodes and decodes codes from the command line.
+### Good to know
 
-The JSON document looks like:
+- `irr.World.SetWeather` takes a number that depends on the map. The numbers are assumed to start at 1;
+  this is not confirmed in game yet - if the weather you get is off by one, please open an issue.
+- The item names offered for *Spawn item* / *Give item* are the game's internal names; the game also accepts
+  part of a name and lists the matches in the console when there are several.
+- Commands marked **HOST** only work for the player who hosts the game (or in solo).
+
+## For developers
+
+### Building
+
+Requires the .NET SDK 8 or newer (the app itself targets .NET Framework 4.6.2).
+
+```
+dotnet build src -c Release
+```
+
+The exe is `src/bin/Release/net462/IRRCompanion.exe`. A Debug build adds test helpers:
+`--screenshot <prefix>` renders every view to PNG files and `--roundtrip <in> <out>` re-exports a share code.
+
+### Updating after a game patch
+
+The app embeds data read from the game. The complete procedure - what to extract, what to check, how to
+release - is the Claude Code skill [`.claude/skills/update-irr-tool/SKILL.md`](.claude/skills/update-irr-tool/SKILL.md)
+(run `/update-irr-tool` in Claude Code, or follow it by hand). It uses these scripts from `tools/`:
+
+| Script | Output / check |
+|---|---|
+| `build_defaults.py` | `src/Resources/defaults.json`: difficulties, simulation levels and settings, from the game's `AISettings` folder; prints what changed |
+| `check_roundtrip.py` | the share codes in `tools/testdata/` survive an import and export by the app |
+| `extract_console.py` | `irr.*` commands of the game exe compared with the app: new and removed ones |
+| `ue_param_types.py` | argument types of the game's cheat commands |
+| `map_weathers.py` | `tools/map_weathers.json`: weather list of each map |
+| `list_items.py` | `tools/item_paths.txt`: the item definitions |
+| `build_commands.py` | `src/Resources/commands.json`: commands, weathers and items |
+| `irr_sharecode.py` | decode / encode share codes from the command line |
+
+Game files are extracted from the paks with [repak](https://github.com/trumank/repak), for example
+`repak unpack -o <out> -i "Test_C/Content/AISettings" pakchunk0-Windows.pak`.
+
+### Share code format
+
+`IRR1-` + base64 of the compact JSON document (no `=` padding) + `-` + checksum. The checksum is djb2-xor
+(`h = 5381; h = (h * 33) ^ c`, 32-bit) over the base64 text, written as 4 base-36 digits (`0-9A-Z`), least
+significant first.
 
 ```json
 { "t": "p", "id": "my_preset",
@@ -53,37 +130,15 @@ The JSON document looks like:
   "vars": [ { "c": "AISettings", "n": "my_preset", "hv": 2, "doc": { "...": "..." } } ] }
 ```
 
-A custom simulation adds `{ "c": "Simulation", "n": "my_preset", "hv": 1, "doc": { ... } }` to `vars`
-and sets `selections.simulation` to the preset id.
+A custom simulation adds `{ "c": "Simulation", "n": "my_preset", "hv": 1, "doc": { … } }` to `vars` and sets
+`selections.simulation` to the preset id.
 
-## Building
+### Releasing
 
-Requires the .NET SDK (8 or newer).
-
-```
-dotnet build src -c Release
-```
-
-The output is `src/bin/Release/net462/IRRPresetTool.exe`.
-
-### Updating the game data
-
-`src/Resources/defaults.json` is generated from the game files. After a game update:
-
-1. Extract `Test_C/Content/AISettings/` from `Test_C/Content/Paks/pakchunk0-Windows.pak`
-   with [repak](https://github.com/trumank/repak):
-   `repak unpack -o <out> -i "Test_C/Content/AISettings" pakchunk0-Windows.pak`
-2. Run `python -I tools/build_defaults.py <out>/Test_C/Content/AISettings tools/reference_full_doc.json`
-   (`reference_full_doc.json` is a full AISettings document saved by the game; it gives the key order and
-   the engine defaults of keys that `Normal.json` does not set).
-3. Rebuild.
-
-## Releasing
-
-Push a tag `vX.Y.Z`: the GitHub Actions workflow builds the exe and publishes a release with it.
+Push a tag `vX.Y.Z`: the GitHub Actions workflow builds the exe and publishes the release with it.
 
 ## Disclaimer
 
-This is a fan-made tool, not affiliated with or endorsed by the developers of Incursion Red River.
-The default values and descriptions in `src/Resources/defaults.json` come from the game and belong to
-their owners. The source code is under the MIT license (see `LICENSE`).
+IRR Companion is a fan-made tool, not affiliated with or endorsed by the developers of Incursion Red River.
+The default values, descriptions and names in `src/Resources/` come from the game and belong to their owners.
+The source code is under the MIT license (see [LICENSE](LICENSE)).

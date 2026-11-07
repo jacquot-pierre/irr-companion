@@ -4,7 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 
-namespace IRRPresetTool
+namespace IRRCompanion
 {
     public sealed class Param
     {

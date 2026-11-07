@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 
-namespace IRRPresetTool
+namespace IRRCompanion
 {
     /// <summary>
     /// Incursion Red River share codes: "IRR1-" + base64(compact JSON, no padding) + "-" + checksum.
