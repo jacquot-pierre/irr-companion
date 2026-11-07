@@ -44,7 +44,7 @@ namespace IRRCompanion
         public static readonly List<MapWeather> Maps = new List<MapWeather>();
         /// <summary>(internal name, category) of every item definition.</summary>
         public static readonly List<KeyValuePair<string, string>> Items = new List<KeyValuePair<string, string>>();
-        public static int WeatherIndexBase = 1;
+        public static int WeatherIndexBase = 0;
 
         public static void Load()
         {
@@ -53,7 +53,7 @@ namespace IRRCompanion
             using (var s = Assembly.GetExecutingAssembly().GetManifestResourceStream("commands.json"))
             using (var r = new StreamReader(s, Encoding.UTF8)) text = r.ReadToEnd();
             var root = (JObj)Json.Parse(text);
-            WeatherIndexBase = (int)root.Num("weatherIndexBase", 1);
+            WeatherIndexBase = (int)root.Num("weatherIndexBase", 0);
             foreach (var x in root.Arr("categories")) Categories.Add((string)x);
             foreach (var x in root.Arr("essentials")) Essentials.Add((string)x);
             foreach (JObj m in root.Arr("maps"))

@@ -19,8 +19,8 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, '..', 'src', 'Resources', 'commands.json')
 
-# First weather number accepted by irr.World.SetWeather (not verified in game yet).
-WEATHER_INDEX_BASE = 1
+# First weather number accepted by irr.World.SetWeather (0: confirmed in game, Delta, 2026-11-07).
+WEATHER_INDEX_BASE = 0
 
 # Weather lists come from tools/map_weathers.json (written by tools/map_weathers.py):
 # for each map, the UDS weather presets in the order of WeatherTypeProbabilities, with their weight.

@@ -6,9 +6,8 @@ What is still to do or to verify for IRR Companion. Tick items as they are done.
 
 Console commands (the values were read from the game files, not tried in game):
 
-- [ ] `irr.World.SetWeather`: does the first weather of a map have number **1** or **0**? Try
-      `irr.World.SetWeather 1` on Delta: clear skies means 1 is right. If not, set `WEATHER_INDEX_BASE = 0`
-      in `tools/build_commands.py`, run it and rebuild.
+- [x] `irr.World.SetWeather`: the first weather of a map has number **0** (checked in game on Delta);
+      `WEATHER_INDEX_BASE = 0` in `tools/build_commands.py`.
 - [ ] `irr.Item.Spawn` / `irr.Item.Give`: are the internal item names accepted (e.g. `Bandage`, `Glock_19`)?
       `irr.Item.List All 1` shows the names the game expects.
 - [ ] Arguments with spaces: does the console accept quoted values, e.g.

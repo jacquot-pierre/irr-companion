@@ -153,8 +153,8 @@ It prints each map's weather list (order and weight) and rewrites `tools/map_wea
 - `NO WEATHER LIST FOUND` for a map: its asset layout changed; inspect the `.uexp` by hand.
 - New map: add it to `MAP_ORDER` in `tools/build_commands.py` (or to `MAP_SKIP` if it is not playable, like
   `Lobby`). New UDS weather preset: add its display name to `WEATHER_NAMES`.
-- `WEATHER_INDEX_BASE` (first number accepted by `irr.World.SetWeather`) is 1. Keep it unless the user
-  tested in game that the numbers are shifted; then change it here only.
+- `WEATHER_INDEX_BASE` (first number accepted by `irr.World.SetWeather`) is 0, checked in game on Delta
+  (2026-11-07). Keep it unless the user tests in game that the numbers are shifted; then change it here only.
 
 ## 7. Items
 

@@ -170,8 +170,8 @@ updates them. If something differs from the game, please
 
 ### Good to know
 
-- `irr.World.SetWeather` takes a number that depends on the map. The numbers are assumed to start at 1;
-  this is not confirmed in game yet - if the weather you get is off by one, please open an issue.
+- `irr.World.SetWeather` takes a number that depends on the map, starting at 0 (clear skies on every map);
+  the app picks it for you from the weather list.
 - The item names offered for *Spawn item* / *Give item* are the game's internal names; the game also accepts
   part of a name and lists the matches in the console when there are several.
 - Commands marked **HOST** only work for the player who hosts the game (or in solo).
