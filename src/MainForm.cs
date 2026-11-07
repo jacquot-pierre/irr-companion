@@ -62,6 +62,7 @@ namespace IRRCompanion
         private Panel _editPanel, _comparePanel, _rowsPanel, _side;
         private CommandsPanel _commandsPanel;
         private HideoutPanel _hideoutPanel;
+        private MapsPanel _mapsPanel;
         private Segmented _viewSwitch;
         private TextBox _name, _author, _desc;
         private Label _banner, _status;
@@ -129,10 +130,10 @@ namespace IRRCompanion
             var header = new Panel { Dock = DockStyle.Top, Height = Theme.S(64), BackColor = Theme.Panel };
             var title = Theme.Lbl("IRR COMPANION", Theme.Title, Theme.Accent);
             title.Location = new Point(Theme.S(18), Theme.S(8));
-            var sub = Theme.Lbl("AI presets, console commands and hideout upgrades for Incursion Red River · game data " + GameData.GameBuild, Theme.Small, Theme.TextDim);
+            var sub = Theme.Lbl("Companion app for Incursion Red River · game data " + GameData.GameBuild, Theme.Small, Theme.TextDim);
             sub.Location = new Point(Theme.S(20), Theme.S(40));
-            _viewSwitch = new Segmented("EDIT", "COMPARE", "COMMANDS", "HIDEOUT") { Selected = 0, BackColor = Theme.Row };
-            _viewSwitch.Size = new Size(Theme.S(520), Theme.S(36));
+            _viewSwitch = new Segmented("EDIT", "COMPARE", "COMMANDS", "HIDEOUT", "MAPS") { Selected = 0, BackColor = Theme.Row };
+            _viewSwitch.Size = new Size(Theme.S(580), Theme.S(36));
             _viewSwitch.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             _viewSwitch.OptionClicked += (s, e) => ShowView(_viewSwitch.ClickedIndex);
             header.Controls.Add(title);
@@ -200,11 +201,13 @@ namespace IRRCompanion
             _comparePanel.Visible = false;
             _commandsPanel = new CommandsPanel(_tip, SetStatus) { Visible = false };
             _hideoutPanel = new HideoutPanel(_tip, SetStatus) { Visible = false };
+            _mapsPanel = new MapsPanel(_tip) { Visible = false };
 
             Controls.Add(_editPanel);
             Controls.Add(_comparePanel);
             Controls.Add(_commandsPanel);
             Controls.Add(_hideoutPanel);
+            Controls.Add(_mapsPanel);
             Controls.Add(side);
             Controls.Add(statusBar);
             Controls.Add(header);
@@ -768,9 +771,11 @@ namespace IRRCompanion
             _comparePanel.Visible = index == 1;
             _commandsPanel.Visible = index == 2;
             _hideoutPanel.Visible = index == 3;
+            _mapsPanel.Visible = index == 4;
             _side.Visible = index < 2;
             if (index == 2) ActiveControl = _commandsPanel.List;
             if (index == 3) ActiveControl = _hideoutPanel.List;
+            if (index == 4) ActiveControl = _mapsPanel.Canvas;
             if (index == 1)
             {
                 RefreshCombos();
@@ -869,6 +874,13 @@ namespace IRRCompanion
             shot("hideout_shopping");
             _hideoutPanel.TestShow(null, false);
             shot("hideout_shopping_all");
+            ShowView(4);
+            _mapsPanel.TestShow("Quarry", 0, -1);
+            shot("maps_quarry");
+            _mapsPanel.TestShow("Delta", 0, 5);
+            shot("maps_delta_hover");
+            _mapsPanel.TestShow("Bunker", 2, -1);
+            shot("maps_bunker");
             ShowView(0);
             _presets.Remove(p);
             foreach (var x in _presets) x.Dirty = false;

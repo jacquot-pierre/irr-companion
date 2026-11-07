@@ -78,7 +78,13 @@ class Reader:
 
 
 def package(path):
-    """Names, imports and exports of a cooked UE5 package (unversioned)."""
+    """Names and exports of a cooked UE5 package (unversioned)."""
+    names, _, exports = package_full(path)
+    return names, exports
+
+
+def package_full(path):
+    """Names, import object names and exports of a cooked UE5 package (unversioned)."""
     d = open(path, 'rb').read()
     r = Reader(d, 4)
     legacy = r.i32()
@@ -114,18 +120,23 @@ def package(path):
         _, _, cn, _, outer, on, _ = struct.unpack_from('<iiiiiii', d, q)
         q += 28 + (0 if flags & 0x80000000 else 8) + (4 if ue5 >= 1003 else 0)
         imports.append(names[on])
+    uexp = os.path.splitext(path)[0] + '.uexp'
+    uexp_size = os.path.getsize(uexp) if os.path.exists(uexp) else 1 << 62
     for stride in range(72, 140, 4):
         exports = []
         for k in range(export_count):
             b = export_off + k * stride
-            cls, _, _, _, ni, nn = struct.unpack_from('<iiiiii', d, b)
-            if not (-len(imports) <= cls <= export_count and 0 <= ni < len(names) and 0 <= nn < 1000):
+            cls, _, _, outer, ni, nn = struct.unpack_from('<iiiiii', d, b)
+            size, off = struct.unpack_from('<qq', d, b + 28)
+            # name numbers can be huge in levels (generated actor names): check the serial range instead
+            if not (-len(imports) <= cls <= export_count and 0 <= ni < len(names) and 0 <= outer <= export_count
+                    and size >= 0 and 0 <= off - len(d) and off - len(d) + size <= uexp_size):
                 exports = None
                 break
-            size, off = struct.unpack_from('<qq', d, b + 28)
-            exports.append({'class': imports[-cls - 1] if cls < 0 else '', 'offset': off - len(d), 'size': size})
+            exports.append({'class': imports[-cls - 1] if cls < 0 else '', 'offset': off - len(d), 'size': size,
+                            'outer': outer, 'name': names[ni], 'class_index': cls})
         if exports:
-            return names, exports
+            return names, imports, exports
     raise ValueError('export table not understood: ' + path)
 
 

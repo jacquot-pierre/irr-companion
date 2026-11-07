@@ -37,6 +37,12 @@ Hideout (costs read from the game files):
 - [ ] GIVE buttons: `irr.Item.Give <item> <count>` with the internal names (`GasCan`, `PowerCable`…),
       `irr.Item.Give Cash <n>` and `irr.Item.AddResource Oil <n>` work in game.
 
+Maps:
+
+- [ ] Resource points on Delta / Quarry / Outskirts / Bunker match the game (a few spots checked in a raid).
+- [ ] About 40 % of the points have a resource in a raid (no other limit applied by the game).
+- [ ] Bunker floors: points shown on the right floor.
+
 ## Verify the app
 
 The interface was only checked on screenshots; nothing was clicked yet.
@@ -49,6 +55,7 @@ The interface was only checked on screenshots; nothing was clicked yet.
 - [ ] Favorites: add (name prompt), SAVE after changing values, RENAME, REMOVE, ▲ / ▼, they survive a restart.
 - [ ] HIDEOUT: player level and loyalty fields, MY LEVEL buttons, requirement links, NEXT UPGRADES /
       EVERYTHING LEFT, GIVE buttons; the progress survives a restart (`%APPDATA%\IRR Companion\hideout.json`).
+- [ ] MAPS: map and floor lists, filters, hover tooltip, zoom with the wheel, drag, double-click to fit.
 - [ ] First start: presets and favorites copied from `%APPDATA%\IRR Preset Tool` to `%APPDATA%\IRR Companion`.
 - [ ] Display scaling 125 % / 150 % and the minimum window size (1000 × 620): nothing cut or overlapping.
 - [ ] Windows 10 and a PC without development tools (download from the release page, SmartScreen).
@@ -62,6 +69,9 @@ The interface was only checked on screenshots; nothing was clicked yet.
 - [ ] Optional: code-sign the exe to avoid the SmartScreen warning.
 
 ## Ideas
+
+- [ ] Names of the extraction points (not found in the level data; maybe from the game's map setup).
+- [ ] More map layers: loot containers, mission spawn points (positions are in the same level files).
 
 - [ ] More icons: item picker of the COMMANDS tab, favorites (add item names to `EXTRA_ITEMS` in
       `tools/build_icons.py`, a few at a time). The Honey Badger has no icon in the game files.

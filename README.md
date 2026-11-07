@@ -1,7 +1,8 @@
 # IRR Companion
 
 **A small companion app for [Incursion Red River](https://store.steampowered.com/app/2116120/): create and
-compare AI presets, build console commands without typing them, and plan your hideout upgrades.**
+compare AI presets, build console commands without typing them, plan your hideout upgrades and find
+resources on the maps.**
 
 One portable `.exe`, nothing to install, nothing written to the game's files.
 
@@ -13,6 +14,7 @@ One portable `.exe`, nothing to install, nothing written to the game's files.
 | **COMPARE** | Compare two presets setting by setting. |
 | **COMMANDS** | Build any of the game's 151 console commands with a few clicks, copy it, keep your favorites. |
 | **HIDEOUT** | See the cost of every hideout upgrade with the game icons, track your progress and get a shopping list. |
+| **MAPS** | Every resource spawn point (Concrete, Food, Metal, Oil) and extraction point on the game maps, with filters. |
 
 ## Download
 
@@ -88,6 +90,24 @@ Stash, Repair Station, Gunsmith, Terminal, Intel Center, Shooting Range:
 
 ![Shopping list](docs/hideout-shopping.png)
 
+### Resource maps
+
+The **MAPS** tab shows the game's minimaps of **Delta, Quarry, Outskirts and Bunker** with every resource
+spawn point placed in the map files:
+
+- **Filters**: show or hide Concrete, Food, Metal, Oil and the extraction points (with their count).
+- **Hover a point**: its type, its chance to be there (**40 %** for every resource point in the game files) and
+  the amount you get (700).
+- **Average per raid** for the whole map: points x chance, and the units it makes.
+- **Bunker**: a floor selector, one plan per floor.
+- Mouse wheel to zoom, drag to move, double-click to see the whole map.
+
+![Resources on Quarry](docs/maps.png)
+
+![Hovering a resource point on Delta](docs/maps-hover.png)
+
+![Bunker floors](docs/maps-bunker.png)
+
 ## How to use
 
 **Make an AI preset**
@@ -106,6 +126,10 @@ Stash, Repair Station, Gunsmith, Terminal, Intel Center, Shooting Range:
 3. Open **SHOPPING LIST** to see everything you still need to collect.
 4. Units marked *Can upgrade* in green meet every requirement; open a unit marked *locked* to see what is
    missing (click a required unit to jump to it).
+
+**Find resources**
+1. Open the **MAPS** tab and pick a map (and a floor for the Bunker).
+2. Untick the resources you do not need; hover a point to see its chance.
 
 ### Your data
 
@@ -138,6 +162,8 @@ updates them. If something differs from the game, please
 - Commands marked **HOST** only work for the player who hosts the game (or in solo).
 - Hideout: the Structure and the Shooting Range have a free level 1 in the game files, taken as their
   starting level; the other units start at level 0 (not built).
+- Maps: the 40 % chance is the value set for each resource point in the game files; the game could still
+  apply other rules during a raid (a limit per raid, for example) that are not visible in the files.
 
 ## For developers
 
@@ -156,8 +182,8 @@ The exe is `src/bin/Release/net462/IRRCompanion.exe`. A Debug build adds test he
 
 | Path | Content |
 |---|---|
-| `src/` | the WinForms app (C# 7.3, .NET Framework 4.6.2): `MainForm.cs` (EDIT / COMPARE), `CommandsPanel.cs`, `HideoutPanel.cs`, data models (`Preset.cs`, `Commands.cs`, `Hideout.cs`), `ShareCode.cs`, `Theme.cs` / `Controls.cs` (dark UI) |
-| `src/Resources/` | data generated from the game: `defaults.json`, `commands.json`, `hideout.json`, `icons/` |
+| `src/` | the WinForms app (C# 7.3, .NET Framework 4.6.2): `MainForm.cs` (EDIT / COMPARE), `CommandsPanel.cs`, `HideoutPanel.cs`, `MapsPanel.cs`, data models (`Preset.cs`, `Commands.cs`, `Hideout.cs`, `Maps.cs`), `ShareCode.cs`, `Theme.cs` / `Controls.cs` (dark UI) |
+| `src/Resources/` | data generated from the game: `defaults.json`, `commands.json`, `hideout.json`, `maps.json`, `icons/`, `maps/` |
 | `tools/` | Python scripts that read the game files and check the app (see below), test share codes in `tools/testdata/` |
 | `.claude/skills/update-irr-tool/` | step-by-step procedure to update the app after a game patch |
 | `.github/workflows/build.yml` | builds the exe on every push, publishes a release for `v*` tags |
@@ -180,6 +206,7 @@ release - is the Claude Code skill [`.claude/skills/update-irr-tool/SKILL.md`](.
 | `build_commands.py` | `src/Resources/commands.json`: commands, weathers and items |
 | `build_hideout.py` | `src/Resources/hideout.json`: costs and requirements of every hideout unit level |
 | `build_icons.py` | `src/Resources/icons/`: icons of the hideout items, cash and materials (+ `EXTRA_ITEMS`) |
+| `build_maps.py` | `src/Resources/maps.json` and `maps/*.jpg`: resource and extraction points, minimaps and their bounds |
 | `irr_sharecode.py` | decode / encode share codes from the command line |
 
 Game files are extracted from the paks with [repak](https://github.com/trumank/repak), for example
@@ -223,6 +250,7 @@ Known gaps and things still to check in game are listed in [TODO.md](TODO.md).
 
 IRR Companion is a fan-made tool, not affiliated with or endorsed by the developers of Incursion Red River.
 The default values, descriptions and names in `src/Resources/` come from the game and belong to their owners.
-The item and material icons in `src/Resources/icons/` are artwork from the game, © its developers; they are
-included only so players recognise the items, and will be removed on request.
+The item and material icons in `src/Resources/icons/` and the minimaps in `src/Resources/maps/` are artwork
+from the game, © its developers; they are included only so players recognise the items and places, and will be
+removed on request.
 The source code is under the MIT license (see [LICENSE](LICENSE)).

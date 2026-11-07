@@ -17,6 +17,7 @@ The tool embeds data read from the game. After a game patch, each of these can c
 | Weathers of each map (order = number of `irr.World.SetWeather`) | pak: `Blueprints/MissionSystem/DataAssets/Maps/MD_*` | `tools/map_weathers.json` | `tools/map_weathers.py` |
 | Item names (Spawn / Give) | pak: `.../Items/**/ID_*.uasset` | `tools/item_paths.txt` | `tools/list_items.py` |
 | Hideout upgrade costs and requirements | pak: `Blueprints/MissionSystem/Actors/Hideout/**` | `src/Resources/hideout.json` | `tools/build_hideout.py` |
+| Resource / extraction points, minimaps | pak: persistent levels `Maps/Gameplay/LVL_*`, `Maps/Testing/LVL_Bunker`, `Textures/Minimaps`, `Environment/Blueprints/Gameplay/Resources` | `src/Resources/maps.json`, `src/Resources/maps/*.jpg` | `tools/build_maps.py` |
 | Item / material icons (hideout) | pak: `Items/**/T_*_Icon` (mostly pakchunk6), `ResourceSystem/Textures` | `src/Resources/icons/*.png` | `tools/build_icons.py` |
 
 Work through the steps in order and keep a list of everything that changed: it becomes the release notes.
@@ -187,6 +188,23 @@ removes icons no longer used. `WARNING: no *_Icon texture` is expected for items
 `read_texture` / `decode`. Look at a few new icons before committing. Icons are added little by little:
 to ship more, add item names to `EXTRA_ITEMS`.
 
+## 7c. Resource maps
+
+```
+python -I tools/build_maps.py "<paks>"
+```
+
+Takes ~2-3 minutes and ~1.5 GB in %TEMP% (it extracts the persistent levels). It prints, per map, the floors,
+the number of resource points per type and of extraction points, and the spawn chance / amount of each type.
+- New map: add it to `MAPS` (display name, persistent level path). A map whose minimap is a grey plan goes in
+  `PLAN_MAPS` (drawn inverted, like the Bunker).
+- `first property ... expected 161` (or 5 / 0): the component layout changed; check `LOCATION_INDEX`.
+- `overrides a blueprint property`: a point has its own chance or amount - read it from the actor instead of
+  using the class default.
+- Spawn chance / amount changed: compare with the previous `maps.json` (`git diff`), it is shown in the app.
+- Check the MAPS screenshots: points must sit on buildings / the quarry rocks. If they are rotated or mirrored,
+  the minimap capture changed: fix `MapFloor.ToImage` in `src/Maps.cs`.
+
 ## 8. Regenerate and build
 
 ```
@@ -199,7 +217,7 @@ src\bin\Debug\net462\IRRCompanion.exe --screenshot <work>\shot
 `--screenshot` (Debug build only) writes PNGs of every view: `_edit`, `_edit_scrolled`, `_builtin`,
 `_compare`, `_compare_diff`, `_compare_difficulties`, `_commands_weather`, `_commands_item`,
 `_commands_player`, `_commands_cvar`, `_commands_favorites`, `_hideout_unit`, `_hideout_stash`,
-`_hideout_shopping`, `_hideout_shopping_all` (and `.error.txt` if it crashed). Look at each image:
+`_hideout_shopping`, `_hideout_shopping_all`, `_maps_quarry`, `_maps_delta_hover`, `_maps_bunker` (and `.error.txt` if it crashed). Look at each image:
 - EDIT: every section of the in-game menu, names not cut, values formatted like the game, nothing scrolled.
 - COMPARE: section rows, colors, range bars.
 - COMMANDS: categories and counts, weather lists, item picker, favorites buttons.
@@ -207,7 +225,8 @@ src\bin\Debug\net462\IRRCompanion.exe --screenshot <work>\shot
 If the screenshots are fine and the UI changed, refresh the README images: `docs/editor.png` (`_edit`),
 `docs/compare.png` (`_compare_difficulties`), `docs/commands.png` (`_commands_weather`),
 `docs/commands-items.png` (`_commands_item`), `docs/favorites.png` (`_commands_favorites`),
-`docs/hideout.png` (`_hideout_stash`), `docs/hideout-shopping.png` (`_hideout_shopping`).
+`docs/hideout.png` (`_hideout_stash`), `docs/hideout-shopping.png` (`_hideout_shopping`), `docs/maps.png`
+(`_maps_quarry`), `docs/maps-hover.png` (`_maps_delta_hover`), `docs/maps-bunker.png` (`_maps_bunker`).
 
 The real GUI cannot be clicked from the sandbox: tell the user what to test by hand (save, import a code,
 copy a code and import it in game, copy a console command and run it in game).
@@ -237,5 +256,6 @@ copy a code and import it in game, copy a console command and run it in game).
 - [ ] `list_items.py` run; `build_commands.py` run
 - [ ] `build_hideout.py`: all units found, no warning; cost changes reviewed
 - [ ] `build_icons.py` run; new icons look right
+- [ ] `build_maps.py`: every map found, point counts reviewed, no warning; MAPS screenshots show points on buildings
 - [ ] Debug build, screenshots reviewed; Release build clean
 - [ ] Version bumped, README updated, change summary given to the user

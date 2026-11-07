@@ -24,7 +24,7 @@ SOFTWARE.
 This license covers the source code of IRR Companion only. The files in
 src/Resources/ (defaults.json, commands.json) contain default values, ranges,
 setting descriptions, console command help texts, map weather lists and item
-names taken from the game Incursion Red River, and src/Resources/icons/
-contains item and material icons from the game; they remain the property of
+names taken from the game Incursion Red River, src/Resources/icons/ contains
+item and material icons and src/Resources/maps/ the minimaps of the game; they remain the property of
 their respective owners and are included only so the tool can show them. They
 will be removed on request of the rights holders.
