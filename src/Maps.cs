@@ -39,11 +39,20 @@ namespace IRRCompanion
 
     public sealed class MapPoint
     {
-        /// <summary>Concrete, Food, Metal, Oil, or Extraction.</summary>
+        /// <summary>Concrete, Food, Metal, Oil, Extraction, or a lock kind (CompactSafe, LargeSafe, HasDoor, LockedDoor).</summary>
         public string Type;
+        /// <summary>Key gameplay tag needed (locks only).</summary>
+        public string Key;
         public double X, Y, Z;
         public int Floor;
         public bool IsExtraction { get { return Type == MapData.Extraction; } }
+        public bool IsLock { get { return Key != null; } }
+        public bool IsResource { get { return !IsExtraction && !IsLock; } }
+    }
+
+    public sealed class KeyInfo
+    {
+        public string Tag, Id, Name;
     }
 
     public sealed class GameMap
@@ -70,6 +79,34 @@ namespace IRRCompanion
     public static class MapData
     {
         public const string Extraction = "Extraction";
+        public static readonly string[] LockKinds = { "CompactSafe", "LargeSafe", "HasDoor", "LockedDoor" };
+        public static readonly Dictionary<string, KeyInfo> Keys = new Dictionary<string, KeyInfo>();
+
+        public static string Label(string type)
+        {
+            switch (type)
+            {
+                case Extraction: return "Extraction points";
+                case "CompactSafe": return "Compact safes";
+                case "LargeSafe": return "Large safes";
+                case "HasDoor": return "HAS doors";
+                case "LockedDoor": return "Locked doors";
+                default: return type;
+            }
+        }
+
+        public static string SingleLabel(string type)
+        {
+            switch (type)
+            {
+                case Extraction: return "Extraction point";
+                case "CompactSafe": return "Compact safe";
+                case "LargeSafe": return "Large safe";
+                case "HasDoor": return "HAS door";
+                case "LockedDoor": return "Locked door";
+                default: return type;
+            }
+        }
         public static readonly List<GameMap> Maps = new List<GameMap>();
         public static readonly List<ResourceSpawn> Resources = new List<ResourceSpawn>();
 
@@ -80,6 +117,8 @@ namespace IRRCompanion
             using (var s = Assembly.GetExecutingAssembly().GetManifestResourceStream("maps.json"))
             using (var r = new StreamReader(s, Encoding.UTF8)) text = r.ReadToEnd();
             var root = (JObj)Json.Parse(text);
+            foreach (JObj k in root.Arr("keys") ?? new List<object>())
+                Keys[k.Str("tag")] = new KeyInfo { Tag = k.Str("tag"), Id = k.Str("id"), Name = k.Str("name") };
             foreach (JObj r in root.Arr("resources"))
                 Resources.Add(new ResourceSpawn { Type = r.Str("type"), Chance = r.Num("chance"), Amount = (int)r.Num("amount") });
             foreach (JObj m in root.Arr("maps"))
@@ -95,6 +134,8 @@ namespace IRRCompanion
                     map.Points.Add(new MapPoint { Type = p.Str("type"), X = p.Num("x"), Y = p.Num("y"), Z = p.Num("z"), Floor = (int)p.Num("floor") });
                 foreach (JObj p in m.Arr("extractions"))
                     map.Points.Add(new MapPoint { Type = Extraction, X = p.Num("x"), Y = p.Num("y"), Z = p.Num("z"), Floor = (int)p.Num("floor") });
+                foreach (JObj p in m.Arr("locks") ?? new List<object>())
+                    map.Points.Add(new MapPoint { Type = p.Str("kind"), Key = p.Str("key"), X = p.Num("x"), Y = p.Num("y"), Z = p.Num("z"), Floor = (int)p.Num("floor") });
                 Maps.Add(map);
             }
         }

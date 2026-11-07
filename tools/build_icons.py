@@ -3,7 +3,8 @@ r"""Extracts the game icons the app shows and writes them as small PNGs to src/R
 Usage:
   python -I tools/build_icons.py "<game>\Test_C\Content\Paks" [path\to\repak.exe]
 
-Which icons: every item of src/Resources/hideout.json (run tools/build_hideout.py first), cash, the four
+Which icons: every item of src/Resources/hideout.json (run tools/build_hideout.py first), the keys of
+src/Resources/maps.json (run tools/build_maps.py first), cash, the four
 materials, plus the item names listed in EXTRA_ITEMS below. Icons are added little by little: add an item
 definition name (as in tools/item_paths.txt, without ID_) to EXTRA_ITEMS to ship its icon.
 
@@ -184,7 +185,11 @@ def main():
     paks = sys.argv[1]
     repak = sys.argv[2] if len(sys.argv) > 2 else (shutil.which('repak') or r'C:\Program Files\repak_cli\bin\repak.exe')
     hideout = json.load(open(HIDEOUT, encoding='utf-8'))
-    ids = sorted({it['id'] for u in hideout['units'] for lv in u['levels'] for it in lv['items'] if it.get('id')} | {'Cash'} | set(EXTRA_ITEMS))
+    ids = {it['id'] for u in hideout['units'] for lv in u['levels'] for it in lv['items'] if it.get('id')} | {'Cash'} | set(EXTRA_ITEMS)
+    maps_json = os.path.join(ROOT, 'src', 'Resources', 'maps.json')
+    if os.path.exists(maps_json):  # keys of the safes / locked doors of the MAPS tab
+        ids |= {k['id'] for k in json.load(open(maps_json, encoding='utf-8')).get('keys', [])}
+    ids = sorted(ids)
 
     print('listing the paks...')
     files = repak_list(repak, paks)

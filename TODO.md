@@ -42,6 +42,8 @@ Maps:
 - [ ] Resource points on Delta / Quarry / Outskirts / Bunker match the game (a few spots checked in a raid).
 - [ ] About 40 % of the points have a resource in a raid (no other limit applied by the game).
 - [ ] Bunker floors: points shown on the right floor.
+- [ ] Safes and locked doors: positions and keys match the game (e.g. an Outskirts large safe, a HAS door).
+- [ ] Doors without a key in the files are hidden (8 on Delta, 26 on Quarry): check they really never open.
 
 ## Verify the app
 

@@ -14,7 +14,7 @@ One portable `.exe`, nothing to install, nothing written to the game's files.
 | **COMPARE** | Compare two presets setting by setting. |
 | **COMMANDS** | Build any of the game's 151 console commands with a few clicks, copy it, keep your favorites. |
 | **HIDEOUT** | See the cost of every hideout upgrade with the game icons, track your progress and get a shopping list. |
-| **MAPS** | Every resource spawn point (Concrete, Food, Metal, Oil) and extraction point on the game maps, with filters. |
+| **MAPS** | Resource spawn points, extraction points, safes and locked doors (with the key they need) on the game maps. |
 
 ## Download
 
@@ -93,9 +93,12 @@ Stash, Repair Station, Gunsmith, Terminal, Intel Center, Shooting Range:
 ### Resource maps
 
 The **MAPS** tab shows the game's minimaps of **Delta, Quarry, Outskirts and Bunker** with every resource
-spawn point placed in the map files:
+spawn point placed in the map files, the extraction points, the safes and the locked doors:
 
-- **Filters**: show or hide Concrete, Food, Metal, Oil and the extraction points (with their count).
+- **Filters**: show or hide Concrete, Food, Metal, Oil, extraction points, compact safes, large safes,
+  HAS doors and locked doors (with their count).
+- **Safes and doors**: hover one to see the key it needs, with the key's icon (e.g. *Outskirts Large Safe Key*,
+  *HAS-0410-A key*). Only doors that open with a key are shown.
 - **Hover a point**: its type, its chance to be there (**40 %** for every resource point in the game files) and
   the amount you get (700).
 - **Average per raid** for the whole map: points x chance, and the units it makes.
@@ -107,6 +110,10 @@ spawn point placed in the map files:
 ![Hovering a resource point on Delta](docs/maps-hover.png)
 
 ![Bunker floors](docs/maps-bunker.png)
+
+![The key a safe needs](docs/maps-safe.png)
+
+The map placement is the one of the in-game PDA map: centre of the map volume and its *MapSize*.
 
 ## How to use
 
@@ -129,7 +136,7 @@ spawn point placed in the map files:
 
 **Find resources**
 1. Open the **MAPS** tab and pick a map (and a floor for the Bunker).
-2. Untick the resources you do not need; hover a point to see its chance.
+2. Untick what you do not need; hover a resource to see its chance, a safe or a door to see its key.
 
 ### Your data
 
@@ -206,7 +213,7 @@ release - is the Claude Code skill [`.claude/skills/update-irr-tool/SKILL.md`](.
 | `build_commands.py` | `src/Resources/commands.json`: commands, weathers and items |
 | `build_hideout.py` | `src/Resources/hideout.json`: costs and requirements of every hideout unit level |
 | `build_icons.py` | `src/Resources/icons/`: icons of the hideout items, cash and materials (+ `EXTRA_ITEMS`) |
-| `build_maps.py` | `src/Resources/maps.json` and `maps/*.jpg`: resource and extraction points, minimaps and their bounds |
+| `build_maps.py` | `src/Resources/maps.json` and `maps/*.jpg`: resource and extraction points, safes and locked doors with their keys, minimaps and their bounds |
 | `irr_sharecode.py` | decode / encode share codes from the command line |
 
 Game files are extracted from the paks with [repak](https://github.com/trumank/repak), for example

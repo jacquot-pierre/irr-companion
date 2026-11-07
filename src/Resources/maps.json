@@ -21,6 +21,93 @@
    "amount": 700
   }
  ],
+ "keys": [
+  {
+   "tag": "Inventory.Items.Keys.Bunker.Compact Safe Key",
+   "id": "Bunker_Compact_Safe_Key",
+   "name": "Bunker Compact Safe Key"
+  },
+  {
+   "tag": "Inventory.Items.Keys.Bunker.Elevator Room",
+   "id": "Bunker_Elevator_Room_Key",
+   "name": "Bunker Elevator Room Key"
+  },
+  {
+   "tag": "Inventory.Items.Keys.Bunker.Extraction Room Key",
+   "id": "Bunker_Extraction_Room_Key",
+   "name": "Bunker Extraction Room Key"
+  },
+  {
+   "tag": "Inventory.Items.Keys.Bunker.General Bunker Key",
+   "id": "Bunker_General_key",
+   "name": "Bunker General key"
+  },
+  {
+   "tag": "Inventory.Items.Keys.Bunker.Large Safe Key",
+   "id": "Bunker_Large_Safe_key",
+   "name": "Bunker Large Safe Key"
+  },
+  {
+   "tag": "Inventory.Items.Keys.Delta.Compact Safe Key",
+   "id": "Delta_Compact_Safe_Key",
+   "name": "Delta Compact Safe Key"
+  },
+  {
+   "tag": "Inventory.Items.Keys.Delta.General Key",
+   "id": "Delta_General_Key",
+   "name": "Delta General Key"
+  },
+  {
+   "tag": "Inventory.Items.Keys.Delta.Large Safe Key",
+   "id": "Delta_Large_Safe_Key",
+   "name": "Delta Large Safe Key"
+  },
+  {
+   "tag": "Inventory.Items.Keys.HAS.HAS-0023-B",
+   "id": "HAS_Medium_Key",
+   "name": "HAS-0023-B key"
+  },
+  {
+   "tag": "Inventory.Items.Keys.HAS.HAS-0226-C",
+   "id": "HAS_Small_Key",
+   "name": "HAS-0226-C key"
+  },
+  {
+   "tag": "Inventory.Items.Keys.HAS.HAS-0410-A",
+   "id": "HAS_Large_Key",
+   "name": "HAS-0410-A key"
+  },
+  {
+   "tag": "Inventory.Items.Keys.Outskirts.Compact Safe Key",
+   "id": "Outskirts_Compact_Safe_Key",
+   "name": "Outskirts Compact Safe Key"
+  },
+  {
+   "tag": "Inventory.Items.Keys.Outskirts.General Key",
+   "id": "Outskirts_General_Key",
+   "name": "Outskirts General Key"
+  },
+  {
+   "tag": "Inventory.Items.Keys.Outskirts.Large Safe Key",
+   "id": "Outskirts_Compact_Large_Key",
+   "name": "Outskirts Large Safe Key"
+  },
+  {
+   "tag": "Inventory.Items.Keys.Quarry.Compact Safe Key",
+   "id": "Quarry_Compact_Safe_key",
+   "name": "Quarry Compact Safe Key"
+  },
+  {
+   "tag": "Inventory.Items.Keys.Quarry.General Key",
+   "id": "Quarry_General_Key",
+   "name": "Quarry General Key"
+  },
+  {
+   "tag": "Inventory.Items.Keys.Quarry.Large Safe Key",
+   "id": "Quarry_Large_Safe_key",
+   "name": "Quarry Large Safe Key"
+  }
+ ],
  "maps": [
   {
    "name": "Delta",
@@ -30,7 +117,7 @@
      "image": "delta_1.jpg",
      "centerX": -58804,
      "centerY": -46464,
-     "extent": 89800,
+     "extent": 90000,
      "centerZ": 1878,
      "extentZ": 25000
     }
@@ -397,6 +484,192 @@
      "z": -608,
      "floor": 0
     }
+   ],
+   "locks": [
+    {
+     "kind": "HasDoor",
+     "key": "Inventory.Items.Keys.HAS.HAS-0023-B",
+     "x": -98597,
+     "y": -70949,
+     "z": -744,
+     "floor": 0
+    },
+    {
+     "kind": "HasDoor",
+     "key": "Inventory.Items.Keys.HAS.HAS-0023-B",
+     "x": -25568,
+     "y": -22690,
+     "z": -905,
+     "floor": 0
+    },
+    {
+     "kind": "HasDoor",
+     "key": "Inventory.Items.Keys.HAS.HAS-0226-C",
+     "x": -81850,
+     "y": -24829,
+     "z": -760,
+     "floor": 0
+    },
+    {
+     "kind": "CompactSafe",
+     "key": "Inventory.Items.Keys.Delta.Compact Safe Key",
+     "x": -82678,
+     "y": -56819,
+     "z": -719,
+     "floor": 0
+    },
+    {
+     "kind": "CompactSafe",
+     "key": "Inventory.Items.Keys.Delta.Compact Safe Key",
+     "x": -71332,
+     "y": -66577,
+     "z": -332,
+     "floor": 0
+    },
+    {
+     "kind": "CompactSafe",
+     "key": "Inventory.Items.Keys.Delta.Compact Safe Key",
+     "x": -64194,
+     "y": -60259,
+     "z": -679,
+     "floor": 0
+    },
+    {
+     "kind": "CompactSafe",
+     "key": "Inventory.Items.Keys.Delta.Compact Safe Key",
+     "x": -55331,
+     "y": -52346,
+     "z": -756,
+     "floor": 0
+    },
+    {
+     "kind": "CompactSafe",
+     "key": "Inventory.Items.Keys.Delta.Compact Safe Key",
+     "x": -28212,
+     "y": -57346,
+     "z": -682,
+     "floor": 0
+    },
+    {
+     "kind": "CompactSafe",
+     "key": "Inventory.Items.Keys.Delta.Compact Safe Key",
+     "x": -58769,
+     "y": -48597,
+     "z": -189,
+     "floor": 0
+    },
+    {
+     "kind": "CompactSafe",
+     "key": "Inventory.Items.Keys.Delta.Compact Safe Key",
+     "x": -83363,
+     "y": -5308,
+     "z": 801,
+     "floor": 0
+    },
+    {
+     "kind": "CompactSafe",
+     "key": "Inventory.Items.Keys.Delta.Compact Safe Key",
+     "x": -41488,
+     "y": 231,
+     "z": -253,
+     "floor": 0
+    },
+    {
+     "kind": "CompactSafe",
+     "key": "Inventory.Items.Keys.Delta.Compact Safe Key",
+     "x": -67786,
+     "y": -38152,
+     "z": -686,
+     "floor": 0
+    },
+    {
+     "kind": "CompactSafe",
+     "key": "Inventory.Items.Keys.Delta.Compact Safe Key",
+     "x": -46524,
+     "y": -75691,
+     "z": -894,
+     "floor": 0
+    },
+    {
+     "kind": "LargeSafe",
+     "key": "Inventory.Items.Keys.Delta.Large Safe Key",
+     "x": -40126,
+     "y": -55269,
+     "z": -446,
+     "floor": 0
+    },
+    {
+     "kind": "LargeSafe",
+     "key": "Inventory.Items.Keys.Delta.Large Safe Key",
+     "x": -66936,
+     "y": -43408,
+     "z": 97,
+     "floor": 0
+    },
+    {
+     "kind": "LargeSafe",
+     "key": "Inventory.Items.Keys.Delta.Large Safe Key",
+     "x": -49700,
+     "y": -50445,
+     "z": -877,
+     "floor": 0
+    },
+    {
+     "kind": "LargeSafe",
+     "key": "Inventory.Items.Keys.Delta.Large Safe Key",
+     "x": -63145,
+     "y": -1303,
+     "z": 550,
+     "floor": 0
+    },
+    {
+     "kind": "LargeSafe",
+     "key": "Inventory.Items.Keys.Delta.Large Safe Key",
+     "x": -58411,
+     "y": -43661,
+     "z": -761,
+     "floor": 0
+    },
+    {
+     "kind": "LargeSafe",
+     "key": "Inventory.Items.Keys.Delta.Large Safe Key",
+     "x": -82263,
+     "y": -24375,
+     "z": -760,
+     "floor": 0
+    },
+    {
+     "kind": "LargeSafe",
+     "key": "Inventory.Items.Keys.Delta.Large Safe Key",
+     "x": -78352,
+     "y": -57850,
+     "z": 106,
+     "floor": 0
+    },
+    {
+     "kind": "LargeSafe",
+     "key": "Inventory.Items.Keys.Delta.Large Safe Key",
+     "x": -47555,
+     "y": 481,
+     "z": 250,
+     "floor": 0
+    },
+    {
+     "kind": "LargeSafe",
+     "key": "Inventory.Items.Keys.Delta.Large Safe Key",
+     "x": -99797,
+     "y": -70772,
+     "z": -744,
+     "floor": 0
+    },
+    {
+     "kind": "LargeSafe",
+     "key": "Inventory.Items.Keys.Delta.Large Safe Key",
+     "x": -69536,
+     "y": -81837,
+     "z": -886,
+     "floor": 0
+    }
    ]
   },
   {
@@ -407,7 +680,7 @@
      "image": "quarry_1.jpg",
      "centerX": -87522,
      "centerY": -56573,
-     "extent": 62300,
+     "extent": 62500,
      "centerZ": 5809,
      "extentZ": 10000
     }
@@ -933,6 +1206,136 @@
      "z": 738,
      "floor": 0
     }
+   ],
+   "locks": [
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Quarry.General Key",
+     "x": -102517,
+     "y": -65327,
+     "z": 2481,
+     "floor": 0
+    },
+    {
+     "kind": "HasDoor",
+     "key": "Inventory.Items.Keys.HAS.HAS-0410-A",
+     "x": -108542,
+     "y": -80302,
+     "z": 1922,
+     "floor": 0
+    },
+    {
+     "kind": "HasDoor",
+     "key": "Inventory.Items.Keys.HAS.HAS-0023-B",
+     "x": -50509,
+     "y": -61764,
+     "z": 2713,
+     "floor": 0
+    },
+    {
+     "kind": "HasDoor",
+     "key": "Inventory.Items.Keys.HAS.HAS-0410-A",
+     "x": -109250,
+     "y": -80803,
+     "z": 1923,
+     "floor": 0
+    },
+    {
+     "kind": "CompactSafe",
+     "key": "Inventory.Items.Keys.Quarry.Compact Safe Key",
+     "x": -129572,
+     "y": -54037,
+     "z": 1088,
+     "floor": 0
+    },
+    {
+     "kind": "CompactSafe",
+     "key": "Inventory.Items.Keys.Quarry.Compact Safe Key",
+     "x": -129212,
+     "y": -71058,
+     "z": 1279,
+     "floor": 0
+    },
+    {
+     "kind": "CompactSafe",
+     "key": "Inventory.Items.Keys.Quarry.Compact Safe Key",
+     "x": -74040,
+     "y": -51265,
+     "z": 540,
+     "floor": 0
+    },
+    {
+     "kind": "CompactSafe",
+     "key": "Inventory.Items.Keys.Quarry.Compact Safe Key",
+     "x": -141409,
+     "y": -59672,
+     "z": 845,
+     "floor": 0
+    },
+    {
+     "kind": "CompactSafe",
+     "key": "Inventory.Items.Keys.Quarry.Compact Safe Key",
+     "x": -82464,
+     "y": -90634,
+     "z": 5745,
+     "floor": 0
+    },
+    {
+     "kind": "CompactSafe",
+     "key": "Inventory.Items.Keys.Quarry.Compact Safe Key",
+     "x": -103030,
+     "y": -65113,
+     "z": 2570,
+     "floor": 0
+    },
+    {
+     "kind": "CompactSafe",
+     "key": "Inventory.Items.Keys.Quarry.Compact Safe Key",
+     "x": -118135,
+     "y": -59453,
+     "z": 1276,
+     "floor": 0
+    },
+    {
+     "kind": "CompactSafe",
+     "key": "Inventory.Items.Keys.Quarry.Compact Safe Key",
+     "x": -133820,
+     "y": -68477,
+     "z": 1280,
+     "floor": 0
+    },
+    {
+     "kind": "LargeSafe",
+     "key": "Inventory.Items.Keys.Quarry.Large Safe Key",
+     "x": -107202,
+     "y": -66621,
+     "z": 2633,
+     "floor": 0
+    },
+    {
+     "kind": "LargeSafe",
+     "key": "Inventory.Items.Keys.Quarry.Large Safe Key",
+     "x": -75565,
+     "y": -91053,
+     "z": 5760,
+     "floor": 0
+    },
+    {
+     "kind": "LargeSafe",
+     "key": "Inventory.Items.Keys.Quarry.Large Safe Key",
+     "x": -77364,
+     "y": -82208,
+     "z": 6100,
+     "floor": 0
+    },
+    {
+     "kind": "LargeSafe",
+     "key": "Inventory.Items.Keys.Quarry.Large Safe Key",
+     "x": -77466,
+     "y": -76087,
+     "z": 5673,
+     "floor": 0
+    }
    ]
   },
   {
@@ -943,7 +1346,7 @@
      "image": "outskirts_1.jpg",
      "centerX": 29666,
      "centerY": 29662,
-     "extent": 85219,
+     "extent": 85419,
      "centerZ": -3878,
      "extentZ": 9748
     }
@@ -1191,6 +1594,192 @@
      "z": -2017,
      "floor": 0
     }
+   ],
+   "locks": [
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Outskirts.General Key",
+     "x": 19111,
+     "y": 62047,
+     "z": -1973,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Outskirts.General Key",
+     "x": 1562,
+     "y": 39074,
+     "z": -1982,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Outskirts.General Key",
+     "x": -22486,
+     "y": 79669,
+     "z": -1986,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Outskirts.General Key",
+     "x": 23109,
+     "y": 31180,
+     "z": -1998,
+     "floor": 0
+    },
+    {
+     "kind": "HasDoor",
+     "key": "Inventory.Items.Keys.HAS.HAS-0226-C",
+     "x": 43339,
+     "y": 69860,
+     "z": -1995,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Outskirts.General Key",
+     "x": 25034,
+     "y": 36866,
+     "z": -1599,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Outskirts.General Key",
+     "x": 21580,
+     "y": 38854,
+     "z": -1595,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Outskirts.General Key",
+     "x": 16461,
+     "y": 77336,
+     "z": -1593,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Outskirts.General Key",
+     "x": -16901,
+     "y": 77968,
+     "z": -2014,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Outskirts.General Key",
+     "x": -17245,
+     "y": 80510,
+     "z": -1974,
+     "floor": 0
+    },
+    {
+     "kind": "CompactSafe",
+     "key": "Inventory.Items.Keys.Outskirts.Compact Safe Key",
+     "x": 16893,
+     "y": 77396,
+     "z": -1487,
+     "floor": 0
+    },
+    {
+     "kind": "CompactSafe",
+     "key": "Inventory.Items.Keys.Outskirts.Compact Safe Key",
+     "x": 22411,
+     "y": 39529,
+     "z": -1500,
+     "floor": 0
+    },
+    {
+     "kind": "CompactSafe",
+     "key": "Inventory.Items.Keys.Outskirts.Compact Safe Key",
+     "x": -3950,
+     "y": 59471,
+     "z": -1967,
+     "floor": 0
+    },
+    {
+     "kind": "CompactSafe",
+     "key": "Inventory.Items.Keys.Outskirts.Compact Safe Key",
+     "x": 21864,
+     "y": 50745,
+     "z": -1476,
+     "floor": 0
+    },
+    {
+     "kind": "LargeSafe",
+     "key": "Inventory.Items.Keys.Outskirts.Large Safe Key",
+     "x": -17221,
+     "y": 80164,
+     "z": -1976,
+     "floor": 0
+    },
+    {
+     "kind": "LargeSafe",
+     "key": "Inventory.Items.Keys.Outskirts.Large Safe Key",
+     "x": 18574,
+     "y": 61725,
+     "z": -1126,
+     "floor": 0
+    },
+    {
+     "kind": "LargeSafe",
+     "key": "Inventory.Items.Keys.Outskirts.Large Safe Key",
+     "x": 24733,
+     "y": 31434,
+     "z": -2000,
+     "floor": 0
+    },
+    {
+     "kind": "LargeSafe",
+     "key": "Inventory.Items.Keys.Outskirts.Large Safe Key",
+     "x": 43367,
+     "y": 69245,
+     "z": -1995,
+     "floor": 0
+    },
+    {
+     "kind": "LargeSafe",
+     "key": "Inventory.Items.Keys.Outskirts.Large Safe Key",
+     "x": 33255,
+     "y": -76221,
+     "z": -860,
+     "floor": 0
+    },
+    {
+     "kind": "LargeSafe",
+     "key": "Inventory.Items.Keys.Outskirts.Large Safe Key",
+     "x": 1831,
+     "y": 38888,
+     "z": -1986,
+     "floor": 0
+    },
+    {
+     "kind": "LargeSafe",
+     "key": "Inventory.Items.Keys.Outskirts.Large Safe Key",
+     "x": -20677,
+     "y": 75368,
+     "z": -1983,
+     "floor": 0
+    },
+    {
+     "kind": "LargeSafe",
+     "key": "Inventory.Items.Keys.Outskirts.Large Safe Key",
+     "x": 11053,
+     "y": 27456,
+     "z": -1986,
+     "floor": 0
+    },
+    {
+     "kind": "LargeSafe",
+     "key": "Inventory.Items.Keys.Outskirts.Large Safe Key",
+     "x": 24276,
+     "y": 38523,
+     "z": -1600,
+     "floor": 0
+    }
    ]
   },
   {
@@ -1201,7 +1790,7 @@
      "image": "bunker_1.jpg",
      "centerX": 7630,
      "centerY": -969,
-     "extent": 10000,
+     "extent": 16000,
      "centerZ": 1000,
      "extentZ": 800
     },
@@ -1210,7 +1799,7 @@
      "image": "bunker_2.jpg",
      "centerX": 7630,
      "centerY": -516,
-     "extent": 15800,
+     "extent": 16000,
      "centerZ": 600,
      "extentZ": 300
     },
@@ -1219,7 +1808,7 @@
      "image": "bunker_3.jpg",
      "centerX": 7630,
      "centerY": -516,
-     "extent": 15800,
+     "extent": 16000,
      "centerZ": 0,
      "extentZ": 500
     },
@@ -1228,7 +1817,7 @@
      "image": "bunker_4.jpg",
      "centerX": 7630,
      "centerY": -516,
-     "extent": 15800,
+     "extent": 16000,
      "centerZ": -1000,
      "extentZ": 500
     },
@@ -1237,7 +1826,7 @@
      "image": "bunker_5.jpg",
      "centerX": 7630,
      "centerY": -516,
-     "extent": 15800,
+     "extent": 16000,
      "centerZ": -1736,
      "extentZ": 250
     },
@@ -1246,7 +1835,7 @@
      "image": "bunker_6.jpg",
      "centerX": 7630,
      "centerY": -516,
-     "extent": 15800,
+     "extent": 16000,
      "centerZ": -3039,
      "extentZ": 500
     },
@@ -1255,7 +1844,7 @@
      "image": "bunker_6.jpg",
      "centerX": 7630,
      "centerY": -516,
-     "extent": 15800,
+     "extent": 16000,
      "centerZ": -3648,
      "extentZ": 125
     }
@@ -1490,6 +2079,88 @@
      "y": 12903,
      "z": -745,
      "floor": 3
+    }
+   ],
+   "locks": [
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Bunker.General Bunker Key",
+     "x": 1650,
+     "y": 10805,
+     "z": 50,
+     "floor": 2
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Bunker.Elevator Room",
+     "x": 1850,
+     "y": -6800,
+     "z": -1000,
+     "floor": 3
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Bunker.Extraction Room Key",
+     "x": 7450,
+     "y": 12550,
+     "z": -750,
+     "floor": 3
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Bunker.General Bunker Key",
+     "x": 2196,
+     "y": 8100,
+     "z": 50,
+     "floor": 2
+    },
+    {
+     "kind": "CompactSafe",
+     "key": "Inventory.Items.Keys.Bunker.Compact Safe Key",
+     "x": 2060,
+     "y": -5966,
+     "z": -903,
+     "floor": 3
+    },
+    {
+     "kind": "CompactSafe",
+     "key": "Inventory.Items.Keys.Bunker.Compact Safe Key",
+     "x": 17017,
+     "y": -7216,
+     "z": -4287,
+     "floor": 6
+    },
+    {
+     "kind": "LargeSafe",
+     "key": "Inventory.Items.Keys.Bunker.Large Safe Key",
+     "x": 6386,
+     "y": 8852,
+     "z": 76,
+     "floor": 2
+    },
+    {
+     "kind": "LargeSafe",
+     "key": "Inventory.Items.Keys.Bunker.Large Safe Key",
+     "x": 2745,
+     "y": 9265,
+     "z": 50,
+     "floor": 2
+    },
+    {
+     "kind": "LargeSafe",
+     "key": "Inventory.Items.Keys.Bunker.Large Safe Key",
+     "x": 2195,
+     "y": 2260,
+     "z": -90,
+     "floor": 2
+    },
+    {
+     "kind": "LargeSafe",
+     "key": "Inventory.Items.Keys.Bunker.Large Safe Key",
+     "x": 11775,
+     "y": -6742,
+     "z": -4327,
+     "floor": 6
     }
    ]
   }

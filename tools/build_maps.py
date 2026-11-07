@@ -52,6 +52,16 @@ RESOURCE_BP = 'Test_C/Content/Environment/Blueprints/Gameplay/Resources/'
 RESOURCE_BASE = 'Test_C/Content/Blueprints/ResourceSystem/Actor/BP_ResourceActor'
 MINIMAPS = 'Test_C/Content/Blueprints/MissionSystem/Textures/Minimaps/'
 RESOURCES = ['Concrete', 'Food', 'Metal', 'Oil']
+MAP_MARGIN = 200  # MapMargins default of BP_IRRMiniMapVolume
+KEYS_DIR = 'Test_C/Content/Blueprints/InventorySystem/Items/Keys/'
+KEY_TAG = 'Inventory.Items.Keys.'
+# Locked things shown on the maps: class -> kind. Doors are kept only when they reference a key (the others never open).
+LOCKS = {
+    'BP_LootContainer_Safe_01_C': 'CompactSafe',
+    'BP_LootContainer_Safe_02_C': 'LargeSafe',
+    'BP_Door_Electric_C': 'HasDoor',
+}
+LOCKED_DOOR = 'LockedDoor'  # any other BP_Door_*Locked*_C
 
 # first serialized property index expected for each location (see the docstring)
 LOCATION_INDEX = {'StaticMeshComponent': 161, 'SceneComponent': 5}
@@ -191,6 +201,38 @@ def save_jpeg(rgb, w, h, path):
     os.remove(png)
 
 
+def key_items(root):
+    """Key gameplay tag -> {id, name} from the key item definitions (ID_*.uasset in Items/Keys)."""
+    import re
+    keys = {}
+    for path in glob.glob(os.path.join(root, KEYS_DIR.replace('/', os.sep), '**', 'ID_*.uasset'), recursive=True):
+        names, _, _ = package_full(path)
+        tags = [n for n in names if n.startswith(KEY_TAG)]
+        if not tags:
+            continue
+        data = open(path[:-6] + 'uexp', 'rb').read()
+        texts = [m.decode() for m in re.findall(rb'[\x20-\x7e]{6,}', data) if b' ' in m]
+        label = texts[0] if texts else tags[0][len(KEY_TAG):]
+        if label.startswith('Key for the '):  # HAS keys: "Key for the HAS-0410-A building."
+            label = label[len('Key for the '):].replace(' building.', '') + ' key'
+        keys[tags[0]] = {'id': os.path.basename(path)[3:-7], 'name': label}
+    return keys
+
+
+def actor_keys(L, index, key_names):
+    """Key tags referenced by an actor or its components."""
+    found = set()
+    for e in [L.exports[index - 1]] + L.children(index):
+        if e['size'] > 65536:
+            continue
+        b = L.blob(e)
+        for o in range(len(b) - 7):
+            ni, nn = struct.unpack_from('<ii', b, o)
+            if nn == 0 and ni in key_names:
+                found.add(key_names[ni])
+    return sorted(found)
+
+
 def floor_of(z, floors):
     inside = [f for f in floors if abs(z - f['centerZ']) <= f['extentZ'] + 50]
     pool = inside or floors
@@ -207,12 +249,15 @@ def main():
     try:
         wanted = [RESOURCE_BP + 'BP_ResourceActor_%s.%s' % (t, ext) for t in RESOURCES for ext in ('uasset', 'uexp')]
         wanted += [f for f in files if f.startswith(MINIMAPS) and '_Mask' not in f]
+        wanted += [f for f in files if f.startswith(KEYS_DIR) and '/ID_' in f]
         for _, lvl in MAPS:
             wanted += [lvl + '.umap', lvl + '.uexp']
         print('extracting %d files (the levels are big, this takes a while)...' % len(wanted))
         extract(repak, files, wanted, tmp)
         defaults = resource_defaults(tmp)
         print('resource defaults:', defaults)
+        keys = key_items(tmp)
+        print('%d key items' % len(keys))
         os.makedirs(OUT_IMG, exist_ok=True)
         old_images = {f for f in os.listdir(OUT_IMG) if f.endswith('.jpg')}
         images_done = {}
@@ -243,7 +288,16 @@ def main():
                 if not tex:
                     problems.append('%s: minimap volume without texture' % name)
                     continue
-                floors.append({'texture': tex, 'centerX': cx, 'centerY': cy, 'centerZ': cz, 'extent': max(ex, ey), 'extentZ': ez})
+                # The PDA map (W_GCPS_Map / MPC_Minimap) uses MapCenter = volume location and MapSize. MapSize is a
+                # float of the volume; when it is not set, the box is MapSize / 2 - MapMargins (200).
+                box = max(ex, ey)
+                half = box + MAP_MARGIN
+                for o in range(len(b) - 3):
+                    fv = struct.unpack_from('<f', b, o)[0]
+                    if 2 * box < fv <= 4 * box + 2000 and abs(fv - round(fv)) < 1e-3:
+                        half = fv / 2
+                        break
+                floors.append({'texture': tex, 'centerX': cx, 'centerY': cy, 'centerZ': cz, 'extent': half, 'extentZ': ez})
             floors.sort(key=lambda f: -f['centerZ'])
             for k, f in enumerate(floors):
                 f['index'] = k
@@ -262,9 +316,28 @@ def main():
                     print('  %s: %s -> %s (%s %dx%d)' % (name, f['texture'][:40], fname, pf, W, H))
                 f['image'] = images_done[f['texture']]
             # points
-            points, extractions = [], []
+            points, extractions, locks = [], [], []
+            key_names = {i: n for i, n in enumerate(L.names) if n.startswith(KEY_TAG)}
             for i, e in enumerate(L.exports, 1):
                 cls = e['class']
+                kind = LOCKS.get(cls) or (LOCKED_DOOR if cls.startswith('BP_Door_') and 'Locked' in cls else None)
+                if kind:
+                    ks = actor_keys(L, i, key_names)
+                    if not ks:
+                        continue  # a door that never opens (no key)
+                    if len(ks) > 1:
+                        problems.append('%s: %s references several keys %s' % (name, cls, ks))
+                    unknown = [k for k in ks if k not in keys]
+                    if unknown:
+                        problems.append('%s: key without item definition %s' % (name, unknown))
+                    root = [c for c in L.children(i) if c['class'] == 'SceneComponent' and c['name'] == 'DefaultSceneRoot']
+                    try:
+                        x, y, z = L.first_vector(root[0], LOCATION_INDEX['SceneComponent'])
+                    except Exception as ex:  # noqa: BLE001
+                        problems.append('%s: %s skipped (%s)' % (name, cls, ex))
+                        continue
+                    locks.append({'kind': kind, 'key': ks[0], 'x': round(x), 'y': round(y), 'z': round(z), 'floor': floor_of(z, floors)})
+                    continue
                 if cls.startswith('BP_ResourceActor_') and cls.endswith('_C'):
                     t = cls[len('BP_ResourceActor_'):-2]
                     if t not in defaults:
@@ -293,17 +366,23 @@ def main():
             L.f.close()
             counts = {t: sum(1 for p in points if p['type'] == t) for t in RESOURCES}
             print('%-10s %d floor(s), %d resource points %s, %d extraction(s)' % (name, len(floors), len(points), counts, len(extractions)))
+            lk = {}
+            for l in locks:
+                lk[l['kind']] = lk.get(l['kind'], 0) + 1
+            print('           locks %s' % lk)
             maps_out.append({
                 'name': name,
                 'floors': [{'name': f['name'], 'image': f['image'], 'centerX': round(f['centerX']), 'centerY': round(f['centerY']),
                             'extent': round(f['extent']), 'centerZ': round(f['centerZ']), 'extentZ': round(f['extentZ'])} for f in floors],
                 'resources': points,
                 'extractions': extractions,
+                'locks': locks,
             })
         for f in sorted(old_images - set(images_done.values())):
             os.remove(os.path.join(OUT_IMG, f))
             print('removed', f)
         doc = {'resources': [{'type': t, 'chance': defaults[t]['chance'], 'amount': defaults[t]['amount']} for t in RESOURCES],
+               'keys': [{'tag': t, 'id': k['id'], 'name': k['name']} for t, k in sorted(keys.items())],
                'maps': maps_out}
         with open(OUT_JSON, 'w', encoding='utf-8', newline='\n') as f:
             json.dump(doc, f, indent=1)

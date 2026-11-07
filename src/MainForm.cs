@@ -881,6 +881,8 @@ namespace IRRCompanion
             shot("maps_delta_hover");
             _mapsPanel.TestShow("Bunker", 2, -1);
             shot("maps_bunker");
+            _mapsPanel.TestShowLock("Outskirts", "LargeSafe");
+            shot("maps_safe_hover");
             ShowView(0);
             _presets.Remove(p);
             foreach (var x in _presets) x.Dirty = false;

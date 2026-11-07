@@ -98,35 +98,102 @@ namespace IRRCompanion
                 var c = Screen(p);
                 if (c.X < -r || c.Y < -r || c.X > Width + r || c.Y > Height + r) continue;
                 bool hot = p == _hover;
-                float rr = hot ? r * 1.35f : r;
-                if (p.IsExtraction)
-                {
-                    var tri = new[] { new PointF(c.X, c.Y - rr * 1.15f), new PointF(c.X + rr, c.Y + rr * 0.75f), new PointF(c.X - rr, c.Y + rr * 0.75f) };
-                    using (var b = new SolidBrush(ExtractionColor)) g.FillPolygon(b, tri);
-                    using (var pen = new Pen(Color.Black, 1.6f)) g.DrawPolygon(pen, tri);
-                    continue;
-                }
-                Color col;
-                HideoutPanel.ResourceColors.TryGetValue(p.Type, out col);
-                using (var b = new SolidBrush(col)) g.FillEllipse(b, c.X - rr, c.Y - rr, 2 * rr, 2 * rr);
-                using (var pen = new Pen(Color.FromArgb(20, 18, 16), hot ? 2.4f : 1.6f)) g.DrawEllipse(pen, c.X - rr, c.Y - rr, 2 * rr, 2 * rr);
-                var icon = Icons.Material(p.Type, Color.FromArgb(28, 26, 24));
-                if (icon != null)
-                {
-                    float ir = rr * 0.72f;
-                    g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                    g.DrawImage(icon, c.X - ir, c.Y - ir, 2 * ir, 2 * ir);
-                }
+                DrawMarker(g, p.Type, c, hot ? r * 1.35f : r, hot);
             }
             if (_hover != null) DrawTooltip(g, _hover, Screen(_hover));
+        }
+
+        public static Color ColorOf(string type)
+        {
+            switch (type)
+            {
+                case MapData.Extraction: return ExtractionColor;
+                case "CompactSafe": return Color.FromArgb(240, 200, 90);
+                case "LargeSafe": return Color.FromArgb(255, 140, 40);
+                case "HasDoor": return Color.FromArgb(186, 120, 220);
+                case "LockedDoor": return Color.FromArgb(239, 83, 80);
+            }
+            Color col;
+            return HideoutPanel.ResourceColors.TryGetValue(type, out col) ? col : Theme.Border;
+        }
+
+        /// <summary>Marker of a point type: resource = coloured disc with its icon, extraction = triangle,
+        /// safe = rounded square with a padlock, door = disc with a padlock.</summary>
+        public static void DrawMarker(Graphics g, string type, PointF c, float rr, bool hot)
+        {
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+            var dark = Color.FromArgb(20, 18, 16);
+            var col = ColorOf(type);
+            if (type == MapData.Extraction)
+            {
+                var tri = new[] { new PointF(c.X, c.Y - rr * 1.15f), new PointF(c.X + rr, c.Y + rr * 0.75f), new PointF(c.X - rr, c.Y + rr * 0.75f) };
+                using (var b = new SolidBrush(col)) g.FillPolygon(b, tri);
+                using (var pen = new Pen(Color.Black, 1.6f)) g.DrawPolygon(pen, tri);
+                return;
+            }
+            bool safe = type == "CompactSafe" || type == "LargeSafe";
+            bool door = type == "HasDoor" || type == "LockedDoor";
+            if (safe)
+            {
+                float s = rr * 0.95f;
+                using (var path = RoundRect(new RectangleF(c.X - s, c.Y - s, 2 * s, 2 * s), s * 0.45f))
+                {
+                    using (var b = new SolidBrush(col)) g.FillPath(b, path);
+                    using (var pen = new Pen(dark, hot ? 2.4f : 1.6f)) g.DrawPath(pen, path);
+                }
+            }
+            else
+            {
+                using (var b = new SolidBrush(col)) g.FillEllipse(b, c.X - rr, c.Y - rr, 2 * rr, 2 * rr);
+                using (var pen = new Pen(dark, hot ? 2.4f : 1.6f)) g.DrawEllipse(pen, c.X - rr, c.Y - rr, 2 * rr, 2 * rr);
+            }
+            if (safe || door)
+            {
+                // padlock: body + shackle
+                float bw = rr * 0.95f, bh = rr * 0.7f;
+                var body = new RectangleF(c.X - bw / 2, c.Y - bh * 0.15f, bw, bh);
+                using (var b = new SolidBrush(dark)) g.FillRectangle(b, body);
+                using (var pen = new Pen(dark, Math.Max(1.5f, rr * 0.18f)))
+                    g.DrawArc(pen, c.X - bw * 0.32f, body.Y - bw * 0.55f, bw * 0.64f, bw * 0.75f, 180, 180);
+                return;
+            }
+            var icon = Icons.Material(type, Color.FromArgb(28, 26, 24));
+            if (icon != null)
+            {
+                float ir = rr * 0.72f;
+                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                g.DrawImage(icon, c.X - ir, c.Y - ir, 2 * ir, 2 * ir);
+            }
+        }
+
+        private static GraphicsPath RoundRect(RectangleF r, float rad)
+        {
+            var p = new GraphicsPath();
+            float d = rad * 2;
+            p.AddArc(r.X, r.Y, d, d, 180, 90);
+            p.AddArc(r.Right - d, r.Y, d, d, 270, 90);
+            p.AddArc(r.Right - d, r.Bottom - d, d, d, 0, 90);
+            p.AddArc(r.X, r.Bottom - d, d, d, 90, 90);
+            p.CloseFigure();
+            return p;
         }
 
         private void DrawTooltip(Graphics g, MapPoint p, PointF at)
         {
             var lines = new List<KeyValuePair<string, Font>>();
+            Image keyIcon = null;
             if (p.IsExtraction)
             {
                 lines.Add(new KeyValuePair<string, Font>("Extraction point", Theme.Bold));
+            }
+            else if (p.IsLock)
+            {
+                KeyInfo k;
+                MapData.Keys.TryGetValue(p.Key, out k);
+                lines.Add(new KeyValuePair<string, Font>(MapData.SingleLabel(p.Type), Theme.Bold));
+                lines.Add(new KeyValuePair<string, Font>("Key needed:", Theme.Small));
+                lines.Add(new KeyValuePair<string, Font>(k != null ? k.Name : p.Key.Replace("Inventory.Items.Keys.", ""), Theme.Bold));
+                keyIcon = k != null ? Icons.Item(k.Id) : null;
             }
             else
             {
@@ -145,20 +212,30 @@ namespace IRRCompanion
                 w = Math.Max(w, sz.Width);
                 h += sz.Height;
             }
-            w += 2 * pad;
-            h += pad;
+            int iconSize = keyIcon != null ? Theme.S(56) : 0;
+            w += 2 * pad + (iconSize > 0 ? iconSize + pad : 0);
+            h = Math.Max(h + pad, iconSize + 2 * pad);
             float x = at.X + Theme.S(16), y = at.Y - h / 2f;
             if (x + w > Width - 4) x = at.X - Theme.S(16) - w;
             y = Math.Max(4, Math.Min(Height - h - 4, y));
             var rect = new Rectangle((int)x, (int)y, w, h);
             using (var b = new SolidBrush(Color.FromArgb(235, 33, 29, 27))) g.FillRectangle(b, rect);
-            Color col = p.IsExtraction ? ExtractionColor : (HideoutPanel.ResourceColors.ContainsKey(p.Type) ? HideoutPanel.ResourceColors[p.Type] : Theme.Border);
+            Color col = ColorOf(p.Type);
             using (var pen = new Pen(col)) g.DrawRectangle(pen, rect);
+            int tx = rect.X + pad;
+            if (keyIcon != null)
+            {
+                var slot = new Rectangle(rect.X + pad, rect.Y + (h - iconSize) / 2, iconSize, iconSize);
+                using (var b = new SolidBrush(Color.FromArgb(62, 58, 53))) g.FillRectangle(b, slot);
+                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                g.DrawImage(keyIcon, Rectangle.Inflate(slot, -Theme.S(3), -Theme.S(3)));
+                tx += iconSize + pad;
+            }
             int ty = rect.Y + pad;
             for (int i = 0; i < lines.Count; i++)
             {
                 var sz = TextRenderer.MeasureText(g, lines[i].Key, lines[i].Value);
-                TextRenderer.DrawText(g, lines[i].Key, lines[i].Value, new Point(rect.X + pad, ty), i == 0 ? col : Theme.Text);
+                TextRenderer.DrawText(g, lines[i].Key, lines[i].Value, new Point(tx, ty), i == 0 ? col : (lines[i].Value == Theme.Small ? Theme.TextDim : Theme.Text));
                 ty += sz.Height;
             }
         }
@@ -221,6 +298,11 @@ namespace IRRCompanion
         }
 
 #if DEBUG
+        public void TestHoverType(string type)
+        {
+            TestHover(_points.FindIndex(p => p.Type == type));
+        }
+
         public void TestHover(int index)
         {
             _hover = index >= 0 && index < _points.Count ? _points[index] : null;
@@ -250,7 +332,7 @@ namespace IRRCompanion
             Type = type;
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.ResizeRedraw, true);
             Dock = DockStyle.Top;
-            Height = Theme.S(34);
+            Height = Theme.S(30);
             BackColor = Theme.Panel;
             Cursor = Cursors.Hand;
         }
@@ -270,21 +352,16 @@ namespace IRRCompanion
                     g.DrawLines(p, new[] { new Point(br.X + 3, br.Y + box / 2), new Point(br.X + box / 2 - 1, br.Bottom - 4), new Point(br.Right - 3, br.Y + 3) });
             int ix = Theme.S(30), isz = Theme.S(22);
             var ir = new Rectangle(ix, (Height - isz) / 2, isz, isz);
-            if (Type == MapData.Extraction)
-            {
-                var c = new PointF(ir.X + isz / 2f, ir.Y + isz / 2f);
-                float rr = isz / 2.4f;
-                var tri = new[] { new PointF(c.X, c.Y - rr * 1.15f), new PointF(c.X + rr, c.Y + rr * 0.75f), new PointF(c.X - rr, c.Y + rr * 0.75f) };
-                using (var b = new SolidBrush(MapCanvas.ExtractionColor)) g.FillPolygon(b, tri);
-            }
-            else
+            if (HideoutPanel.ResourceColors.ContainsKey(Type))
             {
                 var icon = Icons.Material(Type, HideoutPanel.ResourceColors[Type]);
                 if (icon != null) { g.InterpolationMode = InterpolationMode.HighQualityBicubic; g.DrawImage(icon, ir); }
             }
+            else
+                MapCanvas.DrawMarker(g, Type, new PointF(ir.X + isz / 2f, ir.Y + isz / 2f), isz / 2.3f, false);
             var col = _checked ? Theme.Text : Theme.TextFaint;
             var tr = new Rectangle(ix + isz + Theme.S(10), 0, Width - ix - isz - Theme.S(10), Height);
-            TextRenderer.DrawText(g, Type == MapData.Extraction ? "Extraction points" : Type, Theme.Bold, tr, col, TextFormatFlags.VerticalCenter | TextFormatFlags.Left);
+            TextRenderer.DrawText(g, MapData.Label(Type), Theme.Bold, tr, col, TextFormatFlags.VerticalCenter | TextFormatFlags.Left);
             TextRenderer.DrawText(g, CountText, Theme.Small, tr, Theme.TextDim, TextFormatFlags.VerticalCenter | TextFormatFlags.Right);
         }
 
@@ -340,7 +417,7 @@ namespace IRRCompanion
 
             var showHeader = new SectionHeader("Show") { BackColor = Theme.Panel, Height = Theme.S(40) };
             var filterBox = new Panel { Dock = DockStyle.Top, BackColor = Theme.Panel };
-            var types = MapData.Resources.Select(r => r.Type).Concat(new[] { MapData.Extraction }).ToList();
+            var types = MapData.Resources.Select(r => r.Type).Concat(new[] { MapData.Extraction }).Concat(MapData.LockKinds).ToList();
             for (int i = types.Count - 1; i >= 0; i--)
             {
                 var f = new FilterRow(types[i]);
@@ -349,14 +426,15 @@ namespace IRRCompanion
                 filterBox.Controls.Add(f);
             }
             filterBox.Height = _filters.Sum(f => f.Height);
-            tip.SetToolTip(filterBox, "Click to show or hide a resource.");
+            tip.SetToolTip(filterBox, "Click to show or hide a type of point.");
+            left.AutoScroll = true;
 
             _summary = new Label { Dock = DockStyle.Top, Font = Theme.Small, ForeColor = Theme.TextDim, BackColor = Theme.Back, AutoSize = false, Height = Theme.S(24), UseMnemonic = false, AutoEllipsis = true };
             tip.SetToolTip(_summary, "Each point has its own chance to be there when the raid starts.");
-            var hint = Theme.Lbl("Wheel: zoom · drag: move · double-click: fit. Hover a point for its chance.", Theme.Small, Theme.TextDim);
+            var hint = Theme.Lbl("Wheel: zoom · drag: move · double-click: fit. Hover a point for its chance or the key it needs.", Theme.Small, Theme.TextDim);
             hint.AutoSize = false;
             hint.Dock = DockStyle.Bottom;
-            hint.Height = Theme.S(44);
+            hint.Height = Theme.S(60);
 
             left.Controls.Add(filterBox);
             left.Controls.Add(showHeader);
@@ -437,7 +515,7 @@ namespace IRRCompanion
             if (sel) using (var b = new SolidBrush(Theme.Accent)) g.FillRectangle(b, e.Bounds.X, e.Bounds.Y + Theme.S(6), Theme.S(3), e.Bounds.Height - Theme.S(12));
             var r = new Rectangle(e.Bounds.X + Theme.S(12), e.Bounds.Y, e.Bounds.Width - Theme.S(16), e.Bounds.Height);
             TextRenderer.DrawText(g, m.Name.ToUpperInvariant(), Theme.Bold, new Rectangle(r.X, r.Y + Theme.S(3), r.Width, Theme.S(20)), Theme.Text, TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
-            int res = m.Points.Count(p => !p.IsExtraction);
+            int res = m.Points.Count(p => p.IsResource);
             string sub = res + " resource points" + (m.Floors.Count > 1 ? " · " + m.Floors.Count + " floors" : "");
             TextRenderer.DrawText(g, sub, Theme.Small, new Rectangle(r.X, r.Y + Theme.S(21), r.Width, Theme.S(16)), Theme.TextDim, TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
         }
@@ -454,12 +532,20 @@ namespace IRRCompanion
             var r = new Rectangle(e.Bounds.X + Theme.S(12), e.Bounds.Y, e.Bounds.Width - Theme.S(16), e.Bounds.Height);
             string label = f.Name + (e.Index == 0 ? "  (top)" : e.Index == _floors.Items.Count - 1 ? "  (bottom)" : "");
             TextRenderer.DrawText(g, label, Theme.Body, r, Theme.Text, TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
-            int n = m == null ? 0 : m.Points.Count(p => !p.IsExtraction && p.Floor == e.Index);
+            int n = m == null ? 0 : m.Points.Count(p => p.IsResource && p.Floor == e.Index);
             TextRenderer.DrawText(g, n == 0 ? "-" : n + " pts", Theme.Small, r, n == 0 ? Theme.TextFaint : Theme.TextDim, TextFormatFlags.Right | TextFormatFlags.VerticalCenter);
         }
 
 #if DEBUG
         /// <summary>Test helper: shows a map / floor, optionally with one point hovered.</summary>
+        public void TestShowLock(string map, string kind)
+        {
+            _maps.SelectedItem = MapData.Maps.First(m => m.Name == map);
+            Application.DoEvents();
+            _canvas.Fit();
+            _canvas.TestHoverType(kind);
+        }
+
         public void TestShow(string map, int floor, int hover)
         {
             _maps.SelectedItem = MapData.Maps.First(m => m.Name == map);

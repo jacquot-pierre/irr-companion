@@ -17,7 +17,7 @@ The tool embeds data read from the game. After a game patch, each of these can c
 | Weathers of each map (order = number of `irr.World.SetWeather`) | pak: `Blueprints/MissionSystem/DataAssets/Maps/MD_*` | `tools/map_weathers.json` | `tools/map_weathers.py` |
 | Item names (Spawn / Give) | pak: `.../Items/**/ID_*.uasset` | `tools/item_paths.txt` | `tools/list_items.py` |
 | Hideout upgrade costs and requirements | pak: `Blueprints/MissionSystem/Actors/Hideout/**` | `src/Resources/hideout.json` | `tools/build_hideout.py` |
-| Resource / extraction points, minimaps | pak: persistent levels `Maps/Gameplay/LVL_*`, `Maps/Testing/LVL_Bunker`, `Textures/Minimaps`, `Environment/Blueprints/Gameplay/Resources` | `src/Resources/maps.json`, `src/Resources/maps/*.jpg` | `tools/build_maps.py` |
+| Resource / extraction points, safes, locked doors and keys, minimaps | pak: persistent levels `Maps/Gameplay/LVL_*`, `Maps/Testing/LVL_Bunker`, `Textures/Minimaps`, `Environment/Blueprints/Gameplay/Resources` | `src/Resources/maps.json`, `src/Resources/maps/*.jpg` | `tools/build_maps.py` |
 | Item / material icons (hideout) | pak: `Items/**/T_*_Icon` (mostly pakchunk6), `ResourceSystem/Textures` | `src/Resources/icons/*.png` | `tools/build_icons.py` |
 
 Work through the steps in order and keep a list of everything that changed: it becomes the release notes.
@@ -195,7 +195,16 @@ python -I tools/build_maps.py "<paks>"
 ```
 
 Takes ~2-3 minutes and ~1.5 GB in %TEMP% (it extracts the persistent levels). It prints, per map, the floors,
-the number of resource points per type and of extraction points, and the spawn chance / amount of each type.
+the number of resource points per type, of extraction points and of locks (safes / doors per kind), the spawn
+chance / amount of each type and the number of key items. Run it before `build_icons.py` (the key icons come
+from `maps.json`).
+- Map size: like the in-game PDA (W_GCPS_Map / MPC_Minimap), half size = `MapSize` / 2 of the minimap volume,
+  or box extent + `MAP_MARGIN` (200) when MapSize is not set. Delta 90 000, Quarry 62 500, Outskirts 85 419,
+  Bunker 16 000 today.
+- Locks: classes of `LOCKS` + any `BP_Door_*Locked*_C`; the key is the `Inventory.Items.Keys.*` tag the actor
+  references. Doors without a key are skipped (they never open). `references several keys` or `key without
+  item definition`: check the actor by hand. New lock class (new safe type...): add it to `LOCKS` and to
+  `MapData.LockKinds` / labels / colours in `src/Maps.cs` and `src/MapsPanel.cs`.
 - New map: add it to `MAPS` (display name, persistent level path). A map whose minimap is a grey plan goes in
   `PLAN_MAPS` (drawn inverted, like the Bunker).
 - `first property ... expected 161` (or 5 / 0): the component layout changed; check `LOCATION_INDEX`.
@@ -217,7 +226,7 @@ src\bin\Debug\net462\IRRCompanion.exe --screenshot <work>\shot
 `--screenshot` (Debug build only) writes PNGs of every view: `_edit`, `_edit_scrolled`, `_builtin`,
 `_compare`, `_compare_diff`, `_compare_difficulties`, `_commands_weather`, `_commands_item`,
 `_commands_player`, `_commands_cvar`, `_commands_favorites`, `_hideout_unit`, `_hideout_stash`,
-`_hideout_shopping`, `_hideout_shopping_all`, `_maps_quarry`, `_maps_delta_hover`, `_maps_bunker` (and `.error.txt` if it crashed). Look at each image:
+`_hideout_shopping`, `_hideout_shopping_all`, `_maps_quarry`, `_maps_delta_hover`, `_maps_bunker`, `_maps_safe_hover` (and `.error.txt` if it crashed). Look at each image:
 - EDIT: every section of the in-game menu, names not cut, values formatted like the game, nothing scrolled.
 - COMPARE: section rows, colors, range bars.
 - COMMANDS: categories and counts, weather lists, item picker, favorites buttons.
@@ -226,7 +235,7 @@ If the screenshots are fine and the UI changed, refresh the README images: `docs
 `docs/compare.png` (`_compare_difficulties`), `docs/commands.png` (`_commands_weather`),
 `docs/commands-items.png` (`_commands_item`), `docs/favorites.png` (`_commands_favorites`),
 `docs/hideout.png` (`_hideout_stash`), `docs/hideout-shopping.png` (`_hideout_shopping`), `docs/maps.png`
-(`_maps_quarry`), `docs/maps-hover.png` (`_maps_delta_hover`), `docs/maps-bunker.png` (`_maps_bunker`).
+(`_maps_quarry`), `docs/maps-hover.png` (`_maps_delta_hover`), `docs/maps-bunker.png` (`_maps_bunker`), `docs/maps-safe.png` (`_maps_safe_hover`).
 
 The real GUI cannot be clicked from the sandbox: tell the user what to test by hand (save, import a code,
 copy a code and import it in game, copy a console command and run it in game).
