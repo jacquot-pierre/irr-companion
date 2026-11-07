@@ -174,7 +174,10 @@ python -I tools/build_hideout.py <work>
 ```
 
 It reads the `BP_IRRHideoutUnitComponent` defaults of every blueprint in `Actors/Hideout` and rewrites
-`src/Resources/hideout.json` (`git diff src/Resources/hideout.json` shows the cost changes). Check:
+`src/Resources/hideout.json` (`git diff src/Resources/hideout.json` shows the cost changes). The JSON keeps
+the game's level numbers; the app hides a free first level (nothing to pay, no requirement: Structure,
+Shooting Range today) and renumbers that unit's levels and the requirements on it (`HideoutData.Load`). The
+saved progress (`hideout.json` version 2) uses the shown numbers; version 1 files are converted on load. Check:
 - every unit of `UNIT_ORDER` is listed (`unit X not found` = renamed or moved blueprint; a new unit is
   listed after the known ones: add it to `UNIT_ORDER` at the right place);
 - no `WARNING` (unknown unit in a requirement, item without item definition: fix the matching in

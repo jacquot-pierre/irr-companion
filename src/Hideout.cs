@@ -50,6 +50,8 @@ namespace IRRCompanion
     {
         public string Name, Tag;
         public int StartLevel;
+        /// <summary>Free first levels of the game files (starting state), not shown: game level = shown level + FreeLevels.</summary>
+        public int FreeLevels;
         public List<HideoutLevel> Levels = new List<HideoutLevel>();
 
         public int MaxLevel { get { return Levels.Count == 0 ? 0 : Levels.Max(l => l.Level); } }
@@ -94,6 +96,26 @@ namespace IRRCompanion
                 }
                 Units.Add(unit);
             }
+            // A free level 1 (nothing to pay, no requirement) is the starting state: hide it and count the levels
+            // from the first real upgrade (game level 2 is shown as level 1).
+            foreach (var u in Units)
+            {
+                while (u.Levels.Any(l => l.Level == u.FreeLevels + 1 && l.IsFree)) u.FreeLevels++;
+                if (u.FreeLevels == 0) continue;
+                u.Levels.RemoveAll(l => l.Level <= u.FreeLevels);
+                foreach (var l in u.Levels) l.Level -= u.FreeLevels;
+                u.StartLevel = Math.Max(0, u.StartLevel - u.FreeLevels);
+            }
+            foreach (var u in Units)
+                foreach (var l in u.Levels)
+                {
+                    foreach (var c in l.Conditions.Where(c => c.Type == "unit"))
+                    {
+                        var target = Find(c.Unit);
+                        if (target != null) c.Level -= target.FreeLevels;
+                    }
+                    l.Conditions.RemoveAll(c => c.Type == "unit" && c.Level <= 0);  // met from the start
+                }
         }
 
         public static HideoutUnit Find(string name)
@@ -162,7 +184,15 @@ namespace IRRCompanion
             var loy = root.Obj("loyalty");
             if (loy != null) foreach (var k in loy.Keys) p.Loyalty[k] = (int)loy.Num(k);
             var units = root.Obj("units");
-            if (units != null) foreach (var k in units.Keys) p.UnitLevels[k] = (int)units.Num(k);
+            // version 1 stored the game levels, version 2 the shown levels (free first levels left out)
+            bool gameLevels = root.Num("version", 1) < 2;
+            if (units != null)
+                foreach (var k in units.Keys)
+                {
+                    var u = HideoutData.Find(k);
+                    int v = (int)units.Num(k);
+                    p.UnitLevels[k] = gameLevels && u != null ? Math.Max(0, v - u.FreeLevels) : v;
+                }
             return p;
         }
 
@@ -171,7 +201,7 @@ namespace IRRCompanion
             Directory.CreateDirectory(Library.Folder);
             var root = new JObj();
             root["format"] = "IRRCompanion.Hideout";
-            root["version"] = 1.0;
+            root["version"] = 2.0;
             root["playerLevel"] = (double)PlayerLevel;
             var loy = new JObj();
             foreach (var kv in Loyalty) loy[kv.Key] = (double)kv.Value;

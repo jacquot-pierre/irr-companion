@@ -398,7 +398,8 @@ namespace IRRCompanion
                 ProgressChanged();
             };
             _tip.SetToolTip(seg, "The level of this unit in your hideout. 0 = not built yet.");
-            var note = Theme.Lbl(u.StartLevel > 0 ? "Level " + u.StartLevel + " is free: probably the starting state." : "", Theme.Small, Theme.TextFaint);
+            var note = Theme.Lbl(u.FreeLevels > 0 ? "Built from the start. Level 1 = first upgrade (level " + (u.FreeLevels + 1) + " in the game files)." : "", Theme.Small, Theme.TextFaint);
+            _tip.SetToolTip(note, "The game files have a free level 1 for this unit (its starting state). It is not shown, so the levels start at the first upgrade you pay for.");
             note.Location = new Point(Theme.S(100) + Theme.S(60) * opts.Length, Theme.S(14));
             bar.Controls.Add(lbl);
             bar.Controls.Add(seg);
@@ -537,7 +538,7 @@ namespace IRRCompanion
                 _p.Loyalty[kv.Key] = kv.Value;
                 _loyalty[kv.Key].Value = kv.Value;
             }
-            foreach (var kv in new Dictionary<string, int> { { "Structure", 1 }, { "Generator", 1 }, { "Stash", 1 }, { "Gunsmith", 1 }, { "Repair Station", 1 } })
+            foreach (var kv in new Dictionary<string, int> { { "Structure", 0 }, { "Generator", 1 }, { "Stash", 1 }, { "Gunsmith", 1 }, { "Repair Station", 1 } })
                 _p.UnitLevels[kv.Key] = kv.Value;
             _loading = false;
             _nextOnly = nextOnly;

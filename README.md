@@ -175,8 +175,10 @@ updates them. If something differs from the game, please
 - The item names offered for *Spawn item* / *Give item* are the game's internal names; the game also accepts
   part of a name and lists the matches in the console when there are several.
 - Commands marked **HOST** only work for the player who hosts the game (or in solo).
-- Hideout: the Structure and the Shooting Range have a free level 1 in the game files, taken as their
-  starting level; the other units start at level 0 (not built).
+- Hideout: the Structure and the Shooting Range have a free level 1 in the game files (their starting state).
+  It is not shown: their levels start at the first upgrade you pay for, so game level 2 is shown as level 1
+  (requirements such as "Structure level 1" are renumbered the same way). The other units start at level 0
+  (not built).
 - Maps: the 40 % chance is the value set for each resource point in the game files; the game could still
   apply other rules during a raid (a limit per raid, for example) that are not visible in the files.
 

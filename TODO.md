@@ -29,7 +29,8 @@ Share codes:
 
 Hideout (costs read from the game files):
 
-- [ ] Starting levels: Structure and Shooting Range at level 1 (free level 1 in the files), every other unit
+- [ ] Starting levels: Structure and Shooting Range built from the start (free level 1 in the files, hidden in the
+      app, which counts their levels from the first paid upgrade); every other unit
       at level 0 (not built). Check on a new character.
 - [ ] Costs and requirements of a few levels match the in-game upgrade screen (e.g. Generator 1, Stash 2,
       Intel Center 3).
