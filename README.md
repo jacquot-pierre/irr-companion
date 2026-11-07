@@ -166,7 +166,7 @@ your presets and favorites are copied from `%APPDATA%\IRR Preset Tool` on the fi
 The app contains data read from a given version of the game (shown in the header: *game data YYYY-MM-DD*).
 After a game patch, values, commands or hideout costs may have changed until a new release of the app
 updates them. If something differs from the game, please
-[open an issue](../../issues).
+[open an issue](https://github.com/jacquot-pierre/irr-companion/issues).
 
 ### Good to know
 
