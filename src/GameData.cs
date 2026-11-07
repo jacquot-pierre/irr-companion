@@ -10,6 +10,10 @@ namespace IRRCompanion
     {
         public string Key, DocKey, Category, Section, Name, Description, Warning;
         public bool IsBool;
+        /// <summary>Not in the game's settings menu (ADVANCED section, hidden by default).</summary>
+        public bool Advanced;
+        /// <summary>Name / description written by the tool, not by the game.</summary>
+        public bool Unofficial;
         public int Precision;
         public double? Min, Max, UIMin, UIMax, Step;
 
@@ -53,6 +57,9 @@ namespace IRRCompanion
                 sb.Append(Name);
                 if (!string.IsNullOrEmpty(Description)) sb.Append("\n\n").Append(Description);
                 if (!string.IsNullOrEmpty(Warning)) sb.Append("\n\n⚠ ").Append(Warning);
+                if (Advanced)
+                    sb.Append("\n\nNot in the game's settings menu.")
+                      .Append(Unofficial ? " Name and description written by IRR Companion from the game key and values, not by the developers." : "");
                 if (!IsBool)
                 {
                     sb.Append("\n\nRecommended range: ").Append(Format(ViewMin)).Append(" – ").Append(Format(ViewMax));
@@ -110,6 +117,8 @@ namespace IRRCompanion
                     Description = o.Str("desc", ""),
                     Warning = o.Str("warn", ""),
                     IsBool = o.Str("type") == "bool",
+                    Advanced = o.Has("advanced") && Equals(o["advanced"], true),
+                    Unofficial = o.Has("unofficial") && Equals(o["unofficial"], true),
                     Precision = (int)o.Num("precision", 2),
                     Min = o.Has("min") ? (double?)o.Num("min") : null,
                     Max = o.Has("max") ? (double?)o.Num("max") : null,

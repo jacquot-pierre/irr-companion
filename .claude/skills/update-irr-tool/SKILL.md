@@ -1,6 +1,6 @@
 ---
 name: update-irr-tool
-description: Update IRR Companion after an Incursion Red River game update - re-extract the game data (AI presets, schema, share-code format, console commands, map weathers, items), regenerate the tool's resources, check everything, rebuild and prepare a release. Use when the user says the game was updated, asks to update/refresh the tool, or runs /update-irr-tool.
+description: Update IRR Companion after an Incursion Red River game update - re-extract the game data (AI presets, schema, share-code format, console commands, map weathers, items, hideout upgrades), regenerate the tool's resources, check everything, rebuild and prepare a release. Use when the user says the game was updated, asks to update/refresh the tool, or runs /update-irr-tool.
 ---
 
 # Update IRR Companion after a game update
@@ -16,6 +16,9 @@ The tool embeds data read from the game. After a game patch, each of these can c
 | Argument types of the cheat commands | exe (UE reflection data) | `tools/build_commands.py` | `tools/ue_param_types.py` |
 | Weathers of each map (order = number of `irr.World.SetWeather`) | pak: `Blueprints/MissionSystem/DataAssets/Maps/MD_*` | `tools/map_weathers.json` | `tools/map_weathers.py` |
 | Item names (Spawn / Give) | pak: `.../Items/**/ID_*.uasset` | `tools/item_paths.txt` | `tools/list_items.py` |
+| Hideout upgrade costs and requirements | pak: `Blueprints/MissionSystem/Actors/Hideout/**` | `src/Resources/hideout.json` | `tools/build_hideout.py` |
+| Resource / extraction points, safes, locked doors and keys, minimaps | pak: persistent levels `Maps/Gameplay/LVL_*`, `Maps/Testing/LVL_Bunker`, `Textures/Minimaps`, `Environment/Blueprints/Gameplay/Resources` | `src/Resources/maps.json`, `src/Resources/maps/*.jpg` | `tools/build_maps.py` |
+| Item / material icons (hideout) | pak: `Items/**/T_*_Icon` (mostly pakchunk6), `ResourceSystem/Textures` | `src/Resources/icons/*.png` | `tools/build_icons.py` |
 
 Work through the steps in order and keep a list of everything that changed: it becomes the release notes.
 Never write into the game folder. Extract into a work folder outside the repository (e.g. `%TEMP%\irr_update`).
@@ -42,7 +45,11 @@ Run Python with `-I` and pass paths as arguments (extracted files are untrusted 
 ```
 repak unpack -o <work> -i "Test_C/Content/AISettings" "<paks>\pakchunk0-Windows.pak"
 repak unpack -o <work> -i "Test_C/Content/Blueprints/MissionSystem/DataAssets/Maps" "<paks>\pakchunk0-Windows.pak"
+repak unpack -o <work> -i "Test_C/Content/Blueprints/MissionSystem/Actors/Hideout" "<paks>\pakchunk0-Windows.pak"
+repak unpack -o <work> -i "Test_C/Content/Blueprints/MissionSystem/Actors/Hideout" "<paks>\pakchunk7-Windows.pak"
 ```
+
+(The hideout unit blueprints are split between pakchunk0 and pakchunk7.)
 
 If a path is not in pakchunk0 any more, find it with `repak list <pak>` on each pak.
 
@@ -61,6 +68,13 @@ schema versions). Check:
 - **Assertion "no longer in the game schema"**: remove the key from `NAMES` / `SECTIONS`.
 - **WARNING "no longer shown in the game menu"**: confirm with the user's screenshots before removing it.
   (`DamageMap.*` is shown in game although not flagged, it is excluded from that warning.)
+- **ADVANCED** (settings of the AI document that the game menu does not show, section hidden by default in
+  the editor): `ADVANCED` in `tools/build_defaults.py` lists them with a name, a description and a slider
+  range. **Assertion "params of ADVANCED no longer in the game schema / document"**: remove the key.
+  **WARNING "shown nowhere in the tool, add them to ADVANCED"**: a new key in the document; add it to
+  `ADVANCED` (game name / description from `Loc/en` if it has one, otherwise write them from the key and the
+  difficulty values; they are flagged as unofficial in the tooltip). A key that moves into the game menu
+  goes from `ADVANCED` to `NAMES` / `SECTIONS`.
 - `aiOrder` / `simOrder` changed (new difficulty or simulation level): update `AI_LABELS` (in-game names:
   Easy=Recruit, Normal=Regular, Hard=Veteran, Extreme=Elite) and check `src/MainForm.cs`, which builds the
   DIFFICULTY / SIMULATION segmented rows from these lists.
@@ -139,8 +153,8 @@ It prints each map's weather list (order and weight) and rewrites `tools/map_wea
 - `NO WEATHER LIST FOUND` for a map: its asset layout changed; inspect the `.uexp` by hand.
 - New map: add it to `MAP_ORDER` in `tools/build_commands.py` (or to `MAP_SKIP` if it is not playable, like
   `Lobby`). New UDS weather preset: add its display name to `WEATHER_NAMES`.
-- `WEATHER_INDEX_BASE` (first number accepted by `irr.World.SetWeather`) is 1. Keep it unless the user
-  tested in game that the numbers are shifted; then change it here only.
+- `WEATHER_INDEX_BASE` (first number accepted by `irr.World.SetWeather`) is 0, checked in game on Delta
+  (2026-11-07). Keep it unless the user tests in game that the numbers are shifted; then change it here only.
 
 ## 7. Items
 
@@ -151,6 +165,65 @@ python -I tools/list_items.py "<paks>"
 Rewrites `tools/item_paths.txt` and prints the added / removed item definitions. New top-level item
 folders become new categories automatically (see `load_items` in `build_commands.py`).
 
+## 7b. Hideout upgrades
+
+Run after step 7 (it uses `tools/item_paths.txt` to find the item names for the GIVE buttons):
+
+```
+python -I tools/build_hideout.py <work>
+```
+
+It reads the `BP_IRRHideoutUnitComponent` defaults of every blueprint in `Actors/Hideout` and rewrites
+`src/Resources/hideout.json` (`git diff src/Resources/hideout.json` shows the cost changes). The JSON keeps
+the game's level numbers; the app hides a free first level (nothing to pay, no requirement: Structure,
+Shooting Range today) and renumbers that unit's levels and the requirements on it (`HideoutData.Load`). The
+saved progress (`hideout.json` version 2) uses the shown numbers; version 1 files are converted on load. Check:
+- every unit of `UNIT_ORDER` is listed (`unit X not found` = renamed or moved blueprint; a new unit is
+  listed after the known ones: add it to `UNIT_ORDER` at the right place);
+- no `WARNING` (unknown unit in a requirement, item without item definition: fix the matching in
+  `item_id()` or check the tag in the game);
+- a `ValueError` (unexpected header, unknown condition class, text history) means the cooked layout changed:
+  look at the bytes at the reported offset and update the reader instead of skipping the check.
+- New faction tag in a requirement: add it to `FACTIONS` (abbreviation used in game, full name).
+
+Then refresh the icons (it lists the paks, extracts only the needed textures, ~10 s):
+
+```
+python -I tools/build_icons.py "<paks>"
+```
+
+It writes one 64 px PNG per hideout item (`item_<name>.png`), cash and material (`res_<name>.png`) and
+removes icons no longer used. `WARNING: no *_Icon texture` is expected for items the game has no icon for
+(Honey Badger today): the app shows a "?" slot. `pixel format … not handled`: add the format to
+`read_texture` / `decode`. Look at a few new icons before committing. Icons are added little by little:
+to ship more, add item names to `EXTRA_ITEMS`.
+
+## 7c. Resource maps
+
+```
+python -I tools/build_maps.py "<paks>"
+```
+
+Takes ~2-3 minutes and ~1.5 GB in %TEMP% (it extracts the persistent levels). It prints, per map, the floors,
+the number of resource points per type, of extraction points and of locks (safes / doors per kind), the spawn
+chance / amount of each type and the number of key items. Run it before `build_icons.py` (the key icons come
+from `maps.json`).
+- Map size: like the in-game PDA (W_GCPS_Map / MPC_Minimap), half size = `MapSize` / 2 of the minimap volume,
+  or box extent + `MAP_MARGIN` (200) when MapSize is not set. Delta 90 000, Quarry 62 500, Outskirts 85 419,
+  Bunker 16 000 today.
+- Locks: classes of `LOCKS` + any `BP_Door_*Locked*_C`; the key is the `Inventory.Items.Keys.*` tag the actor
+  references. Doors without a key are skipped (they never open). `references several keys` or `key without
+  item definition`: check the actor by hand. New lock class (new safe type...): add it to `LOCKS` and to
+  `MapData.LockKinds` / labels / colours in `src/Maps.cs` and `src/MapsPanel.cs`.
+- New map: add it to `MAPS` (display name, persistent level path). A map whose minimap is a grey plan goes in
+  `PLAN_MAPS` (drawn inverted, like the Bunker).
+- `first property ... expected 161` (or 5 / 0): the component layout changed; check `LOCATION_INDEX`.
+- `overrides a blueprint property`: a point has its own chance or amount - read it from the actor instead of
+  using the class default.
+- Spawn chance / amount changed: compare with the previous `maps.json` (`git diff`), it is shown in the app.
+- Check the MAPS screenshots: points must sit on buildings / the quarry rocks. If they are rotated or mirrored,
+  the minimap capture changed: fix `MapFloor.ToImage` in `src/Maps.cs`.
+
 ## 8. Regenerate and build
 
 ```
@@ -160,15 +233,21 @@ python -I tools/check_roundtrip.py
 src\bin\Debug\net462\IRRCompanion.exe --screenshot <work>\shot
 ```
 
-`--screenshot` (Debug build only) writes PNGs of every view: `_edit`, `_edit_scrolled`, `_builtin`,
-`_compare`, `_compare_diff`, `_compare_difficulties`, `_commands_weather`, `_commands_item`,
-`_commands_player`, `_commands_cvar`, `_commands_favorites` (and `.error.txt` if it crashed). Look at each image:
-- EDIT: every section of the in-game menu, names not cut, values formatted like the game, nothing scrolled.
+`--screenshot` (Debug build only) writes PNGs of every view: `_edit`, `_edit_scrolled`,
+`_edit_advanced_closed`, `_edit_advanced`, `_builtin`, `_compare`, `_compare_diff`, `_compare_advanced`, `_compare_difficulties`, `_commands_weather`, `_commands_item`,
+`_commands_player`, `_commands_cvar`, `_commands_favorites`, `_hideout_unit`, `_hideout_stash`,
+`_hideout_shopping`, `_hideout_shopping_all`, `_maps_quarry`, `_maps_delta_hover`, `_maps_bunker`, `_maps_safe_hover` (and `.error.txt` if it crashed). Look at each image:
+- EDIT: every section of the in-game menu, names not cut, values formatted like the game, nothing scrolled;
+  the ADVANCED bar at the bottom, closed, then open with its sections in order.
 - COMPARE: section rows, colors, range bars.
 - COMMANDS: categories and counts, weather lists, item picker, favorites buttons.
+- HIDEOUT: unit list states, level cards (requirements green/red, items, materials), shopping list totals.
 If the screenshots are fine and the UI changed, refresh the README images: `docs/editor.png` (`_edit`),
+`docs/editor-advanced.png` (`_edit_advanced`),
 `docs/compare.png` (`_compare_difficulties`), `docs/commands.png` (`_commands_weather`),
-`docs/commands-items.png` (`_commands_item`), `docs/favorites.png` (`_commands_favorites`).
+`docs/commands-items.png` (`_commands_item`), `docs/favorites.png` (`_commands_favorites`),
+`docs/hideout.png` (`_hideout_stash`), `docs/hideout-shopping.png` (`_hideout_shopping`), `docs/maps.png`
+(`_maps_quarry`), `docs/maps-hover.png` (`_maps_delta_hover`), `docs/maps-bunker.png` (`_maps_bunker`), `docs/maps-safe.png` (`_maps_safe_hover`).
 
 The real GUI cannot be clicked from the sandbox: tell the user what to test by hand (save, import a code,
 copy a code and import it in game, copy a console command and run it in game).
@@ -196,5 +275,8 @@ copy a code and import it in game, copy a console command and run it in game).
 - [ ] `extract_console.py`: no NEW / REMOVED left unhandled; `ue_param_types.py` all ok
 - [ ] `map_weathers.py`: every map has a list; new maps/weathers named
 - [ ] `list_items.py` run; `build_commands.py` run
+- [ ] `build_hideout.py`: all units found, no warning; cost changes reviewed
+- [ ] `build_icons.py` run; new icons look right
+- [ ] `build_maps.py`: every map found, point counts reviewed, no warning; MAPS screenshots show points on buildings
 - [ ] Debug build, screenshots reviewed; Release build clean
 - [ ] Version bumped, README updated, change summary given to the user

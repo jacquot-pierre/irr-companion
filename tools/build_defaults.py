@@ -116,6 +116,91 @@ SECTIONS = [
                 "MaxSearchAreaSize", "FiredUponSearchTime", "SearchCasualtyHoldTime"]),
 ]
 
+# Settings of the AI document that the game menu does not show (ADVANCED section of the editor, hidden by
+# default). Grenade settings have a name / description in the game files; for the others the name and the
+# description are written by us from the key and the difficulty values (flagged "unofficial" in the tool).
+# (key, name, description, uiMin, uiMax, precision); None = take it from the game schema / loc.
+ADVANCED = [
+    ("Perception", [
+        ("PerceptionMinVisibleBoneScore", "Min Visible Body Part",
+         "How much of your body must be visible before a bot can start to see you. Higher values let you hide "
+         "behind more partial cover. Lower on harder difficulties (0.25 Recruit → 0.05 Elite).", 0, 0.5, 2),
+        ("PerceptionLookTowardsCoef", "Look Towards Coefficient",
+         "Weight of where the bot is looking in how fast it notices you. Lower on harder difficulties "
+         "(0.66 Recruit → 0.33 Elite).", 0, 1, 2),
+        ("PerceptionGainDecayCoef", "Perception Decay",
+         "How fast the awareness a bot is building up fades when it loses sight of you.", 0, 1, 2),
+        ("PeripheralVisionDistance", "Peripheral Vision Distance",
+         "Range (cm) of the wide peripheral vision cone.", 0, 5000, 0),
+        ("PeripheralVisionAngle", "Peripheral Vision Angle",
+         "Angle (degrees) of the peripheral vision cone.", 0, 180, 0),
+        ("WatchWarmthCap", "Watch Alertness Cap",
+         "Maximum alertness a bot builds up while watching an area. Higher on harder difficulties "
+         "(0.5 Recruit → 1 Elite).", 0, 1, 2),
+        ("PerceptionUnderFireDelay", "Under Fire Sense Delay",
+         "Reaction delay (s) of a bot that is being shot at.", 0, 1, 2),
+        ("UnderFireGlanceDuration", "Under Fire Glance Duration",
+         "How long (s) a bot looks towards where the shots come from.", 0, 6, 1),
+        ("RepeatSenseDistanceScaleEnd", "Repeat Sense Distance",
+         "Distance (cm) over which Repeat Sense Coef applies: seeing or hearing you again speeds up detection.", 0, 3000, 0),
+        ("MaxFootstepSoundRange", "Max Footstep Sound Range",
+         "Maximum distance (cm) at which bots hear footsteps. 0 in every difficulty (game default).", 0, 5000, 0),
+        ("Coordination_PerceptionShareMaxDistance", "Perception Share Max Distance",
+         "Maximum distance (cm) of a target that bots pass on to the allies around them.", 0, 10000, 0),
+    ]),
+    ("Light and Laser", [
+        ("LightReportCooldown", "Light Report Cooldown",
+         "Minimum time (s) between two reports of your flashlight by a bot.", 0, 5, 1),
+        ("LaserReportCooldown", "Laser Report Cooldown",
+         "Minimum time (s) between two reports of your laser by a bot.", 0, 5, 1),
+        ("LaserDotSightRange", "Laser Dot Sight Range",
+         "Distance (cm) at which bots notice a laser dot.", 0, 10000, 0),
+        ("LaserDotSightHalfAngle", "Laser Dot Sight Angle",
+         "Half angle (degrees) of the cone in which bots notice a laser dot.", 0, 180, 0),
+        ("LasedBacktrackDistance", "Laser Backtrack Distance",
+         "How far (cm) back along a laser beam bots look for the one holding it.", 0, 5000, 0),
+        ("DesignationCompromiseRadius", "Designation Compromise Radius",
+         "Radius (cm) around a lased position in which the bots consider the shooter's area compromised.", 0, 10000, 0),
+    ]),
+    ("Aim and Shoot", [
+        ("EquipmentLevel", "Equipment Level",
+         "Quality of the bots' equipment. Listed in the game files but not shown in the game menu; 0.75 in every "
+         "difficulty.", None, None, None),
+        ("TriggerSignalDelay", "Trigger Delay",
+         "Delay (s) before a bot that has you in its sights pulls the trigger. Lower on harder difficulties "
+         "(0.4 Recruit → 0.15 Elite).", 0, 1, 3),
+        ("DeliberateMissChanceTime", "Deliberate Miss Window",
+         "How long (s) after first contact Deliberate Miss Chance applies. Shorter on harder difficulties "
+         "(6 Recruit → 4 Elite).", 0, 15, 1),
+        ("DeliberateMissPersistentChance", "Persistent Miss Chance",
+         "Chance that a bot misses on purpose after that window. Lower on harder difficulties "
+         "(0.15 Recruit → 0.06 Elite).", 0, 0.5, 2),
+        ("bDisableDeliberateMissTimerVsAI", "No Deliberate Miss vs AI",
+         "Bots do not miss on purpose when they shoot at other bots.", None, None, None),
+        ("AimTimeBetweenShotsMin", "Time Between Shots Min",
+         "Shortest pause (s) between two aimed shots.", 0, 1, 2),
+        ("AimTimeBetweenShotsMax", "Time Between Shots Max",
+         "Longest pause (s) between two aimed shots.", 0, 10, 1),
+        ("FriendlyFireRadius", "Friendly Fire Radius",
+         "A bot holds fire when an ally is closer than this (cm) to its line of fire.", 0, 200, 0),
+        ("FriendlyFireOnsetDelay", "Friendly Fire Onset Delay",
+         "Delay (s) before a bot reacts to an ally in its line of fire.", 0, 2, 2),
+    ]),
+    ("Suppression", [
+        ("Suppress_Point_Max_Distance", "Suppress Max Distance",
+         "Bots do not lay suppressive fire on a point further than this (cm).", 0, 10000, 0),
+        ("Suppress_Point_Always_Distance", "Suppress Always Distance",
+         "Bots always suppress a point closer than this (cm).", 0, 1000, 0),
+        ("Suppress_Point_Max_PathLength", "Suppress Max Path Length",
+         "Same as Suppress Max Distance, measured along the walking path (cm).", 0, 10000, 0),
+        ("Suppress_Point_Always_PathLength", "Suppress Always Path Length",
+         "Same as Suppress Always Distance, measured along the walking path (cm).", 0, 1000, 0),
+    ]),
+    ("Grenades", [(k, None, None, None, None, None) for k in (
+        "GrenadeMinThrowDistance", "GrenadeMaxThrowDistance", "bGrenadeRequireClearArc", "GrenadeMaxLandingError",
+        "GrenadeMinAimTime", "GrenadeMaxReleaseYawError", "GrenadeMaxTurnTime", "GrenadeReleaseCheckInterval")]),
+]
+
 DAMAGE_DESC = {
     "DamageMap.Boss": "Damage multiplier applied to boss hits.",
     "DamageMap.AI": "Damage multiplier applied when bots hit other bots.",
@@ -157,6 +242,35 @@ for section, keys in SECTIONS:
             p.update(key=k, docKey="damageMap." + sub, name=NAMES[k], desc=DAMAGE_DESC[k])
         else:
             p = param(k, schema[k], loc.get(k, {}), section, "AISettings")
+        params.append(p)
+
+# ADVANCED: every other setting of the AI document (game key = doc key with an upper-case first letter,
+# except the bXxx booleans).
+doc_keys = {k if k in schema else k[0].upper() + k[1:] for k in base}
+adv_listed = [k[0] for _, ks in ADVANCED for k in ks]
+gone = [k for k in adv_listed if k not in schema or k not in doc_keys]
+assert not gone, f"params of ADVANCED no longer in the game schema / document, remove them: {gone}"
+new_hidden = sorted(doc_keys - {k.split(".")[0] for k in listed} - set(adv_listed)
+                    - {"BehaviorConfig", "SchemaSoftVersion", "SchemaHardVersion"})
+if new_hidden:
+    print("WARNING: settings of the AI document shown nowhere in the tool, add them to ADVANCED:", new_hidden)
+for section, keys in ADVANCED:
+    for k, name, desc, lo, hi, prec in keys:
+        l = loc.get(k, {})
+        p = param(k, schema[k], l, "Advanced · " + section, "AISettings")
+        p["advanced"] = True
+        if name:
+            p["name"] = name
+        if desc:
+            p["desc"] = desc
+        if not l.get("Description"):
+            p["unofficial"] = True
+        if lo is not None and "UIMin" not in schema[k] and "Min" not in schema[k]:
+            p["uiMin"] = lo
+        if hi is not None and "UIMax" not in schema[k] and "Max" not in schema[k]:
+            p["uiMax"] = hi
+        if prec is not None and "Precision" not in schema[k]:
+            p["precision"] = prec
         params.append(p)
 
 sim_params = []
