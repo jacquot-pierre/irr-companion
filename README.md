@@ -137,6 +137,10 @@ A custom simulation adds `{ "c": "Simulation", "n": "my_preset", "hv": 1, "doc":
 
 Push a tag `vX.Y.Z`: the GitHub Actions workflow builds the exe and publishes the release with it.
 
+## Status
+
+Known gaps and things still to check in game are listed in [TODO.md](TODO.md).
+
 ## Disclaimer
 
 IRR Companion is a fan-made tool, not affiliated with or endorsed by the developers of Incursion Red River.
