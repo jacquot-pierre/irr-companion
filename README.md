@@ -18,7 +18,7 @@ One portable `.exe`, nothing to install, nothing written to the game's files.
 
 ## Download
 
-1. Download **`IRRCompanion.exe`** from the [latest release](../../releases/latest).
+1. Download **`IRRCompanion.exe`** from the [latest release](https://github.com/jacquot-pierre/irr-companion/releases/latest).
 2. Run it. That's it: no installer, no admin rights.
 
 Requires Windows 10 or 11 (it uses .NET Framework 4.6.2, already part of Windows).
