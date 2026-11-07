@@ -1,7 +1,7 @@
 # IRR Companion
 
 **A small companion app for [Incursion Red River](https://store.steampowered.com/app/2116120/): create and
-compare AI presets, and build console commands without typing them.**
+compare AI presets, build console commands without typing them, and plan your hideout upgrades.**
 
 One portable `.exe`, nothing to install, nothing written to the game's files.
 
@@ -62,6 +62,25 @@ reorder them, and copy them in one click. They are stored in `%APPDATA%\IRR Comp
 
 ![Favorite commands](docs/favorites.png)
 
+### Hideout upgrades
+
+The **HIDEOUT** tab shows what every level of the 9 hideout units costs - Structure, Generator, Lighting,
+Stash, Repair Station, Gunsmith, Terminal, Intel Center, Shooting Range:
+
+- **Items** with their quantity, **cash** and **materials** (Concrete, Food, Metal, Oil).
+- **Requirements**: level of another unit (click it to open that unit), faction loyalty (IGC, UICS, VLF,
+  FANG) and player level.
+- **Your progress**: set the level of each unit, your player level and your loyalty with each faction. The
+  app shows the next upgrade of each unit, with the requirements you meet in green and the missing ones in red.
+- **Shopping list**: everything still needed, added up - for the next upgrades only or for all the levels
+  left - with the units each item is for.
+- **GIVE** buttons copy the matching console command (`irr.Item.Give`, `irr.Item.AddResource`) if you want
+  to cheat a little. Your progress is stored in `%APPDATA%\IRR Companion\hideout.json`.
+
+![Stash levels and requirements](docs/hideout.png)
+
+![Shopping list](docs/hideout-shopping.png)
+
 ## How to use
 
 **Make an AI preset**
@@ -74,6 +93,11 @@ reorder them, and copy them in one click. They are stored in `%APPDATA%\IRR Comp
 2. Set its arguments on the right and click **COPY** (or double-click the command).
 3. In the game, open the console and paste with `Ctrl+V`, then press Enter.
 
+**Plan your hideout**
+1. Open the **HIDEOUT** tab and set your player level and faction loyalty on the left.
+2. Select each unit and click its current level (**MY LEVEL**).
+3. Open **SHOPPING LIST** to see everything you still need to collect.
+
 ### Good to know
 
 - `irr.World.SetWeather` takes a number that depends on the map. The numbers are assumed to start at 1;
@@ -81,6 +105,8 @@ reorder them, and copy them in one click. They are stored in `%APPDATA%\IRR Comp
 - The item names offered for *Spawn item* / *Give item* are the game's internal names; the game also accepts
   part of a name and lists the matches in the console when there are several.
 - Commands marked **HOST** only work for the player who hosts the game (or in solo).
+- Hideout: the Structure and the Shooting Range have a free level 1 in the game files, taken as their
+  starting level; the other units start at level 0 (not built).
 
 ## For developers
 
@@ -110,6 +136,7 @@ release - is the Claude Code skill [`.claude/skills/update-irr-tool/SKILL.md`](.
 | `map_weathers.py` | `tools/map_weathers.json`: weather list of each map |
 | `list_items.py` | `tools/item_paths.txt`: the item definitions |
 | `build_commands.py` | `src/Resources/commands.json`: commands, weathers and items |
+| `build_hideout.py` | `src/Resources/hideout.json`: costs and requirements of every hideout unit level |
 | `irr_sharecode.py` | decode / encode share codes from the command line |
 
 Game files are extracted from the paks with [repak](https://github.com/trumank/repak), for example

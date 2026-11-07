@@ -27,6 +27,16 @@ Share codes:
       preset has been imported in game so far).
 - [ ] Import in the app a code exported by another player.
 
+Hideout (costs read from the game files):
+
+- [ ] Starting levels: Structure and Shooting Range at level 1 (free level 1 in the files), every other unit
+      at level 0 (not built). Check on a new character.
+- [ ] Costs and requirements of a few levels match the in-game upgrade screen (e.g. Generator 1, Stash 2,
+      Intel Center 3).
+- [ ] Faction loyalty levels: the requirement numbers (1 to 4) are the loyalty levels shown in game.
+- [ ] GIVE buttons: `irr.Item.Give <item> <count>` with the internal names (`GasCan`, `PowerCable`…),
+      `irr.Item.Give Cash <n>` and `irr.Item.AddResource Oil <n>` work in game.
+
 ## Verify the app
 
 The interface was only checked on screenshots; nothing was clicked yet.
@@ -37,6 +47,8 @@ The interface was only checked on screenshots; nothing was clicked yet.
 - [ ] COMMANDS: search, COPY, double-click / Enter to copy, DEFAULTS, optional arguments (tick box),
       item list filter and autocomplete, editing the command text by hand.
 - [ ] Favorites: add (name prompt), SAVE after changing values, RENAME, REMOVE, ▲ / ▼, they survive a restart.
+- [ ] HIDEOUT: player level and loyalty fields, MY LEVEL buttons, requirement links, NEXT UPGRADES /
+      EVERYTHING LEFT, GIVE buttons; the progress survives a restart (`%APPDATA%\IRR Companion\hideout.json`).
 - [ ] First start: presets and favorites copied from `%APPDATA%\IRR Preset Tool` to `%APPDATA%\IRR Companion`.
 - [ ] Display scaling 125 % / 150 % and the minimum window size (1000 × 620): nothing cut or overlapping.
 - [ ] Windows 10 and a PC without development tools (download from the release page, SmartScreen).

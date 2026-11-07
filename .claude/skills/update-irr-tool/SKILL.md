@@ -1,6 +1,6 @@
 ---
 name: update-irr-tool
-description: Update IRR Companion after an Incursion Red River game update - re-extract the game data (AI presets, schema, share-code format, console commands, map weathers, items), regenerate the tool's resources, check everything, rebuild and prepare a release. Use when the user says the game was updated, asks to update/refresh the tool, or runs /update-irr-tool.
+description: Update IRR Companion after an Incursion Red River game update - re-extract the game data (AI presets, schema, share-code format, console commands, map weathers, items, hideout upgrades), regenerate the tool's resources, check everything, rebuild and prepare a release. Use when the user says the game was updated, asks to update/refresh the tool, or runs /update-irr-tool.
 ---
 
 # Update IRR Companion after a game update
@@ -16,6 +16,7 @@ The tool embeds data read from the game. After a game patch, each of these can c
 | Argument types of the cheat commands | exe (UE reflection data) | `tools/build_commands.py` | `tools/ue_param_types.py` |
 | Weathers of each map (order = number of `irr.World.SetWeather`) | pak: `Blueprints/MissionSystem/DataAssets/Maps/MD_*` | `tools/map_weathers.json` | `tools/map_weathers.py` |
 | Item names (Spawn / Give) | pak: `.../Items/**/ID_*.uasset` | `tools/item_paths.txt` | `tools/list_items.py` |
+| Hideout upgrade costs and requirements | pak: `Blueprints/MissionSystem/Actors/Hideout/**` | `src/Resources/hideout.json` | `tools/build_hideout.py` |
 
 Work through the steps in order and keep a list of everything that changed: it becomes the release notes.
 Never write into the game folder. Extract into a work folder outside the repository (e.g. `%TEMP%\irr_update`).
@@ -42,7 +43,11 @@ Run Python with `-I` and pass paths as arguments (extracted files are untrusted 
 ```
 repak unpack -o <work> -i "Test_C/Content/AISettings" "<paks>\pakchunk0-Windows.pak"
 repak unpack -o <work> -i "Test_C/Content/Blueprints/MissionSystem/DataAssets/Maps" "<paks>\pakchunk0-Windows.pak"
+repak unpack -o <work> -i "Test_C/Content/Blueprints/MissionSystem/Actors/Hideout" "<paks>\pakchunk0-Windows.pak"
+repak unpack -o <work> -i "Test_C/Content/Blueprints/MissionSystem/Actors/Hideout" "<paks>\pakchunk7-Windows.pak"
 ```
+
+(The hideout unit blueprints are split between pakchunk0 and pakchunk7.)
 
 If a path is not in pakchunk0 any more, find it with `repak list <pak>` on each pak.
 
@@ -151,6 +156,24 @@ python -I tools/list_items.py "<paks>"
 Rewrites `tools/item_paths.txt` and prints the added / removed item definitions. New top-level item
 folders become new categories automatically (see `load_items` in `build_commands.py`).
 
+## 7b. Hideout upgrades
+
+Run after step 7 (it uses `tools/item_paths.txt` to find the item names for the GIVE buttons):
+
+```
+python -I tools/build_hideout.py <work>
+```
+
+It reads the `BP_IRRHideoutUnitComponent` defaults of every blueprint in `Actors/Hideout` and rewrites
+`src/Resources/hideout.json` (`git diff src/Resources/hideout.json` shows the cost changes). Check:
+- every unit of `UNIT_ORDER` is listed (`unit X not found` = renamed or moved blueprint; a new unit is
+  listed after the known ones: add it to `UNIT_ORDER` at the right place);
+- no `WARNING` (unknown unit in a requirement, item without item definition: fix the matching in
+  `item_id()` or check the tag in the game);
+- a `ValueError` (unexpected header, unknown condition class, text history) means the cooked layout changed:
+  look at the bytes at the reported offset and update the reader instead of skipping the check.
+- New faction tag in a requirement: add it to `FACTIONS` (abbreviation used in game, full name).
+
 ## 8. Regenerate and build
 
 ```
@@ -162,13 +185,16 @@ src\bin\Debug\net462\IRRCompanion.exe --screenshot <work>\shot
 
 `--screenshot` (Debug build only) writes PNGs of every view: `_edit`, `_edit_scrolled`, `_builtin`,
 `_compare`, `_compare_diff`, `_compare_difficulties`, `_commands_weather`, `_commands_item`,
-`_commands_player`, `_commands_cvar`, `_commands_favorites` (and `.error.txt` if it crashed). Look at each image:
+`_commands_player`, `_commands_cvar`, `_commands_favorites`, `_hideout_unit`, `_hideout_stash`,
+`_hideout_shopping`, `_hideout_shopping_all` (and `.error.txt` if it crashed). Look at each image:
 - EDIT: every section of the in-game menu, names not cut, values formatted like the game, nothing scrolled.
 - COMPARE: section rows, colors, range bars.
 - COMMANDS: categories and counts, weather lists, item picker, favorites buttons.
+- HIDEOUT: unit list states, level cards (requirements green/red, items, materials), shopping list totals.
 If the screenshots are fine and the UI changed, refresh the README images: `docs/editor.png` (`_edit`),
 `docs/compare.png` (`_compare_difficulties`), `docs/commands.png` (`_commands_weather`),
-`docs/commands-items.png` (`_commands_item`), `docs/favorites.png` (`_commands_favorites`).
+`docs/commands-items.png` (`_commands_item`), `docs/favorites.png` (`_commands_favorites`),
+`docs/hideout.png` (`_hideout_stash`), `docs/hideout-shopping.png` (`_hideout_shopping`).
 
 The real GUI cannot be clicked from the sandbox: tell the user what to test by hand (save, import a code,
 copy a code and import it in game, copy a console command and run it in game).
@@ -196,5 +222,6 @@ copy a code and import it in game, copy a console command and run it in game).
 - [ ] `extract_console.py`: no NEW / REMOVED left unhandled; `ue_param_types.py` all ok
 - [ ] `map_weathers.py`: every map has a list; new maps/weathers named
 - [ ] `list_items.py` run; `build_commands.py` run
+- [ ] `build_hideout.py`: all units found, no warning; cost changes reviewed
 - [ ] Debug build, screenshots reviewed; Release build clean
 - [ ] Version bumped, README updated, change summary given to the user

@@ -8,7 +8,7 @@
     <RootNamespace>IRRCompanion</RootNamespace>
     <Version>1.0.0</Version>
     <Product>IRR Companion</Product>
-    <Description>AI preset editor and console command builder for Incursion Red River</Description>
+    <Description>AI preset editor, console command builder and hideout upgrade planner for Incursion Red River</Description>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Resources\app.ico</ApplicationIcon>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
@@ -30,6 +30,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\defaults.json" LogicalName="defaults.json" />
     <EmbeddedResource Include="Resources\commands.json" LogicalName="commands.json" />
+    <EmbeddedResource Include="Resources\hideout.json" LogicalName="hideout.json" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,920 @@
+{
+ "resources": [
+  "Concrete",
+  "Food",
+  "Metal",
+  "Oil"
+ ],
+ "factions": [
+  {
+   "tag": "OPFOR",
+   "abbr": "IGC",
+   "name": "Iron Guard Corps"
+  },
+  {
+   "tag": "BLUEFOR",
+   "abbr": "UICS",
+   "name": "United Intercontinental Security"
+  },
+  {
+   "tag": "GREYFOR",
+   "abbr": "VLF",
+   "name": "Vietnamese Liberation Front"
+  },
+  {
+   "tag": "FANG",
+   "abbr": "FANG",
+   "name": "FANG"
+  }
+ ],
+ "units": [
+  {
+   "name": "Structure",
+   "tag": "Mission.Hideout Unit.Structure",
+   "startLevel": 1,
+   "levels": [
+    {
+     "level": 1,
+     "description": "",
+     "conditions": [],
+     "items": [],
+     "cash": 0,
+     "resources": {}
+    },
+    {
+     "level": 2,
+     "description": "Cleans up the rocks, adds fresh concrete flooring, as well as seal the gaps in the roof and repaints the wall bricks.",
+     "conditions": [
+      {
+       "type": "unit",
+       "unit": "Repair Station",
+       "level": 1
+      },
+      {
+       "type": "unit",
+       "unit": "Gunsmith",
+       "level": 1
+      },
+      {
+       "type": "unit",
+       "unit": "Stash",
+       "level": 1
+      }
+     ],
+     "items": [
+      {
+       "tag": "Inventory.Items.Barter.Household Items.Bathroom Cleaner",
+       "name": "Bathroom Cleaner",
+       "id": "BathroomCleaner",
+       "count": 4
+      },
+      {
+       "tag": "Inventory.Items.Barter.Tools.Saw",
+       "name": "Saw",
+       "id": "Saw",
+       "count": 1
+      },
+      {
+       "tag": "Inventory.Items.Barter.Household Items.Rope",
+       "name": "Rope",
+       "id": "Rope",
+       "count": 2
+      },
+      {
+       "tag": "Inventory.Items.Barter.Tools.Fan",
+       "name": "Fan",
+       "id": "Fan",
+       "count": 4
+      },
+      {
+       "tag": "Inventory.Items.Barter.Electronics.Mining Battery",
+       "name": "Mining Battery",
+       "id": "Mining_Battery",
+       "count": 1
+      }
+     ],
+     "cash": 20000,
+     "resources": {
+      "Concrete": 3200,
+      "Metal": 1800
+     }
+    }
+   ],
+   "source": "BP_HideoutUnit_Structure"
+  },
+  {
+   "name": "Generator",
+   "tag": "Mission.Hideout Unit.Generator",
+   "startLevel": 0,
+   "levels": [
+    {
+     "level": 1,
+     "description": "Installs a large generator powered by diesel in your safehouse.",
+     "conditions": [],
+     "items": [
+      {
+       "tag": "Inventory.Items.Barter.Electronics.Generator",
+       "name": "Generator",
+       "id": "Generator",
+       "count": 1
+      },
+      {
+       "tag": "Inventory.Items.Barter.Tools.Gas Can",
+       "name": "Gas Can",
+       "id": "GasCan",
+       "count": 1
+      },
+      {
+       "tag": "Inventory.Items.Barter.Electronics.Power Cable",
+       "name": "Power Cable",
+       "id": "PowerCable",
+       "count": 1
+      }
+     ],
+     "cash": 1000,
+     "resources": {
+      "Oil": 700
+     }
+    },
+    {
+     "level": 2,
+     "description": "Replaces the diesel generator with an generator that is powered by gasoline.",
+     "conditions": [
+      {
+       "type": "unit",
+       "unit": "Structure",
+       "level": 2
+      }
+     ],
+     "items": [
+      {
+       "tag": "Inventory.Items.Barter.Electronics.Generator",
+       "name": "Generator",
+       "id": "Generator",
+       "count": 2
+      },
+      {
+       "tag": "Inventory.Items.Barter.Tools.Gas Can",
+       "name": "Gas Can",
+       "id": "GasCan",
+       "count": 2
+      },
+      {
+       "tag": "Inventory.Items.Barter.Electronics.Power Cable",
+       "name": "Power Cable",
+       "id": "PowerCable",
+       "count": 2
+      },
+      {
+       "tag": "Inventory.Items.Barter.Tools.Plastic Wire Spool",
+       "name": "Plastic Wire Spool",
+       "id": "PlasticWireSpool",
+       "count": 2
+      },
+      {
+       "tag": "Inventory.Items.Barter.Tools.Fuel",
+       "name": "Fuel",
+       "id": "Fuel",
+       "count": 2
+      }
+     ],
+     "cash": 3000,
+     "resources": {
+      "Metal": 4200,
+      "Concrete": 700
+     }
+    }
+   ],
+   "source": "BP_HideoutUnit_Generator"
+  },
+  {
+   "name": "Lighting",
+   "tag": "Mission.Hideout Unit.Lighting",
+   "startLevel": 0,
+   "levels": [
+    {
+     "level": 1,
+     "description": "Adds basic lighting to your safehouse.",
+     "conditions": [
+      {
+       "type": "unit",
+       "unit": "Generator",
+       "level": 1
+      }
+     ],
+     "items": [
+      {
+       "tag": "Inventory.Items.Barter.Electronics.Old Flashlight",
+       "name": "Old Flashlight",
+       "id": "OldFlashlight",
+       "count": 2
+      },
+      {
+       "tag": "Inventory.Items.Barter.Tools.Plastic Wire Spool",
+       "name": "Plastic Wire Spool",
+       "id": "PlasticWireSpool",
+       "count": 2
+      },
+      {
+       "tag": "Inventory.Items.Barter.Tools.Nails",
+       "name": "Nails",
+       "id": "Nails",
+       "count": 2
+      }
+     ],
+     "cash": 2000,
+     "resources": {
+      "Oil": 1400
+     }
+    },
+    {
+     "level": 2,
+     "description": "Replaces the basic lighting with more advanced fluorescent lighting.",
+     "conditions": [
+      {
+       "type": "unit",
+       "unit": "Generator",
+       "level": 2
+      }
+     ],
+     "items": [
+      {
+       "tag": "Inventory.Items.Barter.Electronics.Battery Car",
+       "name": "Battery Car",
+       "id": "Battery_Car",
+       "count": 2
+      },
+      {
+       "tag": "Inventory.Items.Barter.Tools.Plastic Wire Spool",
+       "name": "Plastic Wire Spool",
+       "id": "PlasticWireSpool",
+       "count": 2
+      },
+      {
+       "tag": "Inventory.Items.Barter.Tools.Nails",
+       "name": "Nails",
+       "id": "Nails",
+       "count": 4
+      },
+      {
+       "tag": "Inventory.Items.Barter.Electronics.Battery 18650",
+       "name": "Battery 18650",
+       "id": "Battery_18650",
+       "count": 6
+      }
+     ],
+     "cash": 4000,
+     "resources": {
+      "Concrete": 1400,
+      "Oil": 2100
+     }
+    }
+   ],
+   "source": "BP_HideoutUnit_Lighting"
+  },
+  {
+   "name": "Stash",
+   "tag": "Mission.Hideout Unit.Stash",
+   "startLevel": 0,
+   "levels": [
+    {
+     "level": 1,
+     "description": "Unlock additional med storage and increase max resources.",
+     "conditions": [],
+     "items": [
+      {
+       "tag": "Inventory.Items.Barter.Household Items.Canteen",
+       "name": "Canteen",
+       "id": "Canteen",
+       "count": 2
+      },
+      {
+       "tag": "Inventory.Items.Medical.Bandage",
+       "name": "Bandage",
+       "id": "Bandage",
+       "count": 4
+      },
+      {
+       "tag": "Inventory.Items.Medical.Painkiller",
+       "name": "Painkiller",
+       "id": "Painkiller",
+       "count": 2
+      },
+      {
+       "tag": "Inventory.Items.Medical.Revive Syringe",
+       "name": "Revive Syringe",
+       "id": "Revive_Syringe",
+       "count": 1
+      }
+     ],
+     "cash": 2000,
+     "resources": {
+      "Food": 1400,
+      "Metal": 700
+     }
+    },
+    {
+     "level": 2,
+     "description": "Unlock additional ammunition storage and increase max resources.",
+     "conditions": [
+      {
+       "type": "unit",
+       "unit": "Structure",
+       "level": 2
+      },
+      {
+       "type": "faction",
+       "faction": "VLF",
+       "level": 2
+      }
+     ],
+     "items": [
+      {
+       "tag": "Inventory.Items.Barter.Household Items.Food Container",
+       "name": "Food Container",
+       "id": "FoodContainer",
+       "count": 3
+      },
+      {
+       "tag": "Inventory.Items.Barter.Tools.Fuel",
+       "name": "Fuel",
+       "id": "Fuel",
+       "count": 2
+      },
+      {
+       "tag": "Inventory.Items.Barter.Household Items.Shaving Cream",
+       "name": "Shaving Cream",
+       "id": "ShavingCream",
+       "count": 1
+      },
+      {
+       "tag": "Inventory.Items.Barter.Household Items.Old Chemical Bottle",
+       "name": "Old Chemical Bottle",
+       "id": "OldChemicalBottle",
+       "count": 3
+      }
+     ],
+     "cash": 8000,
+     "resources": {
+      "Concrete": 2100,
+      "Food": 2800,
+      "Metal": 700,
+      "Oil": 1400
+     }
+    },
+    {
+     "level": 3,
+     "description": "Unlock additional weapon storage and increase max resources.",
+     "conditions": [
+      {
+       "type": "unit",
+       "unit": "Shooting Range",
+       "level": 2
+      }
+     ],
+     "items": [
+      {
+       "tag": "Inventory.Items.Barter.Electronics.Old Radio",
+       "name": "Old Radio",
+       "id": "OldRadio",
+       "count": 1
+      },
+      {
+       "tag": "Inventory.Items.Barter.Electronics.Old Communicator",
+       "name": "Old Communicator",
+       "id": "OldCommunicator",
+       "count": 1
+      },
+      {
+       "tag": "Inventory.Items.Weapons.Rifle.Honey Badger",
+       "name": "Honey Badger",
+       "id": "Honey_Badger",
+       "count": 1
+      },
+      {
+       "tag": "Inventory.Items.Weapons.SniperRifle.SRS A2",
+       "name": "SRS A2",
+       "id": "SRS-A2",
+       "count": 1
+      },
+      {
+       "tag": "Inventory.Items.Ammunition.Rounds.x300 Blackout.M62",
+       "name": "x300 Blackout M62",
+       "id": "x300_Blackout_M62",
+       "count": 30
+      }
+     ],
+     "cash": 40000,
+     "resources": {
+      "Concrete": 2800,
+      "Food": 5600,
+      "Metal": 2800,
+      "Oil": 2100
+     }
+    },
+    {
+     "level": 4,
+     "description": "Unlock additional gear storage and increase max resources.",
+     "conditions": [
+      {
+       "type": "faction",
+       "faction": "UICS",
+       "level": 4
+      },
+      {
+       "type": "faction",
+       "faction": "VLF",
+       "level": 4
+      },
+      {
+       "type": "faction",
+       "faction": "IGC",
+       "level": 4
+      }
+     ],
+     "items": [],
+     "cash": 0,
+     "resources": {
+      "Concrete": 10000,
+      "Food": 10000,
+      "Metal": 10000,
+      "Oil": 10000
+     }
+    }
+   ],
+   "source": "BP_InventoryStash"
+  },
+  {
+   "name": "Repair Station",
+   "tag": "Mission.Hideout Unit.Repair Station",
+   "startLevel": 0,
+   "levels": [
+    {
+     "level": 1,
+     "description": "Enables repairing of gear items with materials.",
+     "conditions": [
+      {
+       "type": "unit",
+       "unit": "Generator",
+       "level": 1
+      }
+     ],
+     "items": [
+      {
+       "tag": "Inventory.Items.Barter.Tools.Toolbox",
+       "name": "Toolbox",
+       "id": "Toolbox",
+       "count": 1
+      }
+     ],
+     "cash": 4000,
+     "resources": {
+      "Concrete": 700,
+      "Metal": 700
+     }
+    },
+    {
+     "level": 2,
+     "description": "Unlocks additionally the repair option with cash.",
+     "conditions": [
+      {
+       "type": "unit",
+       "unit": "Stash",
+       "level": 2
+      },
+      {
+       "type": "unit",
+       "unit": "Lighting",
+       "level": 2
+      },
+      {
+       "type": "faction",
+       "faction": "IGC",
+       "level": 3
+      }
+     ],
+     "items": [
+      {
+       "tag": "Inventory.Items.Barter.Household Items.Polishing Oil",
+       "name": "Polishing Oil",
+       "id": "PolishingOil",
+       "count": 3
+      },
+      {
+       "tag": "Inventory.Items.Barter.Tools.Duct Tape",
+       "name": "Duct Tape",
+       "id": "Duct_Tape",
+       "count": 4
+      },
+      {
+       "tag": "Inventory.Items.Barter.Tools.Bolt Cutter",
+       "name": "Bolt Cutter",
+       "id": "BoltCutter",
+       "count": 1
+      },
+      {
+       "tag": "Inventory.Items.Gear.Unarmored Rig.D3CRM Unarmored Rig",
+       "name": "D3CRM Unarmored Rig",
+       "id": "D3CRM_Unarmored_Rig",
+       "count": 1
+      },
+      {
+       "tag": "Inventory.Items.Gear.Unarmored Rig.Vest Virtus Unarmored Rig",
+       "name": "Vest Virtus Unarmored Rig",
+       "id": "Vest_Virtus_Unarmored_Rig",
+       "count": 1
+      }
+     ],
+     "cash": 15000,
+     "resources": {
+      "Oil": 4100,
+      "Food": 700,
+      "Metal": 1400
+     }
+    }
+   ],
+   "source": "BP_HideoutUnit_RepairStation"
+  },
+  {
+   "name": "Gunsmith",
+   "tag": "Mission.Hideout Unit.Gunsmith",
+   "startLevel": 0,
+   "levels": [
+    {
+     "level": 1,
+     "description": "Unlocks the gunsmith to customize and assemble all guns.",
+     "conditions": [
+      {
+       "type": "faction",
+       "faction": "IGC",
+       "level": 1
+      }
+     ],
+     "items": [
+      {
+       "tag": "Inventory.Items.Barter.Tools.Toolbox",
+       "name": "Toolbox",
+       "id": "Toolbox",
+       "count": 1
+      },
+      {
+       "tag": "Inventory.Items.Barter.Household Items.Spraycan",
+       "name": "Spraycan",
+       "id": "SprayCan",
+       "count": 1
+      },
+      {
+       "tag": "Inventory.Items.Barter.Tools.Duct Tape",
+       "name": "Duct Tape",
+       "id": "Duct_Tape",
+       "count": 1
+      }
+     ],
+     "cash": 5000,
+     "resources": {
+      "Metal": 2100
+     }
+    },
+    {
+     "level": 2,
+     "description": "Unlocks material repairs for guns & attachments.",
+     "conditions": [
+      {
+       "type": "unit",
+       "unit": "Repair Station",
+       "level": 2
+      },
+      {
+       "type": "faction",
+       "faction": "UICS",
+       "level": 3
+      }
+     ],
+     "items": [
+      {
+       "tag": "Inventory.Items.Barter.Tools.Hammer",
+       "name": "Hammer",
+       "id": "Hammer",
+       "count": 1
+      },
+      {
+       "tag": "Inventory.Items.Barter.Household Items.Spraycan",
+       "name": "Spraycan",
+       "id": "SprayCan",
+       "count": 2
+      },
+      {
+       "tag": "Inventory.Items.Barter.Tools.Duct Tape",
+       "name": "Duct Tape",
+       "id": "Duct_Tape",
+       "count": 8
+      },
+      {
+       "tag": "Inventory.Items.Barter.Household Items.Paintbrush",
+       "name": "Paintbrush",
+       "id": "Paintbrush",
+       "count": 2
+      },
+      {
+       "tag": "Inventory.Items.Barter.Electronics.Battery PP3",
+       "name": "Battery PP3",
+       "id": "Battery_PP3",
+       "count": 2
+      }
+     ],
+     "cash": 15000,
+     "resources": {
+      "Concrete": 700,
+      "Food": 700,
+      "Metal": 4100,
+      "Oil": 3600
+     }
+    },
+    {
+     "level": 3,
+     "description": "Unlocks cash repair for guns & attachments.",
+     "conditions": [
+      {
+       "type": "unit",
+       "unit": "Repair Station",
+       "level": 2
+      }
+     ],
+     "items": [
+      {
+       "tag": "Inventory.Items.Barter.Tools.Hammer",
+       "name": "Hammer",
+       "id": "Hammer",
+       "count": 1
+      },
+      {
+       "tag": "Inventory.Items.Barter.Tools.Toolbox",
+       "name": "Toolbox",
+       "id": "Toolbox",
+       "count": 2
+      },
+      {
+       "tag": "Inventory.Items.Barter.Tools.Duct Tape",
+       "name": "Duct Tape",
+       "id": "Duct_Tape",
+       "count": 8
+      },
+      {
+       "tag": "Inventory.Items.Weapons.SniperRifle.Remington M700",
+       "name": "Remington M700",
+       "id": "Remington_M700",
+       "count": 1
+      },
+      {
+       "tag": "Inventory.Items.Barter.Electronics.Battery Car",
+       "name": "Battery Car",
+       "id": "Battery_Car",
+       "count": 2
+      }
+     ],
+     "cash": 30000,
+     "resources": {
+      "Concrete": 1500,
+      "Food": 1500,
+      "Metal": 6000,
+      "Oil": 6000
+     }
+    }
+   ],
+   "source": "BP_Gunsmith"
+  },
+  {
+   "name": "Terminal",
+   "tag": "Mission.Hideout Unit.Terminal",
+   "startLevel": 0,
+   "levels": [
+    {
+     "level": 1,
+     "description": "Allows to select the exact infill point.",
+     "conditions": [
+      {
+       "type": "unit",
+       "unit": "Generator",
+       "level": 1
+      },
+      {
+       "type": "faction",
+       "faction": "VLF",
+       "level": 2
+      }
+     ],
+     "items": [
+      {
+       "tag": "Inventory.Items.Barter.Electronics.Hard Drive",
+       "name": "Hard Drive",
+       "id": "Hard_Drive",
+       "count": 1
+      },
+      {
+       "tag": "Inventory.Items.Barter.Tools.Fuel",
+       "name": "Fuel",
+       "id": "Fuel",
+       "count": 1
+      },
+      {
+       "tag": "Inventory.Items.Barter.Collectibles.Earth Globe",
+       "name": "Earth Globe",
+       "id": "Earth_Globe",
+       "count": 1
+      },
+      {
+       "tag": "Inventory.Items.Barter.Collectibles.Compass",
+       "name": "Compass",
+       "id": "Compass",
+       "count": 1
+      },
+      {
+       "tag": "Inventory.Items.Barter.Electronics.Old Radio",
+       "name": "Old Radio",
+       "id": "OldRadio",
+       "count": 1
+      }
+     ],
+     "cash": 6000,
+     "resources": {
+      "Food": 1400,
+      "Oil": 700
+     }
+    }
+   ],
+   "source": "BP_PC_Interact"
+  },
+  {
+   "name": "Intel Center",
+   "tag": "Mission.Hideout Unit.Intel Center",
+   "startLevel": 0,
+   "levels": [
+    {
+     "level": 1,
+     "description": "Adds the first antenna piece. More to come!",
+     "conditions": [],
+     "items": [
+      {
+       "tag": "Inventory.Items.Quest.Antenna Piece 1",
+       "name": "Antenna Piece 1",
+       "id": "Antenna_Piece_1",
+       "count": 1
+      },
+      {
+       "tag": "Inventory.Items.Barter.Electronics.Power Cable",
+       "name": "Power Cable",
+       "id": "PowerCable",
+       "count": 1
+      }
+     ],
+     "cash": 0,
+     "resources": {
+      "Concrete": 700
+     }
+    },
+    {
+     "level": 2,
+     "description": "Adds the second antenna piece. We are close to get a signal!",
+     "conditions": [
+      {
+       "type": "unit",
+       "unit": "Terminal",
+       "level": 1
+      }
+     ],
+     "items": [
+      {
+       "tag": "Inventory.Items.Quest.Antenna Piece 2",
+       "name": "Antenna Piece 2",
+       "id": "Antenna_Piece_2",
+       "count": 1
+      },
+      {
+       "tag": "Inventory.Items.Barter.Electronics.Hard Drive",
+       "name": "Hard Drive",
+       "id": "Hard_Drive",
+       "count": 1
+      },
+      {
+       "tag": "Inventory.Items.Barter.Electronics.Military Laptop",
+       "name": "Military Laptop",
+       "id": "Military_Laptop",
+       "count": 1
+      },
+      {
+       "tag": "Inventory.Items.Barter.Collectibles.Film Case",
+       "name": "Film Case",
+       "id": "FilmCase",
+       "count": 2
+      }
+     ],
+     "cash": 0,
+     "resources": {
+      "Concrete": 3200,
+      "Metal": 1800,
+      "Oil": 1400
+     }
+    },
+    {
+     "level": 3,
+     "description": "Builds a satelliate antenna that provides additional information from each faction at your deploy screen.",
+     "conditions": [
+      {
+       "type": "unit",
+       "unit": "Generator",
+       "level": 2
+      },
+      {
+       "type": "player",
+       "level": 20
+      },
+      {
+       "type": "faction",
+       "faction": "IGC",
+       "level": 2
+      }
+     ],
+     "items": [
+      {
+       "tag": "Inventory.Items.Barter.Electronics.Motherboard",
+       "name": "Motherboard",
+       "id": "Motherboard",
+       "count": 1
+      },
+      {
+       "tag": "Inventory.Items.Barter.Electronics.Hard Drive",
+       "name": "Hard Drive",
+       "id": "Hard_Drive",
+       "count": 3
+      },
+      {
+       "tag": "Inventory.Items.Barter.Electronics.Power Cable",
+       "name": "Power Cable",
+       "id": "PowerCable",
+       "count": 1
+      },
+      {
+       "tag": "Inventory.Items.Barter.Electronics.DLSR Camera",
+       "name": "DLSR Camera",
+       "id": "DLSR_Camera",
+       "count": 1
+      },
+      {
+       "tag": "Inventory.Items.Barter.Electronics.Military Laptop",
+       "name": "Military Laptop",
+       "id": "Military_Laptop",
+       "count": 1
+      },
+      {
+       "tag": "Inventory.Items.Quest.Antenna Piece 3",
+       "name": "Antenna Piece 3",
+       "id": "Antenna_Piece_3",
+       "count": 1
+      }
+     ],
+     "cash": 5000,
+     "resources": {
+      "Concrete": 4800,
+      "Metal": 2700,
+      "Oil": 2100
+     }
+    }
+   ],
+   "source": "BP_HideoutUnit_IntelCenter"
+  },
+  {
+   "name": "Shooting Range",
+   "tag": "Mission.Hideout Unit.Shooting Range",
+   "startLevel": 1,
+   "levels": [
+    {
+     "level": 1,
+     "description": "",
+     "conditions": [],
+     "items": [],
+     "cash": 0,
+     "resources": {}
+    },
+    {
+     "level": 2,
+     "description": "Adds more targets that are lit to help visibility during night times.",
+     "conditions": [
+      {
+       "type": "unit",
+       "unit": "Gunsmith",
+       "level": 2
+      }
+     ],
+     "items": [],
+     "cash": 0,
+     "resources": {
+      "Concrete": 5600,
+      "Metal": 4900,
+      "Oil": 400
+     }
+    }
+   ],
+   "source": "BP_HideoutUnit_Master_ShootingRange"
+  }
+ ]
+}
