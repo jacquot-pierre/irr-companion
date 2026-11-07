@@ -63,6 +63,9 @@ The interface was only checked on screenshots; nothing was clicked yet.
 
 ## Ideas
 
+- [ ] More icons: item picker of the COMMANDS tab, favorites (add item names to `EXTRA_ITEMS` in
+      `tools/build_icons.py`, a few at a time). The Honey Badger has no icon in the game files.
+
 - [ ] Support `IRR2-` share codes (seen in the game's text, format unknown - probably compressed).
 - [ ] List of mission names and operation ids for `irr.Mission.Start` / `irr.Operations.Start`.
 - [ ] Show an item's display name and icon next to its internal name.

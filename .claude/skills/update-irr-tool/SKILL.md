@@ -17,6 +17,7 @@ The tool embeds data read from the game. After a game patch, each of these can c
 | Weathers of each map (order = number of `irr.World.SetWeather`) | pak: `Blueprints/MissionSystem/DataAssets/Maps/MD_*` | `tools/map_weathers.json` | `tools/map_weathers.py` |
 | Item names (Spawn / Give) | pak: `.../Items/**/ID_*.uasset` | `tools/item_paths.txt` | `tools/list_items.py` |
 | Hideout upgrade costs and requirements | pak: `Blueprints/MissionSystem/Actors/Hideout/**` | `src/Resources/hideout.json` | `tools/build_hideout.py` |
+| Item / material icons (hideout) | pak: `Items/**/T_*_Icon` (mostly pakchunk6), `ResourceSystem/Textures` | `src/Resources/icons/*.png` | `tools/build_icons.py` |
 
 Work through the steps in order and keep a list of everything that changed: it becomes the release notes.
 Never write into the game folder. Extract into a work folder outside the repository (e.g. `%TEMP%\irr_update`).
@@ -174,6 +175,18 @@ It reads the `BP_IRRHideoutUnitComponent` defaults of every blueprint in `Actors
   look at the bytes at the reported offset and update the reader instead of skipping the check.
 - New faction tag in a requirement: add it to `FACTIONS` (abbreviation used in game, full name).
 
+Then refresh the icons (it lists the paks, extracts only the needed textures, ~10 s):
+
+```
+python -I tools/build_icons.py "<paks>"
+```
+
+It writes one 64 px PNG per hideout item (`item_<name>.png`), cash and material (`res_<name>.png`) and
+removes icons no longer used. `WARNING: no *_Icon texture` is expected for items the game has no icon for
+(Honey Badger today): the app shows a "?" slot. `pixel format … not handled`: add the format to
+`read_texture` / `decode`. Look at a few new icons before committing. Icons are added little by little:
+to ship more, add item names to `EXTRA_ITEMS`.
+
 ## 8. Regenerate and build
 
 ```
@@ -223,5 +236,6 @@ copy a code and import it in game, copy a console command and run it in game).
 - [ ] `map_weathers.py`: every map has a list; new maps/weathers named
 - [ ] `list_items.py` run; `build_commands.py` run
 - [ ] `build_hideout.py`: all units found, no warning; cost changes reviewed
+- [ ] `build_icons.py` run; new icons look right
 - [ ] Debug build, screenshots reviewed; Release build clean
 - [ ] Version bumped, README updated, change summary given to the user

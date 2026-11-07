@@ -67,7 +67,7 @@ reorder them, and copy them in one click. They are stored in `%APPDATA%\IRR Comp
 The **HIDEOUT** tab shows what every level of the 9 hideout units costs - Structure, Generator, Lighting,
 Stash, Repair Station, Gunsmith, Terminal, Intel Center, Shooting Range:
 
-- **Items** with their quantity, **cash** and **materials** (Concrete, Food, Metal, Oil).
+- **Items** with their game icon and quantity, **cash** and **materials** (Concrete, Food, Metal, Oil).
 - **Requirements**: level of another unit (click it to open that unit), faction loyalty (IGC, UICS, VLF,
   FANG) and player level.
 - **Your progress**: set the level of each unit, your player level and your loyalty with each faction. The
@@ -137,6 +137,7 @@ release - is the Claude Code skill [`.claude/skills/update-irr-tool/SKILL.md`](.
 | `list_items.py` | `tools/item_paths.txt`: the item definitions |
 | `build_commands.py` | `src/Resources/commands.json`: commands, weathers and items |
 | `build_hideout.py` | `src/Resources/hideout.json`: costs and requirements of every hideout unit level |
+| `build_icons.py` | `src/Resources/icons/`: icons of the hideout items, cash and materials (+ `EXTRA_ITEMS`) |
 | `irr_sharecode.py` | decode / encode share codes from the command line |
 
 Game files are extracted from the paks with [repak](https://github.com/trumank/repak), for example
@@ -172,4 +173,6 @@ Known gaps and things still to check in game are listed in [TODO.md](TODO.md).
 
 IRR Companion is a fan-made tool, not affiliated with or endorsed by the developers of Incursion Red River.
 The default values, descriptions and names in `src/Resources/` come from the game and belong to their owners.
+The item and material icons in `src/Resources/icons/` are artwork from the game, © its developers; they are
+included only so players recognise the items, and will be removed on request.
 The source code is under the MIT license (see [LICENSE](LICENSE)).

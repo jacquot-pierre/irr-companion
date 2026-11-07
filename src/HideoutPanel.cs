@@ -30,6 +30,19 @@ namespace IRRCompanion
             if (tooltip != null) { tip.SetToolTip(_name, tooltip); tip.SetToolTip(_detail, tooltip); }
         }
 
+        private Image _icon;
+        private bool _iconSlot;
+
+        /// <summary>Shows a game icon before the name (null keeps an empty slot so names stay aligned).</summary>
+        public void SetIcon(Image icon)
+        {
+            _icon = icon;
+            _iconSlot = true;
+            Height = Theme.S(48);
+            PerformLayout();
+            Invalidate();
+        }
+
         /// <summary>Makes the name clickable (link to another unit).</summary>
         public void MakeLink(Action click)
         {
@@ -42,7 +55,22 @@ namespace IRRCompanion
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            if (_marker.HasValue)
+            if (_iconSlot)
+            {
+                // inventory-like slot, so dark icons stay visible
+                int s = Height - Theme.S(6);
+                var slot = new Rectangle(Theme.S(12), (Height - s) / 2, s, s);
+                using (var b = new SolidBrush(Color.FromArgb(62, 58, 53))) e.Graphics.FillRectangle(b, slot);
+                using (var p = new Pen(Theme.Track)) e.Graphics.DrawRectangle(p, slot.X, slot.Y, slot.Width - 1, slot.Height - 1);
+                if (_icon != null)
+                {
+                    e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                    e.Graphics.DrawImage(_icon, Rectangle.Inflate(slot, -Theme.S(2), -Theme.S(2)));
+                }
+                else
+                    TextRenderer.DrawText(e.Graphics, "?", Theme.Bold, slot, Theme.TextFaint, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+            }
+            else if (_marker.HasValue)
                 using (var b = new SolidBrush(_marker.Value))
                     e.Graphics.FillRectangle(b, Theme.S(14), Height / 2 - Theme.S(5), Theme.S(10), Theme.S(10));
         }
@@ -51,11 +79,12 @@ namespace IRRCompanion
         {
             base.OnLayout(e);
             if (_name == null || _detail == null || _value == null) return;
-            int pad = Theme.S(14), x = pad + (_marker.HasValue ? Theme.S(18) : 0), right = Width - pad;
+            int pad = Theme.S(14), right = Width - pad;
+            int x = _iconSlot ? Theme.S(12) + Height - Theme.S(6) + Theme.S(10) : pad + (_marker.HasValue ? Theme.S(18) : 0);
             if (_btn != null)
             {
-                int bw = Theme.S(64);
-                _btn.SetBounds(right - bw, Theme.S(2), bw, Height - Theme.S(4));
+                int bw = Theme.S(64), bh = Math.Min(Height - Theme.S(4), Theme.S(26));
+                _btn.SetBounds(right - bw, (Height - bh) / 2, bw, bh);
                 right -= bw + Theme.S(10);
             }
             int vw = Math.Max(Theme.S(60), TextRenderer.MeasureText(_value.Text, _value.Font).Width + Theme.S(6));
@@ -433,19 +462,25 @@ namespace IRRCompanion
             {
                 card.Add(Caption("ITEMS"));
                 foreach (var it in lv.Items)
-                    card.Add(new InfoRow(it.Name, null, "× " + it.Count, Theme.Text, null, GiveButton(HideoutData.GiveItem(it, it.Count)), _tip, it.Tag));
+                    card.Add(WithIcon(new InfoRow(it.Name, null, "× " + it.Count, Theme.Text, null, GiveButton(HideoutData.GiveItem(it, it.Count)), _tip, it.Tag), Icons.Item(it.Id)));
             }
             card.Add(Caption("MONEY AND MATERIALS"));
             if (lv.Cash > 0)
-                card.Add(new InfoRow("Cash", null, Fmt(lv.Cash), Theme.Changed, Theme.Changed, GiveButton(HideoutData.GiveCash(lv.Cash)), _tip, null));
+                card.Add(WithIcon(new InfoRow("Cash", null, Fmt(lv.Cash), Theme.Changed, Theme.Changed, GiveButton(HideoutData.GiveCash(lv.Cash)), _tip, null), Icons.Item("Cash")));
             foreach (var r in HideoutData.Resources)
             {
                 int v;
                 if (!lv.Resources.TryGetValue(r, out v)) continue;
-                card.Add(new InfoRow(r, null, Fmt(v), Theme.Text, ResourceColors[r], GiveButton(HideoutData.GiveResource(r, v)), _tip, null));
+                card.Add(WithIcon(new InfoRow(r, null, Fmt(v), Theme.Text, ResourceColors[r], GiveButton(HideoutData.GiveResource(r, v)), _tip, null), Icons.Material(r, ResourceColors[r])));
             }
             card.Done();
             return card;
+        }
+
+        private static InfoRow WithIcon(InfoRow row, Image icon)
+        {
+            row.SetIcon(icon);
+            return row;
         }
 
         private static string Fmt(int v) { return v.ToString("#,0", CultureInfo.InvariantCulture).Replace(",", " "); }
@@ -470,12 +505,12 @@ namespace IRRCompanion
 
             var money = new Card();
             money.Add(Caption("MONEY AND MATERIALS"));
-            money.Add(new InfoRow("Cash", null, Fmt(t.Cash), Theme.Changed, Theme.Changed, t.Cash > 0 ? GiveButton(HideoutData.GiveCash(t.Cash)) : null, _tip, null));
+            money.Add(WithIcon(new InfoRow("Cash", null, Fmt(t.Cash), Theme.Changed, Theme.Changed, t.Cash > 0 ? GiveButton(HideoutData.GiveCash(t.Cash)) : null, _tip, null), Icons.Item("Cash")));
             foreach (var r in HideoutData.Resources)
             {
                 int v;
                 t.Resources.TryGetValue(r, out v);
-                money.Add(new InfoRow(r, null, Fmt(v), Theme.Text, ResourceColors[r], v > 0 ? GiveButton(HideoutData.GiveResource(r, v)) : null, _tip, null));
+                money.Add(WithIcon(new InfoRow(r, null, Fmt(v), Theme.Text, ResourceColors[r], v > 0 ? GiveButton(HideoutData.GiveResource(r, v)) : null, _tip, null), Icons.Material(r, ResourceColors[r])));
             }
             money.Done();
             items.Add(money);
@@ -484,8 +519,8 @@ namespace IRRCompanion
             var list = new Card();
             list.Add(Caption("ITEMS (" + t.Items.Count + ")"));
             foreach (var line in t.Items)
-                list.Add(new InfoRow(line.Item.Name, "for " + string.Join(", ", line.For), "× " + line.Count, Theme.Text, null,
-                    GiveButton(HideoutData.GiveItem(line.Item, line.Count)), _tip, line.Item.Tag + "\nfor " + string.Join(", ", line.For)));
+                list.Add(WithIcon(new InfoRow(line.Item.Name, "for " + string.Join(", ", line.For), "× " + line.Count, Theme.Text, null,
+                    GiveButton(HideoutData.GiveItem(line.Item, line.Count)), _tip, line.Item.Tag + "\nfor " + string.Join(", ", line.For)), Icons.Item(line.Item.Id)));
             list.Done();
             items.Add(list);
         }
