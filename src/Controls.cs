@@ -252,6 +252,56 @@ namespace IRRCompanion
         }
     }
 
+    /// <summary>Clickable section title that shows / hides a group ("▶ ADVANCED ————  hint").</summary>
+    public sealed class ToggleHeader : Control
+    {
+        private bool _expanded, _hot;
+        public string Hint;
+        public event EventHandler Toggled;
+
+        public ToggleHeader(string text, string hint)
+        {
+            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer |
+                     ControlStyles.UserPaint | ControlStyles.ResizeRedraw, true);
+            Text = text.ToUpperInvariant();
+            Hint = hint;
+            Font = Theme.Header;
+            BackColor = Theme.Back;
+            Height = Theme.S(56);
+            Dock = DockStyle.Top;
+            Cursor = Cursors.Hand;
+        }
+
+        public bool Expanded
+        {
+            get { return _expanded; }
+            set { if (_expanded == value) return; _expanded = value; Invalidate(); if (Toggled != null) Toggled(this, EventArgs.Empty); }
+        }
+
+        protected override void OnClick(EventArgs e) { base.OnClick(e); Expanded = !Expanded; }
+        protected override void OnMouseEnter(EventArgs e) { base.OnMouseEnter(e); _hot = true; Invalidate(); }
+        protected override void OnMouseLeave(EventArgs e) { base.OnMouseLeave(e); _hot = false; Invalidate(); }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            var g = e.Graphics;
+            g.Clear(BackColor);
+            var r = new Rectangle(0, Theme.S(12), Width - 1, Height - Theme.S(16));
+            using (var b = new SolidBrush(_hot ? Theme.Row : Theme.Panel)) g.FillRectangle(b, r);
+            using (var p = new Pen(_expanded ? Theme.Accent : Theme.Border)) g.DrawRectangle(p, r);
+            string title = (_expanded ? "▼  " : "▶  ") + Text;
+            var sz = TextRenderer.MeasureText(g, title, Font);
+            int y = r.Y + (r.Height - sz.Height) / 2;
+            TextRenderer.DrawText(g, title, Font, new Point(r.X + Theme.S(12), y), Theme.Accent, TextFormatFlags.NoPrefix);
+            if (!string.IsNullOrEmpty(Hint))
+            {
+                var hr = new Rectangle(r.X + Theme.S(24) + sz.Width, r.Y, r.Width - sz.Width - Theme.S(36), r.Height);
+                TextRenderer.DrawText(g, Hint, Theme.Small, hr, Theme.TextDim,
+                    TextFormatFlags.VerticalCenter | TextFormatFlags.Right | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPrefix);
+            }
+        }
+    }
+
     /// <summary>Owner-drawn dark combo box.</summary>
     public sealed class DarkCombo : ComboBox
     {

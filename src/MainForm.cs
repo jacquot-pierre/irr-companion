@@ -71,7 +71,8 @@ namespace IRRCompanion
         private ChoiceRow _simRow, _diffRow;
         private readonly List<ParamRow> _rows = new List<ParamRow>();
         private DataGridView _grid;
-        private CheckBox _onlyDiff;
+        private CheckBox _onlyDiff, _cmpAdvanced;
+        private ToggleHeader _advHeader;
         private Label _cmpSummary;
 
         public MainForm()
@@ -291,7 +292,24 @@ namespace IRRCompanion
                 _tip, GameData.AiOrder.Select(x => GameData.AiLabels[x].ToUpperInvariant()).Concat(new[] { "CUSTOM" }).ToArray());
             _diffRow.Choice.OptionClicked += (s, e) => ApplyDifficulty(_diffRow.Choice.ClickedIndex);
             items.Add(_diffRow);
-            AddRows(items, GameData.Params.Where(p => !p.IsSimulation));
+            AddRows(items, GameData.Params.Where(p => !p.IsSimulation && !p.Advanced));
+
+            // ADVANCED: settings of the AI document that the game menu does not show, hidden by default.
+            _advHeader = new ToggleHeader("Advanced", "Settings the game menu does not show · " +
+                GameData.Params.Count(p => p.Advanced) + " settings · change them only if you know what they do");
+            items.Add(_advHeader);
+            // One container for the whole group: showing / hiding many docked controls one by one breaks their order.
+            var advItems = new List<Control>();
+            AddRows(advItems, GameData.Params.Where(p => p.Advanced));
+            var adv = new Panel { Dock = DockStyle.Top, BackColor = Theme.Back, Visible = false, Height = advItems.Sum(c => c.Height) };
+            for (int i = advItems.Count - 1; i >= 0; i--) adv.Controls.Add(advItems[i]);
+            items.Add(adv);
+            _advHeader.Toggled += (s, e) =>
+            {
+                adv.Visible = _advHeader.Expanded;
+                if (_advHeader.Expanded) _rowsPanel.ScrollControlIntoView(_advHeader);
+                _cmpAdvanced.Checked = _advHeader.Expanded;
+            };
 
             // Dock=Top stacks the last added control on top: add in reverse order.
             for (int i = items.Count - 1; i >= 0; i--) _rowsPanel.Controls.Add(items[i]);
@@ -336,21 +354,24 @@ namespace IRRCompanion
             var bar = new FlowLayoutPanel { Dock = DockStyle.Top, Height = Theme.S(46), BackColor = Theme.Back, WrapContents = false };
             var la = Theme.Lbl("A", Theme.Header, Theme.ColorA);
             la.Margin = new Padding(0, Theme.S(8), Theme.S(6), 0);
-            _cmpA = new DarkCombo { Width = Theme.S(250), Margin = new Padding(0, Theme.S(8), Theme.S(8), 0) };
+            _cmpA = new DarkCombo { Width = Theme.S(220), Margin = new Padding(0, Theme.S(8), Theme.S(8), 0) };
             var swap = Theme.Btn("⇄", (s, e) => { var a = _cmpA.SelectedItem; _cmpA.SelectedItem = _cmpB.SelectedItem; _cmpB.SelectedItem = a; });
             swap.Width = Theme.S(44);
             swap.Margin = new Padding(0, Theme.S(4), Theme.S(8), 0);
             _tip.SetToolTip(swap, "Swap A and B");
             var lb = Theme.Lbl("B", Theme.Header, Theme.ColorB);
             lb.Margin = new Padding(0, Theme.S(8), Theme.S(6), 0);
-            _cmpB = new DarkCombo { Width = Theme.S(250), Margin = new Padding(0, Theme.S(8), Theme.S(16), 0) };
+            _cmpB = new DarkCombo { Width = Theme.S(220), Margin = new Padding(0, Theme.S(8), Theme.S(16), 0) };
             _onlyDiff = new CheckBox { Text = "Only differences", ForeColor = Theme.Text, AutoSize = true, Margin = new Padding(0, Theme.S(11), Theme.S(16), 0) };
+            _cmpAdvanced = new CheckBox { Text = "Advanced", ForeColor = Theme.Text, AutoSize = true, Margin = new Padding(0, Theme.S(11), Theme.S(16), 0) };
+            _tip.SetToolTip(_cmpAdvanced, "Also compare the advanced settings (not in the game menu).");
             _cmpSummary = Theme.Lbl("", Theme.Bold, Theme.Accent);
             _cmpSummary.Margin = new Padding(0, Theme.S(11), 0, 0);
             _cmpA.SelectedIndexChanged += (s, e) => RefreshCompare();
             _cmpB.SelectedIndexChanged += (s, e) => RefreshCompare();
             _onlyDiff.CheckedChanged += (s, e) => RefreshCompare();
-            bar.Controls.AddRange(new Control[] { la, _cmpA, swap, lb, _cmpB, _onlyDiff, _cmpSummary });
+            _cmpAdvanced.CheckedChanged += (s, e) => RefreshCompare();
+            bar.Controls.AddRange(new Control[] { la, _cmpA, swap, lb, _cmpB, _onlyDiff, _cmpAdvanced, _cmpSummary });
 
             var legend = Theme.Lbl("Bar: recommended range of the setting, ● = A, ◆ = B.   Change column: B compared to A (▲ higher, ▼ lower).",
                 Theme.Small, Theme.TextDim);
@@ -838,6 +859,13 @@ namespace IRRCompanion
             shot("edit");
             _rowsPanel.AutoScrollPosition = new Point(0, Theme.S(1300));
             shot("edit_scrolled");
+            _rowsPanel.AutoScrollPosition = new Point(0, 99999);
+            shot("edit_advanced_closed");
+            _advHeader.Expanded = true;
+            Application.DoEvents();
+            _rowsPanel.AutoScrollPosition = new Point(0, -_rowsPanel.AutoScrollPosition.Y + _advHeader.Top - Theme.S(8));
+            shot("edit_advanced");
+            _advHeader.Expanded = false;
             SelectPreset(_presets[0]);
             shot("builtin");
             _cmpA.SelectedItem = _presets[1];
@@ -846,6 +874,11 @@ namespace IRRCompanion
             shot("compare");
             _onlyDiff.Checked = true;
             shot("compare_diff");
+            _cmpA.SelectedItem = _presets[2];
+            _cmpB.SelectedItem = _presets[3];
+            _cmpAdvanced.Checked = true;
+            shot("compare_advanced");
+            _cmpAdvanced.Checked = false;
             _cmpA.SelectedItem = _presets[0];
             _cmpB.SelectedItem = _presets[3];
             _onlyDiff.Checked = false;
@@ -910,7 +943,7 @@ namespace IRRCompanion
             var rows = new List<CmpRow>();
             // simulation level as first line
             rows.Add(new CmpRow { Section = "Simulation", A = a.SimLevel ?? "Custom", B = b.SimLevel ?? "Custom" });
-            foreach (var p in GameData.Params)
+            foreach (var p in GameData.Params.Where(x => !x.Advanced || _cmpAdvanced.Checked))
                 rows.Add(new CmpRow { P = p, Section = p.IsSimulation ? "AI Optimization Ranges" : p.Section, A = a.Get(p), B = b.Get(p) });
 
             foreach (var r in rows)
@@ -970,7 +1003,10 @@ namespace IRRCompanion
                     row.Cells[0].Style.SelectionForeColor = Theme.TextDim;
                 }
             }
-            _cmpSummary.Text = diffs == 0 ? "Identical" : diffs + " of " + total + " settings differ";
+            _cmpSummary.Text = diffs == 0 ? "Identical" : diffs + " of " + total + " differ";
+            // differences hidden in the advanced settings: shown on the checkbox
+            int adv = _cmpAdvanced.Checked ? 0 : GameData.Params.Count(p => p.Advanced && !GameData.ValuesEqual(a.Get(p), b.Get(p)));
+            _cmpAdvanced.Text = adv > 0 ? "Advanced (+" + adv + ")" : "Advanced";
             _grid.ClearSelection();
         }
 

@@ -587,7 +587,7 @@ namespace IRRCompanion
         {
             if (e.Index < 0) return;
             var name = (string)_cats.Items[e.Index];
-            bool sel = e.Index == _cats.SelectedIndex && _search.Text.Length == 0;
+            bool sel = (e.State & DrawItemState.Selected) != 0 && _search.Text.Length == 0;
             var g = e.Graphics;
             using (var b = new SolidBrush(sel ? Theme.AccentDark : Theme.Panel)) g.FillRectangle(b, e.Bounds);
             if (sel) using (var b = new SolidBrush(Theme.Accent)) g.FillRectangle(b, e.Bounds.X, e.Bounds.Y + Theme.S(5), Theme.S(3), e.Bounds.Height - Theme.S(10));

@@ -68,6 +68,13 @@ schema versions). Check:
 - **Assertion "no longer in the game schema"**: remove the key from `NAMES` / `SECTIONS`.
 - **WARNING "no longer shown in the game menu"**: confirm with the user's screenshots before removing it.
   (`DamageMap.*` is shown in game although not flagged, it is excluded from that warning.)
+- **ADVANCED** (settings of the AI document that the game menu does not show, section hidden by default in
+  the editor): `ADVANCED` in `tools/build_defaults.py` lists them with a name, a description and a slider
+  range. **Assertion "params of ADVANCED no longer in the game schema / document"**: remove the key.
+  **WARNING "shown nowhere in the tool, add them to ADVANCED"**: a new key in the document; add it to
+  `ADVANCED` (game name / description from `Loc/en` if it has one, otherwise write them from the key and the
+  difficulty values; they are flagged as unofficial in the tooltip). A key that moves into the game menu
+  goes from `ADVANCED` to `NAMES` / `SECTIONS`.
 - `aiOrder` / `simOrder` changed (new difficulty or simulation level): update `AI_LABELS` (in-game names:
   Easy=Recruit, Normal=Regular, Hard=Veteran, Extreme=Elite) and check `src/MainForm.cs`, which builds the
   DIFFICULTY / SIMULATION segmented rows from these lists.
@@ -223,15 +230,17 @@ python -I tools/check_roundtrip.py
 src\bin\Debug\net462\IRRCompanion.exe --screenshot <work>\shot
 ```
 
-`--screenshot` (Debug build only) writes PNGs of every view: `_edit`, `_edit_scrolled`, `_builtin`,
-`_compare`, `_compare_diff`, `_compare_difficulties`, `_commands_weather`, `_commands_item`,
+`--screenshot` (Debug build only) writes PNGs of every view: `_edit`, `_edit_scrolled`,
+`_edit_advanced_closed`, `_edit_advanced`, `_builtin`, `_compare`, `_compare_diff`, `_compare_advanced`, `_compare_difficulties`, `_commands_weather`, `_commands_item`,
 `_commands_player`, `_commands_cvar`, `_commands_favorites`, `_hideout_unit`, `_hideout_stash`,
 `_hideout_shopping`, `_hideout_shopping_all`, `_maps_quarry`, `_maps_delta_hover`, `_maps_bunker`, `_maps_safe_hover` (and `.error.txt` if it crashed). Look at each image:
-- EDIT: every section of the in-game menu, names not cut, values formatted like the game, nothing scrolled.
+- EDIT: every section of the in-game menu, names not cut, values formatted like the game, nothing scrolled;
+  the ADVANCED bar at the bottom, closed, then open with its sections in order.
 - COMPARE: section rows, colors, range bars.
 - COMMANDS: categories and counts, weather lists, item picker, favorites buttons.
 - HIDEOUT: unit list states, level cards (requirements green/red, items, materials), shopping list totals.
 If the screenshots are fine and the UI changed, refresh the README images: `docs/editor.png` (`_edit`),
+`docs/editor-advanced.png` (`_edit_advanced`),
 `docs/compare.png` (`_compare_difficulties`), `docs/commands.png` (`_commands_weather`),
 `docs/commands-items.png` (`_commands_item`), `docs/favorites.png` (`_commands_favorites`),
 `docs/hideout.png` (`_hideout_stash`), `docs/hideout-shopping.png` (`_hideout_shopping`), `docs/maps.png`

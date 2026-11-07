@@ -45,13 +45,21 @@ Maps:
 - [ ] Safes and locked doors: positions and keys match the game (e.g. an Outskirts large safe, a HAS door).
 - [ ] Doors without a key in the files are hidden (8 on Delta, 26 on Quarry): check they really never open.
 
+Advanced settings (not in the game menu):
+
+- [ ] A preset with changed advanced values imports in game and the bots behave accordingly (e.g. a high
+      Trigger Delay or Min Visible Body Part).
+- [ ] Our names / descriptions of the advanced settings match what they do (they were written from the key
+      names and the difficulty values, not from the developers).
+
 ## Verify the app
 
 The interface was only checked on screenshots; nothing was clicked yet.
 
 - [ ] EDIT: NEW, DUPLICATE, DELETE, SAVE (and `Ctrl+S`), REVERT, the save prompt when closing.
 - [ ] COPY CODE, VIEW CODE, IMPORT CODE (pre-filled from the clipboard).
-- [ ] COMPARE: both lists, swap, *Only differences*.
+- [ ] EDIT: ADVANCED bar opens / closes, the advanced rows edit and save like the others.
+- [ ] COMPARE: both lists, swap, *Only differences*, *Advanced* (and its "+N" count).
 - [ ] COMMANDS: search, COPY, double-click / Enter to copy, DEFAULTS, optional arguments (tick box),
       item list filter and autocomplete, editing the command text by hand.
 - [ ] Favorites: add (name prompt), SAVE after changing values, RENAME, REMOVE, ▲ / ▼, they survive a restart.
@@ -71,6 +79,9 @@ The interface was only checked on screenshots; nothing was clicked yet.
 - [ ] Optional: code-sign the exe to avoid the SmartScreen warning.
 
 ## Ideas
+
+- [ ] Per-stance modifiers of `behaviorConfig` (patrol / investigate / combat: vision speed and distance,
+      hearing, perception delay, aim) in the ADVANCED section; same in every difficulty today.
 
 - [ ] Names of the extraction points (not found in the level data; maybe from the game's map setup).
 - [ ] More map layers: loot containers, mission spawn points (positions are in the same level files).

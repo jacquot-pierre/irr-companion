@@ -35,6 +35,11 @@ Requires Windows 10 or 11 (it uses .NET Framework 4.6.2, already part of Windows
   *Potato, Low, Normal, High*.
 - **The same 35 settings as the in-game AI menu**, in the same sections and order, with the game's
   descriptions as tooltips. Values outside the recommended range turn orange.
+- **Advanced settings** (closed by default): the 38 other settings of the game's AI file that the in-game
+  menu does not show - finer perception, light and laser detection, trigger delay, deliberate misses,
+  suppression, grenades. Click **▶ ADVANCED** at the bottom of the list to open them. The grenade settings
+  have the game's own descriptions; the other names and descriptions are ours (written from the game key and
+  the difficulty values) and say so in their tooltip.
 - **Reference values**: next to each setting, see the value of another preset (▲ above / ▼ below).
 - **Custom simulation**: AI optimization ranges and movement tick rate.
 - **Share codes**: **COPY CODE** gives an `IRR1-…` code to paste in the game's preset import;
@@ -45,9 +50,12 @@ Requires Windows 10 or 11 (it uses .NET Framework 4.6.2, already part of Windows
 ### Compare presets
 
 Pick two presets and see every setting side by side: values, change in value and percent, and a bar showing
-both values on the setting's range. Tick *Only differences* to hide what is identical.
+both values on the setting's range. Tick *Only differences* to hide what is identical, and *Advanced* to
+compare the advanced settings too (the box shows how many of them differ while it is unticked).
 
 ![Comparing Recruit and Elite](docs/compare.png)
+
+![The advanced settings](docs/editor-advanced.png)
 
 ### Console command builder
 
