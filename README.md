@@ -18,7 +18,7 @@ One portable `.exe`, nothing to install, nothing written to the game's files.
 
 ## Download
 
-1. Download **`IRRCompanion.exe`** from the [latest release](https://github.com/jacquot-pierre/irr-companion/releases/latest).
+1. Download **`IRRCompanion.exe`** from the [latest release](https://github.com/mordeci/irr-companion/releases/latest).
 2. Run it. That's it: no installer, no admin rights.
 
 Requires Windows 10 or 11 (it uses .NET Framework 4.6.2, already part of Windows).
@@ -166,7 +166,7 @@ your presets and favorites are copied from `%APPDATA%\IRR Preset Tool` on the fi
 The app contains data read from a given version of the game (shown in the header: *game data YYYY-MM-DD*).
 After a game patch, values, commands or hideout costs may have changed until a new release of the app
 updates them. If something differs from the game, please
-[open an issue](https://github.com/jacquot-pierre/irr-companion/issues).
+[open an issue](https://github.com/mordeci/irr-companion/issues).
 
 ### Good to know
 
