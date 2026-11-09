@@ -63,10 +63,19 @@ namespace IRRCompanion
         private CommandsPanel _commandsPanel;
         private HideoutPanel _hideoutPanel;
         private MapsPanel _mapsPanel;
+        private WeaponsPanel _weaponsPanel;
         private Segmented _viewSwitch;
         private TextBox _name, _author, _desc;
-        private Label _banner, _status;
-        private Button _save, _revert, _copy, _view, _dup, _del;
+        private Label _status, _info, _unsaved;
+        private Panel _banner, _advBox, _perfBox;
+        private Button _save, _copy, _compareBtn, _moreBtn;
+        private ContextMenuStrip _moreMenu;
+        private ToolStripMenuItem _miRevert, _miInfo, _miDelete;
+        private CheckBox _onlyChanged;
+        private ToggleHeader _perfHeader;
+        /// <summary>Section headers of the editor with their rows (for "Only changed settings").</summary>
+        private readonly List<KeyValuePair<SectionHeader, List<ParamRow>>> _sections = new List<KeyValuePair<SectionHeader, List<ParamRow>>>();
+        private readonly Dictionary<Control, int> _natural = new Dictionary<Control, int>();
         private DarkCombo _refCombo, _cmpA, _cmpB;
         private ChoiceRow _simRow, _diffRow;
         private readonly List<ParamRow> _rows = new List<ParamRow>();
@@ -83,8 +92,9 @@ namespace IRRCompanion
             ForeColor = Theme.Text;
             Font = Theme.Body;
             StartPosition = FormStartPosition.CenterScreen;
-            Size = new Size(Theme.S(1280), Theme.S(860));
-            MinimumSize = new Size(Theme.S(1000), Theme.S(620));
+            var area = Screen.FromPoint(Cursor.Position).WorkingArea;
+            Size = new Size(Math.Min(Theme.S(1280), area.Width), Math.Min(Theme.S(860), area.Height));
+            MinimumSize = new Size(Math.Min(Theme.S(1000), area.Width), Math.Min(Theme.S(620), area.Height));
             try { Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath); } catch (Exception) { }
 
             BuildLayout();
@@ -100,8 +110,8 @@ namespace IRRCompanion
                                 "\n\nFile: " + Library.FilePath, Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             RefreshList();
+            _refChoice = _presets.First(p => p.BuiltIn && p.Name == GameData.AiLabels["Normal"]);
             RefreshCombos();
-            _refCombo.SelectedItem = _presets.First(p => p.BuiltIn && p.Name == GameData.AiLabels["Normal"]);
             var firstMine = _presets.FirstOrDefault(p => !p.BuiltIn);
             SelectPreset(firstMine ?? _presets[1]);
             _cmpA.SelectedItem = _presets[1];
@@ -133,10 +143,12 @@ namespace IRRCompanion
             title.Location = new Point(Theme.S(18), Theme.S(8));
             var sub = Theme.Lbl("Companion app for Incursion Red River · game data " + GameData.GameBuild, Theme.Small, Theme.TextDim);
             sub.Location = new Point(Theme.S(20), Theme.S(40));
-            _viewSwitch = new Segmented("EDIT", "COMPARE", "COMMANDS", "HIDEOUT", "MAPS") { Selected = 0, BackColor = Theme.Row };
-            _viewSwitch.Size = new Size(Theme.S(580), Theme.S(36));
+            // Views: 0 presets editor, 1 compare (opened from the editor, no tab of its own), 2 commands, 3 weapons,
+            // 4 hideout, 5 maps. Tab i shows view TabViews[i].
+            _viewSwitch = new Segmented("PRESETS", "COMMANDS", "WEAPONS", "HIDEOUT", "MAPS") { Selected = 0, BackColor = Theme.Row };
+            _viewSwitch.Size = new Size(Theme.S(590), Theme.S(36));
             _viewSwitch.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            _viewSwitch.OptionClicked += (s, e) => ShowView(_viewSwitch.ClickedIndex);
+            _viewSwitch.OptionClicked += (s, e) => ShowView(TabViews[_viewSwitch.ClickedIndex]);
             header.Controls.Add(title);
             header.Controls.Add(sub);
             header.Controls.Add(_viewSwitch);
@@ -156,9 +168,34 @@ namespace IRRCompanion
                 Directory.CreateDirectory(Library.Folder);
                 Process.Start("explorer.exe", "\"" + Library.Folder + "\"");
             };
+            // interface size (applied at the next start)
+            var zoom = new DarkCombo { Width = Theme.S(118), Font = Theme.Small, ItemHeight = Theme.S(18) };
+            foreach (var z in AppSettings.Zooms) zoom.Items.Add("UI size " + Math.Round(z * 100) + " %");
+            int zi = Array.FindIndex(AppSettings.Zooms, z => Math.Abs(z - AppSettings.UiZoom) < 0.01f);
+            if (zi < 0) { zoom.Items.Add("UI size " + Math.Round(AppSettings.UiZoom * 100) + " %"); zi = zoom.Items.Count - 1; }
+            zoom.SelectedIndex = zi;
+            _tip.SetToolTip(zoom, "Size of the text and of the whole interface (on top of the Windows display scaling). Applied after a restart.");
+            zoom.SelectedIndexChanged += (s, e) =>
+            {
+                if (zoom.SelectedIndex >= AppSettings.Zooms.Length) return;
+                float z = AppSettings.Zooms[zoom.SelectedIndex];
+                if (Math.Abs(z - AppSettings.UiZoom) < 0.01f) return;
+                AppSettings.UiZoom = z;
+                try { AppSettings.Save(); }
+                catch (Exception ex) { SetStatus("Could not save the settings: " + ex.Message); return; }
+                if (MessageBox.Show(this, "The new size is applied when the app starts. Restart IRR Companion now?", Text,
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    Application.Restart();
+                else SetStatus("The new interface size is applied at the next start.");
+            };
             statusBar.Controls.Add(_status);
             statusBar.Controls.Add(folder);
-            statusBar.Resize += (s, e) => folder.Location = new Point(statusBar.Width - folder.Width - Theme.S(12), Theme.S(6));
+            statusBar.Controls.Add(zoom);
+            statusBar.Resize += (s, e) =>
+            {
+                folder.Location = new Point(statusBar.Width - folder.Width - Theme.S(12), Theme.S(6));
+                zoom.Location = new Point(folder.Left - zoom.Width - Theme.S(16), (statusBar.Height - zoom.Height) / 2);
+            };
 
             // ---- sidebar
             var side = _side = new Panel { Dock = DockStyle.Left, Width = Theme.S(260), BackColor = Theme.Panel, Padding = new Padding(Theme.S(12)) };
@@ -177,21 +214,15 @@ namespace IRRCompanion
             };
             Theme.DarkScrollbars(_list);
 
-            var sideButtons = new TableLayoutPanel { Dock = DockStyle.Bottom, ColumnCount = 2, RowCount = 2, Height = Theme.S(84), BackColor = Theme.Panel };
-            sideButtons.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-            sideButtons.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-            var bNew = Theme.Btn("NEW", (s, e) => NewPreset());
-            _dup = Theme.Btn("DUPLICATE", (s, e) => DuplicatePreset(), true);
-            _del = Theme.Btn("DELETE", (s, e) => DeletePreset());
+            var sideButtons = new TableLayoutPanel { Dock = DockStyle.Bottom, ColumnCount = 1, RowCount = 2, Height = Theme.S(84), BackColor = Theme.Panel };
+            sideButtons.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+            var bNew = Theme.Btn("+ NEW", (s, e) => NewPreset());
             var bImp = Theme.Btn("IMPORT CODE", (s, e) => ImportCode());
             _tip.SetToolTip(bNew, "New preset based on the game's Regular difficulty.");
-            _tip.SetToolTip(_dup, "Copy the selected preset into a new one you can edit.");
             _tip.SetToolTip(bImp, "Paste a share code (IRR1-...) copied from the game or from another player.");
-            foreach (var b in new[] { bNew, _dup, _del, bImp }) { b.Dock = DockStyle.Fill; b.Margin = new Padding(Theme.S(2)); }
+            foreach (var b in new[] { bNew, bImp }) { b.Dock = DockStyle.Fill; b.Margin = new Padding(Theme.S(2)); }
             sideButtons.Controls.Add(bNew, 0, 0);
-            sideButtons.Controls.Add(_dup, 1, 0);
             sideButtons.Controls.Add(bImp, 0, 1);
-            sideButtons.Controls.Add(_del, 1, 1);
             side.Controls.Add(_list);
             side.Controls.Add(sideTitle);
             side.Controls.Add(sideButtons);
@@ -203,12 +234,14 @@ namespace IRRCompanion
             _commandsPanel = new CommandsPanel(_tip, SetStatus) { Visible = false };
             _hideoutPanel = new HideoutPanel(_tip, SetStatus) { Visible = false };
             _mapsPanel = new MapsPanel(_tip) { Visible = false };
+            _weaponsPanel = new WeaponsPanel(_tip, SetStatus) { Visible = false };
 
             Controls.Add(_editPanel);
             Controls.Add(_comparePanel);
             Controls.Add(_commandsPanel);
             Controls.Add(_hideoutPanel);
             Controls.Add(_mapsPanel);
+            Controls.Add(_weaponsPanel);
             Controls.Add(side);
             Controls.Add(statusBar);
             Controls.Add(header);
@@ -218,98 +251,117 @@ namespace IRRCompanion
         {
             var panel = new Panel { Dock = DockStyle.Fill, BackColor = Theme.Back };
 
-            // --- top: metadata + actions
-            var top = new Panel { Dock = DockStyle.Top, Height = Theme.S(150), BackColor = Theme.Back, Padding = new Padding(Theme.S(20), Theme.S(12), Theme.S(20), 0) };
-            var grid = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 4, RowCount = 3, BackColor = Theme.Back };
-            grid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, Theme.S(90)));
-            grid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            grid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, Theme.S(20)));
-            grid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, Theme.S(330)));
-            for (int i = 0; i < 3; i++) grid.RowStyles.Add(new RowStyle(SizeType.Absolute, Theme.S(36)));
-
-            _name = Theme.Box(); _author = Theme.Box(); _desc = Theme.Box();
+            // --- top: name, state line, actions, reference
+            var top = new Panel { Dock = DockStyle.Top, Height = Theme.S(118), BackColor = Theme.Back };
+            _name = Theme.Box();
+            _name.Font = Theme.Header;
             _name.TextChanged += (s, e) => MetaChanged();
-            _author.TextChanged += (s, e) => MetaChanged();
-            _desc.TextChanged += (s, e) => MetaChanged();
             _name.Leave += (s, e) => RefreshCombos();
             _tip.SetToolTip(_name, "Preset name, shown in the game. Its ID (used by the game as folder name) is derived from it.");
-            AddField(grid, 0, "Name", _name);
-            AddField(grid, 1, "Author", _author);
-            AddField(grid, 2, "Description", _desc);
+            // author and description: edited from the ⋯ menu (Author and description…)
+            _author = Theme.Box();
+            _desc = Theme.Box();
+            _author.TextChanged += (s, e) => MetaChanged();
+            _desc.TextChanged += (s, e) => MetaChanged();
 
-            var actions = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 2, BackColor = Theme.Back, Margin = new Padding(0) };
-            actions.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-            actions.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+            _info =Theme.Lbl("", Theme.Small, Theme.TextDim);
+            _unsaved = Theme.Lbl("· unsaved changes", Theme.Small, Theme.Changed);
+            var infoRow = new FlowLayoutPanel { BackColor = Theme.Back, WrapContents = false, Margin = new Padding(0) };
+            _info.Margin = _unsaved.Margin = new Padding(0, 0, Theme.S(4), 0);
+            infoRow.Controls.Add(_info);
+            infoRow.Controls.Add(_unsaved);
+
             _save = Theme.Btn("SAVE", (s, e) => SaveCurrent(), true);
-            _revert = Theme.Btn("REVERT", (s, e) => RevertCurrent());
-            _copy = Theme.Btn("COPY CODE", (s, e) => CopyCode(), true);
-            _view = Theme.Btn("VIEW CODE", (s, e) => ViewCode());
+            _copy = Theme.Btn("COPY CODE", (s, e) => CopyCode());
+            _compareBtn = Theme.Btn("COMPARE", (s, e) => OpenCompare());
+            _moreBtn = Theme.Btn("⋯", null);
+            _moreBtn.Font = Theme.Header;
             _tip.SetToolTip(_save, "Save this preset in the tool (Ctrl+S). Nothing is written to the game.");
-            _tip.SetToolTip(_revert, "Discard unsaved changes.");
             _tip.SetToolTip(_copy, "Copy the share code to the clipboard, then paste it in the game's preset import.");
-            foreach (var b in new[] { _save, _revert, _copy, _view }) { b.Dock = DockStyle.Fill; b.Margin = new Padding(Theme.S(2)); }
-            actions.Controls.Add(_save, 0, 0);
-            actions.Controls.Add(_revert, 1, 0);
-            actions.Controls.Add(_copy, 0, 1);
-            actions.Controls.Add(_view, 1, 1);
-            grid.Controls.Add(actions, 3, 0);
-            grid.SetRowSpan(actions, 2);
+            _tip.SetToolTip(_compareBtn, "Compare this preset with the one chosen in \"Compare values to\", setting by setting.");
+            _tip.SetToolTip(_moreBtn, "More: revert, view code, duplicate, author and description, delete.");
+            _moreMenu = DarkMenu.Create();
+            _miRevert = new ToolStripMenuItem("Revert unsaved changes", null, (s, e) => RevertCurrent());
+            var miView = new ToolStripMenuItem("View share code", null, (s, e) => ViewCode());
+            var miDup = new ToolStripMenuItem("Duplicate", null, (s, e) => DuplicatePreset());
+            _miInfo = new ToolStripMenuItem("Author and description…", null, (s, e) => EditInfo());
+            _miDelete = new ToolStripMenuItem("Delete", null, (s, e) => DeletePreset());
+            _moreMenu.Items.AddRange(new ToolStripItem[] { _miRevert, miView, miDup, _miInfo, new ToolStripSeparator(), _miDelete });
+            _moreBtn.Click += (s, e) => _moreMenu.Show(_moreBtn, new Point(_moreBtn.Width - _moreMenu.PreferredSize.Width, _moreBtn.Height));
 
-            var refPanel = new FlowLayoutPanel { Dock = DockStyle.Fill, BackColor = Theme.Back, Margin = new Padding(0), WrapContents = false };
-            var refLbl = Theme.Lbl("Compare to", Theme.Small, Theme.TextDim);
-            refLbl.Margin = new Padding(Theme.S(2), Theme.S(9), Theme.S(6), 0);
-            _refCombo = new DarkCombo { Width = Theme.S(240), Margin = new Padding(0, Theme.S(4), 0, 0) };
-            _refCombo.SelectedIndexChanged += (s, e) => RefreshReferences();
-            _tip.SetToolTip(_refCombo, "Reference values shown next to each setting (▲ higher, ▼ lower).");
-            refPanel.Controls.Add(refLbl);
-            refPanel.Controls.Add(_refCombo);
-            grid.Controls.Add(refPanel, 3, 2);
-            top.Controls.Add(grid);
-
-            _banner = new Label
+            var refLbl = Theme.Lbl("Compare values to", Theme.Small, Theme.TextDim);
+            _refCombo = new DarkCombo { Width = Theme.S(240) };
+            _refCombo.SelectedIndexChanged += (s, e) =>
             {
-                Dock = DockStyle.Top, Height = Theme.S(30), TextAlign = ContentAlignment.MiddleCenter,
-                BackColor = Theme.PanelAlt, ForeColor = Theme.Accent, Font = Theme.Bold,
-                Text = "Game preset – read only. Click DUPLICATE to make your own version.",
+                if (!_refFilling) _refChoice = _refCombo.SelectedItem as Preset;
+                RefreshReferences();
+                ApplyFilter();
+            };
+            _tip.SetToolTip(_refCombo, "Reference values shown next to each setting (▲ higher, ▼ lower).");
+            _onlyChanged = new CheckBox { Text = "Only changed settings", ForeColor = Theme.Text, AutoSize = true };
+            _onlyChanged.CheckedChanged += (s, e) => ApplyFilter();
+            _tip.SetToolTip(_onlyChanged, "Show only the settings that differ from the preset chosen in \"Compare values to\".");
+
+            top.Controls.AddRange(new Control[] { _name, infoRow, _save, _copy, _compareBtn, _moreBtn, refLbl, _refCombo, _onlyChanged });
+            top.Resize += (s, e) =>
+            {
+                int pad = Theme.S(20), w = top.Width, bw = Theme.S(118), gap = Theme.S(6);
+                int x = w - pad - Theme.S(40);
+                _moreBtn.SetBounds(x, Theme.S(12), Theme.S(40), Theme.S(34));
+                foreach (var b in new[] { _compareBtn, _copy, _save })
+                {
+                    x -= gap + bw;
+                    b.SetBounds(x, Theme.S(12), bw, Theme.S(34));
+                }
+                _name.SetBounds(pad, Theme.S(13), Math.Max(Theme.S(120), x - pad - Theme.S(16)), _name.PreferredHeight);
+                infoRow.SetBounds(pad, Theme.S(50), Math.Max(Theme.S(120), w - 2 * pad), Theme.S(20));
+                refLbl.Location = new Point(pad, Theme.S(83));
+                _refCombo.Location = new Point(refLbl.Right + Theme.S(8), Theme.S(79));
+                _onlyChanged.Location = new Point(_refCombo.Right + Theme.S(20), Theme.S(81));
             };
 
-            // --- rows
+            _banner = new Panel { Dock = DockStyle.Top, Height = Theme.S(40), BackColor = Theme.PanelAlt };
+            var bannerText = Theme.Lbl("Game difficulty – read only. Make your own copy to change it.", Theme.Bold, Theme.Accent);
+            var bannerBtn = Theme.Btn("MAKE MY OWN COPY", (s, e) => DuplicatePreset(), true);
+            bannerBtn.Width = Theme.S(170);
+            _banner.Controls.Add(bannerText);
+            _banner.Controls.Add(bannerBtn);
+            _banner.Resize += (s, e) =>
+            {
+                int tw = bannerText.PreferredWidth, total = tw + Theme.S(16) + bannerBtn.Width, x0 = Math.Max(Theme.S(10), (_banner.Width - total) / 2);
+                bannerText.Location = new Point(x0, (_banner.Height - bannerText.Height) / 2);
+                bannerBtn.SetBounds(x0 + tw + Theme.S(16), Theme.S(4), bannerBtn.Width, _banner.Height - Theme.S(8));
+            };
+
+            // --- rows: difficulty and the game menu settings, then ADVANCED and PERFORMANCE (closed)
             _rowsPanel = new Panel { Dock = DockStyle.Fill, AutoScroll = true, BackColor = Theme.Back, Padding = new Padding(Theme.S(20), 0, Theme.S(20), Theme.S(20)) };
             Theme.DarkScrollbars(_rowsPanel);
             var items = new List<Control>();
 
-            items.Add(new SectionHeader("Simulation"));
-            _simRow = new ChoiceRow("AI Simulation",
-                "Simulation level: how far bots are simulated in full detail.\nEditing the values below switches to CUSTOM.",
-                _tip, GameData.SimOrder.Select(x => x.ToUpperInvariant()).Concat(new[] { "CUSTOM" }).ToArray());
-            _simRow.Choice.OptionClicked += (s, e) => ApplySimLevel(_simRow.Choice.ClickedIndex);
-            items.Add(_simRow);
-            AddRows(items, GameData.Params.Where(p => p.IsSimulation));
-
-            items.Add(new SectionHeader("Difficulty"));
-            _diffRow = new ChoiceRow("AI Difficulty",
+            items.Add(new SectionHeader("AI Difficulty"));
+            _diffRow = new ChoiceRow("Start from",
                 "Loads all the values of a game difficulty into this preset (like in the game).\nCUSTOM means the values differ from every game difficulty.",
                 _tip, GameData.AiOrder.Select(x => GameData.AiLabels[x].ToUpperInvariant()).Concat(new[] { "CUSTOM" }).ToArray());
             _diffRow.Choice.OptionClicked += (s, e) => ApplyDifficulty(_diffRow.Choice.ClickedIndex);
             items.Add(_diffRow);
             AddRows(items, GameData.Params.Where(p => !p.IsSimulation && !p.Advanced));
 
-            // ADVANCED: settings of the AI document that the game menu does not show, hidden by default.
-            _advHeader = new ToggleHeader("Advanced", "Settings the game menu does not show · " +
-                GameData.Params.Count(p => p.Advanced) + " settings · change them only if you know what they do");
-            items.Add(_advHeader);
-            // One container for the whole group: showing / hiding many docked controls one by one breaks their order.
+            // ADVANCED: settings of the AI document that the game menu does not show.
             var advItems = new List<Control>();
             AddRows(advItems, GameData.Params.Where(p => p.Advanced));
-            var adv = new Panel { Dock = DockStyle.Top, BackColor = Theme.Back, Visible = false, Height = advItems.Sum(c => c.Height) };
-            for (int i = advItems.Count - 1; i >= 0; i--) adv.Controls.Add(advItems[i]);
-            items.Add(adv);
-            _advHeader.Toggled += (s, e) =>
-            {
-                adv.Visible = _advHeader.Expanded;
-                if (_advHeader.Expanded) _rowsPanel.ScrollControlIntoView(_advHeader);
-                _cmpAdvanced.Checked = _advHeader.Expanded;
-            };
+            _advHeader = AddGroup(items, "Advanced", advItems, out _advBox);
+            _advHeader.Toggled += (s, e) => _cmpAdvanced.Checked = _advHeader.Expanded;
+
+            // PERFORMANCE: AI simulation level and optimization ranges (how far bots are simulated in detail).
+            var perfItems = new List<Control>();
+            _simRow = new ChoiceRow("AI Simulation",
+                "Simulation level: how far bots are simulated in full detail. Higher costs more performance.\nEditing the values below switches to CUSTOM.",
+                _tip, GameData.SimOrder.Select(x => x.ToUpperInvariant()).Concat(new[] { "CUSTOM" }).ToArray());
+            _simRow.Choice.OptionClicked += (s, e) => ApplySimLevel(_simRow.Choice.ClickedIndex);
+            perfItems.Add(Spacer(8));
+            perfItems.Add(_simRow);
+            AddRows(perfItems, GameData.Params.Where(p => p.IsSimulation));
+            _perfHeader = AddGroup(items, "Performance", perfItems, out _perfBox);
 
             // Dock=Top stacks the last added control on top: add in reverse order.
             for (int i = items.Count - 1; i >= 0; i--) _rowsPanel.Controls.Add(items[i]);
@@ -320,6 +372,29 @@ namespace IRRCompanion
             return panel;
         }
 
+        private static Control Spacer(int h)
+        {
+            return new Panel { Dock = DockStyle.Top, Height = Theme.S(h), BackColor = Theme.Back };
+        }
+
+        /// <summary>Clickable header + one container holding the group (closed by default).</summary>
+        private ToggleHeader AddGroup(List<Control> items, string title, List<Control> groupItems, out Panel box)
+        {
+            var header = new ToggleHeader(title, "");
+            // One container for the whole group: showing / hiding many docked controls one by one breaks their order.
+            var container = new Panel { Dock = DockStyle.Top, BackColor = Theme.Back, Visible = false, Height = groupItems.Sum(c => c.Height) };
+            for (int i = groupItems.Count - 1; i >= 0; i--) container.Controls.Add(groupItems[i]);
+            header.Toggled += (s, e) =>
+            {
+                container.Visible = header.Expanded;
+                if (header.Expanded) _rowsPanel.ScrollControlIntoView(header);
+            };
+            items.Add(header);
+            items.Add(container);
+            box = container;
+            return header;
+        }
+
         private void AddRows(List<Control> items, IEnumerable<Param> ps)
         {
             string section = null;
@@ -328,23 +403,110 @@ namespace IRRCompanion
                 if (p.Section != section)
                 {
                     section = p.Section;
-                    items.Add(new SectionHeader(section));
+                    var h = new SectionHeader(section);
+                    _sections.Add(new KeyValuePair<SectionHeader, List<ParamRow>>(h, new List<ParamRow>()));
+                    items.Add(h);
                 }
                 var row = new ParamRow(p, _tip);
                 row.UserChanged += RowChanged;
                 _rows.Add(row);
+                _sections[_sections.Count - 1].Value.Add(row);
                 items.Add(row);
             }
         }
 
-        private static void AddField(TableLayoutPanel grid, int row, string label, TextBox box)
+        /// <summary>Shows or hides a docked control by its height (keeps the dock order, unlike Visible).</summary>
+        private void SetShown(Control c, bool shown)
         {
-            var l = Theme.Lbl(label, Theme.Bold, Theme.TextDim);
-            l.Anchor = AnchorStyles.Left;
-            box.Dock = DockStyle.Fill;
-            box.Margin = new Padding(0, Theme.S(5), 0, Theme.S(5));
-            grid.Controls.Add(l, 0, row);
-            grid.Controls.Add(box, 1, row);
+            int h;
+            if (!_natural.TryGetValue(c, out h)) _natural[c] = h = c.Height;
+            c.Height = shown ? h : 0;
+            c.TabStop = shown;
+        }
+
+        /// <summary>"Only changed settings": hides the rows equal to the reference preset.</summary>
+        private void ApplyFilter()
+        {
+            if (_current == null || _rowsPanel == null) return;
+            var refP = _refCombo.SelectedItem as Preset;
+            bool on = _onlyChanged.Checked && refP != null && refP != _current;
+            _rowsPanel.SuspendLayout();
+            foreach (var sec in _sections)
+            {
+                bool any = false;
+                foreach (var r in sec.Value)
+                {
+                    bool show = !on || !GameData.ValuesEqual(_current.Get(r.P), refP.Get(r.P));
+                    SetShown(r, show);
+                    any |= show;
+                }
+                SetShown(sec.Key, any);
+            }
+            foreach (var box in new[] { _advBox, _perfBox })
+                box.Height = box.Controls.Cast<Control>().Sum(c => c.Height);
+            _rowsPanel.ResumeLayout(true);
+            UpdateInfo();
+        }
+
+        /// <summary>State line under the name and the hints of the ADVANCED / PERFORMANCE bars.</summary>
+        private void UpdateInfo()
+        {
+            if (_current == null || _info == null) return;
+            var refP = _refCombo.SelectedItem as Preset;
+            bool hasRef = refP != null && refP != _current;
+            Func<Func<Param, bool>, int> differ = f => !hasRef ? 0 :
+                GameData.Params.Count(p => f(p) && !GameData.ValuesEqual(_current.Get(p), refP.Get(p)));
+            var parts = new List<string>();
+            if (_current.BuiltIn) parts.Add("Game difficulty");
+            else
+            {
+                string closest = null;
+                int best = int.MaxValue;
+                foreach (var name in GameData.AiOrder)
+                {
+                    var doc = GameData.Ai[name];
+                    int n = GameData.Params.Count(p => !p.IsSimulation && !GameData.ValuesEqual(_current.Get(p), Json.GetPath(doc, p.DocKey)));
+                    if (n < best) { best = n; closest = GameData.AiLabels[name]; }
+                }
+                parts.Add(best == 0 ? "Same values as " + closest : "Closest game difficulty: " + closest);
+            }
+            if (hasRef)
+            {
+                int n = differ(p => true);
+                parts.Add(n == 0 ? "same values as " + refP.Name : n + (n == 1 ? " setting differs" : " settings differ") + " from " + refP.Name);
+            }
+            _info.Text = string.Join(" · ", parts);
+            _unsaved.Visible = !_current.BuiltIn && _current.Dirty;
+
+            int adv = GameData.Params.Count(p => p.Advanced), advDiff = differ(p => p.Advanced);
+            _advHeader.Hint = adv + " settings the game menu does not show" + (advDiff > 0 ? " · " + advDiff + " differ" : "") + " · change them only if you know what they do";
+            string sim = _current.SimLevel;
+            int perfDiff = differ(p => p.IsSimulation);
+            _perfHeader.Hint = "AI simulation: " + (sim == null ? "CUSTOM" : sim.ToUpperInvariant()) + " · optimization ranges" + (perfDiff > 0 ? " · " + perfDiff + " differ" : "");
+            _advHeader.Invalidate();
+            _perfHeader.Invalidate();
+        }
+
+        private void OpenCompare()
+        {
+            if (_current == null) return;
+            var refP = _refCombo.SelectedItem as Preset;
+            if (refP == null || refP == _current) refP = _presets.First(x => x.BuiltIn && x.Name == GameData.AiLabels["Normal"]);
+            RefreshCombos();
+            _cmpA.SelectedItem = refP;
+            _cmpB.SelectedItem = _current;
+            ShowView(1);
+        }
+
+        private void EditInfo()
+        {
+            if (_current == null || _current.BuiltIn) return;
+            string author = TextPrompt.Ask(this, "Author", "Author of this preset (shown in the game)", _current.Author ?? "");
+            if (author == null) return;
+            string desc = TextPrompt.Ask(this, "Description", "Short description of this preset", _current.Description ?? "");
+            if (desc == null) return;
+            _author.Text = author;
+            _desc.Text = desc;
         }
 
         private Panel BuildComparePanel()
@@ -433,6 +595,17 @@ namespace IRRCompanion
             panel.Controls.Add(_grid);
             panel.Controls.Add(legend);
             panel.Controls.Add(bar);
+
+            // opened from the COMPARE button of the presets editor: way back to the editor
+            var strip = new Panel { Dock = DockStyle.Top, Height = Theme.S(44), BackColor = Theme.Back };
+            var back = Theme.Btn("◀  BACK TO PRESET", (s, e) => ShowView(0));
+            back.SetBounds(0, Theme.S(4), Theme.S(170), Theme.S(34));
+            _tip.SetToolTip(back, "Back to the presets editor (Esc).");
+            var title = Theme.Lbl("COMPARE PRESETS", Theme.Header, Theme.Text);
+            title.Location = new Point(Theme.S(186), Theme.S(11));
+            strip.Controls.Add(back);
+            strip.Controls.Add(title);
+            panel.Controls.Add(strip);
             return panel;
         }
 
@@ -477,9 +650,31 @@ namespace IRRCompanion
                 TextFormatFlags.VerticalCenter | TextFormatFlags.Left | TextFormatFlags.EndEllipsis);
         }
 
+        /// <summary>"None" entry of the "Compare values to" list.</summary>
+        private sealed class NoReference { public override string ToString() { return "None"; } }
+
+        private static readonly object NoRef = new NoReference();
+        /// <summary>The reference the user picked (null = none); shown unless it is the preset being edited.</summary>
+        private Preset _refChoice;
+        private bool _refFilling;
+
+        /// <summary>"Compare values to": None + every preset except the one being edited.</summary>
+        private void FillReferenceCombo()
+        {
+            _refFilling = true;
+            _refCombo.BeginUpdate();
+            _refCombo.Items.Clear();
+            _refCombo.Items.Add(NoRef);
+            foreach (var p in _presets) if (p != _current) _refCombo.Items.Add(p);
+            _refCombo.SelectedItem = _refChoice != null && _refChoice != _current && _presets.Contains(_refChoice) ? (object)_refChoice : NoRef;
+            _refCombo.EndUpdate();
+            _refFilling = false;
+        }
+
         private void RefreshCombos()
         {
-            foreach (var combo in new[] { _refCombo, _cmpA, _cmpB })
+            FillReferenceCombo();
+            foreach (var combo in new[] { _cmpA, _cmpB })
             {
                 var sel = combo.SelectedItem;
                 combo.BeginUpdate();
@@ -517,11 +712,12 @@ namespace IRRCompanion
             _diffRow.Choice.ReadOnly = ro;
             _banner.Visible = ro;
             _save.Enabled = !ro;
-            _revert.Enabled = !ro;
-            _del.Enabled = !ro;
+            _miRevert.Enabled = _miInfo.Enabled = _miDelete.Enabled = !ro;
             _loading = false;
             RefreshChoiceRows();
+            FillReferenceCombo();
             RefreshReferences();
+            ApplyFilter();
             UpdateDirtyUi();
             _list.Invalidate();
             if (_rowsPanel.ContainsFocus) ActiveControl = _list;
@@ -553,6 +749,7 @@ namespace IRRCompanion
             if (_current == null) return;
             _save.Text = _current.Dirty ? "SAVE *" : "SAVE";
             _list.Invalidate();
+            UpdateInfo();
             if (_comparePanel.Visible) RefreshCompare();
         }
 
@@ -596,6 +793,7 @@ namespace IRRCompanion
             _loading = false;
             RefreshChoiceRows();
             RefreshReferences();
+            ApplyFilter();
             UpdateDirtyUi();
         }
 
@@ -785,18 +983,22 @@ namespace IRRCompanion
 
         private void SetStatus(string s) { _status.Text = s; }
 
+        private static readonly int[] TabViews = { 0, 2, 3, 4, 5 };
+
         private void ShowView(int index)
         {
-            _viewSwitch.Selected = index;
+            _viewSwitch.Selected = Math.Max(0, Array.IndexOf(TabViews, index <= 1 ? 0 : index));  // COMPARE belongs to the PRESETS tab
             _editPanel.Visible = index == 0;
             _comparePanel.Visible = index == 1;
             _commandsPanel.Visible = index == 2;
-            _hideoutPanel.Visible = index == 3;
-            _mapsPanel.Visible = index == 4;
+            _weaponsPanel.Visible = index == 3;
+            _hideoutPanel.Visible = index == 4;
+            _mapsPanel.Visible = index == 5;
             _side.Visible = index < 2;
             if (index == 2) ActiveControl = _commandsPanel.List;
-            if (index == 3) ActiveControl = _hideoutPanel.List;
-            if (index == 4) ActiveControl = _mapsPanel.Canvas;
+            if (index == 3) ActiveControl = _weaponsPanel.List;
+            if (index == 4) ActiveControl = _hideoutPanel.List;
+            if (index == 5) ActiveControl = _mapsPanel.Canvas;
             if (index == 1)
             {
                 RefreshCombos();
@@ -807,12 +1009,15 @@ namespace IRRCompanion
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (keyData == (Keys.Control | Keys.S) && _editPanel.Visible) { SaveCurrent(); return true; }
+            if (keyData == (Keys.Control | Keys.S) && _weaponsPanel.Visible) { _weaponsPanel.SaveCurrent(); return true; }
+            if (keyData == Keys.Escape && _comparePanel.Visible) { ShowView(0); return true; }
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             base.OnFormClosing(e);
+            if (!_weaponsPanel.ConfirmClose()) { e.Cancel = true; return; }
             var dirty = _presets.Where(p => !p.BuiltIn && p.Dirty).ToList();
             if (dirty.Count == 0) return;
             var r = MessageBox.Show(this, "Save changes to: " + string.Join(", ", dirty.Select(p => "\"" + p.Name + "\"")) + " ?",
@@ -866,6 +1071,15 @@ namespace IRRCompanion
             _rowsPanel.AutoScrollPosition = new Point(0, -_rowsPanel.AutoScrollPosition.Y + _advHeader.Top - Theme.S(8));
             shot("edit_advanced");
             _advHeader.Expanded = false;
+            _perfHeader.Expanded = true;
+            Application.DoEvents();
+            _rowsPanel.AutoScrollPosition = new Point(0, -_rowsPanel.AutoScrollPosition.Y + _perfHeader.Top - Theme.S(8));
+            shot("edit_performance");
+            _perfHeader.Expanded = false;
+            _onlyChanged.Checked = true;
+            _rowsPanel.AutoScrollPosition = new Point(0, 0);
+            shot("edit_changed_only");
+            _onlyChanged.Checked = false;
             SelectPreset(_presets[0]);
             shot("builtin");
             _cmpA.SelectedItem = _presets[1];
@@ -899,6 +1113,12 @@ namespace IRRCompanion
             _commandsPanel.TestAddFavorite("Spawn 5 bandages", "irr.Item.Spawn Bandage 5", null);
             shot("commands_favorites");
             ShowView(3);
+            _weaponsPanel.TestShow(0);
+            shot("weapons");
+            _weaponsPanel.TestShow(1);
+            shot("weapons_aug");
+            _weaponsPanel.TestClear();
+            ShowView(4);
             _hideoutPanel.TestShow("Generator", true);
             shot("hideout_unit");
             _hideoutPanel.TestShow("Stash", true);
@@ -907,7 +1127,7 @@ namespace IRRCompanion
             shot("hideout_shopping");
             _hideoutPanel.TestShow(null, false);
             shot("hideout_shopping_all");
-            ShowView(4);
+            ShowView(5);
             _mapsPanel.TestShow("Quarry", 0, -1);
             shot("maps_quarry");
             _mapsPanel.TestShow("Delta", 0, 5);

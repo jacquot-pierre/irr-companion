@@ -6,7 +6,7 @@
     <LangVersion>7.3</LangVersion>
     <AssemblyName>IRRCompanion</AssemblyName>
     <RootNamespace>IRRCompanion</RootNamespace>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
     <Product>IRR Companion</Product>
     <Description>AI preset editor, console command builder, hideout upgrade planner and resource maps for Incursion Red River</Description>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -33,6 +33,7 @@
     <EmbeddedResource Include="Resources\hideout.json" LogicalName="hideout.json" />
     <EmbeddedResource Include="Resources\icons\*.png" LogicalName="icons/%(Filename).png" />
     <EmbeddedResource Include="Resources\maps.json" LogicalName="maps.json" />
+    <EmbeddedResource Include="Resources\weapons.json" LogicalName="weapons.json" />
     <EmbeddedResource Include="Resources\maps\*.jpg" LogicalName="maps/%(Filename)%(Extension)" />
   </ItemGroup>
 

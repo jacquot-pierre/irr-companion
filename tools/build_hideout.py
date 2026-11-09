@@ -83,8 +83,9 @@ def package(path):
     return names, exports
 
 
-def package_full(path):
-    """Names, import object names and exports of a cooked UE5 package (unversioned)."""
+def package_full(path, numbered=False):
+    """Names, import object names and exports of a cooked UE5 package (unversioned).
+    numbered: import names with their number (ID_Glock_19 is stored as name ID_Glock + number 20)."""
     d = open(path, 'rb').read()
     r = Reader(d, 4)
     legacy = r.i32()
@@ -117,9 +118,9 @@ def package_full(path):
     imports = []
     q = import_off
     for _ in range(import_count):
-        _, _, cn, _, outer, on, _ = struct.unpack_from('<iiiiiii', d, q)
+        _, _, cn, _, outer, on, onum = struct.unpack_from('<iiiiiii', d, q)
         q += 28 + (0 if flags & 0x80000000 else 8) + (4 if ue5 >= 1003 else 0)
-        imports.append(names[on])
+        imports.append(names[on] + ('_%d' % (onum - 1) if numbered and onum > 0 else ''))
     uexp = os.path.splitext(path)[0] + '.uexp'
     uexp_size = os.path.getsize(uexp) if os.path.exists(uexp) else 1 << 62
     for stride in range(72, 140, 4):

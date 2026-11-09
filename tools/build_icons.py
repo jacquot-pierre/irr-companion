@@ -4,7 +4,8 @@ Usage:
   python -I tools/build_icons.py "<game>\Test_C\Content\Paks" [path\to\repak.exe]
 
 Which icons: every item of src/Resources/hideout.json (run tools/build_hideout.py first), the keys of
-src/Resources/maps.json (run tools/build_maps.py first), cash, the four
+src/Resources/maps.json (run tools/build_maps.py first), every weapon, attachment and ammo of
+src/Resources/weapons.json (run tools/build_weapons.py first; weapons in BIG x BIG), cash, the four
 materials, plus the item names listed in EXTRA_ITEMS below. Icons are added little by little: add an item
 definition name (as in tools/item_paths.txt, without ID_) to EXTRA_ITEMS to ship its icon.
 
@@ -30,12 +31,27 @@ ROOT = os.path.normpath(os.path.join(HERE, '..'))
 OUT = os.path.join(ROOT, 'src', 'Resources', 'icons')
 HIDEOUT = os.path.join(ROOT, 'src', 'Resources', 'hideout.json')
 SIZE = 64
+BIG = 128  # weapon icons (WEAPONS tab)
 
 # Extra item icons to ship (item definition names, e.g. 'Bandage'), beyond the hideout items.
 EXTRA_ITEMS = []
 # Material -> texture name in Blueprints/ResourceSystem/Textures
 MATERIALS = {'Concrete': 'concrete__1_', 'Food': 'food', 'Metal': 'metal__1_', 'Oil': 'oil'}
 RESOURCE_TEX = 'Test_C/Content/Blueprints/ResourceSystem/Textures/'
+# Generic silhouettes of the game (inventory slots), used by the WEAPONS tab for items without an icon of their
+# own and for empty slots: cat_<weapon class or part folder>.png
+CAT_TEX = 'Test_C/Content/Blueprints/InventorySystem/Textures/'
+CATEGORIES = {
+    'Rifle': 'ItemCategories/Weapon_Types/AR-Icon', 'Lmg': 'ItemCategories/Weapon_Types/AR-Icon',
+    'DMR': 'ItemCategories/Weapon_Types/DMR-Icon', 'SniperRifle': 'ItemCategories/Weapon_Types/Sniper-Icon',
+    'SMG': 'ItemCategories/Weapon_Types/SMG-Icon', 'Shotgun': 'ItemCategories/Weapon_Types/Shotgun-Icon',
+    'Pistol': 'ItemCategories/Weapon_Types/Pistol-Icon',
+    'Barrel': 'Attachments/T_Barrel', 'GasTube': 'Attachments/T_Gastube', 'Foregrip': 'Attachments/T_GripIcon',
+    'Handguard': 'Attachments/T_Handguard', 'Tactical': 'Attachments/T_LightAttachment', 'Mag': 'Attachments/T_MagIcon',
+    'Muzzle': 'Attachments/T_Muzzle', 'PistolGrip': 'Attachments/T_PistolGrip', 'Rail': 'Attachments/T_Rail',
+    'Sight': 'Attachments/T_Scope', 'Stock': 'Attachments/T_Stock', 'DustCover': 'Attachments/DustCover-Icon',
+    'Receiver': 'Attachments/T_Body',
+}
 
 
 # ------------------------------------------------------------------ texture decoding
@@ -50,7 +66,7 @@ def read_texture(uexp):
     n = struct.unpack_from('<i', d, i - 4)[0]
     pf = d[i:i + n - 1].decode()
     w, h = struct.unpack_from('<ii', d, i - 16)
-    bpp = {'PF_DXT1': 0.5, 'PF_DXT5': 1, 'PF_B8G8R8A8': 4, 'PF_FloatRGBA': 8}.get(pf)
+    bpp = {'PF_DXT1': 0.5, 'PF_DXT5': 1, 'PF_BC7': 1, 'PF_B8G8R8A8': 4, 'PF_FloatRGBA': 8}.get(pf)
     if bpp is None:
         raise ValueError('pixel format %s not handled (%s)' % (pf, uexp))
     size = int(w * h * bpp)
@@ -66,8 +82,91 @@ def _c565(c):
     return ((c >> 11 & 31) * 255 // 31, (c >> 5 & 63) * 255 // 63, (c & 31) * 255 // 31)
 
 
+# BC7 modes handled: (subsets, partition bits, rotation bits, index selection bit, colour bits, alpha bits,
+# endpoint p-bits, shared p-bits, index bits, second index bits). Modes 0 and 2 (3 subsets) are not handled:
+# the script says so (the game's silhouettes use modes 4-7 today).
+BC7_MODES = {1: (2, 6, 0, 0, 6, 0, 0, 1, 3, 0), 3: (2, 6, 0, 0, 7, 0, 1, 0, 2, 0), 4: (1, 0, 2, 1, 5, 6, 0, 0, 2, 3),
+             5: (1, 0, 2, 0, 7, 8, 0, 0, 2, 2), 6: (1, 0, 0, 0, 7, 7, 1, 0, 4, 0), 7: (2, 6, 0, 0, 5, 5, 1, 0, 2, 0)}
+BC7_WEIGHTS = {2: [0, 21, 43, 64], 3: [0, 9, 18, 27, 37, 46, 55, 64],
+               4: [0, 4, 9, 13, 17, 21, 26, 30, 34, 38, 43, 47, 51, 55, 60, 64]}
+# 2-subset partitions (bit i = subset of pixel i) and the anchor pixel of subset 1 (BC6H / BC7 specification)
+BC7_P2 = [0xCCCC, 0x8888, 0xEEEE, 0xECC8, 0xC880, 0xFEEC, 0xFEC8, 0xEC80, 0xC800, 0xFFEC, 0xFE80, 0xE800, 0xFFE8,
+          0xFF00, 0xFFF0, 0xF000, 0xF710, 0x008E, 0x7100, 0x08CE, 0x008C, 0x7310, 0x3100, 0x8CCE, 0x088C, 0x3110,
+          0x6666, 0x366C, 0x17E8, 0x0FF0, 0x718E, 0x399C, 0xAAAA, 0xF0F0, 0x5A5A, 0x33CC, 0x3C3C, 0x55AA, 0x9696,
+          0xA55A, 0x73CE, 0x13C8, 0x324C, 0x3BDC, 0x6996, 0xC33C, 0x9966, 0x0660, 0x0272, 0x04E4, 0x4E40, 0x2720,
+          0xC936, 0x936C, 0x39C6, 0x639C, 0x9336, 0x9CC6, 0x817E, 0xE718, 0xCCF0, 0x0FCC, 0x7744, 0xEE22]
+BC7_A2 = [15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 2, 8, 2, 2, 8, 8, 15, 2, 8, 2, 2, 8, 8,
+          2, 2, 15, 15, 6, 8, 2, 8, 15, 15, 2, 8, 2, 2, 2, 15, 15, 6, 6, 2, 6, 8, 15, 15, 2, 2, 15, 15, 15, 15, 15, 2,
+          2, 15]
+
+
+def _bc7_block(block):
+    """16 RGBA pixels of one BC7 block."""
+    v = int.from_bytes(block, 'little')
+    mode = (v & -v).bit_length() - 1 if v else 8
+    if mode not in BC7_MODES:
+        raise ValueError('BC7 mode %d not handled' % mode)
+    ns, pb, rb, isb, cb, ab, epb, spb, ib, ib2 = BC7_MODES[mode]
+    pos = mode + 1
+
+    def bits(n):
+        nonlocal pos
+        r = (v >> pos) & ((1 << n) - 1)
+        pos += n
+        return r
+
+    part, rot, sel = bits(pb), bits(rb), bits(isb)
+    ne = 2 * ns  # endpoints: subset s uses 2s and 2s+1
+    ends = [[bits(cb) for _ in range(ne)] for _ in range(3)]
+    ends.append([bits(ab) for _ in range(ne)] if ab else [255] * ne)
+    nb = [cb, cb, cb, ab]
+    pbits = [bits(1) for _ in range(ne)] if epb else [p for p in (bits(1) for _ in range(ns)) for _ in range(2)] if spb else None
+    if pbits:
+        for c in range(4):
+            if c < 3 or ab:
+                ends[c] = [(ends[c][e] << 1) | pbits[e] for e in range(ne)]
+        nb = [n + 1 for n in nb]
+    for c in range(4):
+        if c < 3 or ab:
+            n = nb[c]
+            ends[c] = [(x << (8 - n)) | (x >> (2 * n - 8)) for x in ends[c]]
+    subset = [(BC7_P2[part] >> i) & 1 for i in range(16)] if ns == 2 else [0] * 16
+    anchors = {0, BC7_A2[part]} if ns == 2 else {0}
+    idx = [bits(ib - 1 if i in anchors else ib) for i in range(16)]
+    idx2 = [bits(ib2 - 1 if i == 0 else ib2) for i in range(16)] if ib2 else None
+    out = bytearray(64)
+    for i in range(16):
+        ci, cbits, ai, abits = idx[i], ib, idx[i], ib
+        if idx2 is not None:
+            if sel:
+                ci, cbits = idx2[i], ib2
+            else:
+                ai, abits = idx2[i], ib2
+        e0, e1 = 2 * subset[i], 2 * subset[i] + 1
+        wc, wa = BC7_WEIGHTS[cbits][ci], BC7_WEIGHTS[abits][ai]
+        px = [((64 - wc) * ends[c][e0] + wc * ends[c][e1] + 32) >> 6 for c in range(3)]
+        px.append(((64 - wa) * ends[3][e0] + wa * ends[3][e1] + 32) >> 6)
+        if rot:
+            px[rot - 1], px[3] = px[3], px[rot - 1]
+        out[i * 4:i * 4 + 4] = bytes(px)
+    return out
+
+
 def decode(pf, w, h, data):
     """RGBA bytes."""
+    if pf == 'PF_BC7':
+        out = bytearray(w * h * 4)
+        k = 0
+        for by in range(0, h, 4):
+            for bx in range(0, w, 4):
+                px = _bc7_block(data[k:k + 16])
+                k += 16
+                for i in range(16):
+                    x, y = bx + i % 4, by + i // 4
+                    if x < w and y < h:
+                        q = (y * w + x) * 4
+                        out[q:q + 4] = px[i * 4:i * 4 + 4]
+        return bytes(out)
     if pf == 'PF_B8G8R8A8':
         out = bytearray(data)
         out[0::4], out[2::4] = data[2::4], data[0::4]
@@ -189,6 +288,13 @@ def main():
     maps_json = os.path.join(ROOT, 'src', 'Resources', 'maps.json')
     if os.path.exists(maps_json):  # keys of the safes / locked doors of the MAPS tab
         ids |= {k['id'] for k in json.load(open(maps_json, encoding='utf-8')).get('keys', [])}
+    big, icon_of = set(), {}
+    weapons_json = os.path.join(ROOT, 'src', 'Resources', 'weapons.json')
+    if os.path.exists(weapons_json):  # WEAPONS tab
+        w = json.load(open(weapons_json, encoding='utf-8'))
+        ids |= set(w['items'])
+        big = set(w['weapons'])
+        icon_of = {k: 'Test_C/Content/' + v['icon'][len('/Game/'):] for k, v in w['items'].items() if v.get('icon')}
     ids = sorted(ids)
 
     print('listing the paks...')
@@ -198,6 +304,9 @@ def main():
 
     jobs, problems = [], []
     for i in ids:
+        if i in icon_of and icon_of[i] + '.uasset' in files:  # icon named in the item definition
+            jobs.append(('item_' + i, icon_of[i]))
+            continue
         idp = id_paths.get(i)
         if not idp:
             problems.append('no item definition ID_%s' % i)
@@ -212,6 +321,9 @@ def main():
         jobs.append(('item_' + i, cands[0][:-7]))
     for m, tex in MATERIALS.items():
         jobs.append(('res_' + m, RESOURCE_TEX + tex))
+    if big:
+        for c, tex in CATEGORIES.items():
+            jobs.append(('cat_' + c, CAT_TEX + tex))
 
     tmp = tempfile.mkdtemp(prefix='irr_icons_')
     try:
@@ -224,8 +336,9 @@ def main():
             uexp = os.path.join(tmp, base.replace('/', os.sep) + '.uexp')
             try:
                 pf, w, h, data = read_texture(uexp)
-                small = downscale(decode(pf, w, h, data), w, h, SIZE)
-                write_png(os.path.join(OUT, name + '.png'), SIZE, SIZE, small)
+                size = BIG if (name.startswith('item_') and name[5:] in big) or name.startswith('cat_') else SIZE
+                small = downscale(decode(pf, w, h, data), w, h, size)
+                write_png(os.path.join(OUT, name + '.png'), size, size, small)
                 done.add(name + '.png')
             except Exception as ex:  # noqa: BLE001 - report every icon that failed
                 problems.append('%s: %s' % (name, ex))

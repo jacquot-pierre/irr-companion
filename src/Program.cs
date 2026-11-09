@@ -25,6 +25,7 @@ namespace IRRCompanion
                 return;
             }
             Library.MigrateOldFolder();
+            AppSettings.Load();
             Application.Run(new MainForm());
         }
 
@@ -61,6 +62,7 @@ namespace IRRCompanion
                         Application.EnableVisualStyles();
                         Application.SetCompatibleTextRenderingDefault(false);
                         GameData.Load();
+                        if (args.Length >= 3) AppSettings.UiZoom = float.Parse(args[2], System.Globalization.CultureInfo.InvariantCulture);
                         using (var f = new MainForm())
                         {
                             f.StartPosition = FormStartPosition.Manual;
