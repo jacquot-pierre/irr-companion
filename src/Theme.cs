@@ -34,13 +34,14 @@ namespace IRRCompanion
 
         public static void Init(Control c)
         {
-            using (var g = c.CreateGraphics()) Scale = g.DpiX / 96f;
-            Body = new Font("Segoe UI", 9.5f);
-            Bold = new Font("Segoe UI Semibold", 9.5f);
-            Small = new Font("Segoe UI", 8.5f);
-            Title = new Font("Segoe UI Semibold", 15f);
-            Header = new Font("Segoe UI Semibold", 11.5f);
-            Mono = new Font("Consolas", 9.5f);
+            float z = AppSettings.UiZoom;  // interface size chosen by the user, on top of the Windows scaling
+            using (var g = c.CreateGraphics()) Scale = g.DpiX / 96f * z;
+            Body = new Font("Segoe UI", 9.5f * z);
+            Bold = new Font("Segoe UI Semibold", 9.5f * z);
+            Small = new Font("Segoe UI", 8.5f * z);
+            Title = new Font("Segoe UI Semibold", 15f * z);
+            Header = new Font("Segoe UI Semibold", 11.5f * z);
+            Mono = new Font("Consolas", 9.5f * z);
         }
 
         public static int S(int px) { return (int)Math.Round(px * Scale); }

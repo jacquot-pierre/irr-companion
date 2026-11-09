@@ -10,9 +10,9 @@ One portable `.exe`, nothing to install, nothing written to the game's files.
 
 | Tab | What it does |
 |---|---|
-| **EDIT** | Create AI presets from the game difficulties, with the same settings as the in-game menu, and get the share code to paste in the game. |
-| **COMPARE** | Compare two presets setting by setting. |
+| **PRESETS** | Create AI presets from the game difficulties, with the same settings as the in-game menu, compare them and get the share code to paste in the game. |
 | **COMMANDS** | Build any of the game's 151 console commands with a few clicks, copy it, keep your favorites. |
+| **WEAPONS** | Build a weapon from the parts that fit it, as in the gunsmith, save your builds and copy the `additem` line that gives the whole build. |
 | **HIDEOUT** | See the cost of every hideout upgrade with the game icons, track your progress and get a shopping list. |
 | **MAPS** | Resource spawn points, extraction points, safes and locked doors (with the key they need) on the game maps. |
 
@@ -40,8 +40,14 @@ Requires Windows 10 or 11 (it uses .NET Framework 4.6.2, already part of Windows
   suppression, grenades. Click **▶ ADVANCED** at the bottom of the list to open them. The grenade settings
   have the game's own descriptions; the other names and descriptions are ours (written from the game key and
   the difficulty values) and say so in their tooltip.
-- **Reference values**: next to each setting, see the value of another preset (▲ above / ▼ below).
-- **Custom simulation**: AI optimization ranges and movement tick rate.
+- **Clear header**: the preset name, a state line (closest game difficulty, how many settings differ from the
+  reference, unsaved changes) and four buttons: **SAVE**, **COPY CODE**, **COMPARE** and **⋯** (revert, view
+  code, duplicate, author and description, delete).
+- **Reference values**: next to each setting, see the value of another preset (▲ above / ▼ below), chosen in
+  *Compare values to* (or **None**). Tick *Only changed settings* to see only what your preset changes.
+- **Game difficulties are read only**: **MAKE MY OWN COPY** turns one into your own preset.
+- **Performance** (closed by default, at the bottom): AI simulation level, optimization ranges and movement
+  tick rate.
 - **Share codes**: **COPY CODE** gives an `IRR1-…` code to paste in the game's preset import;
   **IMPORT CODE** reads a code exported by the game or shared by another player.
 - **Your presets stay in the app** (`%APPDATA%\IRR Companion\presets.json`). The game only sees what you
@@ -49,7 +55,8 @@ Requires Windows 10 or 11 (it uses .NET Framework 4.6.2, already part of Windows
 
 ### Compare presets
 
-Pick two presets and see every setting side by side: values, change in value and percent, and a bar showing
+Click **COMPARE** in the presets editor (**◀ BACK TO PRESET** or `Esc` to return). Pick two presets and see
+every setting side by side: values, change in value and percent, and a bar showing
 both values on the setting's range. Tick *Only differences* to hide what is identical, and *Advanced* to
 compare the advanced settings too (the box shows how many of them differ while it is unticked).
 
@@ -78,6 +85,36 @@ The **COMMANDS** tab lists the game's `irr.*` console commands (151 of them), wi
 reorder them, and copy them in one click. They are stored in `%APPDATA%\IRR Companion\favorites.json`.
 
 ![Favorite commands](docs/favorites.png)
+
+### Weapon builder
+
+The **WEAPONS** tab builds a weapon from its parts and gives you the console line that spawns it all:
+
+- **Base weapon**: the 49 weapons of the game, by class (assault rifles, DMRs, sniper rifles, SMGs, LMGs,
+  shotguns, pistols), with their game icon. Some weapons and parts have no icon in the game files (AS Val, VSS,
+  M14, MPX...): they show the game's grey silhouette of their class, as do the empty slots.
+- **Only compatible parts**: each slot (barrel, handguard, muzzle, sight, stock, pistol grip, magazine...)
+  only offers the parts the game accepts in it - the same lists the gunsmith uses, read from the game files.
+  You cannot put a part on a weapon that does not take it.
+- **Parts of parts**: a part can have slots of its own (rails and grips on a handguard, a muzzle on a
+  barrel, a sight on a rail mount); they show up under it. When you change a part or the base weapon, the
+  parts that still fit are kept.
+- **Default parts**: `additem` gives a weapon fitted with its default parts and a loaded magazine (the game's
+  preset). A new build starts with them, marked *comes with the weapon*; they are not in the command. **⋯ >
+  Back to the default parts** resets the build.
+- **Magazines and ammo**: how many magazines in total, the ammo type (magazines are given loaded with it when
+  the game has that variant, e.g. AR-15 magazines with x300 Blackout) and extra loose rounds.
+- **CONSOLE COMMAND**: the `additem` line that gives the whole build, e.g.
+  `additem AUG_A3 1 | additem AUG_A3_Barrel_20_Inch_Barrel 1 | ... | additem AUG_556x45_42rnd 2`.
+  **COPY COMMAND** copies it; paste it in the game console (cheat). The changed parts arrive in your stash or
+  inventory: fit them at the gunsmith.
+- `additem` takes the names of the game's vendor table, which often differ from the item names (e.g.
+  `MP5_Picatinny_Rail` for the MP5 scope mount, `545x39_7N22` for 5.45x39 BP rounds): the app uses them. The
+  rare part the table does not have (the AKM wooden pistol grip) is marked and left out of the command.
+- **My builds**: save your builds (**SAVE**, `Ctrl+S`), duplicate or delete them (**⋯**). They are stored in
+  `%APPDATA%\IRR Companion\weapons.json`.
+
+![Weapon builder](docs/weapons.png)
 
 ### Hideout upgrades
 
@@ -126,7 +163,7 @@ The map placement is the one of the in-game PDA map: centre of the map volume an
 ## How to use
 
 **Make an AI preset**
-1. Select a game difficulty and click **DUPLICATE** (or **NEW**).
+1. Select a game difficulty and click **MAKE MY OWN COPY** (or **+ NEW**).
 2. Change the settings, give the preset a name, click **SAVE** (`Ctrl+S`).
 3. Click **COPY CODE**, then in the game paste the code in the AI settings preset import.
 
@@ -134,6 +171,11 @@ The map placement is the one of the in-game PDA map: centre of the map volume an
 1. Open the **COMMANDS** tab and pick a command (or search for it).
 2. Set its arguments on the right and click **COPY** (or double-click the command).
 3. In the game, open the console and paste with `Ctrl+V`, then press Enter.
+
+**Build a weapon**
+1. Open the **WEAPONS** tab, click **+ NEW BUILD** and pick the **base weapon**.
+2. Pick a part in each slot you want (only compatible parts are listed), set the magazines and the ammo.
+3. Name the build and click **SAVE**, then **COPY COMMAND** and paste it in the game console.
 
 **Plan your hideout**
 1. Open the **HIDEOUT** tab and set your player level and faction loyalty on the left.
@@ -146,6 +188,9 @@ The map placement is the one of the in-game PDA map: centre of the map volume an
 1. Open the **MAPS** tab and pick a map (and a floor for the Bunker).
 2. Untick what you do not need; hover a resource to see its chance, a safe or a door to see its key.
 
+**Bigger interface**: pick **UI size** (100 % to 200 %) at the bottom right of the window; it applies after a
+restart and adds to the Windows display scaling.
+
 ### Your data
 
 Everything the app saves is in `%APPDATA%\IRR Companion` (the **Open data folder** link at the bottom
@@ -156,6 +201,10 @@ right of the window opens it):
 | `presets.json` | your AI presets |
 | `favorites.json` | your favorite console commands |
 | `hideout.json` | your hideout progress: level of each unit, player level, faction loyalty |
+| `weapons.json` | your weapon builds |
+
+`settings.json` keeps the app preferences (**UI size**, in the status bar: 100 % to 200 %, on top of the
+Windows display scaling; applied after a restart).
 
 Each file keeps a `.bak` copy of its previous version. Copy this folder to keep a backup or to move your data
 to another PC. Users of the former *IRR Preset Tool*:
@@ -174,6 +223,9 @@ updates them. If something differs from the game, please
   the app picks it for you from the weather list.
 - The item names offered for *Spawn item* / *Give item* are the game's internal names; the game also accepts
   part of a name and lists the matches in the console when there are several.
+- Weapon builds: `additem` names come from the game's vendor table (`DT_Vendor_Old`), not from the item
+  names used by *Spawn item* / *Give item*. A build saved with an older version
+  of the app drops the parts that no longer exist or no longer fit after a game update.
 - Commands marked **HOST** only work for the player who hosts the game (or in solo).
 - Hideout: the Structure and the Shooting Range have a free level 1 in the game files (their starting state).
   It is not shown: their levels start at the first upgrade you pay for, so game level 2 is shown as level 1
@@ -199,8 +251,8 @@ The exe is `src/bin/Release/net462/IRRCompanion.exe`. A Debug build adds test he
 
 | Path | Content |
 |---|---|
-| `src/` | the WinForms app (C# 7.3, .NET Framework 4.6.2): `MainForm.cs` (EDIT / COMPARE), `CommandsPanel.cs`, `HideoutPanel.cs`, `MapsPanel.cs`, data models (`Preset.cs`, `Commands.cs`, `Hideout.cs`, `Maps.cs`), `ShareCode.cs`, `Theme.cs` / `Controls.cs` (dark UI) |
-| `src/Resources/` | data generated from the game: `defaults.json`, `commands.json`, `hideout.json`, `maps.json`, `icons/`, `maps/` |
+| `src/` | the WinForms app (C# 7.3, .NET Framework 4.6.2): `MainForm.cs` (PRESETS editor and compare), `CommandsPanel.cs`, `WeaponsPanel.cs`, `HideoutPanel.cs`, `MapsPanel.cs`, data models (`Preset.cs`, `Commands.cs`, `Weapons.cs`, `Hideout.cs`, `Maps.cs`), `ShareCode.cs`, `Theme.cs` / `Controls.cs` (dark UI) |
+| `src/Resources/` | data generated from the game: `defaults.json`, `commands.json`, `weapons.json`, `hideout.json`, `maps.json`, `icons/`, `maps/` |
 | `tools/` | Python scripts that read the game files and check the app (see below), test share codes in `tools/testdata/` |
 | `.claude/skills/update-irr-tool/` | step-by-step procedure to update the app after a game patch |
 | `.github/workflows/build.yml` | builds the exe on every push, publishes a release for `v*` tags |
@@ -221,8 +273,9 @@ release - is the Claude Code skill [`.claude/skills/update-irr-tool/SKILL.md`](.
 | `map_weathers.py` | `tools/map_weathers.json`: weather list of each map |
 | `list_items.py` | `tools/item_paths.txt`: the item definitions |
 | `build_commands.py` | `src/Resources/commands.json`: commands, weathers and items |
+| `build_weapons.py` | `src/Resources/weapons.json`: weapons, their slots and the parts each slot accepts (the gunsmith's data), magazine capacities, `additem` names (vendor table), default parts of each weapon and loaded magazines (item presets) |
 | `build_hideout.py` | `src/Resources/hideout.json`: costs and requirements of every hideout unit level |
-| `build_icons.py` | `src/Resources/icons/`: icons of the hideout items, cash and materials (+ `EXTRA_ITEMS`) |
+| `build_icons.py` | `src/Resources/icons/`: icons of the hideout items, map keys, weapons, parts and ammo, cash and materials (+ `EXTRA_ITEMS`) |
 | `build_maps.py` | `src/Resources/maps.json` and `maps/*.jpg`: resource and extraction points, safes and locked doors with their keys, minimaps and their bounds |
 | `irr_sharecode.py` | decode / encode share codes from the command line |
 

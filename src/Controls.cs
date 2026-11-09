@@ -302,6 +302,45 @@ namespace IRRCompanion
         }
     }
 
+    /// <summary>Dark context menu (the ⋯ menu of the presets editor).</summary>
+    public static class DarkMenu
+    {
+        public static ContextMenuStrip Create()
+        {
+            return new ContextMenuStrip
+            {
+                Renderer = new DarkRenderer(), BackColor = Theme.Panel, ForeColor = Theme.Text, Font = Theme.Body,
+                ShowImageMargin = false, Padding = new Padding(0, Theme.S(4), 0, Theme.S(4)),
+            };
+        }
+
+        private sealed class DarkRenderer : ToolStripProfessionalRenderer
+        {
+            public DarkRenderer() : base(new DarkColors()) { RoundedEdges = false; }
+
+            protected override void OnRenderItemText(ToolStripItemTextRenderEventArgs e)
+            {
+                e.TextColor = e.Item.Enabled ? Theme.Text : Theme.TextFaint;
+                base.OnRenderItemText(e);
+            }
+        }
+
+        private sealed class DarkColors : ProfessionalColorTable
+        {
+            public override Color ToolStripDropDownBackground { get { return Theme.Panel; } }
+            public override Color MenuBorder { get { return Theme.Border; } }
+            public override Color MenuItemBorder { get { return Theme.Border; } }
+            public override Color MenuItemSelected { get { return Theme.RowHover; } }
+            public override Color MenuItemSelectedGradientBegin { get { return Theme.RowHover; } }
+            public override Color MenuItemSelectedGradientEnd { get { return Theme.RowHover; } }
+            public override Color ImageMarginGradientBegin { get { return Theme.Panel; } }
+            public override Color ImageMarginGradientMiddle { get { return Theme.Panel; } }
+            public override Color ImageMarginGradientEnd { get { return Theme.Panel; } }
+            public override Color SeparatorDark { get { return Theme.Border; } }
+            public override Color SeparatorLight { get { return Theme.Panel; } }
+        }
+    }
+
     /// <summary>Owner-drawn dark combo box.</summary>
     public sealed class DarkCombo : ComboBox
     {

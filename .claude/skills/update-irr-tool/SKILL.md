@@ -18,7 +18,8 @@ The tool embeds data read from the game. After a game patch, each of these can c
 | Item names (Spawn / Give) | pak: `.../Items/**/ID_*.uasset` | `tools/item_paths.txt` | `tools/list_items.py` |
 | Hideout upgrade costs and requirements | pak: `Blueprints/MissionSystem/Actors/Hideout/**` | `src/Resources/hideout.json` | `tools/build_hideout.py` |
 | Resource / extraction points, safes, locked doors and keys, minimaps | pak: persistent levels `Maps/Gameplay/LVL_*`, `Maps/Testing/LVL_Bunker`, `Textures/Minimaps`, `Environment/Blueprints/Gameplay/Resources` | `src/Resources/maps.json`, `src/Resources/maps/*.jpg` | `tools/build_maps.py` |
-| Item / material icons (hideout) | pak: `Items/**/T_*_Icon` (mostly pakchunk6), `ResourceSystem/Textures` | `src/Resources/icons/*.png` | `tools/build_icons.py` |
+| Weapons, attachment slots and compatible parts (gunsmith) | pak: `Blueprints/InventorySystem/**` (Items and Objects, every pak) | `src/Resources/weapons.json` | `tools/build_weapons.py` |
+| Item / material icons (hideout, keys, weapons, parts, ammo) | pak: `Items/**/T_*_Icon` (mostly pakchunk6), `ResourceSystem/Textures` | `src/Resources/icons/*.png` | `tools/build_icons.py` |
 
 Work through the steps in order and keep a list of everything that changed: it becomes the release notes.
 Never write into the game folder. Extract into a work folder outside the repository (e.g. `%TEMP%\irr_update`).
@@ -50,6 +51,14 @@ repak unpack -o <work> -i "Test_C/Content/Blueprints/MissionSystem/Actors/Hideou
 ```
 
 (The hideout unit blueprints are split between pakchunk0 and pakchunk7.)
+
+For the weapons, extract the whole inventory system from every pak (about 12 GB with the meshes; a separate
+folder is fine, it is only read by `build_weapons.py`):
+
+```
+for each <pak> in <paks>\*.pak:
+  repak unpack -o <work> -f -i "Test_C/Content/Blueprints/InventorySystem" <pak>
+```
 
 If a path is not in pakchunk0 any more, find it with `repak list <pak>` on each pak.
 
@@ -186,15 +195,42 @@ saved progress (`hideout.json` version 2) uses the shown numbers; version 1 file
   look at the bytes at the reported offset and update the reader instead of skipping the check.
 - New faction tag in a requirement: add it to `FACTIONS` (abbreviation used in game, full name).
 
-Then refresh the icons (it lists the paks, extracts only the needed textures, ~10 s):
+## 7d. Weapons (WEAPONS tab)
+
+```
+python -I tools/build_weapons.py <work>
+```
+
+Reads every item definition (`Items/**/ID_*`) of the weapons, attachments and ammo, their attachment slots
+(container subobjects, classes in `Objects/ItemContainers`) and the parts each slot accepts (supported items:
+inline tag lists or `UISI_*` classes in `Objects/InventorySupportedItems`; a subobject without its own list takes
+the one of the same subobject in the container class defaults). Writes `src/Resources/weapons.json` and prints
+the counts (49 weapons, 513 attachments, 21 ammo today), the attachments no weapon accepts and the tags that
+match no item (tags left in the game data for removed items: expected, 4 today). It also reads the vendor table
+`Vendor/DT_Vendor_Old` (the row names `additem` takes, 825 rows) and the item presets `Presets/**/DA_*` (default
+parts of each weapon, loaded magazines) and prints the items additem cannot give (1 today), how many have another
+additem name (34) and the preset parts that fit no slot (10 `WARNING ... (left out)`: data of the game). Check:
+- the counts against the previous run; `git diff src/Resources/weapons.json` shows the compatibility changes;
+- a `ValueError` (unexpected container layout, supported items array not found, two classes with the same name)
+  means the cooked layout changed: look at the bytes and update the reader instead of skipping the check;
+- new slot class: its name comes from the game text of its class (`LABELS` overrides unclear ones, `SLOT_ORDER`
+  sets the display order); new weapon class folder: add it to `WEAPON_CLASSES`;
+- the WEAPONS screenshots (`_weapons`, `_weapons_aug`): the test builds keep their parts (if a part is gone,
+  the slot names or the part names changed).
+
+Run it before `build_icons.py` (the weapon, part and ammo icons come from `weapons.json`).
+
+Then refresh the icons (it lists the paks, extracts only the needed textures, ~2 min with the weapons):
 
 ```
 python -I tools/build_icons.py "<paks>"
 ```
 
-It writes one 64 px PNG per hideout item (`item_<name>.png`), cash and material (`res_<name>.png`) and
-removes icons no longer used. `WARNING: no *_Icon texture` is expected for items the game has no icon for
-(Honey Badger today): the app shows a "?" slot. `pixel format … not handled`: add the format to
+It writes one 64 px PNG per hideout item, map key, part and ammo (`item_<name>.png`, weapons in 128 px), cash
+and material (`res_<name>.png`) and removes icons no longer used. `WARNING: no *_Icon texture` is expected for
+items the game has no icon for (18 weapons and parts today: AS Val, VSS, M14, SR-25, MPX...): the app shows the
+silhouette of the item's class (`cat_<class or part folder>.png`, from `CATEGORIES`: the game's inventory slot
+textures, some in BC7 - modes 0 and 2 are not decoded, the script says so if one shows up). `pixel format … not handled`: add the format to
 `read_texture` / `decode`. Look at a few new icons before committing. Icons are added little by little:
 to ship more, add item names to `EXTRA_ITEMS`.
 
@@ -233,20 +269,23 @@ python -I tools/check_roundtrip.py
 src\bin\Debug\net462\IRRCompanion.exe --screenshot <work>\shot
 ```
 
-`--screenshot` (Debug build only) writes PNGs of every view: `_edit`, `_edit_scrolled`,
-`_edit_advanced_closed`, `_edit_advanced`, `_builtin`, `_compare`, `_compare_diff`, `_compare_advanced`, `_compare_difficulties`, `_commands_weather`, `_commands_item`,
+`--screenshot <prefix> [ui size]` (Debug build only, e.g. `1.25` to check the UI size setting) writes PNGs of every view: `_edit`, `_edit_scrolled`,
+`_edit_advanced_closed`, `_edit_advanced`, `_edit_performance`, `_edit_changed_only`, `_builtin`, `_compare`, `_compare_diff`, `_compare_advanced`, `_compare_difficulties`, `_commands_weather`, `_commands_item`,
 `_commands_player`, `_commands_cvar`, `_commands_favorites`, `_hideout_unit`, `_hideout_stash`,
-`_hideout_shopping`, `_hideout_shopping_all`, `_maps_quarry`, `_maps_delta_hover`, `_maps_bunker`, `_maps_safe_hover` (and `.error.txt` if it crashed). Look at each image:
-- EDIT: every section of the in-game menu, names not cut, values formatted like the game, nothing scrolled;
-  the ADVANCED bar at the bottom, closed, then open with its sections in order.
-- COMPARE: section rows, colors, range bars.
+`_weapons`, `_weapons_aug`, `_hideout_shopping`, `_hideout_shopping_all`, `_maps_quarry`, `_maps_delta_hover`, `_maps_bunker`, `_maps_safe_hover` (and `.error.txt` if it crashed). Look at each image:
+- PRESETS: header (name, state line, SAVE / COPY CODE / COMPARE / ⋯), every section of the in-game menu, names not cut, values formatted like the game, nothing scrolled;
+  the ADVANCED and PERFORMANCE bars at the bottom, closed, then open with their sections in order;
+  *Only changed settings* hides the equal rows and empty sections.
+- COMPARE (opened from the editor, BACK TO PRESET button): section rows, colors, range bars.
 - COMMANDS: categories and counts, weather lists, item picker, favorites buttons.
+- WEAPONS: base weapon with its icon, slot rows with the sub-slots indented under their part, magazines and
+  rounds fields, the console line (`additem X 1 | ...`).
 - HIDEOUT: unit list states, level cards (requirements green/red, items, materials), shopping list totals.
 If the screenshots are fine and the UI changed, refresh the README images: `docs/editor.png` (`_edit`),
 `docs/editor-advanced.png` (`_edit_advanced`),
 `docs/compare.png` (`_compare_difficulties`), `docs/commands.png` (`_commands_weather`),
 `docs/commands-items.png` (`_commands_item`), `docs/favorites.png` (`_commands_favorites`),
-`docs/hideout.png` (`_hideout_stash`), `docs/hideout-shopping.png` (`_hideout_shopping`), `docs/maps.png`
+`docs/weapons.png` (`_weapons`), `docs/hideout.png` (`_hideout_stash`), `docs/hideout-shopping.png` (`_hideout_shopping`), `docs/maps.png`
 (`_maps_quarry`), `docs/maps-hover.png` (`_maps_delta_hover`), `docs/maps-bunker.png` (`_maps_bunker`), `docs/maps-safe.png` (`_maps_safe_hover`).
 
 The real GUI cannot be clicked from the sandbox: tell the user what to test by hand (save, import a code,
@@ -276,6 +315,7 @@ copy a code and import it in game, copy a console command and run it in game).
 - [ ] `map_weathers.py`: every map has a list; new maps/weathers named
 - [ ] `list_items.py` run; `build_commands.py` run
 - [ ] `build_hideout.py`: all units found, no warning; cost changes reviewed
+- [ ] `build_weapons.py`: counts reviewed, no `ValueError`; compatibility changes reviewed
 - [ ] `build_icons.py` run; new icons look right
 - [ ] `build_maps.py`: every map found, point counts reviewed, no warning; MAPS screenshots show points on buildings
 - [ ] Debug build, screenshots reviewed; Release build clean
