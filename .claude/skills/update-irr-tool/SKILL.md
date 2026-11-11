@@ -220,6 +220,22 @@ additem name (34) and the preset parts that fit no slot (10 `WARNING ... (left o
 
 Run it before `build_icons.py` (the weapon, part and ammo icons come from `weapons.json`).
 
+## 7f. Loot heatmap (MAPS tab)
+
+```
+python -I tools/build_loot.py <work>
+```
+
+Needs, besides the 7d extraction, `Environment/Blueprints/Gameplay/LootContainers`, `Environment/Blueprints/DeadBody`
+and the persistent levels `Maps/Gameplay/LVL_{Delta,Quarry,Outskirts}` + `Maps/Testing/LVL_Bunker` (.umap + .uexp)
+in `<work>`, and `src/Resources/maps.json` (floors). Prints per map the places by kind (≈ 1 000 containers and
+1 000-1 500 loose loot points per map today) and the number of items that can be found (780). Check:
+- `without preset` / `without position` warnings: a new container class (add its folder to `CLASS_DIRS`) or a new
+  root component layout;
+- a new container preset: add a label to `LABELS`;
+- `loot settings: unknown property`: the LootGenerationSettings layout changed (see the docstring);
+- the MAPS heatmap screenshots (`_maps_heat_graphics`, `_maps_heat_bandage`): hot areas on the towns.
+
 ## 7e. Traders (TRADERS tab)
 
 ```
@@ -288,7 +304,7 @@ src\bin\Debug\net462\IRRCompanion.exe --screenshot <work>\shot
 `--screenshot <prefix> [ui size]` (Debug build only, e.g. `1.25` to check the UI size setting) writes PNGs of every view: `_edit`, `_edit_scrolled`,
 `_edit_advanced_closed`, `_edit_advanced`, `_edit_performance`, `_edit_changed_only`, `_builtin`, `_compare`, `_compare_diff`, `_compare_advanced`, `_compare_difficulties`, `_commands_weather`, `_commands_item`,
 `_commands_player`, `_commands_cvar`, `_commands_favorites`, `_hideout_unit`, `_hideout_stash`,
-`_weapons`, `_weapons_aug`, `_traders`, `_traders_vlf`, `_traders_search`, `_hideout_shopping`, `_hideout_shopping_all`, `_maps_quarry`, `_maps_delta_hover`, `_maps_bunker`, `_maps_safe_hover` (and `.error.txt` if it crashed). Look at each image:
+`_weapons`, `_weapons_aug`, `_traders`, `_traders_vlf`, `_traders_search`, `_hideout_shopping`, `_hideout_shopping_all`, `_maps_quarry`, `_maps_delta_hover`, `_maps_bunker`, `_maps_safe_hover`, `_maps_heat_graphics`, `_maps_heat_bandage` (and `.error.txt` if it crashed). Look at each image:
 - PRESETS: header (name, state line, SAVE / COPY CODE / COMPARE / ⋯), every section of the in-game menu, names not cut, values formatted like the game, nothing scrolled;
   the ADVANCED and PERFORMANCE bars at the bottom, closed, then open with their sections in order;
   *Only changed settings* hides the equal rows and empty sections.
@@ -302,7 +318,7 @@ If the screenshots are fine and the UI changed, refresh the README images: `docs
 `docs/compare.png` (`_compare_difficulties`), `docs/commands.png` (`_commands_weather`),
 `docs/commands-items.png` (`_commands_item`), `docs/favorites.png` (`_commands_favorites`),
 `docs/weapons.png` (`_weapons`), `docs/traders.png` (`_traders_vlf`), `docs/hideout.png` (`_hideout_stash`), `docs/hideout-shopping.png` (`_hideout_shopping`), `docs/maps.png`
-(`_maps_quarry`), `docs/maps-hover.png` (`_maps_delta_hover`), `docs/maps-bunker.png` (`_maps_bunker`), `docs/maps-safe.png` (`_maps_safe_hover`).
+(`_maps_quarry`), `docs/maps-hover.png` (`_maps_delta_hover`), `docs/maps-bunker.png` (`_maps_bunker`), `docs/maps-safe.png` (`_maps_safe_hover`), `docs/maps-heat.png` (`_maps_heat_graphics`).
 
 The real GUI cannot be clicked from the sandbox: tell the user what to test by hand (save, import a code,
 copy a code and import it in game, copy a console command and run it in game).
@@ -333,6 +349,7 @@ copy a code and import it in game, copy a console command and run it in game).
 - [ ] `build_hideout.py`: all units found, no warning; cost changes reviewed
 - [ ] `build_weapons.py`: counts reviewed, no `ValueError`; compatibility changes reviewed
 - [ ] `build_traders.py`: counts reviewed, no `ValueError`; chance changes reviewed
+- [ ] `build_loot.py`: places per map reviewed, no warning; heatmap screenshots look right
 - [ ] `build_icons.py` run; new icons look right
 - [ ] `build_maps.py`: every map found, point counts reviewed, no warning; MAPS screenshots show points on buildings
 - [ ] Debug build, screenshots reviewed; Release build clean

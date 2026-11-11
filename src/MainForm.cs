@@ -1150,6 +1150,11 @@ namespace IRRCompanion
             shot("maps_bunker");
             _mapsPanel.TestShowLock("Outskirts", "LargeSafe");
             shot("maps_safe_hover");
+            _mapsPanel.TestHeat("Delta", "Graphics_Card");
+            shot("maps_heat_graphics");
+            _mapsPanel.TestHeat("Quarry", "Bandage");
+            shot("maps_heat_bandage");
+            _mapsPanel.TestClearHeat();
             ShowView(0);
             _presets.Remove(p);
             foreach (var x in _presets) x.Dirty = false;

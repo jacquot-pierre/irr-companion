@@ -197,8 +197,9 @@ def read_trader(path):
     return entries, settings
 
 
-def vendor_info(inv):
-    """Item definition (ID_x) -> (rarity tier tag, market price), from the vendor table (first row of the item)."""
+def vendor_info(inv, presets=False):
+    """Item definition (ID_x) -> (rarity tier tag, market price), from the vendor table (first row of the item).
+    presets: also the rows that give a preset (weapons, loaded magazines): the rarity goes to the preset's item."""
     path = os.path.join(inv, 'Vendor', 'DT_Vendor_Old.uasset')
     pkg = Package(path)
     b = pkg.data(1)
@@ -220,6 +221,12 @@ def vendor_info(inv):
         rows += 1
         data = row.get('ItemData') or {}
         ref = item_ref(data)
+        if ref and ref.startswith('DA_') and presets:
+            from build_weapons import read_preset
+            target = read_preset(inv, ref)[0]
+            if target and target.startswith('ID_') and row.get('ItemRarityTag'):
+                rarity.setdefault(target[3:], row['ItemRarityTag'])
+            continue
         if not ref or ref.startswith('DA_'):
             continue  # presets: the item is in the preset (weapons, loaded magazines)
         k = ref[3:]
