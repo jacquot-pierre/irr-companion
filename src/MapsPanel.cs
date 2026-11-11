@@ -24,6 +24,7 @@ namespace IRRCompanion
         private Bitmap _heat;
 
         public static readonly Color ExtractionColor = Color.FromArgb(0, 230, 118);
+        public static readonly Color SpawnColor = Color.FromArgb(79, 195, 247);
 
         public MapCanvas()
         {
@@ -119,6 +120,8 @@ namespace IRRCompanion
                 bool hot = p == _hover;
                 DrawMarker(g, p.Type, c, hot ? r * 1.35f : r, hot);
             }
+            foreach (var p in _points)
+                if (p.IsPlayerSpawn && !string.IsNullOrEmpty(p.Name) && p != _hover) DrawLabel(g, p.Name + (p.Guessed ? " ?" : ""), Screen(p), r);
             if (_hover != null) DrawTooltip(g, _hover, Screen(_hover));
         }
 
@@ -127,6 +130,7 @@ namespace IRRCompanion
             switch (type)
             {
                 case MapData.Extraction: return ExtractionColor;
+                case MapData.PlayerSpawn: return SpawnColor;
                 case "CompactSafe": return Color.FromArgb(240, 200, 90);
                 case "LargeSafe": return Color.FromArgb(255, 140, 40);
                 case "HasDoor": return Color.FromArgb(186, 120, 220);
@@ -143,6 +147,19 @@ namespace IRRCompanion
             g.SmoothingMode = SmoothingMode.AntiAlias;
             var dark = Color.FromArgb(20, 18, 16);
             var col = ColorOf(type);
+            if (type == MapData.PlayerSpawn)
+            {
+                // blue disc with a person (head + shoulders)
+                using (var b = new SolidBrush(col)) g.FillEllipse(b, c.X - rr, c.Y - rr, 2 * rr, 2 * rr);
+                using (var pen = new Pen(dark, hot ? 2.4f : 1.6f)) g.DrawEllipse(pen, c.X - rr, c.Y - rr, 2 * rr, 2 * rr);
+                using (var b = new SolidBrush(dark))
+                {
+                    float hr = rr * 0.27f;
+                    g.FillEllipse(b, c.X - hr, c.Y - rr * 0.55f, 2 * hr, 2 * hr);
+                    g.FillPie(b, c.X - rr * 0.55f, c.Y - rr * 0.02f, rr * 1.1f, rr * 1.1f, 180, 180);
+                }
+                return;
+            }
             if (type == MapData.Extraction)
             {
                 var tri = new[] { new PointF(c.X, c.Y - rr * 1.15f), new PointF(c.X + rr, c.Y + rr * 0.75f), new PointF(c.X - rr, c.Y + rr * 0.75f) };
@@ -185,6 +202,16 @@ namespace IRRCompanion
             }
         }
 
+        /// <summary>Name of a spawn zone, on a dark box to the right of its marker.</summary>
+        private void DrawLabel(Graphics g, string text, PointF c, int r)
+        {
+            var sz = TextRenderer.MeasureText(g, text, Theme.Bold);
+            var box = new Rectangle((int)(c.X + r + Theme.S(4)), (int)(c.Y - sz.Height / 2f) - Theme.S(1), sz.Width + Theme.S(6), sz.Height + Theme.S(2));
+            if (box.Right > Width - 2) box.X = (int)(c.X - r - Theme.S(4)) - box.Width;  // no room on the right
+            using (var b = new SolidBrush(Color.FromArgb(200, 20, 18, 16))) g.FillRectangle(b, box);
+            TextRenderer.DrawText(g, text, Theme.Bold, box, SpawnColor, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPrefix);
+        }
+
         private static GraphicsPath RoundRect(RectangleF r, float rad)
         {
             var p = new GraphicsPath();
@@ -204,6 +231,14 @@ namespace IRRCompanion
             if (p.IsExtraction)
             {
                 lines.Add(new KeyValuePair<string, Font>("Extraction point", Theme.Bold));
+            }
+            else if (p.IsPlayerSpawn)
+            {
+                lines.Add(new KeyValuePair<string, Font>(p.Name ?? "Player spawn", Theme.Bold));
+                lines.Add(new KeyValuePair<string, Font>("Player spawn: pick it when you deploy.", Theme.Body));
+                lines.Add(new KeyValuePair<string, Font>("Your squad starts around this point.", Theme.Small));
+                if (p.Guessed)
+                    lines.Add(new KeyValuePair<string, Font>("Name guessed from the place: the game files do not say.", Theme.Small));
             }
             else if (p.IsLock)
             {
@@ -478,7 +513,7 @@ namespace IRRCompanion
 
             var showHeader = new SectionHeader("Show") { BackColor = Theme.Panel, Height = Theme.S(40) };
             var filterBox = new Panel { Dock = DockStyle.Top, BackColor = Theme.Panel };
-            var types = MapData.Resources.Select(r => r.Type).Concat(new[] { MapData.Extraction }).Concat(MapData.LockKinds).ToList();
+            var types = MapData.Resources.Select(r => r.Type).Concat(new[] { MapData.PlayerSpawn, MapData.Extraction }).Concat(MapData.LockKinds).ToList();
             for (int i = types.Count - 1; i >= 0; i--)
             {
                 var f = new FilterRow(types[i]);
@@ -549,8 +584,8 @@ namespace IRRCompanion
             foreach (var f in _filters) f.CountText = m.Count(f.Type, multi ? fi : -1).ToString(CultureInfo.InvariantCulture);
             foreach (var f in _filters) f.Invalidate();
             var shown = new HashSet<string>(_filters.Where(f => f.Checked).Select(f => f.Type));
-            // with a heatmap only the extraction points stay, the other markers would hide it
-            var pts = m.Points.Where(p => shown.Contains(p.Type) && (!multi || p.Floor == fi) && (_heatItem == null || p.IsExtraction)).ToList();
+            // with a heatmap only the spawns and extraction points stay, the other markers would hide it
+            var pts = m.Points.Where(p => shown.Contains(p.Type) && (!multi || p.Floor == fi) && (_heatItem == null || p.IsExtraction || p.IsPlayerSpawn)).ToList();
             _title.Text = m.Name.ToUpperInvariant() + (multi ? "  ·  " + floor.Name.ToUpperInvariant() : "") +
                           (_heatItem != null ? "  ·  " + _heatItem.Name.ToUpperInvariant() : "");
             _canvas.SetContent(floor, pts);

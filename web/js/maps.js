@@ -1,12 +1,12 @@
-// MAPS tab: minimaps with resource / extraction / lock markers and the item heatmap (same data as the desktop app).
+// MAPS tab: minimaps with resource / player spawn / extraction / lock markers and the item heatmap (same data as the desktop app).
 import { data, el, iconUrl, pct, showTip, hideTip, escapeHtml, debounce } from './app.js?v=dev';
 
 const COLORS = {
-  Concrete: '#aaa69c', Food: '#8bc34a', Metal: '#5da9e9', Oil: '#f0a040', Extraction: '#00e676',
+  Concrete: '#aaa69c', Food: '#8bc34a', Metal: '#5da9e9', Oil: '#f0a040', Extraction: '#00e676', PlayerSpawn: '#4fc3f7',
   CompactSafe: '#f0c85a', LargeSafe: '#ff8c28', HasDoor: '#ba78dc', LockedDoor: '#ef5350',
 };
 const LABELS = {
-  Extraction: 'Extraction points', CompactSafe: 'Compact safes', LargeSafe: 'Large safes', HasDoor: 'HAS doors', LockedDoor: 'Locked doors',
+  Extraction: 'Extraction points', PlayerSpawn: 'Player spawns', CompactSafe: 'Compact safes', LargeSafe: 'Large safes', HasDoor: 'HAS doors', LockedDoor: 'Locked doors',
 };
 const SINGLE = { Extraction: 'Extraction point', CompactSafe: 'Compact safe', LargeSafe: 'Large safe', HasDoor: 'HAS door', LockedDoor: 'Locked door' };
 const LOCKS = ['CompactSafe', 'LargeSafe', 'HasDoor', 'LockedDoor'];
@@ -15,13 +15,14 @@ export async function mountMaps(view) {
   const [md, loot] = await Promise.all([data('maps.json'), data('loot.json')]);
   const keys = Object.fromEntries(md.keys.map(k => [k.tag, k]));
   const resources = md.resources;
-  const types = resources.map(r => r.type).concat(['Extraction'], LOCKS);
+  const types = resources.map(r => r.type).concat(['PlayerSpawn', 'Extraction'], LOCKS);
   const shown = new Set(types);
   const maps = md.maps.map(m => ({
     name: m.name, floors: m.floors,
     points: [].concat(
       m.resources.map(p => ({ ...p })),
       m.extractions.map(p => ({ ...p, type: 'Extraction' })),
+      (m.spawns || []).map(p => ({ ...p, type: 'PlayerSpawn' })),
       m.locks.map(p => ({ ...p, type: p.kind })),
     ),
   }));
@@ -43,7 +44,7 @@ export async function mountMaps(view) {
     el('div.section', { text: 'Find an item' }),
     el('div.find', null, findInput, clearBtn), datalist,
     el('div.section', { text: 'Show' }), filterBox,
-    el('div.hint', { text: 'Wheel / pinch: zoom · drag: move · double-click: fit. Hover a point for its chance or the key it needs. Find an item: where it can spawn (estimate from the loot settings).' }),
+    el('div.hint', { text: 'Wheel / pinch: zoom · drag: move · double-click: fit. Blue: player spawns (pick one when you deploy). Hover a point for its chance or the key it needs. Find an item: where it can spawn (estimate from the loot settings).' }),
   );
   const title = el('div.title');
   const summary = el('div.summary');
@@ -162,6 +163,14 @@ export async function mountMaps(view) {
     ctx.lineWidth = hot ? 2.4 : 1.6;
     ctx.strokeStyle = type === 'Extraction' ? '#000' : dark;
     ctx.fillStyle = col;
+    if (type === 'PlayerSpawn') {
+      // blue disc with a person (head + shoulders)
+      ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = dark;
+      ctx.beginPath(); ctx.arc(x, y - r * 0.28, r * 0.27, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(x, y + r * 0.53, r * 0.55, r * 0.55, 0, Math.PI, 0); ctx.fill();
+      return;
+    }
     if (type === 'Extraction') {
       ctx.beginPath(); ctx.moveTo(x, y - r * 1.15); ctx.lineTo(x + r, y + r * 0.75); ctx.lineTo(x - r, y + r * 0.75); ctx.closePath();
       ctx.fill(); ctx.stroke();
@@ -186,7 +195,7 @@ export async function mountMaps(view) {
 
   function visiblePoints() {
     const multi = map.floors.length > 1;
-    return map.points.filter(p => shown.has(p.type) && (!multi || p.floor === floorIndex) && (!heatItem || p.type === 'Extraction'));
+    return map.points.filter(p => shown.has(p.type) && (!multi || p.floor === floorIndex) && (!heatItem || p.type === 'Extraction' || p.type === 'PlayerSpawn'));
   }
 
   function draw() {
@@ -205,6 +214,21 @@ export async function mountMaps(view) {
       const [x, y] = screen(p);
       if (x < -r || y < -r || x > W + r || y > H + r) continue;
       marker(p.type, x, y, r, false);
+    }
+    // names of the spawn zones next to their marker
+    ctx.font = '600 13px ' + getComputedStyle(document.body).fontFamily;
+    ctx.textBaseline = 'middle';
+    for (const p of pts) {
+      if (p.type !== 'PlayerSpawn' || !p.name || p === hover) continue;
+      const [x, y] = screen(p);
+      const label = p.name + (p.guessed ? ' ?' : '');
+      const w = ctx.measureText(label).width + 8;
+      let bx = x + r + 4;
+      if (bx + w > W - 2) bx = x - r - 4 - w;  // no room on the right
+      ctx.fillStyle = 'rgba(20,18,16,.8)';
+      ctx.fillRect(bx, y - 10, w, 20);
+      ctx.fillStyle = COLORS.PlayerSpawn;
+      ctx.fillText(label, bx + 4, y + 1);
     }
     if (hover) { const [x, y] = screen(hover); marker(hover.type, x, y, r * 1.35, true); }
   }
@@ -337,6 +361,9 @@ export async function mountMaps(view) {
 
   function tipHtml(p) {
     if (p.type === 'Extraction') return '<b style="color:' + COLORS.Extraction + '">Extraction point</b>';
+    if (p.type === 'PlayerSpawn') return '<b style="color:' + COLORS.PlayerSpawn + '">' + escapeHtml(p.name || 'Player spawn') +
+      '</b>Player spawn: pick it when you deploy.<br>Your squad starts around this point.' +
+      (p.guessed ? '<br><i>Name guessed from the place: the game files do not say.</i>' : '');
     if (p.key) {
       const k = keys[p.key];
       return '<b style="color:' + COLORS[p.type] + '">' + SINGLE[p.type] + '</b>Key needed:<br><b>' +

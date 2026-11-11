@@ -13,6 +13,13 @@ Where the data comes from (cooked with unversioned properties):
   Environment/Blueprints/Gameplay/Resources/BP_ResourceActor_<Type>; the script also checks that no placed actor
   overrides a property of the resource blueprint itself.
 - Extraction points: BP_IRRExtractionZone_C actors (RelativeLocation of their SceneComponent, index 5).
+- Player spawn zones (the spawns offered when deploying): BP_IRRSpawnZone_C actors (a child class of the extraction
+  zone, with 4 PlayerStart child actors around it). Position = RelativeLocation of DefaultSceneRoot (index 5); name
+  = the first actor tag (Tags = [<name>, AutoBlend_HasPrimitiveData]), e.g. "Train Track" on Delta.
+  The names offered in game ("INFILL LOCATION" of the deploy tab) are the InfillLocations (TArray<FName>) of the map
+  setup Blueprints/MissionSystem/DataAssets/Maps/MD_<Map>; the game picks the zone whose tag is that name. Zones whose
+  tag differs from every infill name (typo: "Tunnelystem"; placeholder: "SpawnZoneD") get the closest name, or the
+  one given in SPAWN_GUESSES (shown as a guess).
 - Minimaps: each BP_IRRMiniMapVolume_C actor gives a centre (SceneComponent RelativeLocation), a half size
   (BoxComponent BoxExtent, index 0) and its texture T_LVL_<Map>_Minimap_*. Several volumes = several floors
   (Bunker). Image orientation: world +X is up, +Y is right (checked against the buildings and the quarry).
@@ -53,6 +60,13 @@ RESOURCE_BASE = 'Test_C/Content/Blueprints/ResourceSystem/Actor/BP_ResourceActor
 MINIMAPS = 'Test_C/Content/Blueprints/MissionSystem/Textures/Minimaps/'
 RESOURCES = ['Concrete', 'Food', 'Metal', 'Oil']
 MAP_MARGIN = 200  # MapMargins default of BP_IRRMiniMapVolume
+MAP_SETUPS = 'Test_C/Content/Blueprints/MissionSystem/DataAssets/Maps/'
+# Spawn zones whose tag matches no infill name and cannot be told apart by the tag: (map, rounded x, y) -> name,
+# from the place on the minimap. Quarry: two zones are tagged "SpawnZoneD"; the one on the river bank is Riverside.
+SPAWN_GUESSES = {
+    ('Quarry', -90078, -47848): 'Riverside',
+    ('Quarry', -53408, -79037): 'Warehouse',
+}
 KEYS_DIR = 'Test_C/Content/Blueprints/InventorySystem/Items/Keys/'
 KEY_TAG = 'Inventory.Items.Keys.'
 # Locked things shown on the maps: class -> kind. Doors are kept only when they reference a key (the others never open).
@@ -105,6 +119,82 @@ class Level:
         if not idx or idx[0] != expected_index:
             raise ValueError('%s: first property %s, expected %d' % (comp['class'], idx[:1], expected_index))
         return struct.unpack_from('<ddd', b, o)
+
+
+def actor_tags(L, b):
+    """Actor Tags (TArray<FName>) of an actor blob: found as <count> <names...> ending with the engine tag
+    AutoBlend_HasPrimitiveData, which every placed actor of these levels has."""
+    try:
+        auto = L.names.index('AutoBlend_HasPrimitiveData')
+    except ValueError:
+        return []
+    for k in range(0, len(b) - 7):
+        if struct.unpack_from('<ii', b, k) != (auto, 0):
+            continue
+        for n in range(1, 9):  # walk back over n-1 more names to the array count
+            c = k - 8 * (n - 1) - 4
+            if c < 0:
+                break
+            if struct.unpack_from('<i', b, c)[0] == n:
+                tags = [L.names[struct.unpack_from('<i', b, c + 4 + 8 * j)[0]] for j in range(n)]
+                return [t for t in tags if t != 'AutoBlend_HasPrimitiveData']
+    return []
+
+
+def infill_names(tmp, name):
+    """InfillLocations of MD_<name> (the spawn names of the deploy tab, in game order), or []."""
+    path = os.path.join(tmp, (MAP_SETUPS + 'MD_%s.uasset' % name).replace('/', os.sep))
+    if not os.path.exists(path):
+        return []
+    names = package_full(path)[0]
+    d = open(path[:-7] + '.uexp', 'rb').read()
+
+    def plain(i):
+        if not 0 <= i < len(names):
+            return False
+        n = names[i]
+        return '/' not in n and not n.startswith(('Resource.', 'Mission.', 'Maps.', 'LVL_')) and n != 'None'
+    found = []
+    for k in range(0, len(d) - 12):
+        n = struct.unpack_from('<i', d, k)[0]
+        if not 2 <= n <= 12 or k + 4 + 8 * n > len(d):
+            continue
+        pairs = [struct.unpack_from('<ii', d, k + 4 + 8 * j) for j in range(n)]
+        if all(num == 0 and plain(i) for i, num in pairs):
+            found.append([names[i] for i, _ in pairs])
+    return found[0] if len(found) == 1 else []
+
+
+def name_spawns(map_name, spawns, infill, problems):
+    """Gives each spawn zone its in-game infill name: same tag, else a close spelling, else SPAWN_GUESSES."""
+    import difflib
+    left = list(infill)
+    for sp in spawns:
+        if sp['tag'] in left:
+            sp['name'] = sp['tag']
+            left.remove(sp['tag'])
+    for sp in spawns:
+        if 'name' in sp:
+            continue
+        close = difflib.get_close_matches(sp['tag'], left, 1, 0.8)
+        if close:
+            sp['name'] = close[0]
+            left.remove(close[0])
+    for sp in spawns:
+        if 'name' in sp:
+            continue
+        g = SPAWN_GUESSES.get((map_name, sp['x'], sp['y']))
+        if g and g in left:
+            sp['name'] = g
+            sp['guessed'] = True
+            left.remove(g)
+        else:
+            sp['name'] = sp['tag']
+            problems.append('%s: spawn zone "%s" at %d, %d matches no infill name %s' % (map_name, sp['tag'], sp['x'], sp['y'], left))
+    if left:
+        problems.append('%s: infill names without a spawn zone: %s' % (map_name, left))
+    order = {n: i for i, n in enumerate(infill)}
+    spawns.sort(key=lambda sp: order.get(sp['name'], len(order)))
 
 
 def resource_defaults(root):
@@ -250,6 +340,7 @@ def main():
         wanted = [RESOURCE_BP + 'BP_ResourceActor_%s.%s' % (t, ext) for t in RESOURCES for ext in ('uasset', 'uexp')]
         wanted += [f for f in files if f.startswith(MINIMAPS) and '_Mask' not in f]
         wanted += [f for f in files if f.startswith(KEYS_DIR) and '/ID_' in f]
+        wanted += [MAP_SETUPS + 'MD_%s.%s' % (n, ext) for n, _ in MAPS for ext in ('uasset', 'uexp')]
         for _, lvl in MAPS:
             wanted += [lvl + '.umap', lvl + '.uexp']
         print('extracting %d files (the levels are big, this takes a while)...' % len(wanted))
@@ -316,7 +407,7 @@ def main():
                     print('  %s: %s -> %s (%s %dx%d)' % (name, f['texture'][:40], fname, pf, W, H))
                 f['image'] = images_done[f['texture']]
             # points
-            points, extractions, locks = [], [], []
+            points, extractions, locks, spawns = [], [], [], []
             key_names = {i: n for i, n in enumerate(L.names) if n.startswith(KEY_TAG)}
             for i, e in enumerate(L.exports, 1):
                 cls = e['class']
@@ -355,6 +446,17 @@ def main():
                         problems.append('%s: %s point skipped (%s)' % (name, t, ex))
                         continue
                     points.append({'type': t, 'x': round(x), 'y': round(y), 'z': round(z), 'floor': floor_of(z, floors)})
+                elif cls == 'BP_IRRSpawnZone_C':
+                    root = [c for c in L.children(i) if c['class'] == 'SceneComponent' and c['name'] == 'DefaultSceneRoot']
+                    try:
+                        x, y, z = L.first_vector(root[0], LOCATION_INDEX['SceneComponent'])
+                    except Exception as ex:  # noqa: BLE001
+                        problems.append('%s: spawn zone skipped (%s)' % (name, ex))
+                        continue
+                    tags = actor_tags(L, L.blob(e))
+                    if not tags:
+                        problems.append('%s: spawn zone without a name tag at %d, %d' % (name, x, y))
+                    spawns.append({'tag': tags[0] if tags else '', 'x': round(x), 'y': round(y), 'z': round(z), 'floor': floor_of(z, floors)})
                 elif cls == 'BP_IRRExtractionZone_C':
                     sc = [c for c in L.children(i) if c['class'] == 'SceneComponent']
                     try:
@@ -364,8 +466,10 @@ def main():
                         continue
                     extractions.append({'x': round(x), 'y': round(y), 'z': round(z), 'floor': floor_of(z, floors)})
             L.f.close()
+            name_spawns(name, spawns, infill_names(tmp, name), problems)
             counts = {t: sum(1 for p in points if p['type'] == t) for t in RESOURCES}
             print('%-10s %d floor(s), %d resource points %s, %d extraction(s)' % (name, len(floors), len(points), counts, len(extractions)))
+            print('           spawns %s' % ', '.join('%s%s (tag %s, %d, %d, floor %d)' % (p['name'], ' [guess]' if p.get('guessed') else '', p['tag'], p['x'], p['y'], p['floor']) for p in spawns))
             lk = {}
             for l in locks:
                 lk[l['kind']] = lk.get(l['kind'], 0) + 1
@@ -376,6 +480,7 @@ def main():
                             'extent': round(f['extent']), 'centerZ': round(f['centerZ']), 'extentZ': round(f['extentZ'])} for f in floors],
                 'resources': points,
                 'extractions': extractions,
+                'spawns': spawns,
                 'locks': locks,
             })
         for f in sorted(old_images - set(images_done.values())):

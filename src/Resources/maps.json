@@ -485,6 +485,40 @@
      "floor": 0
     }
    ],
+   "spawns": [
+    {
+     "tag": "Train Track",
+     "x": -14404,
+     "y": -1975,
+     "z": -1708,
+     "floor": 0,
+     "name": "Train Track"
+    },
+    {
+     "tag": "Highway",
+     "x": -104005,
+     "y": -91429,
+     "z": -835,
+     "floor": 0,
+     "name": "Highway"
+    },
+    {
+     "tag": "Lakeside",
+     "x": -621,
+     "y": -36422,
+     "z": -972,
+     "floor": 0,
+     "name": "Lakeside"
+    },
+    {
+     "tag": "Logs",
+     "x": -109153,
+     "y": -17527,
+     "z": 2742,
+     "floor": 0,
+     "name": "Logs"
+    }
+   ],
    "locks": [
     {
      "kind": "HasDoor",
@@ -1207,6 +1241,34 @@
      "floor": 0
     }
    ],
+   "spawns": [
+    {
+     "tag": "Fishing Village",
+     "x": -30560,
+     "y": -42563,
+     "z": 829,
+     "floor": 0,
+     "name": "Fishing Village"
+    },
+    {
+     "tag": "SpawnZoneD",
+     "x": -90078,
+     "y": -47848,
+     "z": 923,
+     "floor": 0,
+     "name": "Riverside",
+     "guessed": true
+    },
+    {
+     "tag": "SpawnZoneD",
+     "x": -53408,
+     "y": -79037,
+     "z": 5124,
+     "floor": 0,
+     "name": "Warehouse",
+     "guessed": true
+    }
+   ],
    "locks": [
     {
      "kind": "LockedDoor",
@@ -1593,6 +1655,48 @@
      "y": 75589,
      "z": -2017,
      "floor": 0
+    }
+   ],
+   "spawns": [
+    {
+     "tag": "Rice Fields",
+     "x": -16285,
+     "y": -19750,
+     "z": -2765,
+     "floor": 0,
+     "name": "Rice Fields"
+    },
+    {
+     "tag": "Docks",
+     "x": -26393,
+     "y": 80513,
+     "z": -1913,
+     "floor": 0,
+     "name": "Docks"
+    },
+    {
+     "tag": "Huts",
+     "x": 27103,
+     "y": 8104,
+     "z": -2809,
+     "floor": 0,
+     "name": "Huts"
+    },
+    {
+     "tag": "Rail Bridge",
+     "x": 81693,
+     "y": 61216,
+     "z": -1254,
+     "floor": 0,
+     "name": "Rail Bridge"
+    },
+    {
+     "tag": "Coast",
+     "x": 75034,
+     "y": 75013,
+     "z": -2118,
+     "floor": 0,
+     "name": "Coast"
     }
    ],
    "locks": [
@@ -2079,6 +2183,32 @@
      "y": 12903,
      "z": -745,
      "floor": 3
+    }
+   ],
+   "spawns": [
+    {
+     "tag": "Medbay",
+     "x": 8100,
+     "y": 8890,
+     "z": 150,
+     "floor": 2,
+     "name": "Medbay"
+    },
+    {
+     "tag": "Tunnelystem",
+     "x": 15670,
+     "y": 3101,
+     "z": -1600,
+     "floor": 4,
+     "name": "Tunnelsystem"
+    },
+    {
+     "tag": "Exterior",
+     "x": -6550,
+     "y": 1110,
+     "z": 1550,
+     "floor": 0,
+     "name": "Exterior"
     }
    ],
    "locks": [

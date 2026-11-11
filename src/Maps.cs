@@ -39,15 +39,20 @@ namespace IRRCompanion
 
     public sealed class MapPoint
     {
-        /// <summary>Concrete, Food, Metal, Oil, Extraction, or a lock kind (CompactSafe, LargeSafe, HasDoor, LockedDoor).</summary>
+        /// <summary>Concrete, Food, Metal, Oil, Extraction, PlayerSpawn, or a lock kind (CompactSafe, LargeSafe, HasDoor, LockedDoor).</summary>
         public string Type;
+        /// <summary>Name of a player spawn zone, as offered when deploying ("Train Track"...).</summary>
+        public string Name;
+        /// <summary>Spawn zone named from its place on the map: the game files do not say which infill name it is.</summary>
+        public bool Guessed;
         /// <summary>Key gameplay tag needed (locks only).</summary>
         public string Key;
         public double X, Y, Z;
         public int Floor;
         public bool IsExtraction { get { return Type == MapData.Extraction; } }
+        public bool IsPlayerSpawn { get { return Type == MapData.PlayerSpawn; } }
         public bool IsLock { get { return Key != null; } }
-        public bool IsResource { get { return !IsExtraction && !IsLock; } }
+        public bool IsResource { get { return !IsExtraction && !IsPlayerSpawn && !IsLock; } }
     }
 
     public sealed class KeyInfo
@@ -79,6 +84,7 @@ namespace IRRCompanion
     public static class MapData
     {
         public const string Extraction = "Extraction";
+        public const string PlayerSpawn = "PlayerSpawn";
         public static readonly string[] LockKinds = { "CompactSafe", "LargeSafe", "HasDoor", "LockedDoor" };
         public static readonly Dictionary<string, KeyInfo> Keys = new Dictionary<string, KeyInfo>();
 
@@ -87,6 +93,7 @@ namespace IRRCompanion
             switch (type)
             {
                 case Extraction: return "Extraction points";
+                case PlayerSpawn: return "Player spawns";
                 case "CompactSafe": return "Compact safes";
                 case "LargeSafe": return "Large safes";
                 case "HasDoor": return "HAS doors";
@@ -100,6 +107,7 @@ namespace IRRCompanion
             switch (type)
             {
                 case Extraction: return "Extraction point";
+                case PlayerSpawn: return "Player spawn";
                 case "CompactSafe": return "Compact safe";
                 case "LargeSafe": return "Large safe";
                 case "HasDoor": return "HAS door";
@@ -134,6 +142,8 @@ namespace IRRCompanion
                     map.Points.Add(new MapPoint { Type = p.Str("type"), X = p.Num("x"), Y = p.Num("y"), Z = p.Num("z"), Floor = (int)p.Num("floor") });
                 foreach (JObj p in m.Arr("extractions"))
                     map.Points.Add(new MapPoint { Type = Extraction, X = p.Num("x"), Y = p.Num("y"), Z = p.Num("z"), Floor = (int)p.Num("floor") });
+                foreach (JObj p in m.Arr("spawns") ?? new List<object>())
+                    map.Points.Add(new MapPoint { Type = PlayerSpawn, Name = p.Str("name"), Guessed = Equals(p["guessed"], true), X = p.Num("x"), Y = p.Num("y"), Z = p.Num("z"), Floor = (int)p.Num("floor") });
                 foreach (JObj p in m.Arr("locks") ?? new List<object>())
                     map.Points.Add(new MapPoint { Type = p.Str("kind"), Key = p.Str("key"), X = p.Num("x"), Y = p.Num("y"), Z = p.Num("z"), Floor = (int)p.Num("floor") });
                 Maps.Add(map);
