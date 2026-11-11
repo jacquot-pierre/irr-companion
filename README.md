@@ -13,6 +13,7 @@ One portable `.exe`, nothing to install, nothing written to the game's files.
 | **PRESETS** | Create AI presets from the game difficulties, with the same settings as the in-game menu, compare them and get the share code to paste in the game. |
 | **COMMANDS** | Build any of the game's 151 console commands with a few clicks, copy it, keep your favorites. |
 | **WEAPONS** | Build a weapon from the parts that fit it, as in the gunsmith, save your builds and copy the `additem` line that gives the whole build. |
+| **TRADERS** | What the traders met in raids (Lt Moroz, Cpt Hale, Voss, Ba Tran) can have in stock, with the chance and the price of every item (weapons left out). |
 | **HIDEOUT** | See the cost of every hideout upgrade with the game icons, track your progress and get a shopping list. |
 | **MAPS** | Resource spawn points, extraction points, safes and locked doors (with the key they need) on the game maps. |
 
@@ -116,6 +117,30 @@ The **WEAPONS** tab builds a weapon from its parts and gives you the console lin
 
 ![Weapon builder](docs/weapons.png)
 
+### Traders
+
+The **TRADERS** tab shows what the traders met in raids can have in stock, read from the game's trader
+presets, with the chance of every item. Weapons are left out (only the chance of having one is given).
+
+| Trader | Faction | Map |
+|---|---|---|
+| Lt Moroz | IGC | Delta (our guess: the map places it through another file) |
+| Cpt Hale | UICS | Quarry |
+| Voss | UICS | Outskirts (same stock as Cpt Hale) |
+| Ba Tran | VLF | Bunker |
+
+- **Random loot**: the part that differs between traders - medical items and grenades (IGC), weapon
+  attachments (UICS), backpacks, helmets, rigs and plate carriers (VLF). The game draws a few items, each one by
+  the weight of its kind, then by rarity tier. The chances are our estimate from these weights.
+- **Random pick**: 6 or 7 items drawn from a list of 17 barter items (globe, compass, golden ring, military
+  laptop...), the rare ones with a lower weight. The chances are exact.
+- **Always in stock**: 35 barter items (60 units) every trader always has.
+- **Price**: the market price of one unit, in cash, from the game's vendor table (a trader met in a raid can
+  apply its own multiplier, not shown).
+- **Find an item**: type part of a name to see which trader can have it.
+
+![Traders](docs/traders.png)
+
 ### Hideout upgrades
 
 The **HIDEOUT** tab shows what every level of the 9 hideout units costs - Structure, Generator, Lighting,
@@ -176,6 +201,10 @@ The map placement is the one of the in-game PDA map: centre of the map volume an
 1. Open the **WEAPONS** tab, click **+ NEW BUILD** and pick the **base weapon**.
 2. Pick a part in each slot you want (only compatible parts are listed), set the magazines and the ammo.
 3. Name the build and click **SAVE**, then **COPY COMMAND** and paste it in the game console.
+
+**Find a trader for an item**
+1. Open the **TRADERS** tab and type part of the item name in *Find an item*.
+2. Click each trader to see whether it can have it, and the chance.
 
 **Plan your hideout**
 1. Open the **HIDEOUT** tab and set your player level and faction loyalty on the left.
@@ -251,8 +280,8 @@ The exe is `src/bin/Release/net462/IRRCompanion.exe`. A Debug build adds test he
 
 | Path | Content |
 |---|---|
-| `src/` | the WinForms app (C# 7.3, .NET Framework 4.6.2): `MainForm.cs` (PRESETS editor and compare), `CommandsPanel.cs`, `WeaponsPanel.cs`, `HideoutPanel.cs`, `MapsPanel.cs`, data models (`Preset.cs`, `Commands.cs`, `Weapons.cs`, `Hideout.cs`, `Maps.cs`), `ShareCode.cs`, `Theme.cs` / `Controls.cs` (dark UI) |
-| `src/Resources/` | data generated from the game: `defaults.json`, `commands.json`, `weapons.json`, `hideout.json`, `maps.json`, `icons/`, `maps/` |
+| `src/` | the WinForms app (C# 7.3, .NET Framework 4.6.2): `MainForm.cs` (PRESETS editor and compare), `CommandsPanel.cs`, `WeaponsPanel.cs`, `TradersPanel.cs`, `HideoutPanel.cs`, `MapsPanel.cs`, data models (`Preset.cs`, `Commands.cs`, `Weapons.cs`, `Traders.cs`, `Hideout.cs`, `Maps.cs`), `ShareCode.cs`, `Theme.cs` / `Controls.cs` (dark UI) |
+| `src/Resources/` | data generated from the game: `defaults.json`, `commands.json`, `weapons.json`, `traders.json`, `hideout.json`, `maps.json`, `icons/`, `maps/` |
 | `tools/` | Python scripts that read the game files and check the app (see below), test share codes in `tools/testdata/` |
 | `.claude/skills/update-irr-tool/` | step-by-step procedure to update the app after a game patch |
 | `.github/workflows/build.yml` | builds the exe on every push, publishes a release for `v*` tags |
@@ -274,6 +303,7 @@ release - is the Claude Code skill [`.claude/skills/update-irr-tool/SKILL.md`](.
 | `list_items.py` | `tools/item_paths.txt`: the item definitions |
 | `build_commands.py` | `src/Resources/commands.json`: commands, weathers and items |
 | `build_weapons.py` | `src/Resources/weapons.json`: weapons, their slots and the parts each slot accepts (the gunsmith's data), magazine capacities, `additem` names (vendor table), default parts of each weapon and loaded magazines (item presets) |
+| `build_traders.py` | `src/Resources/traders.json`: stock of each trader (trader presets `Presets/Container/Traders/DA_Trader_*`), the chance of every item and its market price (vendor table) |
 | `build_hideout.py` | `src/Resources/hideout.json`: costs and requirements of every hideout unit level |
 | `build_icons.py` | `src/Resources/icons/`: icons of the hideout items, map keys, weapons, parts and ammo, cash and materials (+ `EXTRA_ITEMS`) |
 | `build_maps.py` | `src/Resources/maps.json` and `maps/*.jpg`: resource and extraction points, safes and locked doors with their keys, minimaps and their bounds |

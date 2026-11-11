@@ -32,6 +32,24 @@ namespace IRRCompanion
 
         private Image _icon;
         private bool _iconSlot;
+        private Label _extra;
+        private int _extraWidth;
+
+        /// <summary>Adds a column before the value (e.g. a price), right-aligned, of the given width (at 100 %).</summary>
+        public void SetExtra(string text, Color color, int width)
+        {
+            if (_extra == null)
+            {
+                _extra = new Label { Font = Theme.Body, BackColor = Theme.Row, TextAlign = ContentAlignment.MiddleRight, UseMnemonic = false };
+                Controls.Add(_extra);
+            }
+            _extra.Text = text ?? "";
+            _extra.ForeColor = color;
+            _extraWidth = Theme.S(width);
+            PerformLayout();
+        }
+
+        public Label Extra { get { return _extra; } }
 
         /// <summary>Shows a game icon before the name (null keeps an empty slot so names stay aligned).</summary>
         public void SetIcon(Image icon)
@@ -90,6 +108,11 @@ namespace IRRCompanion
             int vw = Math.Max(Theme.S(60), TextRenderer.MeasureText(_value.Text, _value.Font).Width + Theme.S(6));
             _value.SetBounds(right - vw, 0, vw, Height);
             right -= vw + Theme.S(8);
+            if (_extra != null)
+            {
+                _extra.SetBounds(right - _extraWidth, 0, _extraWidth, Height);
+                right -= _extraWidth + Theme.S(8);
+            }
             int nw = Math.Min(Math.Max(0, right - x), TextRenderer.MeasureText(_name.Text, _name.Font).Width + Theme.S(8));
             _name.SetBounds(x, 0, nw, Height);
             _detail.SetBounds(x + nw + Theme.S(4), 0, Math.Max(0, right - x - nw - Theme.S(4)), Height);
