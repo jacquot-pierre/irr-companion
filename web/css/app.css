@@ -242,3 +242,9 @@ table.cmp { width: 100%; border-collapse: collapse; }
 .brand .sub a.steam { color: var(--accent); text-decoration: none; }
 .brand .sub a.steam:hover { text-decoration: underline; }
 #gamebuild { cursor: help; }
+
+/* commands: item picker */
+.itempick { display: flex; gap: 10px; align-items: center; }
+.itempick .icon { width: 64px; height: 64px; flex: none; }
+.itempick .icon img { max-width: 62px; max-height: 62px; }
+.itemsel { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }

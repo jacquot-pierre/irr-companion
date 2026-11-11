@@ -25,7 +25,17 @@ namespace IRRCompanion
         private bool _loading, _ready;
         private string _value;
 
-        private static readonly List<string> AllItemNames = CommandData.Items.Select(x => x.Key).ToList();
+        /// <summary>(value given to the game, category) of an item argument: item names, or vendor rows for irr.Item.Add.</summary>
+        private List<KeyValuePair<string, string>> _entries;
+
+        private static List<KeyValuePair<string, string>> ItemEntries(ArgDef a)
+        {
+            if (a.Values != "rows") return CommandData.Items;
+            var cat = new Dictionary<string, string>();
+            foreach (var it in CommandData.Items) cat[it.Key] = it.Value;
+            return CommandData.Rows.Where(r => cat.ContainsKey(r.Value))
+                .Select(r => new KeyValuePair<string, string>(r.Key, cat[r.Value])).ToList();
+        }
         private const string AllItems = "All items";
 
         public ArgEditor(ArgDef a, ToolTip tip)
@@ -124,13 +134,14 @@ namespace IRRCompanion
                 case "item":
                     _combo2 = new DarkCombo();
                     _combo2.Items.Add(AllItems);
-                    foreach (var c in CommandData.Items.Select(x => x.Value).Distinct()) _combo2.Items.Add(c);
+                    _entries = ItemEntries(a);
+                    foreach (var c in _entries.Select(x => x.Value).Distinct()) _combo2.Items.Add(c);
                     _combo2.SelectedIndexChanged += (s, e) => { if (!_loading) FillItems(); };
                     tip.SetToolTip(_combo2, "Filter the item list by category.");
                     Controls.Add(_combo2);
                     _edit = MakeEditCombo(new string[0]);
                     var ac = new AutoCompleteStringCollection();
-                    ac.AddRange(AllItemNames.ToArray());
+                    ac.AddRange(_entries.Select(x => x.Key).ToArray());
                     _edit.AutoCompleteCustomSource = ac;
                     _edit.AutoCompleteSource = AutoCompleteSource.CustomSource;
                     _edit.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
@@ -214,7 +225,7 @@ namespace IRRCompanion
             _loading = true;
             _edit.BeginUpdate();
             _edit.Items.Clear();
-            foreach (var it in CommandData.Items)
+            foreach (var it in _entries)
                 if (cat == null || cat == AllItems || it.Value == cat) _edit.Items.Add(it.Key);
             _edit.EndUpdate();
             _edit.Text = keep;

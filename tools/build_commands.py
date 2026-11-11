@@ -1,16 +1,18 @@
 r"""Generates src/Resources/commands.json: the console commands shown in the COMMANDS tab.
 
-Usage:  python -I tools/build_commands.py [tools/item_paths.txt]
+Usage:  python -I tools/build_commands.py [tools/item_paths.txt] [<work>]
 
 The command names and help texts come from the game executable (UTF-16 strings next to each
 `irr.*` name); argument types come from the UE reflection data of the cheat functions; the
 weather lists come from Blueprints/MissionSystem/DataAssets/Maps/MD_<Map>.uasset.
 item_paths.txt is the list of item definition assets (`repak list pakchunk*.pak | grep /ID_`).
+<work> (the extraction folder of build_weapons.py) gives the rows of the vendor table
+(Vendor/DT_Vendor_Old) for irr.Item.Add; without it the rows of the current commands.json are kept.
 
 Argument kinds understood by the tool:
   toggle   0/1 (OFF/ON)               int / float  number (min/max -> slider)
   choice   fixed or editable list     text         free text
-  item     item picker (items list)   weather      map + weather -> index
+  item     item picker (items list; "values": "rows" = vendor table rows)   weather   map + weather -> index
 """
 import json
 import os
@@ -109,9 +111,10 @@ def text(name, default='', help=None, optional=False):
     return a
 
 
-def item(name='Item', help=None):
+def item(name='Item', help=None, rows=False):
     a = {'name': name, 'kind': 'item', 'default': 'Bandage'}
     if help: a['help'] = help
+    if rows: a['values'] = 'rows'  # the vendor table row names ("rows" of commands.json), not the item names
     return a
 
 
@@ -186,7 +189,7 @@ c('irr.Item.Give', I, 'Give item', 'Add an item to stash/inventory by name/tag. 
   [item(), num('Count', 'int', 1, 100, 1, 1)])
 c('irr.Item.Categories', I, 'List item categories', 'Log spawnable item categories (in the console).')
 c('irr.Item.List', I, 'List items', 'Log items in a category (paged), with the names to use in Spawn / Give.',
-  [text('Category', 'All'), num('Page', 'int', 1, 50, 1, 1)])
+  [text('Category', 'All', help='exact names: run "List item categories" first'), num('Page', 'int', 1, 50, 1, 1)])
 c('irr.Item.AddResource', I, 'Add resource', 'Add a resource.',
   [choice('Resource', ['Concrete', 'Food', 'Metal', 'Oil'], 'Food', editable=True), num('Amount', 'int', 1, 10000, 100, 10)])
 c('irr.Item.SetDurability', I, 'Set durability', 'Set durability of all weapons & armor.',
@@ -194,7 +197,7 @@ c('irr.Item.SetDurability', I, 'Set durability', 'Set durability of all weapons 
 c('irr.Item.ResetInventory', I, 'Reset inventory', 'Reset inventory to default.', warn='Your inventory goes back to the default one.')
 c('irr.Item.ResetResources', I, 'Reset resources', 'Reset resources.', warn='Your resources are reset.')
 c('irr.Item.ResetVendor', I, 'Reset vendor', 'Reset vendor stock.')
-c('irr.Item.Add', I, 'Add item (legacy)', 'Legacy vendor-table AddItemByRowName. Prefer Give item.', [text('Row name', 'Bandage')])
+c('irr.Item.Add', I, 'Add item (legacy)', 'Legacy vendor-table AddItemByRowName. Prefer Give item.', [item('Row name', help='vendor table row, often not the item name', rows=True)])
 c('irr.Menu.SpawnMenu', I, 'Spawn menu', 'Toggle the debug item spawn/give menu.')
 c('irr.SpawnMenu.AllowClients', I, 'Spawn menu for clients', 'Server: accept debug spawn menu spawn/give requests from remote clients.', [ONOFF()])
 c('irr.World.SetLevel', I, 'Set player level', 'Set player level and XP.',
@@ -383,8 +386,26 @@ def load_items(path):
     return items
 
 
+def load_rows(inv):
+    """[[row, item], ...] of the vendor table, in table order (a row of an item preset gives the preset's item)."""
+    if not inv:
+        if os.path.exists(OUT):
+            with open(OUT, encoding='utf-8') as f:
+                return json.load(f).get('rows', [])
+        return []
+    sys.path.insert(0, HERE)
+    from build_weapons import vendor_rows, read_preset
+    rows = []
+    for r, t in vendor_rows(inv).items():
+        target = t if t.startswith('ID_') else read_preset(inv, t)[0]
+        if target and target.startswith('ID_'):
+            rows.append([r, target[3:]])
+    return rows
+
+
 def main():
     items_path = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, 'item_paths.txt')
+    inv = os.path.join(sys.argv[2], 'Test_C', 'Content', 'Blueprints', 'InventorySystem') if len(sys.argv) > 2 else None
     names = [x['cmd'] for x in CMDS]
     assert len(names) == len(set(names)), 'duplicate command'
     for e in ESSENTIALS: assert e in names, e
@@ -398,11 +419,12 @@ def main():
         'essentials': ESSENTIALS,
         'commands': CMDS,
         'items': load_items(items_path),
+        'rows': load_rows(inv),
         'omitted': OMITTED,
     }
     with open(OUT, 'w', encoding='utf-8', newline='\n') as f:
         json.dump(doc, f, ensure_ascii=False, indent=1)
-    print('%d commands, %d essentials, %d items -> %s' % (len(CMDS), len(ESSENTIALS), len(doc['items']), os.path.normpath(OUT)))
+    print('%d commands, %d essentials, %d items, %d vendor rows -> %s' % (len(CMDS), len(ESSENTIALS), len(doc['items']), len(doc['rows']), os.path.normpath(OUT)))
 
 
 if __name__ == '__main__':

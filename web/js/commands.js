@@ -1,8 +1,8 @@
 // COMMANDS tab: console command builder (every irr.* command of the game, with its arguments) and favorites.
 // Favorites are kept in this browser and can be exported / imported as the desktop app's favorites.json.
-import { data, el, seg, copy, status, stored, downloadJson, pickJson, dialog, token, splitLine, debounce } from './app.js?v=dev';
+import { data, el, seg, copy, status, stored, downloadJson, pickJson, dialog, token, splitLine, debounce, itemIcon } from './app.js?v=dev';
 
-const CAT_FAV = '★  FAVORITES', CAT_ESS = 'ESSENTIALS', CAT_ALL = 'ALL COMMANDS', ALL_ITEMS = 'All items';
+const CAT_FAV = '★  FAVORITES', CAT_ESS = 'ESSENTIALS', CAT_ALL = 'ALL COMMANDS', ALL_ITEMS = 'All items', OTHER = '*other*';
 const fmt = d => String(+(+d).toFixed(3));
 const favStore = stored('irr.favorites', []);
 
@@ -10,7 +10,14 @@ export async function mountCommands(view) {
   const d = await data('commands.json');
   const base = d.weatherIndexBase || 0;
   const find = cmd => d.commands.find(c => c.cmd.toLowerCase() === (cmd || '').toLowerCase());
-  const itemCats = [...new Set(d.items.map(i => i[1]))];
+  const itemCats = [...new Set(d.items.map(i => i[1]))].sort((a, b) => a.localeCompare(b));
+  // readable item names from the other data files (weapons, traders, loot); else the internal name
+  const names = {};
+  for (const f of ['weapons.json', 'traders.json', 'loot.json']) {
+    try { for (const [id, v] of Object.entries((await data(f)).items || {})) if (v && v.name && !names[id]) names[id] = v.name; } catch (e) { /* names are optional */ }
+  }
+  const itemName = id => names[id] || id.replace(/_/g, ' ');
+  const itemCat = Object.fromEntries(d.items.map(i => [i[0], i[1]]));
 
   let favs = (favStore.load() || []).filter(f => f && f.line && f.line.trim());
   let cat = CAT_ESS, query = '', selected = null, fav = null, cmd = null, editors = [];
@@ -131,20 +138,60 @@ export async function mountCommands(view) {
         if (!options.some(o => o[0] === v)) v = options.some(o => o[0] === a.default) ? a.default : options[0][0];
         s.value = ed.value = v;
       };
-    } else if (a.kind === 'choice' || a.kind === 'item') {
+    } else if (a.kind === 'item') {
+      // category, then an item of that category (readable name, internal name sent to the game);
+      // "Other name..." lets you type any name or tag (part of a name also works in the game)
+      // entries: [value sent to the game, item]; vendor table rows for irr.Item.Add, else the item names
+      const entries = a.values === 'rows' ? (d.rows || []).filter(r => itemCat[r[1]]) : d.items.map(i => [i[0], i[0]]);
+      const itemOf = Object.fromEntries(entries.map(e => [e[0], e[1]]));
+      const catOf = v => itemOf[v] ? itemCat[itemOf[v]] : null;
+      const cats = itemCats.filter(c => entries.some(e => itemCat[e[1]] === c));
+      const icon = el('div.icon');
+      const cs = el('select.input', { title: 'Category of the item' },
+        el('option', { value: ALL_ITEMS, text: ALL_ITEMS + ' (' + entries.length + ')' }),
+        ...cats.map(c => el('option', { value: c, text: c + ' (' + entries.filter(e => itemCat[e[1]] === c).length + ')' })));
+      const is = el('select.input', { title: 'Item (the console gets its internal name, shown in the command line)' });
+      const other = el('input.input', { spellcheck: 'false', placeholder: 'Item name or tag (part of a name also works)', hidden: true });
+      const fillItems = () => {
+        const list = entries.filter(e => cs.value === ALL_ITEMS || itemCat[e[1]] === cs.value)
+          .sort((x, y) => itemName(x[1]).localeCompare(itemName(y[1])) || x[0].localeCompare(y[0]));
+        is.replaceChildren(...list.map(([v, id]) => el('option', { value: v, text: itemName(id) + (itemName(id).replace(/ /g, '_') !== v ? '   ·   ' + v : '') })),
+          el('option', { value: OTHER, text: 'Other name...' }));
+      };
+      const showIcon = v => { const id = itemOf[v]; icon.replaceChildren(...(id ? [itemIcon(id, itemCat[id].split(' / ').pop())] : [])); };
+      cs.addEventListener('change', () => {
+        fillItems();
+        const keep = [...is.options].some(o => o.value === ed.value) ? ed.value : is.options[0].value;
+        is.value = keep;
+        other.hidden = keep !== OTHER;
+        if (keep !== OTHER) { ed.value = keep; showIcon(keep); }
+        raise();
+      });
+      is.addEventListener('change', () => {
+        other.hidden = is.value !== OTHER;
+        if (is.value === OTHER) { other.value = ed.value; other.focus(); other.select(); return; }
+        ed.value = is.value;
+        showIcon(ed.value);
+        raise();
+      });
+      other.addEventListener('input', () => { ed.value = other.value; showIcon(null); raise(); });
+      body.append(el('div.itempick', null, icon, el('div.itemsel', null, cs, is, other)));
+      setUi = v => {
+        ed.value = v;
+        const known = catOf(v);
+        cs.value = known || ALL_ITEMS;
+        fillItems();
+        is.value = known ? v : OTHER;
+        other.hidden = !!known;
+        other.value = known ? '' : v;
+        showIcon(known ? v : null);
+      };
+    } else if (a.kind === 'choice') {
       const listId = 'dl-' + Math.random().toString(36).slice(2);
       const dl = el('datalist', { id: listId });
-      const box = el('input.input', { list: listId, spellcheck: 'false', title: a.kind === 'item' ? 'Internal item name. Type to search; part of a name also works in the game.' : 'Pick a value or type your own.' });
+      const box = el('input.input', { list: listId, spellcheck: 'false', title: 'Pick a value or type your own.' });
       box.addEventListener('input', () => { ed.value = box.value; raise(); });
-      const fill = c => dl.replaceChildren(...(a.kind === 'item'
-        ? d.items.filter(i => !c || c === ALL_ITEMS || i[1] === c).map(i => el('option', { value: i[0] }))
-        : options.map(o => el('option', { value: o[0], text: o[1] }))));
-      if (a.kind === 'item') {
-        const cs = el('select.input', { title: 'Filter the item list by category.' }, el('option', { text: ALL_ITEMS }), ...itemCats.map(c => el('option', { text: c })));
-        cs.addEventListener('change', () => fill(cs.value));
-        body.append(cs);
-      }
-      fill(ALL_ITEMS);
+      dl.replaceChildren(...options.map(o => el('option', { value: o[0], text: o[1] })));
       body.append(box, dl);
       setUi = v => { box.value = ed.value = v; };
     } else if (a.kind === 'int' || a.kind === 'float') {

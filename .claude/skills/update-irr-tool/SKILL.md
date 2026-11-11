@@ -295,7 +295,7 @@ from `maps.json`).
 ## 8. Regenerate and build
 
 ```
-python -I tools/build_commands.py
+python -I tools/build_commands.py tools/item_paths.txt <work>
 dotnet build src -c Debug
 python -I tools/check_roundtrip.py
 src\bin\Debug\net462\IRRCompanion.exe --screenshot <work>\shot
@@ -352,7 +352,7 @@ It is published by `.github/workflows/pages.yml` when `main` is pushed.
 - [ ] `reference_full_doc.json` refreshed if the AI document changed
 - [ ] `extract_console.py`: no NEW / REMOVED left unhandled; `ue_param_types.py` all ok
 - [ ] `map_weathers.py`: every map has a list; new maps/weathers named
-- [ ] `list_items.py` run; `build_commands.py` run
+- [ ] `list_items.py` run; `build_commands.py` run with `<work>` (vendor rows of `irr.Item.Add`)
 - [ ] `build_hideout.py`: all units found, no warning; cost changes reviewed
 - [ ] `build_weapons.py`: counts reviewed, no `ValueError`; compatibility changes reviewed
 - [ ] `build_traders.py`: counts reviewed, no `ValueError`; chance changes reviewed

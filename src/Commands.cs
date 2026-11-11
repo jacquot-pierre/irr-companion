@@ -11,6 +11,8 @@ namespace IRRCompanion
     public sealed class ArgDef
     {
         public string Name, Kind, Help, Unit, Default;
+        /// <summary>item: "rows" = the vendor table row names (irr.Item.Add), else the item names.</summary>
+        public string Values;
         public double? Min, Max, Step;
         public bool Optional, Editable;
         public string Off = "OFF", On = "ON";
@@ -44,6 +46,8 @@ namespace IRRCompanion
         public static readonly List<MapWeather> Maps = new List<MapWeather>();
         /// <summary>(internal name, category) of every item definition.</summary>
         public static readonly List<KeyValuePair<string, string>> Items = new List<KeyValuePair<string, string>>();
+        /// <summary>(vendor table row, item internal name) for irr.Item.Add, in table order.</summary>
+        public static readonly List<KeyValuePair<string, string>> Rows = new List<KeyValuePair<string, string>>();
         public static int WeatherIndexBase = 0;
 
         public static void Load()
@@ -68,6 +72,8 @@ namespace IRRCompanion
             }
             foreach (List<object> it in root.Arr("items"))
                 Items.Add(new KeyValuePair<string, string>((string)it[0], (string)it[1]));
+            foreach (List<object> it in root.Arr("rows") ?? new List<object>())
+                Rows.Add(new KeyValuePair<string, string>((string)it[0], (string)it[1]));
             foreach (JObj c in root.Arr("commands"))
             {
                 var d = new CommandDef
@@ -80,7 +86,7 @@ namespace IRRCompanion
                 {
                     var ad = new ArgDef
                     {
-                        Name = a.Str("name"), Kind = a.Str("kind"), Help = a.Str("help"), Unit = a.Str("unit"),
+                        Name = a.Str("name"), Kind = a.Str("kind"), Help = a.Str("help"), Unit = a.Str("unit"), Values = a.Str("values"),
                         Optional = a["optional"] is bool && (bool)a["optional"],
                         Editable = a["editable"] is bool && (bool)a["editable"],
                         Off = a.Str("off", "OFF"), On = a.Str("on", "ON"),
