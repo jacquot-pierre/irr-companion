@@ -323,6 +323,12 @@ If the screenshots are fine and the UI changed, refresh the README images: `docs
 The real GUI cannot be clicked from the sandbox: tell the user what to test by hand (save, import a code,
 copy a code and import it in game, copy a console command and run it in game).
 
+## 8b. Web version
+
+The web version (`web/`) reads the same `src/Resources/` files: nothing to regenerate. Check it with
+`python -I tools/serve_web.py` (http://localhost:8080): MAPS heatmap, TRADERS, WEAPONS (a build and its command).
+It is published by `.github/workflows/pages.yml` when `main` is pushed.
+
 ## 9. Release
 
 1. Bump `<Version>` in `src/IRRCompanion.csproj` (minor for new data/features, patch for data-only updates).

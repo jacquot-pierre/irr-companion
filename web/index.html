@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IRR Companion</title>
+  <meta name="description" content="Companion web app for Incursion Red River: item heatmap on the maps, trader stock with chances and prices, weapon builder with the additem console line.">
+  <link rel="icon" href="favicon.ico">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <div class="title">IRR COMPANION</div>
+      <div class="sub">Companion app for Incursion Red River · <span id="gamebuild">game data</span></div>
+    </div>
+    <nav class="tabs" id="tabs">
+      <a href="#maps" data-tab="maps">MAPS</a>
+      <a href="#traders" data-tab="traders">TRADERS</a>
+      <a href="#weapons" data-tab="weapons">WEAPONS</a>
+    </nav>
+  </header>
+  <main id="view"></main>
+  <footer class="status">
+    <span id="status">Web version · the desktop app (presets, console commands, hideout) is on
+      <a href="https://github.com/mordeci/irr-companion/releases/latest" target="_blank" rel="noopener">GitHub</a>.</span>
+    <span class="right">Fan-made, not affiliated with the developers. Game icons and maps are their artwork.</span>
+  </footer>
+  <div id="tooltip" class="tooltip" hidden></div>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
