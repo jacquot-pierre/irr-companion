@@ -39,12 +39,11 @@ export async function mountMaps(view) {
   const findInput = el('input.input', { list: 'loot-items', placeholder: 'Type an item...', 'aria-label': 'Item' });
   const datalist = el('datalist', { id: 'loot-items' }, lootItems.map(i => el('option', { value: i.name })));
   const clearBtn = el('button.btn', { text: '×', title: 'Hide the heatmap (Esc)', onclick: () => setHeat(null) });
-  const side = el('div.side', null,
-    el('div.section', { text: 'Map' }), mapList, floorBox,
-    el('div.section', { text: 'Find an item' }),
-    el('div.find', null, findInput, clearBtn), datalist,
-    el('div.section', { text: 'Show' }), filterBox,
-    el('div.hint', { text: 'Wheel / pinch: zoom · drag: move · double-click: fit. Blue: player spawns (pick one when you deploy). Hover a point for its chance or the key it needs. Find an item: where it can spawn (estimate from the loot settings).' }),
+  const side = el('div.side.maps-side', null,
+    el('div.m-maps', null, el('div.section', { text: 'Map' }), mapList, floorBox),
+    el('div.m-find', null, el('div.section', { text: 'Find an item' }), el('div.find', null, findInput, clearBtn), datalist),
+    el('div.m-filters', null, el('div.section', { text: 'Show' }), filterBox),
+    el('div.hint.m-hint', { text: 'Wheel / pinch: zoom · drag: move · double-click / double-tap: fit. Blue: player spawns (pick one when you deploy). Hover or tap a point for its chance or the key it needs. Find an item: where it can spawn (estimate from the loot settings).' }),
   );
   const title = el('div.title');
   const summary = el('div.summary');
@@ -90,7 +89,7 @@ export async function mountMaps(view) {
   // ---------------- canvas
   const ctx = canvas.getContext('2d');
   const images = {};
-  let scale = 1, ox = 0, oy = 0, hover = null, heatCanvas = null;
+  let scale = 1, ox = 0, oy = 0, hover = null, heatCanvas = null, fitted = true;
 
   function floor() { return map.floors[floorIndex] || map.floors[0]; }
   function image() {
@@ -127,11 +126,13 @@ export async function mountMaps(view) {
     scale = Math.min(W / w, H / h);
     ox = (W - w * scale) / 2;
     oy = (H - h * scale) / 2;
+    fitted = true;
   }
   function zoomAt(sx, sy, factor) {
     const [w, h] = size(), [W, H] = view2();
     const min = Math.min(W / w, H / h) * 0.9, max = 4;
     const ns = Math.max(min, Math.min(max, scale * factor)), f = ns / scale;
+    fitted = false;
     ox = sx - (sx - ox) * f;
     oy = sy - (sy - oy) * f;
     scale = ns;
@@ -325,15 +326,40 @@ export async function mountMaps(view) {
   const pointers = new Map();
   canvas.addEventListener('wheel', e => { e.preventDefault(); const r = canvas.getBoundingClientRect(); zoomAt(e.clientX - r.left, e.clientY - r.top, e.deltaY < 0 ? 1.25 : 0.8); }, { passive: false });
   canvas.addEventListener('dblclick', () => { fit(); draw(); });
+  let tap = null;  // finger down without moving: a tap shows the tooltip of the point under it
+  // drag from where the remaining finger is now (after a pinch the map must not jump back)
+  const restartDrag = () => {
+    const rest = [...pointers.values()][0];
+    drag = rest ? { x: rest[0], y: rest[1], ox, oy, dist: null } : null;
+  };
   canvas.addEventListener('pointerdown', e => {
-    canvas.setPointerCapture(e.pointerId);
+    try { canvas.setPointerCapture(e.pointerId); } catch (err) { /* pointer already gone */ }
     pointers.set(e.pointerId, [e.clientX, e.clientY]);
-    drag = { x: e.clientX, y: e.clientY, ox, oy, dist: null };
+    restartDrag();
+    tap = pointers.size === 1 && e.pointerType !== 'mouse' ? { x: e.clientX, y: e.clientY, t: Date.now() } : null;
     canvas.style.cursor = 'grabbing';
   });
-  canvas.addEventListener('pointerup', e => { pointers.delete(e.pointerId); if (!pointers.size) { drag = null; canvas.style.cursor = 'grab'; } });
-  canvas.addEventListener('pointercancel', e => { pointers.delete(e.pointerId); drag = null; });
-  canvas.addEventListener('pointerleave', () => { if (hover) { hover = null; hideTip(); draw(); } });
+  canvas.addEventListener('pointerup', e => {
+    pointers.delete(e.pointerId);
+    if (tap && Date.now() - tap.t < 500) showAt(e.clientX, e.clientY, 24);
+    tap = null;
+    if (pointers.size) restartDrag(); else { drag = null; canvas.style.cursor = 'grab'; }
+  });
+  canvas.addEventListener('pointercancel', e => { pointers.delete(e.pointerId); tap = null; if (pointers.size) restartDrag(); else drag = null; });
+  canvas.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse' && hover) { hover = null; hideTip(); draw(); } });
+
+  /** Point nearest to the client position (within radius px), highlighted with its tooltip; nothing there: hidden. */
+  function showAt(cx, cy, radius) {
+    const r = canvas.getBoundingClientRect(), sx = cx - r.left, sy = cy - r.top;
+    let best = null, bd = radius * radius;
+    for (const p of visiblePoints()) {
+      const [x, y] = screen(p);
+      const d = (x - sx) ** 2 + (y - sy) ** 2;
+      if (d <= bd) { bd = d; best = p; }
+    }
+    if (best !== hover) { hover = best; draw(); }
+    if (hover) { const [x, y] = screen(hover); showTip(tipHtml(hover), x + r.left, y + r.top); } else hideTip();
+  }
   canvas.addEventListener('pointermove', e => {
     const r = canvas.getBoundingClientRect();
     if (pointers.has(e.pointerId)) pointers.set(e.pointerId, [e.clientX, e.clientY]);
@@ -344,19 +370,18 @@ export async function mountMaps(view) {
       if (drag) drag.dist = d;
       return;
     }
-    if (drag) { ox = drag.ox + e.clientX - drag.x; oy = drag.oy + e.clientY - drag.y; draw(); return; }
-    const sx = e.clientX - r.left, sy = e.clientY - r.top;
-    let best = null, bd = 13 * 13;
-    for (const p of visiblePoints()) {
-      const [x, y] = screen(p);
-      const d = (x - sx) ** 2 + (y - sy) ** 2;
-      if (d <= bd) { bd = d; best = p; }
-    }
-    if (best !== hover) {
-      hover = best;
+    if (drag) {
+      if (!pointers.has(e.pointerId)) return;  // a pointer that is not down on the map
+      if (tap && Math.hypot(e.clientX - tap.x, e.clientY - tap.y) < 8) return;  // still a tap
+      tap = null;
+      ox = drag.ox + e.clientX - drag.x; oy = drag.oy + e.clientY - drag.y;
+      fitted = false;
+      if (hover && e.pointerType !== 'mouse') { hover = null; hideTip(); }
       draw();
+      return;
     }
-    if (hover) showTip(tipHtml(hover), e.clientX, e.clientY); else hideTip();
+    if (e.pointerType !== 'mouse') return;
+    showAt(e.clientX, e.clientY, 13);
   });
 
   function tipHtml(p) {
@@ -373,7 +398,8 @@ export async function mountMaps(view) {
     return '<b style="color:' + COLORS[p.type] + '">' + p.type + '</b>' + (r ? Math.round(r.chance * 100) + ' % chance to be there<br>' + r.amount + ' units when collected' : '');
   }
 
-  const ro = new ResizeObserver(() => { const keep = scale; resize(); if (keep === 1) fit(); draw(); });
+  // the whole map stays in view (address bar of phones, window resize) until the user zooms or moves it
+  const ro = new ResizeObserver(() => { resize(); if (fitted) fit(); draw(); });
   ro.observe(wrap);
   resize();
   refresh(true);
