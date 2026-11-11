@@ -64,6 +64,18 @@ Traders (read from the trader presets DA_Trader_IGC / UICS / VLF):
 - [ ] Prices: the market price (DefaultMarketPrice of the vendor table) is what the traders ask, or do they apply a
       multiplier (PriceMultiplier / PriceOverrides of the trader actor in the maps)? The Health Injector has no price.
 
+Item heatmap (MAPS, read from the loot containers, presets and loose loot of the maps):
+
+- [ ] The hot areas match where players find the item (e.g. graphics card on Delta, bandages on Quarry).
+- [ ] Our reading of the loot settings: number of items from the count curve, then a kind by its weight, a rarity
+      tier by its weight, an item of that tier. Items without a rarity tier in the vendor table are left out.
+- [ ] Loose loot gives one item per point (the settings set no count) with its 50 % spawn chance.
+- [ ] Not taken into account: loot contexts / modifiers (BP_LootContext_*, BP_LootModifierComponent: night, more
+      collectibles, more rarity in some areas), value limits of safes, item size limit of loose loot, the secure
+      containers of missions.
+- [ ] Dead bodies use the general crate preset (their class has no preset of its own; DA_LootContainer_DeadBody is
+      not referenced).
+
 Maps:
 
 - [ ] Resource points on Delta / Quarry / Outskirts / Bunker match the game (a few spots checked in a raid).
@@ -99,6 +111,7 @@ The interface was only checked on screenshots; nothing was clicked yet.
       ⋯ menu (revert, duplicate, delete), COPY COMMAND; the builds survive a restart
       (`%APPDATA%\IRR Companion\weapons.json`). The mouse wheel scrolls the page, not the part lists.
 - [ ] TRADERS: trader list, *Find an item* (search after a short pause or Enter, Esc clears, no flicker), tooltips of the card titles.
+- [ ] MAPS: *Find an item* (autocomplete, Enter, Esc, ×), the heatmap on every map and Bunker floor.
 - [ ] MAPS: map and floor lists, filters, hover tooltip, zoom with the wheel, drag, double-click to fit.
 - [ ] First start: presets and favorites copied from `%APPDATA%\IRR Preset Tool` to `%APPDATA%\IRR Companion`.
 - [ ] Display scaling 125 % / 150 % and the minimum window size (1000 × 620): nothing cut or overlapping.
@@ -111,7 +124,8 @@ The interface was only checked on screenshots; nothing was clicked yet.
 - [x] First GitHub Actions run: the build passes and the `v1.0.0` release has the exe and the notes.
 - [x] `v1.1.0` release: the exe and the notes are on the release page.
 - [x] `v1.2.0` release: the exe and the notes are on the release page.
-- [ ] `v1.3.0` release: the exe and the notes are on the release page.
+- [x] `v1.3.0` release: the exe and the notes are on the release page.
+- [ ] `v1.4.0` release: the exe and the notes are on the release page.
 - [ ] Delete the old local folder `Documents\IRRPresetTool` once everything is in this repository.
 - [ ] Before making the repository public: the test codes in `tools/testdata/` contain the author name of the
       presets; decide whether to keep them.

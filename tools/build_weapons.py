@@ -66,17 +66,24 @@ def header(b):
         frags.append((v & 0x7f, bool(v & 0x80), v >> 9))
         if v & 0x100:
             break
-    idx, i = [], 0
-    for skip, _, n in frags:
+    # the zero mask has one bit per value of the fragments flagged "has zeroes" only
+    idx, maskable, i = [], [], 0
+    for skip, has_zero, n in frags:
         i += skip
         idx.extend(range(i, i + n))
+        maskable.extend([has_zero] * n)
         i += n
     zero = [False] * len(idx)
-    if any(f[1] for f in frags):
-        nb = 1 if len(idx) <= 8 else 2 if len(idx) <= 16 else (len(idx) + 31) // 32 * 4
+    bits = sum(maskable)
+    if bits:
+        nb = 1 if bits <= 8 else 2 if bits <= 16 else (bits + 31) // 32 * 4
         mask = int.from_bytes(b[o:o + nb], 'little')
         o += nb
-        zero = [bool(mask >> j & 1) for j in range(len(idx))]
+        j = 0
+        for k, m in enumerate(maskable):
+            if m:
+                zero[k] = bool(mask >> j & 1)
+                j += 1
     return list(zip(idx, zero)), o
 
 

@@ -19,6 +19,7 @@ namespace IRRCompanion
         private PointF _dragOffset;
         private bool _dragging;
         private MapPoint _hover;
+        private Bitmap _heat;
 
         public static readonly Color ExtractionColor = Color.FromArgb(0, 230, 118);
 
@@ -40,6 +41,14 @@ namespace IRRCompanion
             _points = points;
             _hover = null;
             if (changed) Fit();
+            Invalidate();
+        }
+
+        /// <summary>Heat overlay covering the whole map image (null to remove it). The canvas owns the bitmap.</summary>
+        public void SetHeat(Bitmap heat)
+        {
+            if (_heat != null) _heat.Dispose();
+            _heat = heat;
             Invalidate();
         }
 
@@ -90,6 +99,11 @@ namespace IRRCompanion
             g.InterpolationMode = _scale < 1 ? InterpolationMode.HighQualityBilinear : InterpolationMode.Bilinear;
             g.PixelOffsetMode = PixelOffsetMode.Half;
             g.DrawImage(_floor.Bitmap, new RectangleF(_offset.X, _offset.Y, s.Width * _scale, s.Height * _scale));
+            if (_heat != null)
+            {
+                g.InterpolationMode = InterpolationMode.HighQualityBilinear;
+                g.DrawImage(_heat, new RectangleF(_offset.X, _offset.Y, s.Width * _scale, s.Height * _scale));
+            }
             g.SmoothingMode = SmoothingMode.AntiAlias;
             g.PixelOffsetMode = PixelOffsetMode.Default;
             int r = Theme.S(10);
@@ -384,12 +398,17 @@ namespace IRRCompanion
         private readonly MapCanvas _canvas;
         private readonly List<FilterRow> _filters = new List<FilterRow>();
         private readonly Label _summary, _title;
+        private readonly ComboBox _item;
+        private readonly ToolTip _tip;
+        private LootItem _heatItem;
 
         public MapsPanel(ToolTip tip)
         {
             Dock = DockStyle.Fill;
             BackColor = Theme.Back;
+            _tip = tip;
             MapData.Load();
+            LootData.Load();
 
             var left = new Panel { Dock = DockStyle.Left, Width = Theme.S(260), BackColor = Theme.Panel, Padding = new Padding(Theme.S(12), Theme.S(4), Theme.S(12), Theme.S(12)) };
             var mapsHeader = new SectionHeader("Map") { BackColor = Theme.Panel, Height = Theme.S(36) };
@@ -415,6 +434,42 @@ namespace IRRCompanion
             _floorBox.Controls.Add(_floors);
             _floorBox.Controls.Add(floorHeader);
 
+            // item heatmap
+            var findHeader = new SectionHeader("Find an item") { BackColor = Theme.Panel, Height = Theme.S(40) };
+            var findBox = new Panel { Dock = DockStyle.Top, BackColor = Theme.Panel, Height = Theme.S(64) };
+            _item = new ComboBox
+            {
+                DropDownStyle = ComboBoxStyle.DropDown, AutoCompleteMode = AutoCompleteMode.SuggestAppend,
+                AutoCompleteSource = AutoCompleteSource.ListItems, FlatStyle = FlatStyle.Flat, BackColor = Theme.Row,
+                ForeColor = Theme.Text, Font = Theme.Body, MaxDropDownItems = 20,
+            };
+            foreach (var it in LootData.Items) _item.Items.Add(it);
+            _item.SelectedIndexChanged += (s, e) => { if (_item.SelectedItem is LootItem) ShowHeat(_item.SelectedItem as LootItem); };
+            _item.KeyDown += (s, e) =>
+            {
+                if (e.KeyCode == Keys.Enter)
+                {
+                    e.SuppressKeyPress = true;
+                    var hit = LootData.Items.FirstOrDefault(x => string.Equals(x.Name, _item.Text.Trim(), StringComparison.OrdinalIgnoreCase))
+                              ?? LootData.Items.FirstOrDefault(x => x.Name.IndexOf(_item.Text.Trim(), StringComparison.OrdinalIgnoreCase) >= 0);
+                    if (hit != null) _item.SelectedItem = hit;
+                }
+                else if (e.KeyCode == Keys.Escape) { e.SuppressKeyPress = true; ShowHeat(null); }
+            };
+            tip.SetToolTip(_item, "Type or pick an item: the map shows where it can spawn (loot containers and loose loot), hotter where more places can have it.");
+            var clear = Theme.Btn("×", (s, e) => ShowHeat(null));
+            clear.Font = Theme.Header;
+            tip.SetToolTip(clear, "Hide the heatmap (Esc).");
+            var findHint = Theme.Lbl("", Theme.Small, Theme.TextDim);
+            findBox.Controls.Add(_item);
+            findBox.Controls.Add(clear);
+            findBox.Resize += (s, e) =>
+            {
+                int bw = Theme.S(34);
+                _item.SetBounds(0, Theme.S(4), findBox.Width - bw - Theme.S(6), Theme.S(30));
+                clear.SetBounds(findBox.Width - bw, Theme.S(2), bw, Theme.S(30));
+            };
+
             var showHeader = new SectionHeader("Show") { BackColor = Theme.Panel, Height = Theme.S(40) };
             var filterBox = new Panel { Dock = DockStyle.Top, BackColor = Theme.Panel };
             var types = MapData.Resources.Select(r => r.Type).Concat(new[] { MapData.Extraction }).Concat(MapData.LockKinds).ToList();
@@ -429,15 +484,17 @@ namespace IRRCompanion
             tip.SetToolTip(filterBox, "Click to show or hide a type of point.");
             left.AutoScroll = true;
 
-            _summary = new Label { Dock = DockStyle.Top, Font = Theme.Small, ForeColor = Theme.TextDim, BackColor = Theme.Back, AutoSize = false, Height = Theme.S(24), UseMnemonic = false, AutoEllipsis = true };
+            _summary = new Label { Dock = DockStyle.Top, Font = Theme.Small, ForeColor = Theme.TextDim, BackColor = Theme.Back, AutoSize = false, Height = Theme.S(36), UseMnemonic = false, AutoEllipsis = true };
             tip.SetToolTip(_summary, "Each point has its own chance to be there when the raid starts.");
-            var hint = Theme.Lbl("Wheel: zoom · drag: move · double-click: fit. Hover a point for its chance or the key it needs.", Theme.Small, Theme.TextDim);
+            var hint = Theme.Lbl("Wheel: zoom · drag: move · double-click: fit. Hover a point for its chance or the key it needs. Find an item: where it can spawn (estimate from the loot settings).", Theme.Small, Theme.TextDim);
             hint.AutoSize = false;
             hint.Dock = DockStyle.Bottom;
-            hint.Height = Theme.S(60);
+            hint.Height = Theme.S(92);
 
             left.Controls.Add(filterBox);
             left.Controls.Add(showHeader);
+            left.Controls.Add(findBox);
+            left.Controls.Add(findHeader);
             left.Controls.Add(_floorBox);
             left.Controls.Add(_maps);
             left.Controls.Add(mapsHeader);
@@ -486,9 +543,20 @@ namespace IRRCompanion
             foreach (var f in _filters) f.CountText = m.Count(f.Type, multi ? fi : -1).ToString(CultureInfo.InvariantCulture);
             foreach (var f in _filters) f.Invalidate();
             var shown = new HashSet<string>(_filters.Where(f => f.Checked).Select(f => f.Type));
-            var pts = m.Points.Where(p => shown.Contains(p.Type) && (!multi || p.Floor == fi)).ToList();
-            _title.Text = m.Name.ToUpperInvariant() + (multi ? "  ·  " + floor.Name.ToUpperInvariant() : "");
+            // with a heatmap only the extraction points stay, the other markers would hide it
+            var pts = m.Points.Where(p => shown.Contains(p.Type) && (!multi || p.Floor == fi) && (_heatItem == null || p.IsExtraction)).ToList();
+            _title.Text = m.Name.ToUpperInvariant() + (multi ? "  ·  " + floor.Name.ToUpperInvariant() : "") +
+                          (_heatItem != null ? "  ·  " + _heatItem.Name.ToUpperInvariant() : "");
             _canvas.SetContent(floor, pts);
+            if (_heatItem != null)
+            {
+                _canvas.SetHeat(BuildHeat(m, floor, multi ? fi : -1, _heatItem.Id));
+                _summary.Text = HeatSummary(m, multi ? fi : -1, _heatItem);
+                _maps.Invalidate();
+                _floors.Invalidate();
+                return;
+            }
+            _canvas.SetHeat(null);
 
             // average per raid for the whole map
             var parts = new List<string>();
@@ -503,6 +571,95 @@ namespace IRRCompanion
             _summary.Text = "On average per raid (whole map):   " + string.Join("   ·   ", parts);
             _maps.Invalidate();
             _floors.Invalidate();
+        }
+
+        private void ShowHeat(LootItem item)
+        {
+            _heatItem = item;
+            if (item == null)
+            {
+                _item.SelectedIndex = -1;
+                _item.Text = "";
+            }
+            Refresh2();
+        }
+
+        /// <summary>
+        /// Heat of an item on a floor: every place (container, loose loot point) adds a soft spot as strong as its chance
+        /// to have the item; colours are relative to the hottest spot of the floor.
+        /// </summary>
+        private static Bitmap BuildHeat(GameMap m, MapFloor floor, int floorIndex, string item)
+        {
+            const int G = 256;
+            const double sigma = 3.0;
+            int rad = (int)Math.Ceiling(sigma * 3);
+            var kernel = new double[2 * rad + 1, 2 * rad + 1];
+            for (int dy = -rad; dy <= rad; dy++)
+                for (int dx = -rad; dx <= rad; dx++)
+                    kernel[dy + rad, dx + rad] = Math.Exp(-(dx * dx + dy * dy) / (2 * sigma * sigma));
+            var grid = new double[G, G];
+            bool any = false;
+            foreach (var p in LootData.PlacesOf(m.Name))
+            {
+                if (floorIndex >= 0 && p.Floor != floorIndex) continue;
+                double c = LootData.Sources[p.Source].ChanceOf(item);
+                if (c <= 0) continue;
+                var n = floor.ToImage(p.X, p.Y);
+                int cx = (int)(n.X * G), cy = (int)(n.Y * G);
+                if (cx < -rad || cy < -rad || cx >= G + rad || cy >= G + rad) continue;
+                any = true;
+                for (int dy = -rad; dy <= rad; dy++)
+                {
+                    int y = cy + dy;
+                    if (y < 0 || y >= G) continue;
+                    for (int dx = -rad; dx <= rad; dx++)
+                    {
+                        int x = cx + dx;
+                        if (x < 0 || x >= G) continue;
+                        grid[y, x] += c * kernel[dy + rad, dx + rad];
+                    }
+                }
+            }
+            if (!any) return null;
+            double max = 0;
+            foreach (var v in grid) max = Math.Max(max, v);
+            var bmp = new Bitmap(G, G, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            var data = bmp.LockBits(new Rectangle(0, 0, G, G), System.Drawing.Imaging.ImageLockMode.WriteOnly, bmp.PixelFormat);
+            var px = new int[G * G];
+            for (int y = 0; y < G; y++)
+                for (int x = 0; x < G; x++)
+                {
+                    double t = grid[y, x] / max;
+                    if (t < 0.02) continue;
+                    t = Math.Sqrt(t);
+                    // yellow -> orange -> red, more opaque where hotter
+                    int r = 255, gg = (int)(225 - 175 * t), b = (int)(70 - 40 * t);
+                    int a = (int)(60 + 170 * t);
+                    px[y * G + x] = (a << 24) | (r << 16) | (gg << 8) | b;
+                }
+            System.Runtime.InteropServices.Marshal.Copy(px, 0, data.Scan0, px.Length);
+            bmp.UnlockBits(data);
+            return bmp;
+        }
+
+        private static string Pct(double p)
+        {
+            double v = p * 100;
+            return (v >= 10 ? v.ToString("0", CultureInfo.InvariantCulture) : v >= 1 ? v.ToString("0.#", CultureInfo.InvariantCulture)
+                    : v >= 0.01 ? v.ToString("0.##", CultureInfo.InvariantCulture) : "< 0.01") + " %";
+        }
+
+        private static string HeatSummary(GameMap m, int floorIndex, LootItem item)
+        {
+            var places = LootData.PlacesOf(m.Name).Where(p => floorIndex < 0 || p.Floor == floorIndex).ToList();
+            var bySource = places.GroupBy(p => p.Source)
+                .Select(g => new { s = LootData.Sources[g.Key], n = g.Count(), c = LootData.Sources[g.Key].ChanceOf(item.Id) })
+                .Where(x => x.c > 0).OrderByDescending(x => x.c * x.n).ToList();
+            if (bySource.Count == 0) return item.Name + " is not found in the loot of this " + (floorIndex >= 0 ? "floor." : "map.");
+            double expected = bySource.Sum(x => x.c * x.n);
+            var parts = bySource.Take(4).Select(x => x.s.Label + " (" + x.n + "): " + Pct(x.c) + " each");
+            return string.Format(CultureInfo.InvariantCulture, "{0}: ≈ {1:0.##} per raid on this {2} (estimate)   ·   ", item.Name, expected,
+                       floorIndex >= 0 ? "floor" : "map") + string.Join("   ·   ", parts);
         }
 
         private void DrawMap(object sender, DrawItemEventArgs e)
@@ -545,6 +702,16 @@ namespace IRRCompanion
             _canvas.Fit();
             _canvas.TestHoverType(kind);
         }
+
+        public void TestHeat(string map, string item)
+        {
+            _maps.SelectedItem = MapData.Maps.First(m => m.Name == map);
+            _item.SelectedItem = LootData.Items.FirstOrDefault(x => x.Id == item);
+            Application.DoEvents();
+            _canvas.Fit();
+        }
+
+        public void TestClearHeat() { ShowHeat(null); }
 
         public void TestShow(string map, int floor, int hover)
         {

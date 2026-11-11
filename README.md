@@ -15,7 +15,7 @@ One portable `.exe`, nothing to install, nothing written to the game's files.
 | **WEAPONS** | Build a weapon from the parts that fit it, as in the gunsmith, save your builds and copy the `additem` line that gives the whole build. |
 | **TRADERS** | What the traders met in raids (Lt Moroz, Cpt Hale, Voss, Ba Tran) can have in stock, with the chance and the price of every item (weapons left out). |
 | **HIDEOUT** | See the cost of every hideout upgrade with the game icons, track your progress and get a shopping list. |
-| **MAPS** | Resource spawn points, extraction points, safes and locked doors (with the key they need) on the game maps. |
+| **MAPS** | Resource spawn points, extraction points, safes and locked doors (with the key they need) on the game maps, and a heatmap of where any item can spawn. |
 
 ## Download
 
@@ -174,6 +174,12 @@ spawn point placed in the map files, the extraction points, the safes and the lo
 - **Average per raid** for the whole map: points x chance, and the units it makes.
 - **Bunker**: a floor selector, one plan per floor.
 - Mouse wheel to zoom, drag to move, double-click to see the whole map.
+- **Find an item**: type an item (a graphics card, a bandage...) and the map shows a **heatmap** of where it can
+  spawn - every loot container (crates, jackets, medical boxes, safes, weapon cases, dead bodies...) and loose loot
+  point of the map, read from the map files, weighted by its chance to have the item. The line above the map gives
+  the expected number per raid and the chance in each kind of container. The chances are our estimate from the
+  game's loot settings (number of items, weight of each kind of item, rarity tiers); loot contexts of some areas or
+  raids (night, more collectibles, more rarity) are not taken into account.
 
 ![Resources on Quarry](docs/maps.png)
 
@@ -182,6 +188,8 @@ spawn point placed in the map files, the extraction points, the safes and the lo
 ![Bunker floors](docs/maps-bunker.png)
 
 ![The key a safe needs](docs/maps-safe.png)
+
+![Where a graphics card can spawn on Delta](docs/maps-heat.png)
 
 The map placement is the one of the in-game PDA map: centre of the map volume and its *MapSize*.
 
@@ -216,6 +224,11 @@ The map placement is the one of the in-game PDA map: centre of the map volume an
 **Find resources**
 1. Open the **MAPS** tab and pick a map (and a floor for the Bunker).
 2. Untick what you do not need; hover a resource to see its chance, a safe or a door to see its key.
+
+**Find where an item spawns**
+1. In the **MAPS** tab, type the item in *Find an item* (Enter picks the first match).
+2. The hot areas are where the most places can have it; the line above the map tells which containers to search.
+   `Esc` or **×** hides the heatmap.
 
 **Bigger interface**: pick **UI size** (100 % to 200 %) at the bottom right of the window; it applies after a
 restart and adds to the Windows display scaling.
@@ -280,8 +293,8 @@ The exe is `src/bin/Release/net462/IRRCompanion.exe`. A Debug build adds test he
 
 | Path | Content |
 |---|---|
-| `src/` | the WinForms app (C# 7.3, .NET Framework 4.6.2): `MainForm.cs` (PRESETS editor and compare), `CommandsPanel.cs`, `WeaponsPanel.cs`, `TradersPanel.cs`, `HideoutPanel.cs`, `MapsPanel.cs`, data models (`Preset.cs`, `Commands.cs`, `Weapons.cs`, `Traders.cs`, `Hideout.cs`, `Maps.cs`), `ShareCode.cs`, `Theme.cs` / `Controls.cs` (dark UI) |
-| `src/Resources/` | data generated from the game: `defaults.json`, `commands.json`, `weapons.json`, `traders.json`, `hideout.json`, `maps.json`, `icons/`, `maps/` |
+| `src/` | the WinForms app (C# 7.3, .NET Framework 4.6.2): `MainForm.cs` (PRESETS editor and compare), `CommandsPanel.cs`, `WeaponsPanel.cs`, `TradersPanel.cs`, `HideoutPanel.cs`, `MapsPanel.cs`, data models (`Preset.cs`, `Commands.cs`, `Weapons.cs`, `Traders.cs`, `Hideout.cs`, `Maps.cs`, `Loot.cs`), `ShareCode.cs`, `Theme.cs` / `Controls.cs` (dark UI) |
+| `src/Resources/` | data generated from the game: `defaults.json`, `commands.json`, `weapons.json`, `traders.json`, `loot.json`, `hideout.json`, `maps.json`, `icons/`, `maps/` |
 | `tools/` | Python scripts that read the game files and check the app (see below), test share codes in `tools/testdata/` |
 | `.claude/skills/update-irr-tool/` | step-by-step procedure to update the app after a game patch |
 | `.github/workflows/build.yml` | builds the exe on every push, publishes a release for `v*` tags |
@@ -303,6 +316,7 @@ release - is the Claude Code skill [`.claude/skills/update-irr-tool/SKILL.md`](.
 | `list_items.py` | `tools/item_paths.txt`: the item definitions |
 | `build_commands.py` | `src/Resources/commands.json`: commands, weathers and items |
 | `build_weapons.py` | `src/Resources/weapons.json`: weapons, their slots and the parts each slot accepts (the gunsmith's data), magazine capacities, `additem` names (vendor table), default parts of each weapon and loaded magazines (item presets) |
+| `build_loot.py` | `src/Resources/loot.json`: loot containers and loose loot points of each map, and the chance of every item in each kind of place (MAPS heatmap) |
 | `build_traders.py` | `src/Resources/traders.json`: stock of each trader (trader presets `Presets/Container/Traders/DA_Trader_*`), the chance of every item and its market price (vendor table) |
 | `build_hideout.py` | `src/Resources/hideout.json`: costs and requirements of every hideout unit level |
 | `build_icons.py` | `src/Resources/icons/`: icons of the hideout items, map keys, weapons, parts and ammo, cash and materials (+ `EXTRA_ITEMS`) |
