@@ -126,6 +126,153 @@ namespace IRRCompanion
             base.OnShown(e);
             ActiveControl = _list;
             _rowsPanel.AutoScrollPosition = new Point(0, 0);
+            if (Program.UpdatedFrom != null)
+                SetStatus("Updated to " + Updater.CurrentText + " (from v" + Program.UpdatedFrom + "). Your presets and settings are kept.");
+            if (AppSettings.CheckUpdates) CheckForUpdates(false);
+        }
+
+        // ================================================================== updates
+
+        private Button _updateBtn;
+        private readonly Timer _blink = new Timer { Interval = 650 };
+        private bool _blinkOn, _updating;
+        private LinkLabel _versionLink;
+        private ToolStripMenuItem _miWhatsNew;
+        private UpdateInfo _update;
+
+        /// <summary>Looks for a new version in the background. manual: report "up to date" and errors too.</summary>
+        private void CheckForUpdates(bool manual)
+        {
+            if (manual) SetStatus("Checking for updates...");
+            System.Threading.Tasks.Task.Run(() => Updater.Check()).ContinueWith(t =>
+            {
+                if (IsDisposed || !IsHandleCreated) return;
+                try
+                {
+                    BeginInvoke((Action)(() =>
+                    {
+                        if (t.IsFaulted)
+                        {
+                            if (manual) SetStatus("Could not check for updates: " + t.Exception.GetBaseException().Message);
+                            return;
+                        }
+                        var info = t.Result;
+                        if (info == null)
+                        {
+                            if (manual) SetStatus("You have the latest version (" + Updater.CurrentText + ").");
+                            return;
+                        }
+                        if (!manual && AppSettings.SkipVersion == info.Version.ToString(3)) return;
+                        ShowUpdateButton(info);
+                        if (manual) SetStatus("IRR Companion " + Updater.Format(info.Version) + " is available: click UPDATE AVAILABLE (top right) to install it.");
+                    }));
+                }
+                catch (InvalidOperationException) { /* window closed meanwhile */ }
+            });
+        }
+
+        /// <summary>Shows the blinking UPDATE AVAILABLE button next to the tabs.</summary>
+        private void ShowUpdateButton(UpdateInfo info)
+        {
+            _update = info;
+            _versionLink.Text = Updater.CurrentText + "  ·  " + Updater.Format(info.Version) + " available";
+            _versionLink.LinkColor = Theme.Changed;
+            _miWhatsNew.Text = "What's new in " + Updater.Format(info.Version) + "…";
+            _miWhatsNew.Visible = true;
+            _tip.SetToolTip(_updateBtn, "IRR Companion " + Updater.Format(info.Version) + " is available (you have " + Updater.CurrentText +
+                ").\nClick: download it and restart the app (your presets and settings are kept).\nRight-click: what's new, skip this version.");
+            _updateBtn.Text = "UPDATE AVAILABLE";
+            _updateBtn.Visible = true;
+            _updateBtn.Enabled = true;
+            _blink.Start();
+        }
+
+        private void HideUpdateButton()
+        {
+            _blink.Stop();
+            _updateBtn.Visible = false;
+        }
+
+        private void Blink()
+        {
+            _blinkOn = !_blinkOn;
+            _updateBtn.BackColor = _blinkOn ? Theme.Changed : Theme.AccentDark;
+            _updateBtn.ForeColor = _blinkOn ? Theme.Back : Theme.Changed;
+        }
+
+        /// <summary>UPDATE AVAILABLE clicked: downloads the new exe (progress on the button), then closes the app,
+        /// which installs it and starts the new version.</summary>
+        private void StartUpdate()
+        {
+            if (_update == null || _updating) return;
+            if (Updater.Ready != null) { Close(); return; }  // already downloaded: closing installs it
+            if (!Updater.CanInstall())
+            {
+                try { Process.Start(_update.PageUrl ?? Updater.ReleasesPage); } catch (Exception) { }
+                SetStatus("The app's folder cannot be written (Program Files?): download " + Updater.Format(_update.Version) + " from the release page.");
+                return;
+            }
+            _updating = true;
+            _blink.Stop();
+            _blinkOn = true;
+            Blink();
+            _updateBtn.Text = "DOWNLOADING 0 %";
+            SetStatus("Downloading IRR Companion " + Updater.Format(_update.Version) + "...");
+            var info = _update;
+            System.Threading.Tasks.Task.Run(() => Updater.Download(info, p => Ui(() => _updateBtn.Text = "DOWNLOADING " + (int)(p * 100) + " %"),
+                System.Threading.CancellationToken.None)).ContinueWith(t => Ui(() =>
+            {
+                _updating = false;
+                if (t.IsFaulted)
+                {
+                    _updateBtn.Text = "UPDATE FAILED · RETRY";
+                    SetStatus("The update could not be downloaded: " + t.Exception.GetBaseException().Message);
+                    _blink.Start();
+                    return;
+                }
+                _updateBtn.Text = "RESTARTING...";
+                SetStatus(Updater.Format(info.Version) + " downloaded: restarting.");
+                Close();  // asks about unsaved changes first
+                if (!IsDisposed && Visible)  // closing cancelled: installed at the next close
+                {
+                    _updateBtn.Text = "RESTART TO UPDATE";
+                    SetStatus(Updater.Format(info.Version) + " is downloaded: it is installed when you close IRR Companion (or click RESTART TO UPDATE).");
+                }
+            }));
+        }
+
+        /// <summary>Runs on the UI thread, unless the window is already closed.</summary>
+        private void Ui(Action a)
+        {
+            try { if (!IsDisposed && IsHandleCreated) BeginInvoke(a); }
+            catch (InvalidOperationException) { /* closed meanwhile */ }
+        }
+
+        /// <summary>Release notes of the new version, with UPDATE / SKIP / LATER.</summary>
+        private void OpenUpdate()
+        {
+            if (_update == null || _updating) return;
+            if (Updater.Ready != null) { Close(); return; }  // already downloaded: closing installs it
+            UpdateDialog.Result r;
+            using (var d = new UpdateDialog(_update))
+            {
+                d.ShowDialog(this);
+                r = d.Choice;
+            }
+            if (r == UpdateDialog.Result.Skip)
+            {
+                AppSettings.SkipVersion = _update.Version.ToString(3);
+                try { AppSettings.Save(); } catch (Exception) { }
+                HideUpdateButton();
+                SetStatus(Updater.Format(_update.Version) + " skipped: not offered again at startup (click the version, bottom right, to check by hand).");
+            }
+            else if (r == UpdateDialog.Result.Installed)
+            {
+                _blink.Stop();
+                _updateBtn.Text = "RESTART TO UPDATE";
+                SetStatus(Updater.Format(_update.Version) + " downloaded: it is installed when you close IRR Companion.");
+                Close();  // asks about unsaved changes; if cancelled, the update waits for the next close
+            }
         }
 
         protected override void OnHandleCreated(EventArgs e)
@@ -144,16 +291,46 @@ namespace IRRCompanion
             title.Location = new Point(Theme.S(18), Theme.S(8));
             var sub = Theme.Lbl("Companion app for Incursion Red River · game data " + GameData.GameBuild, Theme.Small, Theme.TextDim);
             sub.Location = new Point(Theme.S(20), Theme.S(40));
+            // version of the app, next to the title
+            var version = Theme.Lbl(Updater.CurrentText, Theme.Bold, Theme.TextDim);
+            _tip.SetToolTip(version, "Version of IRR Companion. Click the version at the bottom right to check for updates.");
+            title.SizeChanged += (s, e) => version.Location = new Point(title.Right + Theme.S(8), title.Bottom - version.Height - Theme.S(3));
+            version.Location = new Point(title.Right + Theme.S(8), title.Bottom - version.Height - Theme.S(3));
             // Views: 0 presets editor, 1 compare (opened from the editor, no tab of its own), 2 commands, 3 weapons,
             // 4 hideout, 5 maps, 6 traders. Tab i shows view TabViews[i].
             _viewSwitch = new Segmented("PRESETS", "COMMANDS", "WEAPONS", "TRADERS", "HIDEOUT", "MAPS") { Selected = 0, BackColor = Theme.Row };
             _viewSwitch.Size = new Size(Theme.S(660), Theme.S(36));
             _viewSwitch.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             _viewSwitch.OptionClicked += (s, e) => ShowView(TabViews[_viewSwitch.ClickedIndex]);
+            // UPDATE AVAILABLE (hidden until a newer release is found): blinks; click = download and restart
+            _updateBtn = Theme.Btn("UPDATE AVAILABLE", (s, e) => StartUpdate(), true);
+            _updateBtn.Size = new Size(Theme.S(196), Theme.S(36));
+            _updateBtn.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            _updateBtn.FlatAppearance.BorderColor = Theme.Changed;
+            _updateBtn.ForeColor = Theme.Changed;
+            _updateBtn.Visible = false;
+            var updBtnMenu = DarkMenu.Create();
+            updBtnMenu.Items.Add(new ToolStripMenuItem("What's new…", null, (s, e) => OpenUpdate()));
+            updBtnMenu.Items.Add(new ToolStripMenuItem("Skip this version", null, (s, e) =>
+            {
+                if (_update == null || _updating) return;
+                AppSettings.SkipVersion = _update.Version.ToString(3);
+                try { AppSettings.Save(); } catch (Exception) { }
+                HideUpdateButton();
+                SetStatus(Updater.Format(_update.Version) + " skipped: not offered again at startup (click the version, bottom right, to check by hand).");
+            }));
+            _updateBtn.ContextMenuStrip = updBtnMenu;
+            _blink.Tick += (s, e) => Blink();
             header.Controls.Add(title);
+            header.Controls.Add(version);
             header.Controls.Add(sub);
             header.Controls.Add(_viewSwitch);
-            header.Resize += (s, e) => _viewSwitch.Location = new Point(header.Width - _viewSwitch.Width - Theme.S(18), Theme.S(14));
+            header.Controls.Add(_updateBtn);
+            header.Resize += (s, e) =>
+            {
+                _viewSwitch.Location = new Point(header.Width - _viewSwitch.Width - Theme.S(18), Theme.S(14));
+                _updateBtn.Location = new Point(_viewSwitch.Left - _updateBtn.Width - Theme.S(14), Theme.S(14));
+            };
 
             // ---- status bar
             var statusBar = new Panel { Dock = DockStyle.Bottom, Height = Theme.S(28), BackColor = Theme.Panel };
@@ -186,17 +363,43 @@ namespace IRRCompanion
                 catch (Exception ex) { SetStatus("Could not save the settings: " + ex.Message); return; }
                 if (MessageBox.Show(this, "The new size is applied when the app starts. Restart IRR Companion now?", Text,
                         MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                    Application.Restart();
+                {
+                    if (Updater.Ready != null) Close();  // the update starts the new version
+                    else Application.Restart();
+                }
                 else SetStatus("The new interface size is applied at the next start.");
             };
+            // version + update menu
+            _versionLink = new LinkLabel
+            {
+                Text = Updater.CurrentText, Font = Theme.Small, AutoSize = true, LinkColor = Theme.TextDim,
+                ActiveLinkColor = Color.White, Anchor = AnchorStyles.Top | AnchorStyles.Right, BackColor = Color.Transparent,
+            };
+            _tip.SetToolTip(_versionLink, "Version of IRR Companion. Click: check for updates.");
+            var updMenu = DarkMenu.Create();
+            var miCheck = new ToolStripMenuItem("Check for updates now", null, (s, e) => CheckForUpdates(true));
+            var miAuto = new ToolStripMenuItem("Check for updates at startup", null, (s, e) =>
+            {
+                AppSettings.CheckUpdates = !AppSettings.CheckUpdates;
+                try { AppSettings.Save(); } catch (Exception ex) { SetStatus("Could not save the settings: " + ex.Message); }
+            });
+            var miPage = new ToolStripMenuItem("Release page", null, (s, e) => { try { Process.Start(Updater.ReleasesPage); } catch (Exception) { } });
+            _miWhatsNew = new ToolStripMenuItem("What's new…", null, (s, e) => OpenUpdate()) { Visible = false };
+            updMenu.Items.AddRange(new ToolStripItem[] { _miWhatsNew, miCheck, miAuto, miPage });
+            updMenu.Opening += (s, e) => miAuto.Text = (AppSettings.CheckUpdates ? "✓  " : "      ") + "Check for updates at startup";
+            _versionLink.LinkClicked += (s, e) => updMenu.Show(_versionLink, new Point(0, -updMenu.PreferredSize.Height));
             statusBar.Controls.Add(_status);
             statusBar.Controls.Add(folder);
             statusBar.Controls.Add(zoom);
+            statusBar.Controls.Add(_versionLink);
             statusBar.Resize += (s, e) =>
             {
                 folder.Location = new Point(statusBar.Width - folder.Width - Theme.S(12), Theme.S(6));
                 zoom.Location = new Point(folder.Left - zoom.Width - Theme.S(16), (statusBar.Height - zoom.Height) / 2);
+                _versionLink.Location = new Point(zoom.Left - _versionLink.Width - Theme.S(16), Theme.S(6));
             };
+            // the link grows to the left when "vX available" is added
+            _versionLink.SizeChanged += (s, e) => _versionLink.Location = new Point(zoom.Left - _versionLink.Width - Theme.S(16), Theme.S(6));
 
             // ---- sidebar
             var side = _side = new Panel { Dock = DockStyle.Left, Width = Theme.S(260), BackColor = Theme.Panel, Padding = new Padding(Theme.S(12)) };

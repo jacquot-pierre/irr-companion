@@ -40,6 +40,14 @@ Requires Windows 10 or 11 (it uses .NET Framework 4.6.2, already part of Windows
 > your PC"*. Click **More info → Run anyway**. Every release is built by GitHub Actions from the source in
 > this repository; its SHA-256 hash is in the release notes.
 
+**Updates** (from v1.5.0): at startup the app asks GitHub whether a newer release exists. If so, a blinking
+**UPDATE AVAILABLE** button shows up next to the tabs. Click it: the app downloads the new exe, checks it against
+the SHA-256 published by GitHub, closes (asking about unsaved changes first), replaces the exe and starts the new
+version. Right-click the button for the release notes or to skip that version. Your presets, favorites, builds,
+progress and settings are kept (they are in `%APPDATA%\IRR Companion`, not in the exe). Click the version number at
+the bottom right to check by hand or to turn off the check at startup. If the exe is in a folder you cannot write
+to (*Program Files*), the button opens the download page instead.
+
 ## Features
 
 ### AI preset editor

@@ -138,6 +138,8 @@ The interface was only checked on screenshots; nothing was clicked yet.
 - [x] `v1.3.0` release: the exe and the notes are on the release page.
 - [ ] `v1.4.0` release: the exe and the notes are on the release page.
 - [ ] `v1.4.1` release: the exe and the notes are on the release page; Add item (legacy) with a vendor row works in game.
+- [ ] `v1.5.0` release: the exe and the notes are on the release page; the next release is offered by UPDATE AVAILABLE
+      and installs itself (check from a v1.5.0 exe).
 - [ ] Delete the old local folder `Documents\IRRPresetTool` once everything is in this repository.
 - [ ] Before making the repository public: the test codes in `tools/testdata/` contain the author name of the
       presets; decide whether to keep them.
