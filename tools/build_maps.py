@@ -69,7 +69,10 @@ SPAWN_GUESSES = {
 }
 KEYS_DIR = 'Test_C/Content/Blueprints/InventorySystem/Items/Keys/'
 KEY_TAG = 'Inventory.Items.Keys.'
-# Locked things shown on the maps: class -> kind. Doors are kept only when they reference a key (the others never open).
+# Locked things shown on the maps: class -> kind. A door's key is the one set on the placed actor, else the one of its
+# class (BP_Door_Delta_Locked / BP_Door_Quarry_Locked hold "<Map>.General Key" in their class defaults); doors
+# with neither never open and are left out.
+DOORS_DIR = 'Test_C/Content/Blueprints/InteractionSystem/Actors/Door/'
 LOCKS = {
     'BP_LootContainer_Safe_01_C': 'CompactSafe',
     'BP_LootContainer_Safe_02_C': 'LargeSafe',
@@ -323,6 +326,17 @@ def actor_keys(L, index, key_names):
     return sorted(found)
 
 
+def class_keys(tmp):
+    """Door class (BP_Door_X_C) -> key tags of its class defaults (Blueprints/InteractionSystem/Actors/Door)."""
+    out = {}
+    for path in glob.glob(os.path.join(tmp, DOORS_DIR.replace('/', os.sep), '**', 'BP_Door_*.uasset'), recursive=True):
+        names = package_full(path)[0]
+        ks = sorted(n for n in names if n.startswith(KEY_TAG))
+        if ks:
+            out[os.path.basename(path)[:-7] + '_C'] = ks
+    return out
+
+
 def floor_of(z, floors):
     inside = [f for f in floors if abs(z - f['centerZ']) <= f['extentZ'] + 50]
     pool = inside or floors
@@ -340,6 +354,7 @@ def main():
         wanted = [RESOURCE_BP + 'BP_ResourceActor_%s.%s' % (t, ext) for t in RESOURCES for ext in ('uasset', 'uexp')]
         wanted += [f for f in files if f.startswith(MINIMAPS) and '_Mask' not in f]
         wanted += [f for f in files if f.startswith(KEYS_DIR) and '/ID_' in f]
+        wanted += [f for f in files if f.startswith(DOORS_DIR) and '/BP_Door_' in f]
         wanted += [MAP_SETUPS + 'MD_%s.%s' % (n, ext) for n, _ in MAPS for ext in ('uasset', 'uexp')]
         for _, lvl in MAPS:
             wanted += [lvl + '.umap', lvl + '.uexp']
@@ -348,6 +363,8 @@ def main():
         defaults = resource_defaults(tmp)
         print('resource defaults:', defaults)
         keys = key_items(tmp)
+        door_keys = class_keys(tmp)
+        print('door classes with a key:', door_keys)
         print('%d key items' % len(keys))
         os.makedirs(OUT_IMG, exist_ok=True)
         old_images = {f for f in os.listdir(OUT_IMG) if f.endswith('.jpg')}
@@ -414,6 +431,8 @@ def main():
                 kind = LOCKS.get(cls) or (LOCKED_DOOR if cls.startswith('BP_Door_') and 'Locked' in cls else None)
                 if kind:
                     ks = actor_keys(L, i, key_names)
+                    if not ks and kind == LOCKED_DOOR:
+                        ks = door_keys.get(cls, [])  # the key of the door class
                     if not ks:
                         continue  # a door that never opens (no key)
                     if len(ks) > 1:

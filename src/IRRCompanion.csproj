@@ -6,7 +6,7 @@
     <LangVersion>7.3</LangVersion>
     <AssemblyName>IRRCompanion</AssemblyName>
     <RootNamespace>IRRCompanion</RootNamespace>
-    <Version>1.7.0</Version>
+    <Version>1.7.1</Version>
     <Product>IRR Companion</Product>
     <Description>AI preset editor, console command builder, hideout upgrade planner and resource maps for Incursion Red River</Description>
     <ApplicationManifest>app.manifest</ApplicationManifest>

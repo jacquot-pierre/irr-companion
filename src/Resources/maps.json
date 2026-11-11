@@ -521,6 +521,70 @@
    ],
    "locks": [
     {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Delta.General Key",
+     "x": -63449,
+     "y": -1851,
+     "z": -296,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Delta.General Key",
+     "x": -39973,
+     "y": -54673,
+     "z": -443,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Delta.General Key",
+     "x": -59022,
+     "y": -43882,
+     "z": -755,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Delta.General Key",
+     "x": -64194,
+     "y": -59857,
+     "z": -767,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Delta.General Key",
+     "x": -49421,
+     "y": -50581,
+     "z": -872,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Delta.General Key",
+     "x": -71235,
+     "y": -56822,
+     "z": -760,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Delta.General Key",
+     "x": -78348,
+     "y": -58401,
+     "z": 109,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Delta.General Key",
+     "x": -59176,
+     "y": -47966,
+     "z": -282,
+     "floor": 0
+    },
+    {
      "kind": "HasDoor",
      "key": "Inventory.Items.Keys.HAS.HAS-0023-B",
      "x": -98597,
@@ -1300,6 +1364,214 @@
      "x": -109250,
      "y": -80803,
      "z": 1923,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Quarry.General Key",
+     "x": -73508,
+     "y": -51685,
+     "z": 445,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Quarry.General Key",
+     "x": -123196,
+     "y": -56339,
+     "z": 1611,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Quarry.General Key",
+     "x": -124074,
+     "y": -60700,
+     "z": 1611,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Quarry.General Key",
+     "x": -124140,
+     "y": -59676,
+     "z": 1611,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Quarry.General Key",
+     "x": -74623,
+     "y": -50480,
+     "z": 445,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Quarry.General Key",
+     "x": -79830,
+     "y": -74812,
+     "z": 6100,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Quarry.General Key",
+     "x": -81025,
+     "y": -74335,
+     "z": 6100,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Quarry.General Key",
+     "x": -78016,
+     "y": -82852,
+     "z": 6100,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Quarry.General Key",
+     "x": -83693,
+     "y": -90132,
+     "z": 5669,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Quarry.General Key",
+     "x": -79040,
+     "y": -82135,
+     "z": 6100,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Quarry.General Key",
+     "x": -85933,
+     "y": -77498,
+     "z": 5670,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Quarry.General Key",
+     "x": -74509,
+     "y": -51773,
+     "z": 445,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Quarry.General Key",
+     "x": -123819,
+     "y": -57242,
+     "z": 1610,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Quarry.General Key",
+     "x": -123971,
+     "y": -64106,
+     "z": 765,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Quarry.General Key",
+     "x": -121825,
+     "y": -64595,
+     "z": 764,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Quarry.General Key",
+     "x": -89647,
+     "y": -86670,
+     "z": 5675,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Quarry.General Key",
+     "x": -108178,
+     "y": -81415,
+     "z": 2348,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Quarry.General Key",
+     "x": -108891,
+     "y": -80580,
+     "z": 2348,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Quarry.General Key",
+     "x": -124979,
+     "y": -69311,
+     "z": 770,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Quarry.General Key",
+     "x": -126351,
+     "y": -71300,
+     "z": 770,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Quarry.General Key",
+     "x": -133031,
+     "y": -59002,
+     "z": 760,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Quarry.General Key",
+     "x": -129574,
+     "y": -64301,
+     "z": 767,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Quarry.General Key",
+     "x": -128732,
+     "y": -69959,
+     "z": 761,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Quarry.General Key",
+     "x": -129176,
+     "y": -71857,
+     "z": 761,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Quarry.General Key",
+     "x": -118034,
+     "y": -58255,
+     "z": 1186,
+     "floor": 0
+    },
+    {
+     "kind": "LockedDoor",
+     "key": "Inventory.Items.Keys.Quarry.General Key",
+     "x": -118378,
+     "y": -63114,
+     "z": 761,
      "floor": 0
     },
     {
