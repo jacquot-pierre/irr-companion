@@ -3,6 +3,9 @@
 import { mountMaps } from './maps.js';
 import { mountTraders } from './traders.js';
 import { mountWeapons } from './weapons.js';
+import { mountCommands } from './commands.js';
+import { mountHideout } from './hideout.js';
+import { mountPresets } from './presets.js';
 
 const cache = {};
 
@@ -89,14 +92,113 @@ export function debounce(fn, ms = 350) {
   return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); };
 }
 
+/** Segmented control: one button per label; onpick(index). */
+export function seg(labels, selected, onpick, opts = {}) {
+  const box = el('div.seg' + (opts.small ? '.small' : ''), opts.title ? { title: opts.title } : null);
+  labels.forEach((l, i) => box.append(el('button' + (i === selected ? '.on' : ''), {
+    type: 'button', text: l, disabled: opts.disabled || undefined, onclick: () => onpick(i),
+  })));
+  return box;
+}
+
+/** Value kept in this browser (localStorage); load() gives def when missing or unreadable. */
+export function stored(key, def) {
+  return {
+    load() { try { const v = localStorage.getItem(key); return v == null ? def : JSON.parse(v); } catch (e) { return def; } },
+    save(v) { try { localStorage.setItem(key, JSON.stringify(v)); return true; } catch (e) { status('Could not save in this browser: ' + e.message); return false; } },
+  };
+}
+
+/** Downloads a JSON document as a file. */
+export function downloadJson(doc, filename) {
+  const a = el('a', { href: URL.createObjectURL(new Blob([JSON.stringify(doc, null, 2)], { type: 'application/json' })), download: filename });
+  document.body.append(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 10000);
+}
+
+/** Asks for a JSON file and gives its content (null when cancelled). */
+export function pickJson() {
+  return new Promise((resolve, reject) => {
+    const input = el('input', { type: 'file', accept: '.json,application/json', hidden: true });
+    input.addEventListener('change', async () => {
+      const f = input.files[0];
+      input.remove();
+      if (!f) return resolve(null);
+      try { resolve(JSON.parse(await f.text())); } catch (e) { reject(new Error(f.name + ' is not a JSON file the app can read.')); }
+    });
+    document.body.append(input);
+    input.click();
+  });
+}
+
+/** Modal dialog with a text box. Resolves to the text (OK) or null (cancel).
+ *  opts: { label, value, multiline, readonly, ok, validate(text) -> error message or null } */
+export function dialog(title, opts = {}) {
+  return new Promise(resolve => {
+    const box = opts.multiline
+      ? el('textarea.input.code', { rows: 6, spellcheck: 'false' })
+      : el('input.input', { spellcheck: 'false' });
+    box.value = opts.value || '';
+    if (opts.readonly) box.readOnly = true;
+    const err = el('div.err');
+    const close = v => { back.remove(); document.removeEventListener('keydown', key); resolve(v); };
+    const ok = () => {
+      if (opts.readonly) return close(box.value);
+      const e = opts.validate ? opts.validate(box.value) : null;
+      if (e) { err.textContent = e; return; }
+      close(box.value);
+    };
+    const key = e => {
+      if (e.key === 'Escape') close(null);
+      else if (e.key === 'Enter' && !opts.multiline) ok();
+    };
+    const back = el('div.modal-back', { onclick: e => { if (e.target === back) close(null); } },
+      el('div.modal', null,
+        el('div.modal-title', { text: title }),
+        opts.label ? el('div.muted', { text: opts.label, style: 'margin-bottom:6px' }) : null,
+        box, err,
+        el('div.buttons', { style: 'justify-content:flex-end;margin-top:10px' },
+          opts.readonly ? el('button.btn', { text: 'COPY', onclick: () => copy(box.value, opts.what || 'the code') }) : null,
+          opts.readonly ? null : el('button.btn', { text: 'CANCEL', onclick: () => close(null) }),
+          el('button.btn.primary', { text: opts.ok || 'OK', onclick: ok }))));
+    document.body.append(back);
+    document.addEventListener('keydown', key);
+    box.focus();
+    if (!opts.readonly && !opts.multiline) box.select();
+    else if (opts.readonly) box.select();
+  });
+}
+
+/** Quotes a console argument when it contains spaces (same as the desktop app). */
+export function token(s) {
+  if (s == null) return '';
+  s = String(s).trim();
+  return s.includes(' ') ? '"' + s.replace(/"/g, '') + '"' : s;
+}
+
+/** Splits a console line into tokens (double quotes group words). */
+export function splitLine(line) {
+  const out = [];
+  let cur = '', quoted = false, any = false;
+  for (const ch of line || '') {
+    if (ch === '"') { quoted = !quoted; any = true; continue; }
+    if (/\s/.test(ch) && !quoted) { if (cur.length || any) out.push(cur); cur = ''; any = false; continue; }
+    cur += ch;
+  }
+  if (cur.length || any) out.push(cur);
+  return out;
+}
+
 // ---------------------------------------------------------------- router
-const tabs = { maps: mountMaps, traders: mountTraders, weapons: mountWeapons };
+const tabs = { presets: mountPresets, commands: mountCommands, weapons: mountWeapons, traders: mountTraders, hideout: mountHideout, maps: mountMaps };
 const view = document.getElementById('view');
 let current = null, unmount = null;
 
 async function route() {
-  const name = (location.hash.replace('#', '').split('/')[0]) || 'maps';
-  const tab = tabs[name] ? name : 'maps';
+  const name = (location.hash.replace('#', '').split('/')[0]) || 'presets';
+  const tab = tabs[name] ? name : 'presets';
   if (tab === current) return;
   current = tab;
   document.querySelectorAll('#tabs a').forEach(a => a.classList.toggle('on', a.dataset.tab === tab));

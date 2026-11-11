@@ -121,10 +121,12 @@ The interface was only checked on screenshots; nothing was clicked yet.
 
 ## Web version
 
-- [ ] GitHub Pages: *Settings > Pages > Source: GitHub Actions*, then the custom domain (CNAME at Ionos to
-      `mordeci.github.io`, *Settings > Pages > Custom domain*, Enforce HTTPS, verify the domain in the account).
-- [ ] Port the other tabs: PRESETS (editor, share codes), COMMANDS (builder, favorites), HIDEOUT (progress,
-      shopping list).
+- [x] GitHub Pages and the custom domain irr-companion.seigneurguerande.fr.
+- [ ] Enforce HTTPS in *Settings > Pages* once the certificate is issued; verify the domain in the account.
+- [x] Port the other tabs: PRESETS (editor, share codes, compare), COMMANDS (builder, favorites), HIDEOUT
+      (progress, shopping list). The web share code is byte-identical to the desktop one (checked on a test doc).
+- [ ] Import a share code made on the web in the game, and one from the game on the web.
+- [ ] Move presets / favorites / builds / hideout progress between the web and the desktop app with EXPORT / IMPORT.
 - [ ] Check on a phone (maps pinch zoom, weapon builder lists) and in Firefox / Safari.
 - [ ] Item icons in the weapon part lists (the browser lists show text only).
 

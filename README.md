@@ -19,10 +19,15 @@ One portable `.exe`, nothing to install, nothing written to the game's files.
 
 ## Web version
 
-A web version runs in the browser, nothing to install: **MAPS** (with the item heatmap), **TRADERS** and
-**WEAPONS** for now - the other tabs stay in the desktop app. It uses the same game data as the desktop app and
-is published from this repository on GitHub Pages. Weapon builds are kept in the browser; **EXPORT** / **IMPORT**
-use the desktop app's `weapons.json`, so builds move between the two.
+A web version runs in the browser, nothing to install, on a PC or a phone:
+**[irr-companion.seigneurguerande.fr](https://irr-companion.seigneurguerande.fr)**. It has every tab of the desktop
+app (PRESETS, COMMANDS, WEAPONS, TRADERS, HIDEOUT, MAPS) with the same game data, and is published from this
+repository on GitHub Pages.
+
+What you make on the web (presets, favorite commands, weapon builds, hideout progress) is kept in that browser.
+**EXPORT** / **IMPORT** use the desktop app's files (`presets.json`, `favorites.json`, `weapons.json`,
+`hideout.json` in `%APPDATA%\IRR Companion`), so you can move them between the two. Share codes are the same:
+a code copied on the web imports in the game and in the desktop app.
 
 ## Download
 
@@ -317,7 +322,7 @@ domain, *Settings > Pages > Custom domain* and a CNAME record at the registrar p
 | Path | Content |
 |---|---|
 | `src/` | the WinForms app (C# 7.3, .NET Framework 4.6.2): `MainForm.cs` (PRESETS editor and compare), `CommandsPanel.cs`, `WeaponsPanel.cs`, `TradersPanel.cs`, `HideoutPanel.cs`, `MapsPanel.cs`, data models (`Preset.cs`, `Commands.cs`, `Weapons.cs`, `Traders.cs`, `Hideout.cs`, `Maps.cs`, `Loot.cs`), `ShareCode.cs`, `Theme.cs` / `Controls.cs` (dark UI) |
-| `web/` | the web version: `index.html`, `css/app.css`, `js/app.js` (tabs, helpers), `js/maps.js`, `js/traders.js`, `js/weapons.js` |
+| `web/` | the web version: `index.html`, `css/app.css`, `js/app.js` (tabs, helpers), one module per tab: `js/presets.js` (editor, share codes, compare), `js/commands.js`, `js/weapons.js`, `js/traders.js`, `js/hideout.js`, `js/maps.js` |
 | `src/Resources/` | data generated from the game (used by both versions): `defaults.json`, `commands.json`, `weapons.json`, `traders.json`, `loot.json`, `hideout.json`, `maps.json`, `icons/`, `maps/` |
 | `tools/` | Python scripts that read the game files and check the app (see below), test share codes in `tools/testdata/` |
 | `.claude/skills/update-irr-tool/` | step-by-step procedure to update the app after a game patch |
