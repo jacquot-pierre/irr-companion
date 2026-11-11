@@ -18,6 +18,8 @@ namespace IRRCompanion
         private Point _dragStart;
         private PointF _dragOffset;
         private bool _dragging;
+        /// <summary>The view shows the whole map (not zoomed or moved by the user): it is fitted again on resize.</summary>
+        private bool _fitted = true;
         private MapPoint _hover;
         private Bitmap _heat;
 
@@ -58,6 +60,7 @@ namespace IRRCompanion
             if (Width <= 1 || Height <= 1) return;
             _scale = Math.Min(Width / (float)s.Width, Height / (float)s.Height);
             _offset = new PointF((Width - s.Width * _scale) / 2, (Height - s.Height * _scale) / 2);
+            _fitted = true;
             Invalidate();
         }
 
@@ -70,13 +73,15 @@ namespace IRRCompanion
             float f = ns / _scale;
             _offset = new PointF(screen.X - (screen.X - _offset.X) * f, screen.Y - (screen.Y - _offset.Y) * f);
             _scale = ns;
+            _fitted = false;
             Invalidate();
         }
 
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
-            if (_floor != null && _scale <= Math.Min(Width / (float)ImageSize.Width, Height / (float)ImageSize.Height) + 0.001f) Fit();
+            // whole map shown (or the window got bigger than the zoomed map): keep showing the whole map
+            if (_floor != null && (_fitted || _scale <= Math.Min(Width / (float)ImageSize.Width, Height / (float)ImageSize.Height) + 0.001f)) Fit();
         }
 
         private PointF Screen(MapPoint p)
@@ -290,6 +295,7 @@ namespace IRRCompanion
             if (_dragging)
             {
                 _offset = new PointF(_dragOffset.X + e.X - _dragStart.X, _dragOffset.Y + e.Y - _dragStart.Y);
+                if (e.Location != _dragStart) _fitted = false;
                 Invalidate();
                 return;
             }

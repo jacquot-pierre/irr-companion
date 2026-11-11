@@ -118,13 +118,13 @@ namespace IRRCompanion
             _cmpA.SelectedItem = _presets[1];
             _cmpB.SelectedItem = firstMine ?? _presets[2];
             SetStatus("Presets are stored in " + Library.FilePath);
-            ActiveControl = _list;
+            ShowView(5);  // start on MAPS
         }
 
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
-            ActiveControl = _list;
+            if (_editPanel.Visible) ActiveControl = _list;
             _rowsPanel.AutoScrollPosition = new Point(0, 0);
             if (Program.UpdatedFrom != null)
                 SetStatus("Updated to " + Updater.CurrentText + " (from v" + Program.UpdatedFrom + "). Your presets and settings are kept.");
@@ -1269,6 +1269,7 @@ namespace IRRCompanion
             RefreshList();
             RefreshCombos();
             SelectPreset(p);
+            ShowView(0);  // the app starts on MAPS
             shot("edit");
             _rowsPanel.AutoScrollPosition = new Point(0, Theme.S(1300));
             shot("edit_scrolled");

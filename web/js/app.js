@@ -197,8 +197,8 @@ const view = document.getElementById('view');
 let current = null, unmount = null;
 
 async function route() {
-  const name = (location.hash.replace('#', '').split('/')[0]) || 'presets';
-  const tab = tabs[name] ? name : 'presets';
+  const name = (location.hash.replace('#', '').split('/')[0]) || 'maps';
+  const tab = tabs[name] ? name : 'maps';
   if (tab === current) return;
   current = tab;
   document.querySelectorAll('#tabs a').forEach(a => a.classList.toggle('on', a.dataset.tab === tab));
