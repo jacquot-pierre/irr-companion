@@ -215,5 +215,11 @@ async function route() {
 }
 
 window.addEventListener('hashchange', route);
-data('defaults.json').then(d => { document.getElementById('gamebuild').textContent = 'game data ' + d.gameBuild; }).catch(() => {});
+data('defaults.json').then(d => {
+  const g = document.getElementById('gamebuild');
+  g.textContent = d.gameVersion ? 'made for game version ' + d.gameVersion + ' (' + d.gameBuild + ')' : 'game data ' + d.gameBuild;
+  g.title = 'The data of this app was read from the game files of version ' + (d.gameVersion || '?') +
+    (d.steamBuild ? ' (Steam build ' + d.steamBuild + ')' : '') + ', updated on ' + d.gameBuild +
+    '. A newer game update can change some values until the app is updated.';
+}).catch(() => {});
 route();

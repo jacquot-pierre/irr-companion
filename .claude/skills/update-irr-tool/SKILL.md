@@ -345,7 +345,8 @@ It is published by `.github/workflows/pages.yml` when `main` is pushed.
 
 ## Checklist
 
-- [ ] Game build noted (Steam `buildid`, date) and passed to `build_defaults.py`
+- [ ] Game build noted (Steam `buildid`, date, `ProjectVersion` of `Test_C/Config/DefaultGame.ini` in pakchunk0) and
+      passed to `build_defaults.py` (arguments 3 to 5: date, version, Steam build): the web header shows them
 - [ ] `build_defaults.py` runs without assertion; changes reviewed (new settings named from in-game screenshots)
 - [ ] Share code format unchanged (or code updated); `check_roundtrip.py` passes with a fresh game export
 - [ ] `reference_full_doc.json` refreshed if the AI document changed

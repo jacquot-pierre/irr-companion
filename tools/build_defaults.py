@@ -1,10 +1,14 @@
 r"""Builds src/Resources/defaults.json from the files extracted from the game pak.
 
 Usage: python -I tools/build_defaults.py <extracted AISettings dir> <reference full preset doc> [game build label]
+       [game version] [Steam build id]
   - extracted dir   : ...\IRR_AISettings\Test_C\Content\AISettings
   - reference doc   : a full AISettings doc saved by the game (gives key order and
                       the engine defaults for keys that Normal.json does not set)
   - game build label: shown in the tool's header, e.g. "2026-11-06" (default: keep the current one)
+  - game version    : ProjectVersion of Test_C/Config/DefaultGame.ini in pakchunk0, e.g. "1.4.0.1"
+  - Steam build id  : "buildid" of steamapps/appmanifest_2116120.acf, e.g. "26487830"
+    (both default to the current ones)
 
 Prints what changed compared with the previous defaults.json (parameters, ranges, difficulty values).
 """
@@ -19,6 +23,8 @@ if os.path.exists(out):
     with open(out, encoding="utf-8") as f:
         previous = json.load(f)
 game_build = sys.argv[3] if len(sys.argv) > 3 else (previous or {}).get("gameBuild", "unknown")
+game_version = sys.argv[4] if len(sys.argv) > 4 else (previous or {}).get("gameVersion", "")
+steam_build = sys.argv[5] if len(sys.argv) > 5 else (previous or {}).get("steamBuild", "")
 
 
 def load(*p):
@@ -288,6 +294,8 @@ for i in range(1, 5):  # the game menu shows levels 1-4; level 5 is kept as-is i
 
 data = {
     "gameBuild": game_build,
+    "gameVersion": game_version,
+    "steamBuild": steam_build,
     "aiHardVersion": normal["schemaHardVersion"],
     "aiSoftVersion": normal["schemaSoftVersion"],
     "simHardVersion": 1,

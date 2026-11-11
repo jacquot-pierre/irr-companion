@@ -238,3 +238,7 @@ table.cmp { width: 100%; border-collapse: collapse; }
   .slotrow select { min-width: 0; flex-basis: 180px; }
   .slotrow .lbl { width: 100px; }
 }
+
+.brand .sub a.steam { color: var(--accent); text-decoration: none; }
+.brand .sub a.steam:hover { text-decoration: underline; }
+#gamebuild { cursor: help; }
