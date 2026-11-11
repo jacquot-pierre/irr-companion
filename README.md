@@ -17,6 +17,13 @@ One portable `.exe`, nothing to install, nothing written to the game's files.
 | **HIDEOUT** | See the cost of every hideout upgrade with the game icons, track your progress and get a shopping list. |
 | **MAPS** | Resource spawn points, extraction points, safes and locked doors (with the key they need) on the game maps, and a heatmap of where any item can spawn. |
 
+## Web version
+
+A web version runs in the browser, nothing to install: **MAPS** (with the item heatmap), **TRADERS** and
+**WEAPONS** for now - the other tabs stay in the desktop app. It uses the same game data as the desktop app and
+is published from this repository on GitHub Pages. Weapon builds are kept in the browser; **EXPORT** / **IMPORT**
+use the desktop app's `weapons.json`, so builds move between the two.
+
 ## Download
 
 1. Download **`IRRCompanion.exe`** from the [latest release](https://github.com/mordeci/irr-companion/releases/latest).
@@ -289,15 +296,33 @@ dotnet build src -c Release
 The exe is `src/bin/Release/net462/IRRCompanion.exe`. A Debug build adds test helpers:
 `--screenshot <prefix>` renders every view to PNG files and `--roundtrip <in> <out>` re-exports a share code.
 
+### Web version
+
+The web version is plain HTML / CSS / JavaScript modules in `web/` (no build step, no dependency). It reads the
+same data files as the desktop app: `web/js/*.js` fetch `data/<file>`, which is `src/Resources/` - so one run of the
+`tools/` scripts updates both versions. To try it locally:
+
+```
+python -I tools/serve_web.py
+```
+
+then open http://localhost:8080 (`web/` at `/`, `src/Resources/` at `/data/`). The workflow
+`.github/workflows/pages.yml` assembles the same layout and publishes it on GitHub Pages on every push to `main`
+that touches `web/` or `src/Resources/`. One-time setup: *Settings > Pages > Source: GitHub Actions*; for a custom
+domain, *Settings > Pages > Custom domain* and a CNAME record at the registrar pointing to `<user>.github.io`
+(verify the domain in the GitHub account settings).
+
 ### Project layout
 
 | Path | Content |
 |---|---|
 | `src/` | the WinForms app (C# 7.3, .NET Framework 4.6.2): `MainForm.cs` (PRESETS editor and compare), `CommandsPanel.cs`, `WeaponsPanel.cs`, `TradersPanel.cs`, `HideoutPanel.cs`, `MapsPanel.cs`, data models (`Preset.cs`, `Commands.cs`, `Weapons.cs`, `Traders.cs`, `Hideout.cs`, `Maps.cs`, `Loot.cs`), `ShareCode.cs`, `Theme.cs` / `Controls.cs` (dark UI) |
-| `src/Resources/` | data generated from the game: `defaults.json`, `commands.json`, `weapons.json`, `traders.json`, `loot.json`, `hideout.json`, `maps.json`, `icons/`, `maps/` |
+| `web/` | the web version: `index.html`, `css/app.css`, `js/app.js` (tabs, helpers), `js/maps.js`, `js/traders.js`, `js/weapons.js` |
+| `src/Resources/` | data generated from the game (used by both versions): `defaults.json`, `commands.json`, `weapons.json`, `traders.json`, `loot.json`, `hideout.json`, `maps.json`, `icons/`, `maps/` |
 | `tools/` | Python scripts that read the game files and check the app (see below), test share codes in `tools/testdata/` |
 | `.claude/skills/update-irr-tool/` | step-by-step procedure to update the app after a game patch |
 | `.github/workflows/build.yml` | builds the exe on every push, publishes a release for `v*` tags |
+| `.github/workflows/pages.yml` | publishes the web version on GitHub Pages |
 | `docs/` | README screenshots and release notes (`docs/release-notes/<tag>.md`) |
 
 ### Updating after a game patch

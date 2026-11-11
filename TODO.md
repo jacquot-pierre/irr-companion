@@ -119,6 +119,15 @@ The interface was only checked on screenshots; nothing was clicked yet.
       only), window size clamped to the screen.
 - [ ] Windows 10 and a PC without development tools (download from the release page, SmartScreen).
 
+## Web version
+
+- [ ] GitHub Pages: *Settings > Pages > Source: GitHub Actions*, then the custom domain (CNAME at Ionos to
+      `mordeci.github.io`, *Settings > Pages > Custom domain*, Enforce HTTPS, verify the domain in the account).
+- [ ] Port the other tabs: PRESETS (editor, share codes), COMMANDS (builder, favorites), HIDEOUT (progress,
+      shopping list).
+- [ ] Check on a phone (maps pinch zoom, weapon builder lists) and in Firefox / Safari.
+- [ ] Item icons in the weapon part lists (the browser lists show text only).
+
 ## Repository and releases
 
 - [x] First GitHub Actions run: the build passes and the `v1.0.0` release has the exe and the notes.
