@@ -1,0 +1,2692 @@
+{
+ "version": 1,
+ "traders": [
+  {
+   "id": "IGC",
+   "name": "Iron Guard Corps",
+   "people": [
+    {
+     "name": "Lt Moroz",
+     "map": "Delta",
+     "guessed": true
+    }
+   ],
+   "fixed": [
+    {
+     "id": "Canteen",
+     "count": 2
+    },
+    {
+     "id": "GasCan",
+     "count": 1
+    },
+    {
+     "id": "PowerCable",
+     "count": 3
+    },
+    {
+     "id": "Toolbox",
+     "count": 1
+    },
+    {
+     "id": "SprayCan",
+     "count": 2
+    },
+    {
+     "id": "Duct_Tape",
+     "count": 2
+    },
+    {
+     "id": "Hesco_Armor_Plate",
+     "count": 1
+    },
+    {
+     "id": "OldFlashlight",
+     "count": 4
+    },
+    {
+     "id": "PlasticWireSpool",
+     "count": 2
+    },
+    {
+     "id": "Nails",
+     "count": 1
+    },
+    {
+     "id": "Rope",
+     "count": 2
+    },
+    {
+     "id": "Hard_Drive",
+     "count": 2
+    },
+    {
+     "id": "Fuel",
+     "count": 2
+    },
+    {
+     "id": "OldRadio",
+     "count": 2
+    },
+    {
+     "id": "BathroomCleaner",
+     "count": 4
+    },
+    {
+     "id": "Saw",
+     "count": 1
+    },
+    {
+     "id": "Fan",
+     "count": 2
+    },
+    {
+     "id": "FoodContainer",
+     "count": 1
+    },
+    {
+     "id": "ShavingCream",
+     "count": 1
+    },
+    {
+     "id": "OldChemicalBottle",
+     "count": 3
+    },
+    {
+     "id": "Battery_18650",
+     "count": 2
+    },
+    {
+     "id": "Hammer",
+     "count": 1
+    },
+    {
+     "id": "Paintbrush",
+     "count": 2
+    },
+    {
+     "id": "Battery_PP3",
+     "count": 1
+    },
+    {
+     "id": "PolishingOil",
+     "count": 3
+    },
+    {
+     "id": "StapleGun",
+     "count": 1
+    },
+    {
+     "id": "FilmCase",
+     "count": 1
+    },
+    {
+     "id": "Marker",
+     "count": 1
+    },
+    {
+     "id": "BoltCutter",
+     "count": 1
+    },
+    {
+     "id": "Clamp",
+     "count": 2
+    },
+    {
+     "id": "WD40_Spray",
+     "count": 2
+    },
+    {
+     "id": "Nylon_Fabric",
+     "count": 1
+    },
+    {
+     "id": "Polyester_Fabric",
+     "count": 1
+    },
+    {
+     "id": "OldCommunicator",
+     "count": 1
+    },
+    {
+     "id": "PreppedMeal",
+     "count": 1
+    }
+   ],
+   "choices": [
+    {
+     "min": 6,
+     "max": 7,
+     "chance": 1.0,
+     "items": [
+      {
+       "id": "Earth_Globe",
+       "weight": 4.0,
+       "chance": 0.5649
+      },
+      {
+       "id": "Boardgame",
+       "weight": 4.0,
+       "chance": 0.5649
+      },
+      {
+       "id": "Canned_TunaMix",
+       "weight": 4.0,
+       "chance": 0.5649
+      },
+      {
+       "id": "Beer_BiaSaigon_Bottle",
+       "weight": 4.0,
+       "chance": 0.5649
+      },
+      {
+       "id": "Compass",
+       "weight": 3.0,
+       "chance": 0.4629
+      },
+      {
+       "id": "Antique_Water_Pitcher",
+       "weight": 3.0,
+       "chance": 0.4629
+      },
+      {
+       "id": "SoccerTrophy",
+       "weight": 3.0,
+       "chance": 0.4629
+      },
+      {
+       "id": "DLSR_Camera",
+       "weight": 3.0,
+       "chance": 0.4629
+      },
+      {
+       "id": "Motherboard",
+       "weight": 3.0,
+       "chance": 0.4629
+      },
+      {
+       "id": "Generator",
+       "weight": 2.0,
+       "chance": 0.3367
+      },
+      {
+       "id": "RebarCutter",
+       "weight": 2.0,
+       "chance": 0.3367
+      },
+      {
+       "id": "Graphics_Card",
+       "weight": 2.0,
+       "chance": 0.3367
+      },
+      {
+       "id": "Military_Laptop",
+       "weight": 1.0,
+       "chance": 0.1831
+      },
+      {
+       "id": "CatFigure",
+       "weight": 1.0,
+       "chance": 0.1831
+      },
+      {
+       "id": "GoldenRing",
+       "weight": 1.0,
+       "chance": 0.1831
+      },
+      {
+       "id": "GoldenWateringCan",
+       "weight": 1.0,
+       "chance": 0.1831
+      },
+      {
+       "id": "GoldenBangle",
+       "weight": 1.0,
+       "chance": 0.1831
+      }
+     ]
+    }
+   ],
+   "random": [
+    {
+     "min": 4,
+     "max": 5,
+     "chance": 1.0,
+     "tiers": [
+      [
+       "1",
+       40.0
+      ],
+      [
+       "2",
+       35.0
+      ],
+      [
+       "3",
+       20.0
+      ],
+      [
+       "4",
+       5.0
+      ]
+     ],
+     "categories": [
+      {
+       "tag": "Inventory.Items.Medical.Bandage",
+       "weight": 4.0,
+       "share": 0.2222,
+       "items": [
+        {
+         "id": "Bandage",
+         "chance": 0.6747,
+         "tier": "1"
+        }
+       ],
+       "label": "Bandage",
+       "item": "Bandage"
+      },
+      {
+       "tag": "Inventory.Items.Medical.Painkiller",
+       "weight": 3.0,
+       "share": 0.1667,
+       "items": [
+        {
+         "id": "Painkiller",
+         "chance": 0.5579,
+         "tier": "1"
+        }
+       ],
+       "label": "Painkiller",
+       "item": "Painkiller"
+      },
+      {
+       "tag": "Inventory.Items.Medical.Health Injector",
+       "weight": 2.0,
+       "share": 0.1111,
+       "items": [
+        {
+         "id": "Health_Injector",
+         "chance": 0.4104,
+         "tier": null
+        }
+       ],
+       "label": "Health Injector",
+       "item": "Health_Injector"
+      },
+      {
+       "tag": "Inventory.Items.Medical.Revive Syringe",
+       "weight": 2.0,
+       "share": 0.1111,
+       "items": [
+        {
+         "id": "Revive_Syringe",
+         "chance": 0.4104,
+         "tier": "2"
+        }
+       ],
+       "label": "Revive Syringe",
+       "item": "Revive_Syringe"
+      },
+      {
+       "tag": "Inventory.Items.Grenades.F-1 Hand Grenade",
+       "weight": 2.0,
+       "share": 0.1111,
+       "items": [
+        {
+         "id": "F-1_Hand_Grenade",
+         "chance": 0.4104,
+         "tier": "1"
+        }
+       ],
+       "label": "F-1 Hand Grenade",
+       "item": "F-1_Hand_Grenade"
+      },
+      {
+       "tag": "Inventory.Items.Grenades.RGO Grenade",
+       "weight": 2.0,
+       "share": 0.1111,
+       "items": [
+        {
+         "id": "RGO_Grenade",
+         "chance": 0.4104,
+         "tier": "1"
+        }
+       ],
+       "label": "RGO Grenade",
+       "item": "RGO_Grenade"
+      },
+      {
+       "tag": "Inventory.Items.Grenades.RGD_Smoke_Grenade",
+       "weight": 2.0,
+       "share": 0.1111,
+       "items": [
+        {
+         "id": "RGD_Smoke_Grenade",
+         "chance": 0.4104,
+         "tier": "1"
+        }
+       ],
+       "label": "RGD Smoke Grenade",
+       "item": "RGD_Smoke_Grenade"
+      },
+      {
+       "tag": "Inventory.Items.Grenades.M67 Hand Grenade",
+       "weight": 1.0,
+       "share": 0.0556,
+       "items": [
+        {
+         "id": "M67",
+         "chance": 0.2265,
+         "tier": "2"
+        }
+       ],
+       "label": "M67 Grenade",
+       "item": "M67"
+      }
+     ]
+    }
+   ],
+   "weapons": 0.5
+  },
+  {
+   "id": "UICS",
+   "name": "United Intercontinental Security",
+   "people": [
+    {
+     "name": "Voss",
+     "map": "Outskirts",
+     "guessed": false
+    },
+    {
+     "name": "Cpt Hale",
+     "map": "Quarry",
+     "guessed": false
+    }
+   ],
+   "fixed": [
+    {
+     "id": "Canteen",
+     "count": 2
+    },
+    {
+     "id": "GasCan",
+     "count": 1
+    },
+    {
+     "id": "PowerCable",
+     "count": 3
+    },
+    {
+     "id": "Toolbox",
+     "count": 1
+    },
+    {
+     "id": "SprayCan",
+     "count": 2
+    },
+    {
+     "id": "Duct_Tape",
+     "count": 2
+    },
+    {
+     "id": "Hesco_Armor_Plate",
+     "count": 1
+    },
+    {
+     "id": "OldFlashlight",
+     "count": 4
+    },
+    {
+     "id": "PlasticWireSpool",
+     "count": 2
+    },
+    {
+     "id": "Nails",
+     "count": 1
+    },
+    {
+     "id": "Rope",
+     "count": 2
+    },
+    {
+     "id": "Hard_Drive",
+     "count": 2
+    },
+    {
+     "id": "Fuel",
+     "count": 2
+    },
+    {
+     "id": "OldRadio",
+     "count": 2
+    },
+    {
+     "id": "BathroomCleaner",
+     "count": 4
+    },
+    {
+     "id": "Saw",
+     "count": 1
+    },
+    {
+     "id": "Fan",
+     "count": 2
+    },
+    {
+     "id": "FoodContainer",
+     "count": 1
+    },
+    {
+     "id": "ShavingCream",
+     "count": 1
+    },
+    {
+     "id": "OldChemicalBottle",
+     "count": 3
+    },
+    {
+     "id": "Battery_18650",
+     "count": 2
+    },
+    {
+     "id": "Hammer",
+     "count": 1
+    },
+    {
+     "id": "Paintbrush",
+     "count": 2
+    },
+    {
+     "id": "Battery_PP3",
+     "count": 1
+    },
+    {
+     "id": "PolishingOil",
+     "count": 3
+    },
+    {
+     "id": "StapleGun",
+     "count": 1
+    },
+    {
+     "id": "FilmCase",
+     "count": 1
+    },
+    {
+     "id": "Marker",
+     "count": 1
+    },
+    {
+     "id": "BoltCutter",
+     "count": 1
+    },
+    {
+     "id": "Clamp",
+     "count": 2
+    },
+    {
+     "id": "WD40_Spray",
+     "count": 2
+    },
+    {
+     "id": "Nylon_Fabric",
+     "count": 1
+    },
+    {
+     "id": "Polyester_Fabric",
+     "count": 1
+    },
+    {
+     "id": "OldCommunicator",
+     "count": 1
+    },
+    {
+     "id": "PreppedMeal",
+     "count": 1
+    }
+   ],
+   "choices": [
+    {
+     "min": 6,
+     "max": 7,
+     "chance": 1.0,
+     "items": [
+      {
+       "id": "Earth_Globe",
+       "weight": 4.0,
+       "chance": 0.5649
+      },
+      {
+       "id": "Boardgame",
+       "weight": 4.0,
+       "chance": 0.5649
+      },
+      {
+       "id": "Canned_TunaMix",
+       "weight": 4.0,
+       "chance": 0.5649
+      },
+      {
+       "id": "Beer_BiaSaigon_Bottle",
+       "weight": 4.0,
+       "chance": 0.5649
+      },
+      {
+       "id": "Compass",
+       "weight": 3.0,
+       "chance": 0.4629
+      },
+      {
+       "id": "Antique_Water_Pitcher",
+       "weight": 3.0,
+       "chance": 0.4629
+      },
+      {
+       "id": "SoccerTrophy",
+       "weight": 3.0,
+       "chance": 0.4629
+      },
+      {
+       "id": "DLSR_Camera",
+       "weight": 3.0,
+       "chance": 0.4629
+      },
+      {
+       "id": "Motherboard",
+       "weight": 3.0,
+       "chance": 0.4629
+      },
+      {
+       "id": "Generator",
+       "weight": 2.0,
+       "chance": 0.3367
+      },
+      {
+       "id": "RebarCutter",
+       "weight": 2.0,
+       "chance": 0.3367
+      },
+      {
+       "id": "Graphics_Card",
+       "weight": 2.0,
+       "chance": 0.3367
+      },
+      {
+       "id": "Military_Laptop",
+       "weight": 1.0,
+       "chance": 0.1831
+      },
+      {
+       "id": "CatFigure",
+       "weight": 1.0,
+       "chance": 0.1831
+      },
+      {
+       "id": "GoldenRing",
+       "weight": 1.0,
+       "chance": 0.1831
+      },
+      {
+       "id": "GoldenWateringCan",
+       "weight": 1.0,
+       "chance": 0.1831
+      },
+      {
+       "id": "GoldenBangle",
+       "weight": 1.0,
+       "chance": 0.1831
+      }
+     ]
+    }
+   ],
+   "random": [
+    {
+     "min": 3,
+     "max": 4,
+     "chance": 1.0,
+     "tiers": [
+      [
+       "1",
+       10.0
+      ],
+      [
+       "2",
+       45.0
+      ],
+      [
+       "3",
+       25.0
+      ]
+     ],
+     "categories": [
+      {
+       "tag": "Inventory.Items.Attachments.Sight",
+       "weight": 4.0,
+       "share": 0.3636,
+       "items": [
+        {
+         "id": "Elcan_SpecterDR_15x_6x_Scope",
+         "chance": 0.0647,
+         "tier": "3"
+        },
+        {
+         "id": "EOTECH_HHS-1_Hybrid_Sight",
+         "chance": 0.0647,
+         "tier": "3"
+        },
+        {
+         "id": "Hensoldt_Wetzlar_Fero-Z_4x24_Scope",
+         "chance": 0.0647,
+         "tier": "3"
+        },
+        {
+         "id": "Leupold_HAMR_4x24_Hybrid_Scope",
+         "chance": 0.0647,
+         "tier": "3"
+        },
+        {
+         "id": "Trijicon_ACOG_4x24_Scope",
+         "chance": 0.0647,
+         "tier": "3"
+        },
+        {
+         "id": "Vortex_RAZOR_AMG_UH-1_Gen_II_Sight",
+         "chance": 0.0647,
+         "tier": "3"
+        },
+        {
+         "id": "Aimpoint_ACRO_P2_Reflex_Sight",
+         "chance": 0.044,
+         "tier": "2"
+        },
+        {
+         "id": "Aimpoint_Micro_T1_Sight",
+         "chance": 0.044,
+         "tier": "2"
+        },
+        {
+         "id": "Elcan_SpecterDR_1x-4x_Scope",
+         "chance": 0.044,
+         "tier": "2"
+        },
+        {
+         "id": "EOTECH_EXPS3_Holographic_Sight",
+         "chance": 0.044,
+         "tier": "2"
+        },
+        {
+         "id": "FAL_Standard_Rear_Ironsight",
+         "chance": 0.044,
+         "tier": "2"
+        },
+        {
+         "id": "KAC_Folding_Micro_Front_Sight",
+         "chance": 0.044,
+         "tier": "2"
+        },
+        {
+         "id": "KAC_Folding_Micro_Rear_Sight",
+         "chance": 0.044,
+         "tier": "2"
+        },
+        {
+         "id": "Leupold_DeltaPoint_Reflex_Sight",
+         "chance": 0.044,
+         "tier": "2"
+        },
+        {
+         "id": "OKP-77_Reflex_Sight",
+         "chance": 0.044,
+         "tier": "2"
+        },
+        {
+         "id": "PSO-1_4x24_Scope",
+         "chance": 0.044,
+         "tier": "2"
+        },
+        {
+         "id": "QBZ-97_Y-MA-95-1-600_3x_Scope",
+         "chance": 0.044,
+         "tier": "2"
+        },
+        {
+         "id": "STV-380_Rear_Sight",
+         "chance": 0.044,
+         "tier": "2"
+        },
+        {
+         "id": "Trijicon_ACOG_6x48_Scope",
+         "chance": 0.044,
+         "tier": "2"
+        },
+        {
+         "id": "Trijicon_MRO_Reflex_Sight",
+         "chance": 0.044,
+         "tier": "2"
+        },
+        {
+         "id": "Trijicon_RMR_Miniature_Reflex_Sight",
+         "chance": 0.044,
+         "tier": "2"
+        },
+        {
+         "id": "VAL_Rear_Iron_Sight",
+         "chance": 0.044,
+         "tier": "2"
+        },
+        {
+         "id": "AR-15_Colt_A2_Rear_Sight",
+         "chance": 0.0099,
+         "tier": "1"
+        },
+        {
+         "id": "CQ_Carry_Handle",
+         "chance": 0.0099,
+         "tier": "1"
+        },
+        {
+         "id": "FAL_Para_Rear_Ironsight",
+         "chance": 0.0099,
+         "tier": "1"
+        },
+        {
+         "id": "Five_Seven_Rear_Sight",
+         "chance": 0.0099,
+         "tier": "1"
+        },
+        {
+         "id": "Leupold_Carbine_Optic_Reflex_Sight",
+         "chance": 0.0099,
+         "tier": "1"
+        },
+        {
+         "id": "M14_Front_Iron_Sight",
+         "chance": 0.0099,
+         "tier": "1"
+        },
+        {
+         "id": "M14_Rear_Iron_Sight",
+         "chance": 0.0099,
+         "tier": "1"
+        },
+        {
+         "id": "M2_Tactical_Rear_Sight",
+         "chance": 0.0099,
+         "tier": "1"
+        },
+        {
+         "id": "M9A3_Sights_Short",
+         "chance": 0.0099,
+         "tier": "1"
+        },
+        {
+         "id": "M9A3_Sights_Tall",
+         "chance": 0.0099,
+         "tier": "1"
+        },
+        {
+         "id": "OKP-7_Reflex_Sight",
+         "chance": 0.0099,
+         "tier": "1"
+        },
+        {
+         "id": "RFB_Front_Sight",
+         "chance": 0.0099,
+         "tier": "1"
+        },
+        {
+         "id": "RFB_Rear_Sight",
+         "chance": 0.0099,
+         "tier": "1"
+        },
+        {
+         "id": "SCAR_Front_Sight",
+         "chance": 0.0099,
+         "tier": "1"
+        },
+        {
+         "id": "SCAR_Rear_Sight",
+         "chance": 0.0099,
+         "tier": "1"
+        },
+        {
+         "id": "Zenitco_BelOMO_PK-06_Reflex_Sight",
+         "chance": 0.0099,
+         "tier": "1"
+        }
+       ],
+       "label": "Sight",
+       "item": null
+      },
+      {
+       "tag": "Inventory.Items.Attachments.Muzzle",
+       "weight": 3.0,
+       "share": 0.2727,
+       "items": [
+        {
+         "id": "AAC_762-SDN-6_Suppressor",
+         "chance": 0.0205,
+         "tier": "2"
+        },
+        {
+         "id": "AK-12_545x39_Muzzle",
+         "chance": 0.0205,
+         "tier": "2"
+        },
+        {
+         "id": "AR-10_CMMG_SV_762x51_Muzzle_Device",
+         "chance": 0.0205,
+         "tier": "2"
+        },
+        {
+         "id": "AR-10_M110_762x51_Muzzle_Brake",
+         "chance": 0.0205,
+         "tier": "2"
+        },
+        {
+         "id": "CMB_Helical_Baffle_12_Gauge_Muzzle_Brake",
+         "chance": 0.0205,
+         "tier": "2"
+        },
+        {
+         "id": "FAL_Standard_Muzzle",
+         "chance": 0.0205,
+         "tier": "2"
+        },
+        {
+         "id": "Galil_ACE_II_762x51_Muzzle",
+         "chance": 0.0205,
+         "tier": "2"
+        },
+        {
+         "id": "Honey_Badger_Cherry_Bomb_Muzzle_Brake",
+         "chance": 0.0205,
+         "tier": "2"
+        },
+        {
+         "id": "Honey_Badger_Whistletip_Muzzle_Brake",
+         "chance": 0.0205,
+         "tier": "2"
+        },
+        {
+         "id": "KAC_QDC_3-Prong_Eliminator_556x45_Muzzle_Device",
+         "chance": 0.0205,
+         "tier": "2"
+        },
+        {
+         "id": "M14_National_Match_762x51_Muzzle_Brake",
+         "chance": 0.0205,
+         "tier": "2"
+        },
+        {
+         "id": "M9A3_Compensator",
+         "chance": 0.0205,
+         "tier": "2"
+        },
+        {
+         "id": "MPX_9x19_Flash_Hider",
+         "chance": 0.0205,
+         "tier": "2"
+        },
+        {
+         "id": "MPX_Ronin_8_Inch_9x19_Suppressor",
+         "chance": 0.0205,
+         "tier": "2"
+        },
+        {
+         "id": "P90_Flash_Hider",
+         "chance": 0.0205,
+         "tier": "2"
+        },
+        {
+         "id": "QBZ-97_556x45_Suppressor",
+         "chance": 0.0205,
+         "tier": "2"
+        },
+        {
+         "id": "RFB_762x51_Muzzle_Device",
+         "chance": 0.0205,
+         "tier": "2"
+        },
+        {
+         "id": "Saiga_12K_12ga_Muzzle_Device",
+         "chance": 0.0205,
+         "tier": "2"
+        },
+        {
+         "id": "Saiga_12K_GK-02_12ga_Muzzle_Device",
+         "chance": 0.0205,
+         "tier": "2"
+        },
+        {
+         "id": "SCAR_H_AAC_SD_51T_Flash_Hider",
+         "chance": 0.0205,
+         "tier": "2"
+        },
+        {
+         "id": "Sig_Sauer_SRD762_Suppressor",
+         "chance": 0.0205,
+         "tier": "2"
+        },
+        {
+         "id": "SilencerCo_Omega_45k_Suppressor",
+         "chance": 0.0205,
+         "tier": "2"
+        },
+        {
+         "id": "SKS_OSS_HX-QD_762_Suppressor",
+         "chance": 0.0205,
+         "tier": "2"
+        },
+        {
+         "id": "Surefire_Ryder_9M_TI_Suppressor",
+         "chance": 0.0205,
+         "tier": "2"
+        },
+        {
+         "id": "SVD_Rotor43_Thread_Adapter",
+         "chance": 0.0205,
+         "tier": "2"
+        },
+        {
+         "id": "TGP-A_545x39_Suppressor",
+         "chance": 0.0205,
+         "tier": "2"
+        },
+        {
+         "id": "AK-74_Steel_PATRIOT_Silencer",
+         "chance": 0.0174,
+         "tier": "3"
+        },
+        {
+         "id": "AR-15_Griffin_Armament_M4SD_II_Silencer",
+         "chance": 0.0174,
+         "tier": "3"
+        },
+        {
+         "id": "AS_VAL_Integral_Suppressor",
+         "chance": 0.0174,
+         "tier": "3"
+        },
+        {
+         "id": "AUG_Ase_Utra_S_Series_SL7i_Suppressor",
+         "chance": 0.0174,
+         "tier": "3"
+        },
+        {
+         "id": "M14_Smith_Enterprise_SOCOM_16_762x51_Muzzle_Brake",
+         "chance": 0.0174,
+         "tier": "3"
+        },
+        {
+         "id": "MP5_PDW_Suppressor",
+         "chance": 0.0174,
+         "tier": "3"
+        },
+        {
+         "id": "MPX_Ronin_12_Inch_9x19_Suppressor",
+         "chance": 0.0174,
+         "tier": "3"
+        },
+        {
+         "id": "P320_Compact_Compensator",
+         "chance": 0.0174,
+         "tier": "3"
+        },
+        {
+         "id": "Rugged_Obsidian_9mm_Suppressor",
+         "chance": 0.0174,
+         "tier": "3"
+        },
+        {
+         "id": "Saiga_12K_Tromix_Monster_Claw_12ga_Muzzle_Device",
+         "chance": 0.0174,
+         "tier": "3"
+        },
+        {
+         "id": "SilencerCo_Hybrid_46_Suppressor",
+         "chance": 0.0174,
+         "tier": "3"
+        },
+        {
+         "id": "SilencerCo_Osprey_45K_Suppressor",
+         "chance": 0.0174,
+         "tier": "3"
+        },
+        {
+         "id": "SilencerCo_Salvo12_Suppressor",
+         "chance": 0.0174,
+         "tier": "3"
+        },
+        {
+         "id": "Surefire_SOCOM338-TI_Suppressor",
+         "chance": 0.0174,
+         "tier": "3"
+        },
+        {
+         "id": "Surefire_SOCOM556-MONSTER_Suppressor",
+         "chance": 0.0174,
+         "tier": "3"
+        },
+        {
+         "id": "SVD_Rotor43_762x54_Suppressor",
+         "chance": 0.0174,
+         "tier": "3"
+        },
+        {
+         "id": "VSS_Integral_Suppressor",
+         "chance": 0.0174,
+         "tier": "3"
+        },
+        {
+         "id": "AK-74M_Muzzle_Brake",
+         "chance": 0.0066,
+         "tier": "1"
+        },
+        {
+         "id": "AKS-74U_Muzzle",
+         "chance": 0.0066,
+         "tier": "1"
+        },
+        {
+         "id": "AR-15_Griffin_Armament_Gate-LOK_Hammer_Flash_Hider",
+         "chance": 0.0066,
+         "tier": "1"
+        },
+        {
+         "id": "AUG_A3_Flash_Hider",
+         "chance": 0.0066,
+         "tier": "1"
+        },
+        {
+         "id": "AUG_RAT_Worx_Muzzle_Adapter",
+         "chance": 0.0066,
+         "tier": "1"
+        },
+        {
+         "id": "Colt_USGI_A2_Flash_Hider",
+         "chance": 0.0066,
+         "tier": "1"
+        },
+        {
+         "id": "DT338_Muzzle_Brake",
+         "chance": 0.0066,
+         "tier": "1"
+        },
+        {
+         "id": "Jmac_Customs_RRD-4C_545x39_Muzzle_Brake",
+         "chance": 0.0066,
+         "tier": "1"
+        },
+        {
+         "id": "M14_16_Inch_762x51_Muzzle_Adapter",
+         "chance": 0.0066,
+         "tier": "1"
+        },
+        {
+         "id": "M14_22_Inch_762x51_Muzzle_Adapter",
+         "chance": 0.0066,
+         "tier": "1"
+        },
+        {
+         "id": "M700_PGW_Timberwolf_Muzzle_Brake",
+         "chance": 0.0066,
+         "tier": "1"
+        },
+        {
+         "id": "M9A3_Thread_Protector",
+         "chance": 0.0066,
+         "tier": "1"
+        },
+        {
+         "id": "PBS-4_545x39_Suppressor",
+         "chance": 0.0066,
+         "tier": "1"
+        },
+        {
+         "id": "PP-19_Muzzle",
+         "chance": 0.0066,
+         "tier": "1"
+        },
+        {
+         "id": "SCAR-L_AAC_SD_51T_Flash_Hider",
+         "chance": 0.0066,
+         "tier": "1"
+        },
+        {
+         "id": "Surefire_SD3P-556_3_Flash_Hider",
+         "chance": 0.0066,
+         "tier": "1"
+        },
+        {
+         "id": "Surefire_SOCOM338-TI_Muzzle_Brake",
+         "chance": 0.0066,
+         "tier": "1"
+        },
+        {
+         "id": "Zenitco_DTK-1_545x39_Muzzle_Brake",
+         "chance": 0.0066,
+         "tier": "1"
+        }
+       ],
+       "label": "Muzzle",
+       "item": null
+      },
+      {
+       "tag": "Inventory.Items.Attachments.Foregrip",
+       "weight": 2.0,
+       "share": 0.1818,
+       "items": [
+        {
+         "id": "Kingarms_Lite_Angled_Grip",
+         "chance": 0.0959,
+         "tier": "3"
+        },
+        {
+         "id": "Troy_Modular_Combat_Grip",
+         "chance": 0.0959,
+         "tier": "3"
+        },
+        {
+         "id": "BT_QuickDetach_Unigrip",
+         "chance": 0.0392,
+         "tier": "2"
+        },
+        {
+         "id": "Daniel_Defense_M-LOK_Vertical_Foregrip",
+         "chance": 0.0392,
+         "tier": "2"
+        },
+        {
+         "id": "Daniel_Defense_Picatinny_Foregrip",
+         "chance": 0.0392,
+         "tier": "2"
+        },
+        {
+         "id": "Fortis_SHIFT_Short_M-LOK_Angled_Foregrip",
+         "chance": 0.0392,
+         "tier": "2"
+        },
+        {
+         "id": "Fortis_SHIFT_Vertical_Foregrip",
+         "chance": 0.0392,
+         "tier": "2"
+        },
+        {
+         "id": "IMI_Defense_FSG2_Foregrip",
+         "chance": 0.0392,
+         "tier": "2"
+        },
+        {
+         "id": "Stark_SE3_Foregrip",
+         "chance": 0.0392,
+         "tier": "2"
+        },
+        {
+         "id": "STV-380_Handguard_Panel",
+         "chance": 0.0392,
+         "tier": "2"
+        },
+        {
+         "id": "Zenitco_RK-1_45deg_Foregrip",
+         "chance": 0.0392,
+         "tier": "2"
+        },
+        {
+         "id": "AUG_Vertical_Foregrip",
+         "chance": 0.0158,
+         "tier": "1"
+        },
+        {
+         "id": "BCM_Gunfighter_Mod3_Foregrip",
+         "chance": 0.0158,
+         "tier": "1"
+        },
+        {
+         "id": "Magpul_MOE_RVG_Forerip",
+         "chance": 0.0158,
+         "tier": "1"
+        },
+        {
+         "id": "Magpul_MVG_M-LOK_FDE_Vertical_Grip",
+         "chance": 0.0158,
+         "tier": "1"
+        },
+        {
+         "id": "TangoDown_Stubby_Vertical_Foregrip",
+         "chance": 0.0158,
+         "tier": "1"
+        }
+       ],
+       "label": "Foregrip",
+       "item": null
+      },
+      {
+       "tag": "Inventory.Items.Attachments.Tactical",
+       "weight": 2.0,
+       "share": 0.1818,
+       "items": [
+        {
+         "id": "Inforce_WMLx_Flashlight",
+         "chance": 0.3135,
+         "tier": "2"
+        },
+        {
+         "id": "l3Harris_NGAL_Laser",
+         "chance": 0.0647,
+         "tier": "3"
+        },
+        {
+         "id": "PEQ-15_LA-5_Tactical_Device",
+         "chance": 0.0647,
+         "tier": "3"
+        },
+        {
+         "id": "Steiner_CQBL-1_Laser",
+         "chance": 0.0647,
+         "tier": "3"
+        },
+        {
+         "id": "Inforce_APLc_Compact_Flashlight",
+         "chance": 0.0197,
+         "tier": "1"
+        },
+        {
+         "id": "Streamlight_TLR1-HL_Flashlight",
+         "chance": 0.0197,
+         "tier": "1"
+        },
+        {
+         "id": "SureFire_Mini_Scout_Flashight",
+         "chance": 0.0197,
+         "tier": "1"
+        },
+        {
+         "id": "Zenitco_Klesch_2IKS3_Laser",
+         "chance": 0.0197,
+         "tier": "1"
+        }
+       ],
+       "label": "Tactical",
+       "item": null
+      }
+     ]
+    }
+   ],
+   "weapons": 0.6
+  },
+  {
+   "id": "VLF",
+   "name": "Vietnamese Liberation Front",
+   "people": [
+    {
+     "name": "Ba Tran",
+     "map": "Bunker",
+     "guessed": false
+    }
+   ],
+   "fixed": [
+    {
+     "id": "Canteen",
+     "count": 2
+    },
+    {
+     "id": "GasCan",
+     "count": 1
+    },
+    {
+     "id": "PowerCable",
+     "count": 3
+    },
+    {
+     "id": "Toolbox",
+     "count": 1
+    },
+    {
+     "id": "SprayCan",
+     "count": 2
+    },
+    {
+     "id": "Duct_Tape",
+     "count": 2
+    },
+    {
+     "id": "Hesco_Armor_Plate",
+     "count": 1
+    },
+    {
+     "id": "OldFlashlight",
+     "count": 4
+    },
+    {
+     "id": "PlasticWireSpool",
+     "count": 2
+    },
+    {
+     "id": "Nails",
+     "count": 1
+    },
+    {
+     "id": "Rope",
+     "count": 2
+    },
+    {
+     "id": "Hard_Drive",
+     "count": 2
+    },
+    {
+     "id": "Fuel",
+     "count": 2
+    },
+    {
+     "id": "OldRadio",
+     "count": 2
+    },
+    {
+     "id": "BathroomCleaner",
+     "count": 4
+    },
+    {
+     "id": "Saw",
+     "count": 1
+    },
+    {
+     "id": "Fan",
+     "count": 2
+    },
+    {
+     "id": "FoodContainer",
+     "count": 1
+    },
+    {
+     "id": "ShavingCream",
+     "count": 1
+    },
+    {
+     "id": "OldChemicalBottle",
+     "count": 3
+    },
+    {
+     "id": "Battery_18650",
+     "count": 2
+    },
+    {
+     "id": "Hammer",
+     "count": 1
+    },
+    {
+     "id": "Paintbrush",
+     "count": 2
+    },
+    {
+     "id": "Battery_PP3",
+     "count": 1
+    },
+    {
+     "id": "PolishingOil",
+     "count": 3
+    },
+    {
+     "id": "StapleGun",
+     "count": 1
+    },
+    {
+     "id": "FilmCase",
+     "count": 1
+    },
+    {
+     "id": "Marker",
+     "count": 1
+    },
+    {
+     "id": "BoltCutter",
+     "count": 1
+    },
+    {
+     "id": "Clamp",
+     "count": 2
+    },
+    {
+     "id": "WD40_Spray",
+     "count": 2
+    },
+    {
+     "id": "Nylon_Fabric",
+     "count": 1
+    },
+    {
+     "id": "Polyester_Fabric",
+     "count": 1
+    },
+    {
+     "id": "OldCommunicator",
+     "count": 1
+    },
+    {
+     "id": "PreppedMeal",
+     "count": 1
+    }
+   ],
+   "choices": [
+    {
+     "min": 6,
+     "max": 7,
+     "chance": 1.0,
+     "items": [
+      {
+       "id": "Earth_Globe",
+       "weight": 4.0,
+       "chance": 0.5649
+      },
+      {
+       "id": "Boardgame",
+       "weight": 4.0,
+       "chance": 0.5649
+      },
+      {
+       "id": "Canned_TunaMix",
+       "weight": 4.0,
+       "chance": 0.5649
+      },
+      {
+       "id": "Beer_BiaSaigon_Bottle",
+       "weight": 4.0,
+       "chance": 0.5649
+      },
+      {
+       "id": "Compass",
+       "weight": 3.0,
+       "chance": 0.4629
+      },
+      {
+       "id": "Antique_Water_Pitcher",
+       "weight": 3.0,
+       "chance": 0.4629
+      },
+      {
+       "id": "SoccerTrophy",
+       "weight": 3.0,
+       "chance": 0.4629
+      },
+      {
+       "id": "DLSR_Camera",
+       "weight": 3.0,
+       "chance": 0.4629
+      },
+      {
+       "id": "Motherboard",
+       "weight": 3.0,
+       "chance": 0.4629
+      },
+      {
+       "id": "Generator",
+       "weight": 2.0,
+       "chance": 0.3367
+      },
+      {
+       "id": "RebarCutter",
+       "weight": 2.0,
+       "chance": 0.3367
+      },
+      {
+       "id": "Graphics_Card",
+       "weight": 2.0,
+       "chance": 0.3367
+      },
+      {
+       "id": "Military_Laptop",
+       "weight": 1.0,
+       "chance": 0.1831
+      },
+      {
+       "id": "CatFigure",
+       "weight": 1.0,
+       "chance": 0.1831
+      },
+      {
+       "id": "GoldenRing",
+       "weight": 1.0,
+       "chance": 0.1831
+      },
+      {
+       "id": "GoldenWateringCan",
+       "weight": 1.0,
+       "chance": 0.1831
+      },
+      {
+       "id": "GoldenBangle",
+       "weight": 1.0,
+       "chance": 0.1831
+      }
+     ]
+    }
+   ],
+   "random": [
+    {
+     "min": 2,
+     "max": 4,
+     "chance": 1.0,
+     "tiers": [
+      [
+       "1",
+       30.0
+      ],
+      [
+       "2",
+       45.0
+      ],
+      [
+       "3",
+       25.0
+      ]
+     ],
+     "categories": [
+      {
+       "tag": "Inventory.Items.Gear.Backpack",
+       "weight": 3.0,
+       "share": 0.25,
+       "items": [
+        {
+         "id": "AVS_CRYE_Precision_Backpack",
+         "chance": 0.1079,
+         "tier": "2"
+        },
+        {
+         "id": "CamelBak_Backpack",
+         "chance": 0.1079,
+         "tier": "2"
+        },
+        {
+         "id": "Mystery_Ranch_3_Day_Assault_Pack",
+         "chance": 0.1079,
+         "tier": "2"
+        },
+        {
+         "id": "AVS_Delta_Back",
+         "chance": 0.0729,
+         "tier": "1"
+        },
+        {
+         "id": "AVS_Mini_Backpack",
+         "chance": 0.0729,
+         "tier": "1"
+        },
+        {
+         "id": "SSO_Smersh_Backpack",
+         "chance": 0.0729,
+         "tier": "1"
+        },
+        {
+         "id": "ADA_Assault_Backpack",
+         "chance": 0.0611,
+         "tier": "3"
+        },
+        {
+         "id": "ALICE_pack",
+         "chance": 0.0611,
+         "tier": "3"
+        },
+        {
+         "id": "F2_Bergen_Backpack",
+         "chance": 0.0611,
+         "tier": "3"
+        }
+       ],
+       "label": "Backpack",
+       "item": null
+      },
+      {
+       "tag": "Inventory.Items.Gear.Helmet",
+       "weight": 3.0,
+       "share": 0.25,
+       "items": [
+        {
+         "id": "HHV_Helmet",
+         "chance": 0.1079,
+         "tier": "2"
+        },
+        {
+         "id": "Ops-Core_FAST_Bump_Helmet",
+         "chance": 0.1079,
+         "tier": "2"
+        },
+        {
+         "id": "Super_High_Cut_Ops-Core_Fast_MT_V1_Helmet",
+         "chance": 0.1079,
+         "tier": "2"
+        },
+        {
+         "id": "High_Cut_LSHZ_Helmet",
+         "chance": 0.0905,
+         "tier": "3"
+        },
+        {
+         "id": "IHPS_Helmet",
+         "chance": 0.0905,
+         "tier": "3"
+        },
+        {
+         "id": "Kiver_RSP_Helmet",
+         "chance": 0.0551,
+         "tier": "1"
+        },
+        {
+         "id": "Kiver_RSP_Nguyin_Edition_Helmet",
+         "chance": 0.0551,
+         "tier": "1"
+        },
+        {
+         "id": "MICH_2000_Helmet",
+         "chance": 0.0551,
+         "tier": "1"
+        },
+        {
+         "id": "SESTAN-BUSCH_BK-3",
+         "chance": 0.0551,
+         "tier": "1"
+        }
+       ],
+       "label": "Helmet",
+       "item": null
+      },
+      {
+       "tag": "Inventory.Items.Gear.Armored Rig",
+       "weight": 2.0,
+       "share": 0.1667,
+       "items": [
+        {
+         "id": "JTAC_V1_Armored_Rig",
+         "chance": 0.0729,
+         "tier": "1"
+        },
+        {
+         "id": "JTAC_V1_Nguyin_Edition_Armored_Rig",
+         "chance": 0.0729,
+         "tier": "1"
+        },
+        {
+         "id": "AVS_SL_Armored_Rig",
+         "chance": 0.0729,
+         "tier": "2"
+        },
+        {
+         "id": "LBT_Breacher_V1_Armored_Rig",
+         "chance": 0.0729,
+         "tier": "2"
+        },
+        {
+         "id": "Spiritus_LV119_Armored_Rig",
+         "chance": 0.0729,
+         "tier": "2"
+        },
+        {
+         "id": "AVS_PL_SGT_Armored_Rig",
+         "chance": 0.0309,
+         "tier": "3"
+        },
+        {
+         "id": "AVS_Rifleman_V4_Armored_Rig",
+         "chance": 0.0309,
+         "tier": "3"
+        },
+        {
+         "id": "LBT_MED_V1_Armored_Rig",
+         "chance": 0.0309,
+         "tier": "3"
+        },
+        {
+         "id": "Warrior_Assault_DCS_Armored_Rig",
+         "chance": 0.0309,
+         "tier": "3"
+        }
+       ],
+       "label": "Armored Rig",
+       "item": null
+      },
+      {
+       "tag": "Inventory.Items.Gear.Plate Carrier",
+       "weight": 2.0,
+       "share": 0.1667,
+       "items": [
+        {
+         "id": "AVS_Plate_Carrier",
+         "chance": 0.0964,
+         "tier": "1"
+        },
+        {
+         "id": "The_Slickster_Plate_Carrier",
+         "chance": 0.0964,
+         "tier": "1"
+        },
+        {
+         "id": "JPC_Plate_Carrier",
+         "chance": 0.0964,
+         "tier": "2"
+        },
+        {
+         "id": "MSV_Plate_Carrier",
+         "chance": 0.0964,
+         "tier": "2"
+        },
+        {
+         "id": "Paraclete_Origin_Plate_Carrier",
+         "chance": 0.0964,
+         "tier": "2"
+        }
+       ],
+       "label": "Plate Carrier",
+       "item": null
+      },
+      {
+       "tag": "Inventory.Items.Gear.Unarmored Rig",
+       "weight": 2.0,
+       "share": 0.1667,
+       "items": [
+        {
+         "id": "D3CRM_Unarmored_Rig",
+         "chance": 0.1419,
+         "tier": "2"
+        },
+        {
+         "id": "D3CRX_Unarmored_Rig",
+         "chance": 0.1419,
+         "tier": "2"
+        },
+        {
+         "id": "Spiritus_Micro_Fight_Chest_Rig",
+         "chance": 0.0964,
+         "tier": "1"
+        },
+        {
+         "id": "Vest_Virtus_Unarmored_Rig",
+         "chance": 0.0964,
+         "tier": "1"
+        }
+       ],
+       "label": "Unarmored Rig",
+       "item": null
+      }
+     ]
+    }
+   ],
+   "weapons": null
+  }
+ ],
+ "items": {
+  "AAC_762-SDN-6_Suppressor": {
+   "name": "AAC 762-SDN-6 Suppressor",
+   "price": 3740.0
+  },
+  "ADA_Assault_Backpack": {
+   "name": "ADA Assault Backpack",
+   "price": 2730.0
+  },
+  "Aimpoint_ACRO_P2_Reflex_Sight": {
+   "name": "Aimpoint Acro P2 Sight",
+   "price": 450.0
+  },
+  "Aimpoint_Micro_T1_Sight": {
+   "name": "Aimpoint Micro T1 Sight",
+   "price": 405.0
+  },
+  "AK-12_545x39_Muzzle": {
+   "name": "AK-12 5.45x39mm Muzzle Brake",
+   "price": 130.0
+  },
+  "AK-74_Steel_PATRIOT_Silencer": {
+   "name": "AK-74 Steel PATRIOT Silencer",
+   "price": 3873.0
+  },
+  "AK-74M_Muzzle_Brake": {
+   "name": "AK-74M Muzzle Brake",
+   "price": 50.0
+  },
+  "AKS-74U_Muzzle": {
+   "name": "AKS-74U Muzzle",
+   "price": 85.0
+  },
+  "ALICE_pack": {
+   "name": "ALICE Pack",
+   "price": 3100.0
+  },
+  "Antique_Water_Pitcher": {
+   "name": "Antique Water Pitcher",
+   "price": 459.0
+  },
+  "AR-10_CMMG_SV_762x51_Muzzle_Device": {
+   "name": "AR-10 CMMG SV 7.62x51mm Muzzle Device",
+   "price": 95.0
+  },
+  "AR-10_M110_762x51_Muzzle_Brake": {
+   "name": "AR-10 M110 7.62x51mm Muzzle Brake",
+   "price": 104.0
+  },
+  "AR-15_Colt_A2_Rear_Sight": {
+   "name": "AR-15 Colt A2 Rear Sight",
+   "price": 50.0
+  },
+  "AR-15_Griffin_Armament_Gate-LOK_Hammer_Flash_Hider": {
+   "name": "AR-15 Griffin Armament Gate-LOK Hammer Flash Hider",
+   "price": 60.0
+  },
+  "AR-15_Griffin_Armament_M4SD_II_Silencer": {
+   "name": "AR-15 Griffin Armament M4SD II Silencer",
+   "price": 6250.0
+  },
+  "AS_VAL_Integral_Suppressor": {
+   "name": "AS Val Suppresor",
+   "price": 1450.0
+  },
+  "AUG_A3_Flash_Hider": {
+   "name": "AUG A3 Flash Hider",
+   "price": 80.0
+  },
+  "AUG_Ase_Utra_S_Series_SL7i_Suppressor": {
+   "name": "AUG Ase Utra S Series SL7i Suppressor",
+   "price": 1352.0
+  },
+  "AUG_RAT_Worx_Muzzle_Adapter": {
+   "name": "AUG RAT Worx Muzzle Adapter",
+   "price": 150.0
+  },
+  "AUG_Vertical_Foregrip": {
+   "name": "AUG Vertical Foregrip",
+   "price": 100.0
+  },
+  "AVS_CRYE_Precision_Backpack": {
+   "name": "AVS CRYE Precision Backpack",
+   "price": 1900.0
+  },
+  "AVS_Delta_Back": {
+   "name": "AVS Delta Backpack",
+   "price": 1100.0
+  },
+  "AVS_Mini_Backpack": {
+   "name": "AVS Mini Backpack",
+   "price": 300.0
+  },
+  "AVS_PL_SGT_Armored_Rig": {
+   "name": "AVS PL SGT Armored Rig",
+   "price": 7000.0
+  },
+  "AVS_Plate_Carrier": {
+   "name": "AVS Plate Carrier",
+   "price": 700.0
+  },
+  "AVS_Rifleman_V4_Armored_Rig": {
+   "name": "AVS Rifleman V4 Armored Rig",
+   "price": 6241.0
+  },
+  "AVS_SL_Armored_Rig": {
+   "name": "AVS SL Armored Rig",
+   "price": 2430.0
+  },
+  "Bandage": {
+   "name": "Bandage",
+   "price": 30.0
+  },
+  "BathroomCleaner": {
+   "name": "Bathroom Cleaner",
+   "price": 13.0
+  },
+  "Battery_18650": {
+   "name": "Battery 18650",
+   "price": 9.0
+  },
+  "Battery_PP3": {
+   "name": "Battery PP3",
+   "price": 520.0
+  },
+  "BCM_Gunfighter_Mod3_Foregrip": {
+   "name": "BCM Gunfighter Mod3 Foregrip",
+   "price": 105.0
+  },
+  "Beer_BiaSaigon_Bottle": {
+   "name": "Beer BiaSaigon Bottle",
+   "price": 120.0
+  },
+  "Boardgame": {
+   "name": "Boardgame",
+   "price": 250.0
+  },
+  "BoltCutter": {
+   "name": "Bolt Cutter",
+   "price": 200.0
+  },
+  "BT_QuickDetach_Unigrip": {
+   "name": "BT Quick Detach Unigrip",
+   "price": 49.0
+  },
+  "CamelBak_Backpack": {
+   "name": "CamelBak Backpack",
+   "price": 1800.0
+  },
+  "Canned_TunaMix": {
+   "name": "Tuna Mix",
+   "price": 130.0
+  },
+  "Canteen": {
+   "name": "Canteen",
+   "price": 112.0
+  },
+  "CatFigure": {
+   "name": "Cat Figure",
+   "price": 10300.0
+  },
+  "Clamp": {
+   "name": "Clamp",
+   "price": 63.0
+  },
+  "CMB_Helical_Baffle_12_Gauge_Muzzle_Brake": {
+   "name": "CMB Helical Baffle 12ga Muzzle brake",
+   "price": 150.0
+  },
+  "Colt_USGI_A2_Flash_Hider": {
+   "name": "Colt USGI A2 Flash Hider",
+   "price": 50.0
+  },
+  "Compass": {
+   "name": "Compass",
+   "price": 834.0
+  },
+  "CQ_Carry_Handle": {
+   "name": "CQ Carry Handle",
+   "price": 20.0
+  },
+  "D3CRM_Unarmored_Rig": {
+   "name": "D3CRM Unarmored Rig",
+   "price": 625.0
+  },
+  "D3CRX_Unarmored_Rig": {
+   "name": "D3CRX Unarmored Rig",
+   "price": 775.0
+  },
+  "Daniel_Defense_M-LOK_Vertical_Foregrip": {
+   "name": "Daniel Defense M-LOK Vertical Foregrip",
+   "price": 210.0
+  },
+  "Daniel_Defense_Picatinny_Foregrip": {
+   "name": "Daniel Defense Picatinny Foregrip",
+   "price": 304.0
+  },
+  "DLSR_Camera": {
+   "name": "DLSR Camera",
+   "price": 925.0
+  },
+  "DT338_Muzzle_Brake": {
+   "name": "DT338 Muzzle Brake",
+   "price": 130.0
+  },
+  "Duct_Tape": {
+   "name": "Duct Tape",
+   "price": 20.0
+  },
+  "Earth_Globe": {
+   "name": "Earth Globe",
+   "price": 93.0
+  },
+  "Elcan_SpecterDR_15x_6x_Scope": {
+   "name": "Elcan SpecterDR 1.5x/6x Scope",
+   "price": 4200.0
+  },
+  "Elcan_SpecterDR_1x-4x_Scope": {
+   "name": "Elcan SpecterDR 1x/4x Scope",
+   "price": 3622.0
+  },
+  "EOTECH_EXPS3_Holographic_Sight": {
+   "name": "EOTECH EXPS3 Holographic Sight",
+   "price": 400.0
+  },
+  "EOTECH_HHS-1_Hybrid_Sight": {
+   "name": "EOTECH HHS-1 Hybrid Sight",
+   "price": 5250.0
+  },
+  "F-1_Hand_Grenade": {
+   "name": "F-1 Hand Grenade",
+   "price": 250.0
+  },
+  "F2_Bergen_Backpack": {
+   "name": "F2 Bergen Backpack",
+   "price": 2990.0
+  },
+  "FAL_Para_Rear_Ironsight": {
+   "name": "FAL Para Rear Ironsight",
+   "price": 52.0
+  },
+  "FAL_Standard_Muzzle": {
+   "name": "FAL Standard Muzzle",
+   "price": 100.0
+  },
+  "FAL_Standard_Rear_Ironsight": {
+   "name": "FAL Standard Rear Ironsight",
+   "price": 50.0
+  },
+  "Fan": {
+   "name": "Fan",
+   "price": 108.0
+  },
+  "FilmCase": {
+   "name": "Film Case",
+   "price": 433.0
+  },
+  "Five_Seven_Rear_Sight": {
+   "name": "Five Seven Rear Sight",
+   "price": 38.0
+  },
+  "FoodContainer": {
+   "name": "Food Container",
+   "price": 51.0
+  },
+  "Fortis_SHIFT_Short_M-LOK_Angled_Foregrip": {
+   "name": "Fortis SHIFT Short M-LOK Angled Foregrip",
+   "price": 200.0
+  },
+  "Fortis_SHIFT_Vertical_Foregrip": {
+   "name": "Fortis SHIFT Vertical Foregrip",
+   "price": 389.0
+  },
+  "Fuel": {
+   "name": "Fuel",
+   "price": 190.0
+  },
+  "Galil_ACE_II_762x51_Muzzle": {
+   "name": "Galil ACE II 7.62x51mm Muzzle",
+   "price": 52.0
+  },
+  "GasCan": {
+   "name": "Gas Can",
+   "price": 178.0
+  },
+  "Generator": {
+   "name": "Generator",
+   "price": 6200.0
+  },
+  "GoldenBangle": {
+   "name": "Golden Bangle",
+   "price": 20000.0
+  },
+  "GoldenRing": {
+   "name": "Golden Ring",
+   "price": 15111.0
+  },
+  "GoldenWateringCan": {
+   "name": "Golden Watering Can",
+   "price": 13400.0
+  },
+  "Graphics_Card": {
+   "name": "Graphics Card",
+   "price": 2532.0
+  },
+  "Hammer": {
+   "name": "Hammer",
+   "price": 23.0
+  },
+  "Hard_Drive": {
+   "name": "Hard Drive",
+   "price": 3173.0
+  },
+  "Health_Injector": {
+   "name": "Health Injector"
+  },
+  "Hensoldt_Wetzlar_Fero-Z_4x24_Scope": {
+   "name": "Hensoldt Wetzlar Fero-Z 4x24 Scope",
+   "price": 3635.0
+  },
+  "Hesco_Armor_Plate": {
+   "name": "Hesco Armor Plate",
+   "price": 80.0
+  },
+  "HHV_Helmet": {
+   "name": "HHV Helmet",
+   "price": 2150.0
+  },
+  "High_Cut_LSHZ_Helmet": {
+   "name": "High Cut LSHZ Helmet",
+   "price": 3230.0
+  },
+  "Honey_Badger_Cherry_Bomb_Muzzle_Brake": {
+   "name": "Honey Badger Cherry Bomb Muzzle Brake",
+   "price": 100.0
+  },
+  "Honey_Badger_Whistletip_Muzzle_Brake": {
+   "name": "Honey Badger Whistletip Muzzle Brake",
+   "price": 143.0
+  },
+  "IHPS_Helmet": {
+   "name": "IHPS Helmet",
+   "price": 3900.0
+  },
+  "IMI_Defense_FSG2_Foregrip": {
+   "name": "IMI Defense FSG2 Foregrip",
+   "price": 243.0
+  },
+  "Inforce_APLc_Compact_Flashlight": {
+   "name": "Inforce APLc Compact Flashlight",
+   "price": 140.0
+  },
+  "Inforce_WMLx_Flashlight": {
+   "name": "Inforce WMLx Flashlight",
+   "price": 181.0
+  },
+  "Jmac_Customs_RRD-4C_545x39_Muzzle_Brake": {
+   "name": "Jmac Customs RRD-4C 5.45x39mm",
+   "price": 205.0
+  },
+  "JPC_Plate_Carrier": {
+   "name": "JPC Plate Carrier",
+   "price": 1900.0
+  },
+  "JTAC_V1_Armored_Rig": {
+   "name": "JTAC V1 Armored Rig",
+   "price": 1300.0
+  },
+  "JTAC_V1_Nguyin_Edition_Armored_Rig": {
+   "name": "JTAC V1 Nguyin Edition Armored Rig",
+   "price": 18000.0
+  },
+  "KAC_Folding_Micro_Front_Sight": {
+   "name": "KAC Folding Micro Front Sight",
+   "price": 75.0
+  },
+  "KAC_Folding_Micro_Rear_Sight": {
+   "name": "KAC Folding Micro Rear Sight",
+   "price": 90.0
+  },
+  "KAC_QDC_3-Prong_Eliminator_556x45_Muzzle_Device": {
+   "name": "KAC QDC 3-Prong Eliminator 5.56x45mm Muzzle Device",
+   "price": 150.0
+  },
+  "Kingarms_Lite_Angled_Grip": {
+   "name": "Kingarms Lite Angled Grip",
+   "price": 462.0
+  },
+  "Kiver_RSP_Helmet": {
+   "name": "Kiver RSP Helmet",
+   "price": 800.0
+  },
+  "Kiver_RSP_Nguyin_Edition_Helmet": {
+   "name": "Kiver RSP Nguyin Edition Helmet",
+   "price": 7300.0
+  },
+  "l3Harris_NGAL_Laser": {
+   "name": "L3Harris NGAL",
+   "price": 800.0
+  },
+  "LBT_Breacher_V1_Armored_Rig": {
+   "name": "LBT Breacher V1 Armored Rig",
+   "price": 2180.0
+  },
+  "LBT_MED_V1_Armored_Rig": {
+   "name": "LBT MED V1 Armored Rig",
+   "price": 6530.0
+  },
+  "Leupold_Carbine_Optic_Reflex_Sight": {
+   "name": "Leupold Carbine Optic Reflex Sight",
+   "price": 330.0
+  },
+  "Leupold_DeltaPoint_Reflex_Sight": {
+   "name": "Leupold DeltaPoint Reflex Sight",
+   "price": 425.0
+  },
+  "Leupold_HAMR_4x24_Hybrid_Scope": {
+   "name": "Leupold HAMR 4x24 Hybrid Scope",
+   "price": 6280.0
+  },
+  "M14_16_Inch_762x51_Muzzle_Adapter": {
+   "name": "M14 16 Inch 7.62x51 Muzzle Adapter",
+   "price": 32.0
+  },
+  "M14_22_Inch_762x51_Muzzle_Adapter": {
+   "name": "M14 22 Inch 7.62x51 Muzzle Adapter",
+   "price": 32.0
+  },
+  "M14_Front_Iron_Sight": {
+   "name": "M14 Front Iron Sight",
+   "price": 20.0
+  },
+  "M14_National_Match_762x51_Muzzle_Brake": {
+   "name": "M14 National Match 7.62x51mm Muzzle Brake",
+   "price": 115.0
+  },
+  "M14_Rear_Iron_Sight": {
+   "name": "M14 Rear Iron Sight",
+   "price": 30.0
+  },
+  "M14_Smith_Enterprise_SOCOM_16_762x51_Muzzle_Brake": {
+   "name": "M14 Smith Enterprise SOCOM 16 7.62x51mm Muzzle Brake",
+   "price": 175.0
+  },
+  "M2_Tactical_Rear_Sight": {
+   "name": "M2 Tactical Rear Sight",
+   "price": 50.0
+  },
+  "M67": {
+   "name": "M67 Grenade",
+   "price": 160.0
+  },
+  "M700_PGW_Timberwolf_Muzzle_Brake": {
+   "name": "M700 PGW Timberwolf Muzzle Brake",
+   "price": 60.0
+  },
+  "M9A3_Compensator": {
+   "name": "M9A3 Compensator",
+   "price": 186.0
+  },
+  "M9A3_Sights_Short": {
+   "name": "M9A3 Short Sights",
+   "price": 20.0
+  },
+  "M9A3_Sights_Tall": {
+   "name": "M9A3 Tall Sights",
+   "price": 40.0
+  },
+  "M9A3_Thread_Protector": {
+   "name": "M9A3 Thread Protector",
+   "price": 20.0
+  },
+  "Magpul_MOE_RVG_Forerip": {
+   "name": "Magpul MOE RVG Foregrip",
+   "price": 193.0
+  },
+  "Magpul_MVG_M-LOK_FDE_Vertical_Grip": {
+   "name": "Magpul MVG M-LOK FDE Vertical Grip",
+   "price": 300.0
+  },
+  "Marker": {
+   "name": "Marker",
+   "price": 30.0
+  },
+  "MICH_2000_Helmet": {
+   "name": "MICH 2000 Helmet",
+   "price": 900.0
+  },
+  "Military_Laptop": {
+   "name": "Military Laptop",
+   "price": 12000.0
+  },
+  "Motherboard": {
+   "name": "Motherboard",
+   "price": 628.0
+  },
+  "MP5_PDW_Suppressor": {
+   "name": "MP5 PDW Suppressor",
+   "price": 2975.0
+  },
+  "MPX_9x19_Flash_Hider": {
+   "name": "MPX 9x19mm Flash Hider",
+   "price": 50.0
+  },
+  "MPX_Ronin_12_Inch_9x19_Suppressor": {
+   "name": "MPX Ronin 12 Inch 9x19mm Suppressor",
+   "price": 3740.0
+  },
+  "MPX_Ronin_8_Inch_9x19_Suppressor": {
+   "name": "MPX Ronin 8 Inch 9x19mm Suppressor",
+   "price": 2200.0
+  },
+  "MSV_Plate_Carrier": {
+   "name": "MSV Plate Carrier",
+   "price": 3000.0
+  },
+  "Mystery_Ranch_3_Day_Assault_Pack": {
+   "name": "Mystery Ranch 3 Day Assault Pack",
+   "price": 2150.0
+  },
+  "Nails": {
+   "name": "Nails",
+   "price": 36.0
+  },
+  "Nylon_Fabric": {
+   "name": "Nylon Fabric",
+   "price": 20.0
+  },
+  "OKP-77_Reflex_Sight": {
+   "name": "OKP-77 Reflex Sight",
+   "price": 316.0
+  },
+  "OKP-7_Reflex_Sight": {
+   "name": "OKP-7 Reflex Sight",
+   "price": 160.0
+  },
+  "OldChemicalBottle": {
+   "name": "Old Chemical Bottle",
+   "price": 86.0
+  },
+  "OldCommunicator": {
+   "name": "Old Communicator",
+   "price": 354.0
+  },
+  "OldFlashlight": {
+   "name": "Old Flashlight",
+   "price": 23.0
+  },
+  "OldRadio": {
+   "name": "Old Radio",
+   "price": 94.0
+  },
+  "Ops-Core_FAST_Bump_Helmet": {
+   "name": "Ops-Core FAST Bump Helmet",
+   "price": 2300.0
+  },
+  "P320_Compact_Compensator": {
+   "name": "P320 Compact Compensator",
+   "price": 230.0
+  },
+  "P90_Flash_Hider": {
+   "name": "P90 Flash Hider",
+   "price": 102.0
+  },
+  "Painkiller": {
+   "name": "Painkiller",
+   "price": 260.0
+  },
+  "Paintbrush": {
+   "name": "Paintbrush",
+   "price": 80.0
+  },
+  "Paraclete_Origin_Plate_Carrier": {
+   "name": "Paraclete Origin Plate Carrier",
+   "price": 1630.0
+  },
+  "PBS-4_545x39_Suppressor": {
+   "name": "PBS-4 5.45x39mm Suppressor",
+   "price": 1300.0
+  },
+  "PEQ-15_LA-5_Tactical_Device": {
+   "name": "PEQ-15 LA-5 Tactical Device",
+   "price": 730.0
+  },
+  "PlasticWireSpool": {
+   "name": "Plastic Wire Spool",
+   "price": 972.0
+  },
+  "PolishingOil": {
+   "name": "Polishing Oil",
+   "price": 173.0
+  },
+  "Polyester_Fabric": {
+   "name": "Polyester Fabric",
+   "price": 120.0
+  },
+  "PowerCable": {
+   "name": "Power Cable",
+   "price": 133.0
+  },
+  "PP-19_Muzzle": {
+   "name": "PP-19 Muzzle",
+   "price": 75.0
+  },
+  "PreppedMeal": {
+   "name": "Prepped Meal",
+   "price": 60.0
+  },
+  "PSO-1_4x24_Scope": {
+   "name": "PSO-1 4x24 Scope",
+   "price": 1642.0
+  },
+  "QBZ-97_556x45_Suppressor": {
+   "name": "QBZ-97 5.56x45mm Suppressor",
+   "price": 2050.0
+  },
+  "QBZ-97_Y-MA-95-1-600_3x_Scope": {
+   "name": "QBZ-97 Y-MA-95-1-600 3x Scope",
+   "price": 1078.0
+  },
+  "RebarCutter": {
+   "name": "Rebar Cutter",
+   "price": 8230.0
+  },
+  "Revive_Syringe": {
+   "name": "Revive Syringe",
+   "price": 750.0
+  },
+  "RFB_762x51_Muzzle_Device": {
+   "name": "RFB 7.62x51mm Muzzle Device",
+   "price": 70.0
+  },
+  "RFB_Front_Sight": {
+   "name": "RFB Front Sight",
+   "price": 18.0
+  },
+  "RFB_Rear_Sight": {
+   "name": "RFB Rear Sight",
+   "price": 24.0
+  },
+  "RGD_Smoke_Grenade": {
+   "name": "RGD Smoke Grenade",
+   "price": 90.0
+  },
+  "RGO_Grenade": {
+   "name": "RGO Grenade",
+   "price": 300.0
+  },
+  "Rope": {
+   "name": "Rope",
+   "price": 80.0
+  },
+  "Rugged_Obsidian_9mm_Suppressor": {
+   "name": "Rugged Obsidian 9 Suppressor",
+   "price": 2500.0
+  },
+  "Saiga_12K_12ga_Muzzle_Device": {
+   "name": "Saiga-12K 12ga Muzzle Device",
+   "price": 50.0
+  },
+  "Saiga_12K_GK-02_12ga_Muzzle_Device": {
+   "name": "Saiga -2K GK-02 12ga Muzzle Device",
+   "price": 62.0
+  },
+  "Saiga_12K_Tromix_Monster_Claw_12ga_Muzzle_Device": {
+   "name": "Saiga-12K Tromix Monster Claw 12ga Muzzle Device",
+   "price": 213.0
+  },
+  "Saw": {
+   "name": "Saw",
+   "price": 200.0
+  },
+  "SCAR-L_AAC_SD_51T_Flash_Hider": {
+   "name": "SCAR-L AAC SD 51T Flash Hider",
+   "price": 109.0
+  },
+  "SCAR_Front_Sight": {
+   "name": "SCAR Front Sight",
+   "price": 60.0
+  },
+  "SCAR_H_AAC_SD_51T_Flash_Hider": {
+   "name": "SCAR-H AAC SD 51T Flash Hider",
+   "price": 100.0
+  },
+  "SCAR_Rear_Sight": {
+   "name": "SCAR Rear Sight",
+   "price": 60.0
+  },
+  "SESTAN-BUSCH_BK-3": {
+   "name": "SESTAN-BUSCH BK-3 Helmet",
+   "price": 610.0
+  },
+  "ShavingCream": {
+   "name": "Shaving Cream",
+   "price": 39.0
+  },
+  "Sig_Sauer_SRD762_Suppressor": {
+   "name": "Sig Sauer SRD762 Suppressor",
+   "price": 3420.0
+  },
+  "SilencerCo_Hybrid_46_Suppressor": {
+   "name": "SilencerCo Hybrid 46 Suppressor",
+   "price": 3940.0
+  },
+  "SilencerCo_Omega_45k_Suppressor": {
+   "name": "SilencerCo Omega 45k Suppressor",
+   "price": 2330.0
+  },
+  "SilencerCo_Osprey_45K_Suppressor": {
+   "name": "SilencerCo Osprey 45K Suppressor",
+   "price": 1993.0
+  },
+  "SilencerCo_Salvo12_Suppressor": {
+   "name": "SilencerCo Salvo12 Suppressor",
+   "price": 4722.0
+  },
+  "SKS_OSS_HX-QD_762_Suppressor": {
+   "name": "SKS OSS HX-QD 762 Suppressor",
+   "price": 3290.0
+  },
+  "SoccerTrophy": {
+   "name": "Soccer Trophy",
+   "price": 987.0
+  },
+  "Spiritus_LV119_Armored_Rig": {
+   "name": "Spiritus LV119 Armored Rig",
+   "price": 2280.0
+  },
+  "Spiritus_Micro_Fight_Chest_Rig": {
+   "name": "Spiritus Micro Fight Chest Rig",
+   "price": 120.0
+  },
+  "SprayCan": {
+   "name": "Spraycan",
+   "price": 25.0
+  },
+  "SSO_Smersh_Backpack": {
+   "name": "SSO Smersh Buttpack",
+   "price": 450.0
+  },
+  "StapleGun": {
+   "name": "Staple Gun",
+   "price": 80.0
+  },
+  "Stark_SE3_Foregrip": {
+   "name": "Stark SE3 Foregrip",
+   "price": 200.0
+  },
+  "Steiner_CQBL-1_Laser": {
+   "name": "Steiner CQBL-1 Laser",
+   "price": 248.0
+  },
+  "Streamlight_TLR1-HL_Flashlight": {
+   "name": "Streamlight TLR1-HL Gun Light",
+   "price": 160.0
+  },
+  "STV-380_Handguard_Panel": {
+   "name": "STV-380 Handguard Panel",
+   "price": 75.0
+  },
+  "STV-380_Rear_Sight": {
+   "name": "STV-380 Rear Sight",
+   "price": 25.0
+  },
+  "Super_High_Cut_Ops-Core_Fast_MT_V1_Helmet": {
+   "name": "Super High Cut Ops Core Fast MT V1 Helmet",
+   "price": 2350.0
+  },
+  "SureFire_Mini_Scout_Flashight": {
+   "name": "SureFire Mini Scout Flashlight",
+   "price": 240.0
+  },
+  "Surefire_Ryder_9M_TI_Suppressor": {
+   "name": "Surefire Ryder 9M TI Suppressor",
+   "price": 2210.0
+  },
+  "Surefire_SD3P-556_3_Flash_Hider": {
+   "name": "Surefire SD3P-556 3 Flash Hider",
+   "price": 100.0
+  },
+  "Surefire_SOCOM338-TI_Muzzle_Brake": {
+   "name": "Surefire SOCOM338-TI Muzzle Brake",
+   "price": 280.0
+  },
+  "Surefire_SOCOM338-TI_Suppressor": {
+   "name": "Surefire SOCOM338-TI Suppressor",
+   "price": 8984.0
+  },
+  "Surefire_SOCOM556-MONSTER_Suppressor": {
+   "name": "Surefire SOCOM556-MONSTER Suppressor",
+   "price": 4128.0
+  },
+  "SVD_Rotor43_762x54_Suppressor": {
+   "name": "SVD Rotor43 7.62x54mmR Suppressor",
+   "price": 1950.0
+  },
+  "SVD_Rotor43_Thread_Adapter": {
+   "name": "SVD Rotor43 Thread Adapter",
+   "price": 30.0
+  },
+  "TangoDown_Stubby_Vertical_Foregrip": {
+   "name": "TangoDown Stubby Vertical Foregrip",
+   "price": 90.0
+  },
+  "TGP-A_545x39_Suppressor": {
+   "name": "TGP-A 5.45x39mm Suppressor",
+   "price": 1905.0
+  },
+  "The_Slickster_Plate_Carrier": {
+   "name": "The Slickster Plate Carrier",
+   "price": 350.0
+  },
+  "Toolbox": {
+   "name": "Toolbox",
+   "price": 320.0
+  },
+  "Trijicon_ACOG_4x24_Scope": {
+   "name": "Trijicon ACOG 4x24 Scope",
+   "price": 3287.0
+  },
+  "Trijicon_ACOG_6x48_Scope": {
+   "name": "Trijicon ACOG 6x48 Scope",
+   "price": 2630.0
+  },
+  "Trijicon_MRO_Reflex_Sight": {
+   "name": "Trijicon MRO Reflex Sight",
+   "price": 430.0
+  },
+  "Trijicon_RMR_Miniature_Reflex_Sight": {
+   "name": "Trijicon RMR Miniature Reflex Sight",
+   "price": 472.0
+  },
+  "Troy_Modular_Combat_Grip": {
+   "name": "Troy Modular Combat Grip",
+   "price": 84.0
+  },
+  "VAL_Rear_Iron_Sight": {
+   "name": "AS Val Rear Iron Sight",
+   "price": 42.0
+  },
+  "Vest_Virtus_Unarmored_Rig": {
+   "name": "Vest Virtus Unarmored Rig",
+   "price": 305.0
+  },
+  "Vortex_RAZOR_AMG_UH-1_Gen_II_Sight": {
+   "name": "Vortex RAZOR AMG UH-1 Gen II Sight",
+   "price": 1665.0
+  },
+  "VSS_Integral_Suppressor": {
+   "name": "VSS Suppresor",
+   "price": 1400.0
+  },
+  "Warrior_Assault_DCS_Armored_Rig": {
+   "name": "Warrior Assault DCS Armored Rig",
+   "price": 5900.0
+  },
+  "WD40_Spray": {
+   "name": "WD40 Spray",
+   "price": 50.0
+  },
+  "Zenitco_BelOMO_PK-06_Reflex_Sight": {
+   "name": "Zenitco BelOMO PK-06 Reflex Sight",
+   "price": 400.0
+  },
+  "Zenitco_DTK-1_545x39_Muzzle_Brake": {
+   "name": "Zenitco DTK-1 5.45x39mm muzzle brake",
+   "price": 180.0
+  },
+  "Zenitco_Klesch_2IKS3_Laser": {
+   "name": "Zenitco Klesch 2IKS3 Laser",
+   "price": 320.0
+  },
+  "Zenitco_RK-1_45deg_Foregrip": {
+   "name": "Zenitco RK-1 angled foregrip",
+   "price": 245.0
+  }
+ }
+}

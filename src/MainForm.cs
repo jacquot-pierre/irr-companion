@@ -64,6 +64,7 @@ namespace IRRCompanion
         private HideoutPanel _hideoutPanel;
         private MapsPanel _mapsPanel;
         private WeaponsPanel _weaponsPanel;
+        private TradersPanel _tradersPanel;
         private Segmented _viewSwitch;
         private TextBox _name, _author, _desc;
         private Label _status, _info, _unsaved;
@@ -144,9 +145,9 @@ namespace IRRCompanion
             var sub = Theme.Lbl("Companion app for Incursion Red River · game data " + GameData.GameBuild, Theme.Small, Theme.TextDim);
             sub.Location = new Point(Theme.S(20), Theme.S(40));
             // Views: 0 presets editor, 1 compare (opened from the editor, no tab of its own), 2 commands, 3 weapons,
-            // 4 hideout, 5 maps. Tab i shows view TabViews[i].
-            _viewSwitch = new Segmented("PRESETS", "COMMANDS", "WEAPONS", "HIDEOUT", "MAPS") { Selected = 0, BackColor = Theme.Row };
-            _viewSwitch.Size = new Size(Theme.S(590), Theme.S(36));
+            // 4 hideout, 5 maps, 6 traders. Tab i shows view TabViews[i].
+            _viewSwitch = new Segmented("PRESETS", "COMMANDS", "WEAPONS", "TRADERS", "HIDEOUT", "MAPS") { Selected = 0, BackColor = Theme.Row };
+            _viewSwitch.Size = new Size(Theme.S(660), Theme.S(36));
             _viewSwitch.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             _viewSwitch.OptionClicked += (s, e) => ShowView(TabViews[_viewSwitch.ClickedIndex]);
             header.Controls.Add(title);
@@ -235,6 +236,7 @@ namespace IRRCompanion
             _hideoutPanel = new HideoutPanel(_tip, SetStatus) { Visible = false };
             _mapsPanel = new MapsPanel(_tip) { Visible = false };
             _weaponsPanel = new WeaponsPanel(_tip, SetStatus) { Visible = false };
+            _tradersPanel = new TradersPanel(_tip) { Visible = false };
 
             Controls.Add(_editPanel);
             Controls.Add(_comparePanel);
@@ -242,6 +244,7 @@ namespace IRRCompanion
             Controls.Add(_hideoutPanel);
             Controls.Add(_mapsPanel);
             Controls.Add(_weaponsPanel);
+            Controls.Add(_tradersPanel);
             Controls.Add(side);
             Controls.Add(statusBar);
             Controls.Add(header);
@@ -983,7 +986,7 @@ namespace IRRCompanion
 
         private void SetStatus(string s) { _status.Text = s; }
 
-        private static readonly int[] TabViews = { 0, 2, 3, 4, 5 };
+        private static readonly int[] TabViews = { 0, 2, 3, 6, 4, 5 };
 
         private void ShowView(int index)
         {
@@ -994,11 +997,13 @@ namespace IRRCompanion
             _weaponsPanel.Visible = index == 3;
             _hideoutPanel.Visible = index == 4;
             _mapsPanel.Visible = index == 5;
+            _tradersPanel.Visible = index == 6;
             _side.Visible = index < 2;
             if (index == 2) ActiveControl = _commandsPanel.List;
             if (index == 3) ActiveControl = _weaponsPanel.List;
             if (index == 4) ActiveControl = _hideoutPanel.List;
             if (index == 5) ActiveControl = _mapsPanel.Canvas;
+            if (index == 6) ActiveControl = _tradersPanel.List;
             if (index == 1)
             {
                 RefreshCombos();
@@ -1118,6 +1123,15 @@ namespace IRRCompanion
             _weaponsPanel.TestShow(1);
             shot("weapons_aug");
             _weaponsPanel.TestClear();
+            ShowView(6);
+            _tradersPanel.TestShow(1, null);
+            shot("traders");
+            _tradersPanel.TestShow(2, null);
+            Application.DoEvents();
+            shot("traders_vlf");
+            _tradersPanel.TestShow(0, "grenade");
+            shot("traders_search");
+            _tradersPanel.TestShow(0, null);
             ShowView(4);
             _hideoutPanel.TestShow("Generator", true);
             shot("hideout_unit");

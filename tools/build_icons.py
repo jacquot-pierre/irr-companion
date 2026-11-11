@@ -5,7 +5,8 @@ Usage:
 
 Which icons: every item of src/Resources/hideout.json (run tools/build_hideout.py first), the keys of
 src/Resources/maps.json (run tools/build_maps.py first), every weapon, attachment and ammo of
-src/Resources/weapons.json (run tools/build_weapons.py first; weapons in BIG x BIG), cash, the four
+src/Resources/weapons.json (run tools/build_weapons.py first; weapons in BIG x BIG), every item of
+src/Resources/traders.json (run tools/build_traders.py first), cash, the four
 materials, plus the item names listed in EXTRA_ITEMS below. Icons are added little by little: add an item
 definition name (as in tools/item_paths.txt, without ID_) to EXTRA_ITEMS to ship its icon.
 
@@ -295,6 +296,9 @@ def main():
         ids |= set(w['items'])
         big = set(w['weapons'])
         icon_of = {k: 'Test_C/Content/' + v['icon'][len('/Game/'):] for k, v in w['items'].items() if v.get('icon')}
+    traders_json = os.path.join(ROOT, 'src', 'Resources', 'traders.json')
+    if os.path.exists(traders_json):  # TRADERS tab
+        ids |= set(json.load(open(traders_json, encoding='utf-8'))['items'])
     ids = sorted(ids)
 
     print('listing the paks...')

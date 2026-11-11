@@ -51,6 +51,19 @@ Weapon builder (compatibility read from the game files):
       loaded with x300.
 - [ ] Slots of the AKs: the "Rail Mount" slot (the game's text says "Cover", like the dust cover).
 
+Traders (read from the trader presets DA_Trader_IGC / UICS / VLF):
+
+- [ ] Traders and maps: Cpt Hale on Quarry, Voss on Outskirts (both UICS stock), Ba Tran on Bunker (VLF) are read
+      from the maps; Lt Moroz (IGC) on Delta is a guess (`TRADER_MAPS` / `MAP_GUESSED` in `tools/build_traders.py`).
+- [ ] Hand-in prices of the quest crates at the traders (BP_RaidTrader price overrides): Chemical Crate 800,
+      Data Storage Crate 760, Weapon Crate 690 - not shown in the app yet.
+- [ ] The 35 "always in stock" barter items (60 units) really are in every stock.
+- [ ] Random loot: our reading of the settings (kind by weight, then rarity tier by weight, then an item of that
+      tier) gives chances that look right in game (e.g. UICS: mostly tier 2 and 3 sights; VLF: tier 2 gear).
+- [ ] Rarity tiers come from the vendor table (ItemRarityTag).
+- [ ] Prices: the market price (DefaultMarketPrice of the vendor table) is what the traders ask, or do they apply a
+      multiplier (PriceMultiplier / PriceOverrides of the trader actor in the maps)? The Health Injector has no price.
+
 Maps:
 
 - [ ] Resource points on Delta / Quarry / Outskirts / Bunker match the game (a few spots checked in a raid).
@@ -85,6 +98,7 @@ The interface was only checked on screenshots; nothing was clicked yet.
       magazines and rounds fields, SAVE (and `Ctrl+S`), the save prompt when switching builds and when closing,
       ⋯ menu (revert, duplicate, delete), COPY COMMAND; the builds survive a restart
       (`%APPDATA%\IRR Companion\weapons.json`). The mouse wheel scrolls the page, not the part lists.
+- [ ] TRADERS: trader list, *Find an item* (search after a short pause or Enter, Esc clears, no flicker), tooltips of the card titles.
 - [ ] MAPS: map and floor lists, filters, hover tooltip, zoom with the wheel, drag, double-click to fit.
 - [ ] First start: presets and favorites copied from `%APPDATA%\IRR Preset Tool` to `%APPDATA%\IRR Companion`.
 - [ ] Display scaling 125 % / 150 % and the minimum window size (1000 × 620): nothing cut or overlapping.
@@ -96,7 +110,8 @@ The interface was only checked on screenshots; nothing was clicked yet.
 
 - [x] First GitHub Actions run: the build passes and the `v1.0.0` release has the exe and the notes.
 - [x] `v1.1.0` release: the exe and the notes are on the release page.
-- [ ] `v1.2.0` release: the exe and the notes are on the release page.
+- [x] `v1.2.0` release: the exe and the notes are on the release page.
+- [ ] `v1.3.0` release: the exe and the notes are on the release page.
 - [ ] Delete the old local folder `Documents\IRRPresetTool` once everything is in this repository.
 - [ ] Before making the repository public: the test codes in `tools/testdata/` contain the author name of the
       presets; decide whether to keep them.
