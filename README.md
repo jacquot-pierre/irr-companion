@@ -12,7 +12,7 @@ One portable `.exe`, nothing to install, nothing written to the game's files.
 |---|---|
 | **PRESETS** | Create AI presets from the game difficulties, with the same settings as the in-game menu, compare them and get the share code to paste in the game. |
 | **COMMANDS** | Build any of the game's 151 console commands with a few clicks, copy it, keep your favorites. |
-| **WEAPONS** | Build a weapon from the parts that fit it, as in the gunsmith, save your builds and copy the `additem` line that gives the whole build. |
+| **WEAPONS** | Build a weapon from the parts that fit it, as in the gunsmith, see its stats change with every part, save your builds and copy the `additem` line that gives the whole build. |
 | **TRADERS** | What the traders met in raids (Lt Moroz, Cpt Hale, Voss, Ba Tran) can have in stock, with the chance and the price of every item (weapons left out). |
 | **HIDEOUT** | See the cost of every hideout upgrade with the game icons, track your progress and get a shopping list. |
 | **MAPS** | Player spawns (the infill locations you pick when deploying), resource spawn points, extraction points, safes and locked doors (with the key they need) on the game maps, and a heatmap of where any item can spawn. |
@@ -123,6 +123,12 @@ The **WEAPONS** tab builds a weapon from its parts and gives you the console lin
 - **Default parts**: `additem` gives a weapon fitted with its default parts and a loaded magazine (the game's
   preset). A new build starts with them, marked *comes with the weapon*; they are not in the command. **⋯ >
   Back to the default parts** resets the build.
+- **STATS**: ergonomics, recoil, weight, accuracy, muzzle velocity, fire rate, effective and sighting range of
+  the build, read from the game files, and the damage, penetration and piercing level of its ammo. Every part
+  changes them as in the game (weight in kg and ergonomics in points are added; recoil, muzzle velocity and some
+  ergonomics change by a percentage; a sight gives its sighting range). Green / red: better / worse than the
+  weapon with its default parts. The totals are worked out like the game's stat modifiers; the game may round
+  them differently.
 - **Magazines and ammo**: how many magazines in total, the ammo type (magazines are given loaded with it when
   the game has that variant, e.g. AR-15 magazines with x300 Blackout) and extra loose rounds.
 - **CONSOLE COMMAND**: the `additem` line that gives the whole build, e.g.

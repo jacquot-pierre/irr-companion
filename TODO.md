@@ -142,6 +142,7 @@ The interface was only checked on screenshots; nothing was clicked yet.
       and installs itself (check from a v1.5.0 exe).
 - [ ] `v1.5.1` release: a v1.5.0 exe shows UPDATE AVAILABLE and installs v1.5.1; the app opens on MAPS.
 - [ ] `v1.6.0` release: player spawns on the maps; check in game where Riverside and Warehouse (Quarry) put you.
+- [ ] `v1.7.0` release: weapon stats; compare a few builds with the game's weapon inspect (totals, rounding).
 - [ ] Delete the old local folder `Documents\IRRPresetTool` once everything is in this repository.
 - [ ] Before making the repository public: the test codes in `tools/testdata/` contain the author name of the
       presets; decide whether to keep them.

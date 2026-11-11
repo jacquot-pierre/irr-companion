@@ -26,6 +26,15 @@ namespace IRRCompanion
     }
 
     /// <summary>A weapon, an attachment or an ammo type.</summary>
+    /// <summary>A stat of an item: its base value (weapons, ammo, sights) or a modifier (parts).</summary>
+    public sealed class StatMod
+    {
+        public string Stat;
+        /// <summary>base, add or mul (a percentage).</summary>
+        public string Op;
+        public double Value;
+    }
+
     public sealed class WeaponItem
     {
         /// <summary>Item definition name (ID_ without the prefix), as typed after additem.</summary>
@@ -41,6 +50,12 @@ namespace IRRCompanion
         /// <summary>Magazines: the loaded magazines additem can give (one per ammo type).</summary>
         public readonly List<MagLoad> Loads = new List<MagLoad>();
         public readonly List<WeaponSlot> Slots = new List<WeaponSlot>();
+        public readonly List<StatMod> Stats = new List<StatMod>();
+        public double? Stat(string stat)
+        {
+            var m = Stats.FirstOrDefault(s => s.Stat == stat);
+            return m == null ? (double?)null : m.Value;
+        }
         public bool IsMag { get { return Cat == "Mag"; } }
         public WeaponSlot Slot(string name) { return Slots.FirstOrDefault(s => s.Name == name); }
         public override string ToString() { return Name; }
@@ -79,6 +94,10 @@ namespace IRRCompanion
                 if (loads != null)
                     foreach (JObj l in loads)
                         it.Loads.Add(new MagLoad { Give = l.Str("give"), Ammo = l.Str("ammo"), Rounds = (int)l.Num("rounds") });
+                var stats = o.Arr("stats");
+                if (stats != null)
+                    foreach (List<object> st in stats)
+                        it.Stats.Add(new StatMod { Stat = (string)st[0], Op = (string)st[1], Value = (double)st[2] });
                 var slots = o.Arr("slots");
                 if (slots != null)
                     foreach (JObj s in slots)
@@ -110,6 +129,105 @@ namespace IRRCompanion
     }
 
     /// <summary>An item put in a slot, with what is put in its own slots.</summary>
+    /// <summary>
+    /// Stats of a build: the weapon's values changed by its parts, like the game's stat modifiers: additions are
+    /// summed (Weight in kg, Ergonomics in points, MuzzleVelocity in %), percentages are summed then applied
+    /// (Recoil, some Ergonomics), a sight gives its own sighting range.
+    /// </summary>
+    public static class WeaponStats
+    {
+        public static readonly string[] Order = { "Ergonomics", "Recoil", "Weight", "Accuracy", "MuzzleVelocity", "RoundsPerMinute", "EffectiveDistance", "SightingRange" };
+        public static readonly string[] AmmoOrder = { "Damage", "Penetration", "PiercingLevel" };
+
+        public static string Label(string stat)
+        {
+            switch (stat)
+            {
+                case "MuzzleVelocity": return "Muzzle velocity";
+                case "RoundsPerMinute": return "Fire rate";
+                case "EffectiveDistance": return "Effective range";
+                case "SightingRange": return "Sighting range";
+                case "PiercingLevel": return "Piercing level";
+                default: return stat;
+            }
+        }
+
+        public static string Unit(string stat)
+        {
+            switch (stat)
+            {
+                case "Weight": return " kg";
+                case "Accuracy": return " MOA";
+                case "MuzzleVelocity": return " m/s";
+                case "RoundsPerMinute": return " rpm";
+                case "EffectiveDistance":
+                case "SightingRange": return " m";
+                default: return "";
+            }
+        }
+
+        /// <summary>True when a lower value is better (recoil, weight, accuracy in MOA).</summary>
+        public static bool LowerIsBetter(string stat) { return stat == "Recoil" || stat == "Weight" || stat == "Accuracy"; }
+
+        /// <summary>The value without its unit.</summary>
+        public static string Number(string stat, double v)
+        {
+            string f = stat == "Weight" ? "0.00" : stat == "Accuracy" ? "0.00" : stat == "Ergonomics" || stat == "Recoil" ? "0.#" : "0";
+            return v.ToString(f, System.Globalization.CultureInfo.InvariantCulture);
+        }
+
+        public static string Format(string stat, double v) { return Number(stat, v) + Unit(stat); }
+
+        private static IEnumerable<BuildNode> All(BuildNode n)
+        {
+            foreach (var c in n.Parts.Values)
+            {
+                yield return c;
+                foreach (var x in All(c)) yield return x;
+            }
+        }
+
+        /// <summary>Stat -> value for the weapon and its parts (null when the weapon is unknown).</summary>
+        public static Dictionary<string, double> Compute(BuildNode root)
+        {
+            var w = root == null ? null : WeaponData.Find(root.Item);
+            if (w == null) return null;
+            var add = new Dictionary<string, double>();
+            var mul = new Dictionary<string, double>();
+            double? sight = null;
+            foreach (var n in All(root))
+            {
+                var it = WeaponData.Find(n.Item);
+                if (it == null) continue;
+                foreach (var m in it.Stats)
+                {
+                    if (m.Op == "base")
+                    {
+                        if (m.Stat == "SightingRange") sight = Math.Max(sight ?? 0, m.Value);
+                        continue;
+                    }
+                    var d = m.Op == "mul" ? mul : add;
+                    double v;
+                    d.TryGetValue(m.Stat, out v);
+                    d[m.Stat] = v + m.Value;
+                }
+            }
+            Func<Dictionary<string, double>, string, double> get = (d, k) => { double v; return d.TryGetValue(k, out v) ? v : 0; };
+            var r = new Dictionary<string, double>();
+            foreach (var stat in Order)
+            {
+                var b = w.Stat(stat);
+                if (b == null) continue;
+                double v = b.Value;
+                if (stat == "MuzzleVelocity") v = v * (1 + get(add, stat) / 100);  // barrels and muzzles give a percentage
+                else if (stat == "SightingRange") v = sight ?? v;
+                else v = (v + get(add, stat)) * (1 + get(mul, stat) / 100);
+                r[stat] = Math.Max(0, v);
+            }
+            return r;
+        }
+    }
+
     public sealed class BuildNode
     {
         public string Item;

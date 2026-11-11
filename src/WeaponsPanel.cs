@@ -137,6 +137,7 @@ namespace IRRCompanion
         private readonly Label _info, _unsaved, _weaponInfo, _cmdInfo;
         private readonly ItemCombo _weapon;
         private readonly Panel _weaponIcon, _rows;
+        private readonly StatsView _stats;
         private readonly ToolStripMenuItem _miRevert, _miDelete;
         private WeaponBuild _cur;
         private bool _loading;
@@ -294,7 +295,10 @@ namespace IRRCompanion
             Theme.DarkScrollbars(_rows);
             _rows.Resize += (s, e) => { if (_cur != null && IsHandleCreated && ComboWidth() != _comboW) BuildRows(false); };
 
+            _stats = new StatsView(_tip) { Dock = DockStyle.Right, Width = Theme.S(290) };
             content.Controls.Add(_rows);
+            content.Controls.Add(new Panel { Dock = DockStyle.Right, Width = Theme.S(14), BackColor = Theme.Back });
+            content.Controls.Add(_stats);
             content.Controls.Add(new Panel { Dock = DockStyle.Top, Height = Theme.S(6), BackColor = Theme.Back });
             content.Controls.Add(weaponBar);
             content.Controls.Add(top);
@@ -556,6 +560,7 @@ namespace IRRCompanion
             _miRevert.Enabled = b != null && b.Dirty && b.Saved != null;
             _unsaved.Visible = b != null && b.Dirty;
             _weaponIcon.Invalidate();
+            _stats.SetBuild(b);
             if (b == null || b.Root == null)
             {
                 _info.Text = "";
@@ -608,7 +613,7 @@ namespace IRRCompanion
         /// <summary>Width of the part lists: follows the window, between 420 and 680 px (at 100 %).</summary>
         private int _comboW;
 
-        private int ComboWidth() { return Math.Max(Theme.S(420), Math.Min(Theme.S(680), _rows.Width - Theme.S(134) - Theme.S(300))); }
+        private int ComboWidth() { return Math.Max(Theme.S(360), Math.Min(Theme.S(680), _rows.Width - Theme.S(134) - Theme.S(240))); }
 
         private void BuildRows(bool resetScroll)
         {
@@ -841,5 +846,146 @@ namespace IRRCompanion
             RefreshList();
         }
 #endif
+    }
+
+    /// <summary>STATS of a build: the weapon's values with its parts, compared with the weapon as additem gives it,
+    /// then the stats of the ammo.</summary>
+    public sealed class StatsView : Panel
+    {
+        private readonly ToolTip _tip;
+        private Dictionary<string, double> _now, _ref;
+        private WeaponItem _ammo;
+        private readonly List<KeyValuePair<Rectangle, string>> _tips = new List<KeyValuePair<Rectangle, string>>();
+        private string _shownTip;
+
+        public StatsView(ToolTip tip)
+        {
+            _tip = tip;
+            BackColor = Theme.Row;
+            DoubleBuffered = true;
+            ResizeRedraw = true;
+        }
+
+        public void SetBuild(WeaponBuild b)
+        {
+            _now = b == null ? null : WeaponStats.Compute(b.Root);
+            var w = b == null ? null : b.Weapon;
+            _ref = w == null || w.Defaults == null ? null : WeaponStats.Compute(w.Defaults);
+            string ammo = b == null ? null : b.Ammo;
+            if (ammo == null && b != null && b.Mag != null)
+            {
+                var load = b.LoadOf(WeaponData.Find(b.Mag.Item));
+                if (load != null) ammo = load.Ammo;
+            }
+            _ammo = WeaponData.Find(ammo);
+            Invalidate();
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            var g = e.Graphics;
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+            using (var p = new Pen(Theme.Border)) g.DrawRectangle(p, 0, 0, Width - 1, Height - 1);
+            _tips.Clear();
+            int pad = Theme.S(12), y = Theme.S(10), w = Width - 2 * pad;
+            TextRenderer.DrawText(g, "STATS", Theme.Bold, new Point(pad, y), Theme.TextDim);
+            _tips.Add(new KeyValuePair<Rectangle, string>(new Rectangle(pad, y, w, Theme.S(20)),
+                "Stats of the weapon with its parts, from the game files. The totals are worked out like the game's stat\n" +
+                "modifiers (additions summed, percentages summed then applied); the game may round them differently.\n" +
+                "Green / red: better / worse than the weapon as additem gives it (its default parts)."));
+            y += Theme.S(22);
+            if (_now == null)
+            {
+                TextRenderer.DrawText(g, "No stats for this weapon.", Theme.Small, new Point(pad, y), Theme.TextFaint);
+                return;
+            }
+            TextRenderer.DrawText(g, "vs the weapon as additem gives it", Theme.Small, new Point(pad, y), Theme.TextFaint);
+            y += Theme.S(20);
+            foreach (var stat in WeaponStats.Order)
+            {
+                double v;
+                if (!_now.TryGetValue(stat, out v)) continue;
+                double r = v;
+                bool hasRef = _ref != null && _ref.TryGetValue(stat, out r);
+                var row = new Rectangle(pad, y, w, Theme.S(stat == "Ergonomics" || stat == "Recoil" ? 36 : 21));
+                TextRenderer.DrawText(g, WeaponStats.Label(stat).ToUpperInvariant(), Theme.Small, new Point(row.X, row.Y + Theme.S(4)), Theme.TextDim);
+                string val = WeaponStats.Format(stat, v);
+                var vs = TextRenderer.MeasureText(g, val, Theme.Bold);
+                int deltaW = Theme.S(64);
+                TextRenderer.DrawText(g, val, Theme.Bold, new Point(row.Right - deltaW - vs.Width, row.Y + Theme.S(2)), Theme.Text);
+                double d = hasRef ? v - r : 0;
+                if (Math.Abs(d) > 0.0049)
+                {
+                    bool better = WeaponStats.LowerIsBetter(stat) ? d < 0 : d > 0;
+                    string ds = (d > 0 ? "+" : "\u2212") + WeaponStats.Number(stat, Math.Abs(d));
+                    TextRenderer.DrawText(g, ds, Theme.Small, new Rectangle(row.Right - deltaW, row.Y + Theme.S(4), deltaW, Theme.S(18)),
+                        better ? Theme.Higher : Theme.Lower, TextFormatFlags.Right);
+                }
+                if (stat == "Ergonomics" || stat == "Recoil")
+                {
+                    var bar = new Rectangle(row.X, row.Y + Theme.S(24), w, Theme.S(6));
+                    using (var b = new SolidBrush(Theme.Track)) g.FillRectangle(b, bar);
+                    float f = (float)Math.Max(0, Math.Min(1, v / 100));
+                    using (var b = new SolidBrush(Theme.Accent)) g.FillRectangle(b, bar.X, bar.Y, bar.Width * f, bar.Height);
+                    if (hasRef)
+                    {
+                        float rx = bar.X + bar.Width * (float)Math.Max(0, Math.Min(1, r / 100));
+                        using (var p = new Pen(Theme.TextDim, 2)) g.DrawLine(p, rx, bar.Y - Theme.S(2), rx, bar.Bottom + Theme.S(2));
+                    }
+                }
+                _tips.Add(new KeyValuePair<Rectangle, string>(row, Tip(stat, v, hasRef ? r : (double?)null)));
+                y = row.Bottom + Theme.S(3);
+            }
+            if (_ammo != null && _ammo.Stats.Any(m => WeaponStats.AmmoOrder.Contains(m.Stat)))
+            {
+                y += Theme.S(4);
+                using (var p = new Pen(Theme.Track)) g.DrawLine(p, pad, y, pad + w, y);
+                y += Theme.S(6);
+                var title = new Rectangle(pad, y, w, Theme.S(20));
+                TextRenderer.DrawText(g, "AMMO  " + _ammo.Name, Theme.Small, title, Theme.TextDim, TextFormatFlags.EndEllipsis | TextFormatFlags.NoPrefix);
+                y += Theme.S(20);
+                // the ammo stats side by side: label above, value below
+                int cw = w / WeaponStats.AmmoOrder.Length, x = pad;
+                var lines = new List<string>();
+                foreach (var stat in WeaponStats.AmmoOrder)
+                {
+                    var m = _ammo.Stat(stat);
+                    if (m == null) continue;
+                    string lab = stat == "PiercingLevel" ? "PIERCING" : WeaponStats.Label(stat).ToUpperInvariant();
+                    TextRenderer.DrawText(g, lab, Theme.Small, new Point(x, y), Theme.TextDim);
+                    TextRenderer.DrawText(g, WeaponStats.Format(stat, m.Value), Theme.Bold, new Point(x, y + Theme.S(16)), Theme.Text);
+                    lines.Add(WeaponStats.Label(stat) + ": " + WeaponStats.Format(stat, m.Value));
+                    x += cw;
+                }
+                _tips.Add(new KeyValuePair<Rectangle, string>(new Rectangle(pad, title.Y, w, Theme.S(56)),
+                    _ammo.Name + "\n" + string.Join("\n", lines) + "\nThe ammo of the build, else the one the magazine comes loaded with."));
+            }
+        }
+
+        private static string Tip(string stat, double v, double? r)
+        {
+            string s = WeaponStats.Label(stat) + ": " + WeaponStats.Format(stat, v);
+            if (r != null) s += "\nWith the default parts: " + WeaponStats.Format(stat, r.Value);
+            switch (stat)
+            {
+                case "Ergonomics": s += "\nHigher is better (handling, aiming)."; break;
+                case "Recoil": s += "\nLower is better. Parts change it by a percentage."; break;
+                case "Weight": s += "\nWeapon and parts (magazine included, not the rounds)."; break;
+                case "Accuracy": s += "\nLower is better (minutes of angle)."; break;
+                case "MuzzleVelocity": s += "\nBarrels and muzzle devices change it by a percentage."; break;
+                case "SightingRange": s += "\nThe sight's range when a sight is fitted."; break;
+            }
+            return s;
+        }
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+            string t = _tips.Where(x => x.Key.Contains(e.Location)).Select(x => x.Value).FirstOrDefault();
+            if (t == _shownTip) return;
+            _shownTip = t;
+            _tip.SetToolTip(this, t ?? "");
+        }
     }
 }

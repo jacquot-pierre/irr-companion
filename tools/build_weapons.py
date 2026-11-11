@@ -29,6 +29,13 @@ How the game stores it (the gunsmith uses the same data):
   from the item names (MP5_Picatinny_Rail gives MP5_Picanny_Scope_Mount, 545x39_7N22 gives 545x39_BP).
   Written per item: "give" (the row), "defaults" for weapons (the parts of the default preset, placed in the
   slots), "loads" for magazines (row, ammo, rounds). Items without a row cannot be given with additem.
+- Stats (WEAPONS tab): the definition holds its stat items: <count>, then count x (<QUA_StatItem> <int32 export
+  index of the stat object>). QUA_StatItem (unversioned): 0 modify type EStatItemModifyType (byte: 1 Base, 2 Add,
+  3 Multiply), 1 value (float), 2 and 3 bytes, 4 bool. The stat is the class of the object: U_Recoil_C -> Recoil.
+  Weapons give their base values (Weight, Ergonomics, Recoil, MuzzleVelocity, Accuracy, RoundsPerMinute,
+  EffectiveDistance, SightingRange); parts add to them (Weight in kg, Ergonomics in points, MuzzleVelocity in %),
+  or change them by a percentage (Multiply: Recoil, some Ergonomics); sights give their own SightingRange; ammo
+  gives Damage, Penetration, PiercingLevel. Written per item: "stats": [[stat, "base"|"add"|"mul", value], ...].
 The assets are cooked with unversioned properties; every unexpected layout stops the script.
 """
 import glob
@@ -264,6 +271,62 @@ class Classes:
         return 'Slot'
 
 
+STAT_MODIFY = {1: 'base', 2: 'add', 3: 'mul'}
+# stats shown by the WEAPONS tab (the others: durability, heat... are left out)
+STATS_KEPT = {'Weight', 'Ergonomics', 'Recoil', 'MuzzleVelocity', 'Accuracy', 'RoundsPerMinute', 'EffectiveDistance',
+              'SightingRange', 'Damage', 'Penetration', 'PiercingLevel'}
+
+
+def item_stats(pkg, d):
+    """Stat items of the item definition (export d): [[stat, modify, value]] for the kept stats with a value."""
+    b = pkg.data(d)
+    sizes = [1, 4, 1, 1, 0]  # QUA_StatItem properties: byte, float, byte, byte, bool (in the zero mask only)
+
+    def parse(k):
+        n = struct.unpack_from('<i', b, k)[0]
+        if not 1 <= n <= 40:
+            return None
+        o, out = k + 4, []
+        for _ in range(n):
+            if o + 2 > len(b):
+                return None
+            h = struct.unpack_from('<H', b, o)[0]
+            o += 2
+            skip, zeros, last, num = h & 0x7f, bool(h & 0x80), bool(h & 0x100), h >> 9
+            if not last or skip or num != 5:
+                return None
+            mask = 0
+            if zeros:
+                mask = b[o]
+                o += 1
+            vals = [0, 0.0, 0, 0, False]
+            for q in range(num):
+                if zeros and (mask >> q) & 1:
+                    continue
+                if q == 4:
+                    vals[q] = True
+                elif sizes[q] == 1:
+                    vals[q] = b[o]
+                else:
+                    vals[q] = struct.unpack_from('<f', b, o)[0]
+                o += sizes[q]
+            if o + 4 > len(b):
+                return None
+            key = struct.unpack_from('<i', b, o)[0]
+            o += 4
+            if not 1 <= key <= len(pkg.exports) or not pkg.exports[key - 1]['class'].startswith('U_'):
+                return None
+            out.append((pkg.exports[key - 1]['class'][2:-2], vals[0], vals[1]))
+        return out
+
+    for k in range(len(b) - 6):
+        r = parse(k)
+        if r:
+            return [[st, STAT_MODIFY[m], round(v, 4)] for st, m, v in r
+                    if st in STATS_KEPT and v and m in STAT_MODIFY]
+    return None
+
+
 def vendor_rows(inv):
     """additem row name -> item definition (ID_x) or item preset (DA_x) of Vendor/DT_Vendor_Old, in table order."""
     path = os.path.join(inv, 'Vendor', 'DT_Vendor_Old.uasset')
@@ -366,8 +429,11 @@ def main():
             if tag in by_tag:
                 print('WARNING: tag %s used by %s and %s' % (tag, by_tag[tag], row))
             by_tag[tag] = row
+            stats = item_stats(pkg, d)
+            if stats is None:
+                print('WARNING: no stat items in ' + row)
             items[row] = {'name': pkg.first_text(d) or row, 'tag': tag, 'cat': rel[1] if cat != 'Ammunition' else
-                          'Ammo', 'kind': cat, 'slots': slots, 'capacity': capacity, 'icon': icon}
+                          'Ammo', 'kind': cat, 'slots': slots, 'capacity': capacity, 'icon': icon, 'stats': stats or []}
 
     # tags -> rows; a tag that is no item but the parent of item tags accepts all its children
     unknown = {}
@@ -413,6 +479,8 @@ def main():
             o['icon'] = it['icon']
         if slots:
             o['slots'] = slots
+        if it['stats']:
+            o['stats'] = it['stats']
         out_items[row] = o
 
     # ---- additem rows, weapon default presets, loaded magazines

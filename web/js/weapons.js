@@ -120,6 +120,45 @@ export async function mountWeapons(view) {
   }
   const command = b => lines(b).lines.map(([g, n]) => 'additem ' + g + ' ' + n).join(' | ');
 
+  // ---------------- stats (port of WeaponStats in src/Weapons.cs): the weapon's values changed by its parts
+  const ORDER = ['Ergonomics', 'Recoil', 'Weight', 'Accuracy', 'MuzzleVelocity', 'RoundsPerMinute', 'EffectiveDistance', 'SightingRange'];
+  const AMMO_ORDER = ['Damage', 'Penetration', 'PiercingLevel'];
+  const LABEL = { MuzzleVelocity: 'Muzzle velocity', RoundsPerMinute: 'Fire rate', EffectiveDistance: 'Effective range',
+    SightingRange: 'Sighting range', PiercingLevel: 'Piercing' };
+  const UNIT = { Weight: ' kg', Accuracy: ' MOA', MuzzleVelocity: ' m/s', RoundsPerMinute: ' rpm', EffectiveDistance: ' m', SightingRange: ' m' };
+  const LOWER_BETTER = new Set(['Recoil', 'Weight', 'Accuracy']);
+  const TIPS = {
+    Ergonomics: 'Higher is better (handling, aiming).', Recoil: 'Lower is better. Parts change it by a percentage.',
+    Weight: 'Weapon and parts (magazine included, not the rounds).', Accuracy: 'Lower is better (minutes of angle).',
+    MuzzleVelocity: 'Barrels and muzzle devices change it by a percentage.', SightingRange: 'The sight\'s range when a sight is fitted.',
+  };
+  const statOf = (it, st) => { const m = (it && it.stats || []).find(x => x[0] === st); return m ? m[2] : null; };
+  const num = (st, v) => (st === 'Weight' || st === 'Accuracy') ? v.toFixed(2) : (st === 'Ergonomics' || st === 'Recoil') ? String(+v.toFixed(1)) : String(Math.round(v));
+  const fmt = (st, v) => num(st, v) + (UNIT[st] || '');
+  function computeStats(root) {
+    const w = find(root && root.item);
+    if (!w) return null;
+    const add = {}, mul = {};
+    let sight = null;
+    const all = n => Object.values(n.parts || {}).flatMap(c => [c, ...all(c)]);
+    for (const n of all(root)) {
+      for (const [st, op, v] of (find(n.item) || {}).stats || []) {
+        if (op === 'base') { if (st === 'SightingRange') sight = Math.max(sight || 0, v); continue; }
+        const d = op === 'mul' ? mul : add;
+        d[st] = (d[st] || 0) + v;
+      }
+    }
+    const r = {};
+    for (const st of ORDER) {
+      const b = statOf(w, st);
+      if (b == null) continue;
+      let v = st === 'MuzzleVelocity' ? b * (1 + (add[st] || 0) / 100)
+        : st === 'SightingRange' ? (sight ?? b) : (b + (add[st] || 0)) * (1 + (mul[st] || 0) / 100);
+      r[st] = Math.max(0, v);
+    }
+    return r;
+  }
+
   // ---------------- storage
   function load() {
     try {
@@ -167,7 +206,37 @@ export async function mountWeapons(view) {
           el('div.s', { text: nameOf(b.weapon.item) + ' · ' + (changedParts(b) ? changedParts(b) + ' parts changed' : 'default parts') }))))));
   }
 
-  function changed(rebuild) { save(); if (rebuild) render(); else { renderList(); renderCommand(); } }
+  function changed(rebuild) { save(); if (rebuild) render(); else { renderList(); renderCommand(); renderStats(); } }
+
+  const statsBox = el('aside.wstats');
+  function renderStats() {
+    const now = computeStats(cur.weapon), w = find(cur.weapon.item);
+    const ref = w && w.defaults ? computeStats(defaultsOf(cur.weapon.item)) : null;
+    const out = [el('div.wst-title', { title: 'Stats of the weapon with its parts, from the game files. The totals are worked out like the game\'s stat modifiers (additions summed, percentages summed then applied); the game may round them differently. Green / red: better / worse than the weapon as additem gives it (its default parts).' },
+      el('b', { text: 'STATS' }), el('span', { text: 'vs the weapon as additem gives it' }))];
+    if (!now) out.push(el('div.muted', { text: 'No stats for this weapon.' }));
+    for (const st of ORDER) {
+      if (!now || !(st in now)) continue;
+      const v = now[st], r = ref && st in ref ? ref[st] : null, d = r == null ? 0 : v - r;
+      const better = LOWER_BETTER.has(st) ? d < 0 : d > 0;
+      const row = el('div.wst-row', { title: (LABEL[st] || st) + ': ' + fmt(st, v) + (r != null ? '\nWith the default parts: ' + fmt(st, r) : '') + (TIPS[st] ? '\n' + TIPS[st] : '') },
+        el('span.l', { text: (LABEL[st] || st).toUpperCase() }), el('b', { text: fmt(st, v) }),
+        el('span.d' + (Math.abs(d) > 0.0049 ? (better ? '.up' : '.down') : ''), { text: Math.abs(d) > 0.0049 ? (d > 0 ? '+' : '\u2212') + num(st, Math.abs(d)) : '' }));
+      out.push(row);
+      if (st === 'Ergonomics' || st === 'Recoil') {
+        const bar = el('div.wst-bar', null, el('i', { style: 'width:' + Math.max(0, Math.min(100, v)) + '%' }));
+        if (r != null) bar.append(el('u', { style: 'left:' + Math.max(0, Math.min(100, r)) + '%' }));
+        out.push(bar);
+      }
+    }
+    const ammo = find(cur.ammo);
+    if (ammo && AMMO_ORDER.some(st => statOf(ammo, st) != null)) {
+      out.push(el('div.wst-ammo', { title: 'The ammo of the build (used for the magazines and the loose rounds).' }, 'AMMO  ', el('span', { text: ammo.name })),
+        el('div.wst-cols', null, ...AMMO_ORDER.filter(st => statOf(ammo, st) != null).map(st =>
+          el('div', null, el('span.l', { text: (LABEL[st] || st).toUpperCase() }), el('b', { text: fmt(st, statOf(ammo, st)) })))));
+    }
+    statsBox.replaceChildren(...out);
+  }
 
   let cmdBox, cmdInfo;
   function renderCommand() {
@@ -257,10 +326,14 @@ export async function mountWeapons(view) {
     cmdBox = el('textarea.cmd', { readonly: true, title: 'Paste it in the game console (² / ~, ^ or F10) with Ctrl+V.' });
     cmdInfo = el('div.muted');
     content.replaceChildren(top, bar,
-      el('div.section', { text: 'Parts' }), el('p.muted', { text: 'Pick a part for each slot. A part can have slots of its own (rails, sights...), shown under it.' }),
-      ...rows, ...ammoRows,
+      el('div.wgrid', null,
+        el('div.wmain', null,
+          el('div.section', { text: 'Parts' }), el('p.muted', { text: 'Pick a part for each slot. A part can have slots of its own (rails, sights...), shown under it.' }),
+          ...rows, ...ammoRows),
+        statsBox),
       el('div.section', { text: 'Console command' }), cmdInfo, cmdBox);
     renderCommand();
+    renderStats();
   }
 
   function exportBuilds() {
