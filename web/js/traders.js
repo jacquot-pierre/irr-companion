@@ -1,5 +1,5 @@
 // TRADERS tab: stock of the traders met in raids, with the chance and the price of every item.
-import { data, el, itemIcon, pct, money, chanceClass, debounce } from './app.js';
+import { data, el, itemIcon, pct, money, chanceClass, debounce } from './app.js?v=dev';
 
 export async function mountTraders(view) {
   const d = await data('traders.json');

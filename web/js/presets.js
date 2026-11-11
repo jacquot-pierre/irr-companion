@@ -1,7 +1,7 @@
 // PRESETS tab: AI difficulty / simulation preset editor, game share codes (IRR1-...) and comparison.
 // Same model as the desktop app (Preset.cs, ShareCode.cs). The presets are kept in this browser and can be exported /
 // imported as the desktop app's presets.json.
-import { data, el, seg, copy, status, stored, downloadJson, pickJson, dialog } from './app.js';
+import { data, el, seg, copy, status, stored, downloadJson, pickJson, dialog } from './app.js?v=dev';
 
 const presetStore = stored('irr.presets', []);
 const kept = {};

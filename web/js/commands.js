@@ -1,6 +1,6 @@
 // COMMANDS tab: console command builder (every irr.* command of the game, with its arguments) and favorites.
 // Favorites are kept in this browser and can be exported / imported as the desktop app's favorites.json.
-import { data, el, seg, copy, status, stored, downloadJson, pickJson, dialog, token, splitLine, debounce } from './app.js';
+import { data, el, seg, copy, status, stored, downloadJson, pickJson, dialog, token, splitLine, debounce } from './app.js?v=dev';
 
 const CAT_FAV = '★  FAVORITES', CAT_ESS = 'ESSENTIALS', CAT_ALL = 'ALL COMMANDS', ALL_ITEMS = 'All items';
 const fmt = d => String(+(+d).toFixed(3));

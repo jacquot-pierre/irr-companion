@@ -1,5 +1,5 @@
 // MAPS tab: minimaps with resource / extraction / lock markers and the item heatmap (same data as the desktop app).
-import { data, el, iconUrl, pct, showTip, hideTip, escapeHtml, debounce } from './app.js';
+import { data, el, iconUrl, pct, showTip, hideTip, escapeHtml, debounce } from './app.js?v=dev';
 
 const COLORS = {
   Concrete: '#aaa69c', Food: '#8bc34a', Metal: '#5da9e9', Oil: '#f0a040', Extraction: '#00e676',

@@ -1,6 +1,6 @@
 // HIDEOUT tab: what every hideout upgrade costs and needs, the player's own progress, and a shopping list.
 // The progress is kept in this browser and can be exported / imported as the desktop app's hideout.json (version 2).
-import { data, el, seg, copy, status, stored, downloadJson, pickJson, itemIcon, iconUrl, token } from './app.js';
+import { data, el, seg, copy, status, stored, downloadJson, pickJson, itemIcon, iconUrl, token } from './app.js?v=dev';
 
 const SHOPPING = 'SHOPPING LIST';
 const RES_COLORS = { Concrete: '#aaa69c', Food: '#8bc34a', Metal: '#5da9e9', Oil: '#f0a040' };

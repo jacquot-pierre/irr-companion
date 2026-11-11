@@ -1,6 +1,6 @@
 // WEAPONS tab: build a weapon from the parts each slot accepts and get the additem line (same rules as the desktop app).
 // Builds are kept in this browser (localStorage) and can be exported / imported as the desktop app's weapons.json.
-import { data, el, itemIcon, copy, status } from './app.js';
+import { data, el, itemIcon, copy, status } from './app.js?v=dev';
 
 const STORE = 'irr.weaponBuilds';
 

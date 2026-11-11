@@ -1,17 +1,17 @@
 // IRR Companion web: tab router and shared helpers.
 // The data files are the same as the desktop app's (src/Resources), served under data/.
-import { mountMaps } from './maps.js';
-import { mountTraders } from './traders.js';
-import { mountWeapons } from './weapons.js';
-import { mountCommands } from './commands.js';
-import { mountHideout } from './hideout.js';
-import { mountPresets } from './presets.js';
+import { mountMaps } from './maps.js?v=dev';
+import { mountTraders } from './traders.js?v=dev';
+import { mountWeapons } from './weapons.js?v=dev';
+import { mountCommands } from './commands.js?v=dev';
+import { mountHideout } from './hideout.js?v=dev';
+import { mountPresets } from './presets.js?v=dev';
 
 const cache = {};
 
 /** JSON file of data/ (cached). */
 export function data(name) {
-  if (!cache[name]) cache[name] = fetch('data/' + name).then(r => {
+  if (!cache[name]) cache[name] = fetch('data/' + name + '?v=dev').then(r => {
     if (!r.ok) throw new Error(name + ': ' + r.status);
     return r.json();
   });
