@@ -18,6 +18,7 @@ The tool embeds data read from the game. After a game patch, each of these can c
 | Item names (Spawn / Give) | pak: `.../Items/**/ID_*.uasset` | `tools/item_paths.txt` | `tools/list_items.py` |
 | Hideout upgrade costs and requirements | pak: `Blueprints/MissionSystem/Actors/Hideout/**` | `src/Resources/hideout.json` | `tools/build_hideout.py` |
 | Resource / extraction points, safes, locked doors and keys, minimaps | pak: persistent levels `Maps/Gameplay/LVL_*`, `Maps/Testing/LVL_Bunker`, `Textures/Minimaps`, `Environment/Blueprints/Gameplay/Resources` | `src/Resources/maps.json`, `src/Resources/maps/*.jpg` | `tools/build_maps.py` |
+| Story missions: order, steps, objectives, briefings, rewards | pak: `Blueprints/MissionSystem/Graphs/MG_MainStory`, `Blueprints/MissionSystem/DataAssets/Factions/FANG/DAWN/**`, item presets `Blueprints/InventorySystem/Presets` | `src/Resources/missions.json` | `tools/build_missions.py` |
 | Weapons, attachment slots and compatible parts (gunsmith) | pak: `Blueprints/InventorySystem/**` (Items and Objects, every pak) | `src/Resources/weapons.json` | `tools/build_weapons.py` |
 | Item / material icons (hideout, keys, weapons, parts, ammo) | pak: `Items/**/T_*_Icon` (mostly pakchunk6), `ResourceSystem/Textures` | `src/Resources/icons/*.png` | `tools/build_icons.py` |
 
@@ -292,6 +293,17 @@ from `maps.json`).
 - Check the MAPS screenshots: points must sit on buildings / the quarry rocks. If they are rotated or mirrored,
   the minimap capture changed: fix `MapFloor.ToImage` in `src/Maps.cs`.
 
+## 7g. Story missions (MISSIONS tab)
+
+```
+python -I tools/build_missions.py "<paks>"
+```
+
+Run it after `build_weapons.py`, `build_traders.py` and `build_loot.py` (the reward names come from their
+`items`). It prints every mission with its map, number of steps and rewards. It stops with `build_missions: …`
+on any unexpected layout (new graph node kind, more than two branches, a reward entry of another size): read the
+docstring of the script, which says where each value is read.
+
 ## 8. Regenerate and build
 
 ```
@@ -359,5 +371,6 @@ It is published by `.github/workflows/pages.yml` when `main` is pushed.
 - [ ] `build_loot.py`: places per map reviewed, no warning; heatmap screenshots look right
 - [ ] `build_icons.py` run; new icons look right
 - [ ] `build_maps.py`: every map found, point counts reviewed, no warning; MAPS screenshots show points on buildings
+- [ ] `build_missions.py` (after weapons / traders / loot, for the item names): story and side mission counts reviewed, no `build_missions:` error; MISSIONS screenshots reviewed
 - [ ] Debug build, screenshots reviewed; Release build clean
 - [ ] Version bumped, README updated, change summary given to the user

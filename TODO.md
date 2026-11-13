@@ -84,6 +84,14 @@ Maps:
 - [ ] Safes and locked doors: positions and keys match the game (e.g. an Outskirts large safe, a HAS door).
 - [ ] Doors without a key in the files are hidden (8 on Delta, 26 on Quarry): check they really never open.
 
+Missions (read from the mission graph and the mission files):
+
+- [ ] Branches: are both branches given at the same time, and does *Dirty Work* come as soon as one branch is done
+      (no "wait for all" before it in the graph, unlike *Opening Eyes - Part 2*)?
+- [ ] Reconnaissance missions: given when the mission that gives them starts or when it ends?
+- [ ] Rewards match the game (counts, e.g. 2 QSZ-92 for *Shipping and Handling*; the item wins over a preset when an
+      entry has both, e.g. .338 AP x 30 for *Probation*).
+
 Advanced settings (not in the game menu):
 
 - [ ] A preset with changed advanced values imports in game and the bots behave accordingly (e.g. a high

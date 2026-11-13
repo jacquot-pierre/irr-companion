@@ -1,0 +1,1652 @@
+{
+ "version": 1,
+ "story": [
+  {
+   "id": "0000x5"
+  },
+  {
+   "id": "0000x75"
+  },
+  {
+   "id": "0001"
+  },
+  {
+   "id": "0002"
+  },
+  {
+   "id": "0003"
+  },
+  {
+   "branches": [
+    [
+     {
+      "id": "0004"
+     },
+     {
+      "id": "0006"
+     }
+    ],
+    [
+     {
+      "id": "0005"
+     },
+     {
+      "id": "0007"
+     },
+     {
+      "id": "0008"
+     }
+    ]
+   ]
+  },
+  {
+   "id": "0008x5"
+  },
+  {
+   "id": "0009",
+   "waitAll": true
+  },
+  {
+   "branches": [
+    [
+     {
+      "id": "0010"
+     },
+     {
+      "id": "0013"
+     }
+    ],
+    [
+     {
+      "id": "0011"
+     },
+     {
+      "id": "0012"
+     }
+    ]
+   ]
+  },
+  {
+   "id": "0014",
+   "waitAll": true
+  },
+  {
+   "branches": [
+    [
+     {
+      "id": "0015"
+     }
+    ],
+    [
+     {
+      "id": "0016"
+     }
+    ]
+   ]
+  },
+  {
+   "id": "0017",
+   "waitAll": true
+  },
+  {
+   "id": "0018"
+  },
+  {
+   "id": "0019"
+  },
+  {
+   "id": "0020"
+  },
+  {
+   "branches": [
+    [
+     {
+      "id": "0021"
+     }
+    ],
+    [
+     {
+      "id": "0022"
+     }
+    ]
+   ]
+  },
+  {
+   "id": "0023",
+   "waitAll": true
+  }
+ ],
+ "achievement": "Eyes Opened",
+ "missions": {
+  "0000x5": {
+   "title": "Mole Hunt",
+   "maps": [
+    "Outskirts"
+   ],
+   "steps": [
+    {
+     "title": "Eliminate Spies",
+     "objectives": [
+      "Eliminate the spies wearing a suit."
+     ]
+    }
+   ],
+   "briefing": [
+    "Each mission I give you will combine information from FANG, tasks from local faction leaders and my own notes. The European organization, United Intercontinental Security, or UICS, is your first faction employer. They need an outsider for this mission, someone with an unknown face to their own team. They’re also using this mission as an audition, ensuring you’ll be a good fit for their future jobs. The UICS briefing is as follows:",
+    "CHARLES BARRELL // FANG and FANG Operator // Operation Audition: Greetings FANG. Some of our member nations have thought it necessary to have their own representatives on the ground in Vietnam for oversight. While we appreciate their enthusiasm, it can be quite dangerous to send outsiders into this violent faction war. Please have your Operator greet the five men in suits with as much subtlety as they can muster. We hope to have a long working relationship with one another.",
+    "Well, they are a bit coy around death, aren't they? This seems like a good first test of your talents. Take out the 5 suits. Good luck and get out."
+   ],
+   "rewards": [
+    {
+     "id": "Cash",
+     "name": "Cash",
+     "count": 2000,
+     "icon": true
+    },
+    {
+     "id": "Painkiller",
+     "name": "Painkiller",
+     "count": 2,
+     "icon": true
+    },
+    {
+     "id": "Blood_IV",
+     "name": "Blood IV",
+     "count": 2,
+     "icon": false
+    },
+    {
+     "id": "The_Slickster_Plate_Carrier",
+     "name": "The Slickster Plate Carrier",
+     "count": 1,
+     "icon": true
+    },
+    {
+     "id": "Spiritus_Micro_Fight_Chest_Rig",
+     "name": "Spiritus Micro Fight Chest Rig",
+     "count": 1,
+     "icon": true
+    }
+   ],
+   "kind": "Story"
+  },
+  "0000x75": {
+   "title": "Hindered Research",
+   "maps": [
+    "Quarry"
+   ],
+   "steps": [
+    {
+     "title": "Clear H.A.S.",
+     "objectives": [
+      "Clear the HAS between the Fishing Village and the Quarry."
+     ]
+    },
+    {
+     "title": "Extract",
+     "objectives": []
+    }
+   ],
+   "briefing": [
+    "UICS has a follow-up mission for you. FANG has a task for you directly, but responding to faction requests in a timely manner is the priority.",
+    "CHARLES BARRELL // FANG Operator // Operation Show: The work you have done is adequate but unfortunately wasn’t enough. After further investigation, our team has identified several groups of soldiers that had been working with those suits. While our sources say many of the grunts have scattered, a few have stayed, greatly hindering our research. Take them out and continue with your subtlety.",
+    "The remaining soldiers are near the blue-roofed UICS Humanitarian Aid Sites or H.A.S. These H.A.S. give supplies to the locals affected by the civil war, mostly harm done at the hands of the Iron Guard Corp, the IGC. They are a paramilitary force funded by the Russian and Chinese backers of the fallen government, the Vietnamese Communist Union Party. VCUP. But, you'll encounter no IGC here. Good luck and get out."
+   ],
+   "rewards": [
+    {
+     "id": "Cash",
+     "name": "Cash",
+     "count": 3200,
+     "icon": true
+    },
+    {
+     "id": "HK_MP5_9x19_30rnd",
+     "name": "HK MP5 9x19mm 30rnd magazine.",
+     "count": 4,
+     "icon": true
+    },
+    {
+     "id": "MICH_2000_Helmet",
+     "name": "MICH 2000 Helmet",
+     "count": 1,
+     "icon": true
+    }
+   ],
+   "kind": "Story",
+   "unlocks": [
+    "0002_B",
+    "0002_C"
+   ]
+  },
+  "0001": {
+   "title": "Shipping and Handling",
+   "maps": [
+    "Delta"
+   ],
+   "steps": [
+    {
+     "title": "Retrieve Shipping Manifest",
+     "objectives": []
+    },
+    {
+     "title": "Hand In Shipping Manifest",
+     "objectives": []
+    }
+   ],
+   "questItems": [
+    "Shipping Manifest"
+   ],
+   "briefing": [
+    "FANG has a direct mission for you. And just to say, while FANG might see you as expendable, I really do see your potential. I’ll give a bit, just a bit, of confidential context to give you the best chance here in Vietnam:",
+    "FANG has a satellite monitoring the region. In order to keep this project secret, however, the satellite is dark whenever it is not over Vietnamese airspace. What does this mean for you? Your main task for FANG will be establishing a connection to the satellite locally, via a special antenna.",
+    "FANG would have preferred I withhold the purpose of assembly until necessary, but, like I said, I'm trying to give you a better shot in Vietnam.",
+    "In order to route these antenna pieces to you, FANG will switch the antenna parts into ordinary IGC trucking shipments. The trucking system on DELTA connects the IGC to their arms suppliers, food supply, and more. But the IGC is careful. None of the information about dates, times, or license plates is digitized. Instead, everything is hand-delivered and done on paper. Before FANG sends the parts, they need to know a bit more.",
+    "You must find the shipping logistics office, steal the dates and times of delivery, and report back. I’ve taken all the steps I can to set you up. And please, do not fail me."
+   ],
+   "rewards": [
+    {
+     "id": "Cash",
+     "name": "Cash",
+     "count": 2400,
+     "icon": true
+    },
+    {
+     "id": "QSZ-92",
+     "name": "Norinco QSZ-92",
+     "count": 2,
+     "icon": false
+    },
+    {
+     "id": "QSZ-92_9x19_15Rnd",
+     "name": "QSZ-92 9x19mm 15rnd",
+     "count": 2,
+     "icon": true
+    },
+    {
+     "id": "9x19_PSO",
+     "name": "9x19mm PSO",
+     "count": 90,
+     "icon": true
+    },
+    {
+     "id": "SureFire_Mini_Scout_Flashight",
+     "name": "SureFire Mini Scout Flashlight",
+     "count": 2,
+     "icon": true
+    },
+    {
+     "id": "WalkieTalkie",
+     "name": "Walkie Talkie",
+     "count": 1,
+     "icon": false
+    }
+   ],
+   "kind": "Story"
+  },
+  "0002": {
+   "title": "No Sleep In Vietnam",
+   "maps": [
+    "Outskirts"
+   ],
+   "steps": [
+    {
+     "title": "Intercept Meeting",
+     "objectives": [
+      "Eliminiate all UICS soldiers at the Lumber Yard."
+     ]
+    }
+   ],
+   "briefing": [
+    "FANG is busy implementing the information in the manifest you retrieved on your previous mission. I, and therefore you, will be notified when the puzzle pieces are set. That being said, nothing ever sleeps in Vietnam. Leader ILYA MAMONTOV of the IGC has a task for you:",
+    "“Клыки [you], In several hours, UICS is meeting with VLF military боевой отряд [warbands] akhdfj kfjdkjf jjkj kdjfkjdkfjdjf lj kjdfkjk djfkdjfkj in control of the forests. The UICS group that is waiting to meet cannot be allowed to make contact.”",
+    "His message ended there. Once again, I can't get into all of the background, you know, FANG likes to keep the important stuff close and I must be... judicious in when I break rank. But suffice it to say FANG agrees that a successful meeting of UICS and those particular VLF would push pieces in the wrong direction. Take out the UICS group, they are waiting in the LUMBER YARD.",
+    "Also, as part of my job, I need to make sure your health is adequate and that you are reacting well to the environment. Which is annoying because you’re supposed to be a highly selected elite military blah, blah, blah. Have you been experiencing any of the following: Headaches, dizziness, balance issues, high temp, shortness of breath, nausea? Nope? Good good.",
+    "Alrighty, good luck, stay safe and, you know, make sure you get out."
+   ],
+   "rewards": [
+    {
+     "id": "Cash",
+     "name": "Cash",
+     "count": 3400,
+     "icon": true
+    },
+    {
+     "id": "MarkedCoin",
+     "name": "Marked Coin",
+     "count": 1,
+     "icon": false
+    },
+    {
+     "id": "PSO-1_4x24_Scope",
+     "name": "PSO-1 4x24 Scope",
+     "count": 2,
+     "icon": true
+    },
+    {
+     "id": "SKS_EST_Tula_Dovetail",
+     "name": "SKS EST Tula Dovetail",
+     "count": 2,
+     "icon": true
+    },
+    {
+     "id": "SKS_Wooden_Stock",
+     "name": "SKS Wooden Stock",
+     "count": 2,
+     "icon": true
+    },
+    {
+     "id": "762x39_HP",
+     "name": "7.62x39mm HP",
+     "count": 40,
+     "icon": true
+    },
+    {
+     "id": "Compass",
+     "name": "Compass",
+     "count": 1,
+     "icon": true
+    }
+   ],
+   "kind": "Story",
+   "unlocks": [
+    "0002_A",
+    "0002_D"
+   ]
+  },
+  "0003": {
+   "title": "Opening Eyes - Part 1",
+   "maps": [
+    "Delta"
+   ],
+   "steps": [
+    {
+     "title": "Antenna Piece",
+     "objectives": [
+      "Find & Retrieve the first Antenna Piece."
+     ]
+    },
+    {
+     "title": "Upgrade Intel Center",
+     "objectives": [
+      "Use first Antenna Piece to upgrade Intel Center."
+     ]
+    }
+   ],
+   "questItems": [
+    "Antenna Piece 1"
+   ],
+   "briefing": [
+    "FANG has split the satellite antenna into three separate shipments to minimize exposure. Your task is to pick up the first part. According to the intel you retrieved, the truck FANG managed to smuggle the piece onto is set to arrive shortly. It has cost the organization greatly to ensure its delivery for you, so I apologize I couldn’t give you more of a heads-up. As the manifest says, the truck depot should be full as a large convoy of trucks is due to arrive in the next few minutes. Find the truck with packages from the TELOCK company. Your package should be stacked at the back of the truck but several interchanges have happened since FANG last checked its movement, so look around. Your box will be labeled with the following identification number: 0302202. The antenna piece is large and heavy, so prep light and, well, bring your wits with you and keep your eyes sharp. Get to the trucks, find the crate, bring it back, good luck and get out."
+   ],
+   "rewards": [
+    {
+     "id": "Cash",
+     "name": "Cash",
+     "count": 5000,
+     "icon": true
+    },
+    {
+     "id": "MarkedCoin",
+     "name": "Marked Coin",
+     "count": 1,
+     "icon": false
+    },
+    {
+     "id": "AKS-74U",
+     "name": "AKS-74U",
+     "count": 1,
+     "icon": true
+    },
+    {
+     "id": "AK_545x39_Bakelite_30rnd",
+     "name": "AK 5.45x39mm Bakelite 30rnd",
+     "count": 2,
+     "icon": true
+    },
+    {
+     "id": "545x39_PS",
+     "name": "5.45x39mm 7N6",
+     "count": 40,
+     "icon": true
+    },
+    {
+     "id": "Blood_IV",
+     "name": "Blood IV",
+     "count": 2,
+     "icon": false
+    }
+   ],
+   "kind": "Story",
+   "unlocks": [
+    "0003_A"
+   ]
+  },
+  "0004": {
+   "title": "The Westerners",
+   "maps": [
+    "Quarry"
+   ],
+   "steps": [
+    {
+     "title": "Locate all H.A.S.",
+     "objectives": [
+      "Investigate small H.A.S.",
+      "Investigate medium H.A.S.",
+      "Investigate large H.A.S."
+     ]
+    },
+    {
+     "title": "Extract",
+     "objectives": []
+    }
+   ],
+   "briefing": [
+    "The VLF has their first mission for you. Missions from factions are sent by the leaders to FANG, and then I relay the needed information to you. FANG redacts sections of what the factions send over, but I’ll do my best to fill in the gaps and translate some too. Nguyễn Văn Định, also known as SỪNG TRÂU, The Horn, writes as follows:",
+    "Nanh Operator [you], prove your discretion. Last Operatorwe sent never returned. LÂM seems not worried by Quân Liên Lục Địa, [That means UICS], building expansions all over Khu mỏ, [That’s QUARRY]. But I know [UICS] hunt after me.",
+    "The message continues:",
+    "We do not want Quân Liên Lục Địa [UICS] support. All you bọn tây, [this is a bit derogatory but it means “them westerners”, bọn tây] want to take Việt Nam, you need prove you are different from them. There are antennas all over, same company not make food crates has crates there. Find why [UICS] here. Keep it secret.",
+    "Essentially, mark all the H.A.S. around QUARRY and see if his fears have any substance worth looking into. Good luck, and get out."
+   ],
+   "rewards": [
+    {
+     "id": "Cash",
+     "name": "Cash",
+     "count": 2600,
+     "icon": true
+    },
+    {
+     "id": "MP5SD",
+     "name": "MP5SD",
+     "count": 2,
+     "icon": true
+    },
+    {
+     "id": "MP5_ICS_With_Flashlight_Handguard",
+     "name": "MP5 ICS With Flashlight Handguard",
+     "count": 2,
+     "icon": true
+    },
+    {
+     "id": "SureFire_Mini_Scout_Flashight",
+     "name": "SureFire Mini Scout Flashlight",
+     "count": 2,
+     "icon": true
+    }
+   ],
+   "kind": "Story"
+  },
+  "0006": {
+   "title": "Guerrilla Marketing",
+   "maps": [
+    "Delta"
+   ],
+   "steps": [
+    {
+     "title": "Locate all H.A.S.",
+     "objectives": [
+      "Investigate first H.A.S.",
+      "Investigate second H.A.S.",
+      "Investigate third H.A.S."
+     ]
+    },
+    {
+     "title": "Clear H.A.S.",
+     "objectives": [
+      "Kill enemies around the main H.A.S."
+     ]
+    },
+    {
+     "title": "Extract",
+     "objectives": []
+    }
+   ],
+   "briefing": [
+    "OBSERVER: Unfortunately, I am away and cannot record the briefing at this time, I'm dealing with other matters. You, ah, nearly ran into him a while back. I won't be gone long and should be back by the time you are in the field, so you can still call with updates and observations. Below is your brief.",
+    "From: SỪNG TRÂU. VLF need you to find more Quân Liên Lục Địa [UICS] buildings on Châu thổ [DELTA]. Small thing while you there, check on Market Building for me. Kill all bọn thiết vệ [IGC] soldiers around the [Market Building], they are not supposed to be near, I have said to them many times. Continue your discretion.",
+    "OBSERVER: SỪNG TRÂU seems very worried about the H.A.S.; his worry might signify something deeper. FANG is unsure of the significance of his second request at this time but take out the IGC around the Market Building to stay in VLF favor. Good luck, get out and talk to you on DELTA."
+   ],
+   "rewards": [
+    {
+     "id": "Cash",
+     "name": "Cash",
+     "count": 4000,
+     "icon": true
+    },
+    {
+     "id": "MarkedCoin",
+     "name": "Marked Coin",
+     "count": 2,
+     "icon": false
+    },
+    {
+     "id": "Battery_Car",
+     "name": "Battery Car",
+     "count": 1,
+     "icon": true
+    },
+    {
+     "id": "Generator",
+     "name": "Generator",
+     "count": 1,
+     "icon": true
+    },
+    {
+     "id": "JPC_Plate_Carrier",
+     "name": "JPC Plate Carrier",
+     "count": 1,
+     "icon": true
+    }
+   ],
+   "kind": "Story"
+  },
+  "0005": {
+   "title": "Snake In The Grass",
+   "maps": [
+    "Delta"
+   ],
+   "steps": [
+    {
+     "title": "Pickup Poison",
+     "objectives": []
+    },
+    {
+     "title": "Poison Rice Fields",
+     "objectives": [
+      "Poison all marked rice fields on the map."
+     ]
+    },
+    {
+     "title": "Extract",
+     "objectives": []
+    }
+   ],
+   "questItems": [
+    "Poison"
+   ],
+   "briefing": [
+    "IGC has their second mission for you. I gotta warn you though, those bastards are gonna make you do some evil stuff to prove yourself. And they speak surprisingly good English in this message, I barely have to translate. FANG redacted some stuff here.",
+    "I am KSENIA MYRONOVA of the Iron Guard Corps, Жук [how they refer to the VLF, Жук] is eating from our rice fields. We know you are from west but trust FANG to bring in the ruthless best killers, soulless you must be. vermin. Go at night and avoid too much noise. If we feed them they will spread everywhere. They steal our food and use it to feed murderers. We need to poison the fields to prevent this. If they are allowed to continue they will rot this land… adkjflkadjflkadsjfkljadslkf sdaj fdskafkdsa kdfjkdsfjkladsjkdj dkjfkdj f kjkkjd.",
+    "The rest of the message is vile and I won’t breathe those words. MYRONOVA says… to place poison into the rice fields at three specific locations. She said this will ensure no VLF can eat from them, or if they do, they’ll die. I know it can be tough, doing missions that are so targeted at civilians, but this is the job, and you gotta do as they say. Know your actions are for the good of the region and if you follow through to the end here in Vietnam you will save countless lives. Prove yourself to them, steel your thoughts, good luck and get out."
+   ],
+   "rewards": [
+    {
+     "id": "Cash",
+     "name": "Cash",
+     "count": 3500,
+     "icon": true
+    },
+    {
+     "id": "PVS_31s_Night_Vision_Goggles",
+     "name": "PVS 31s Night Vision Goggles",
+     "count": 1,
+     "icon": false
+    },
+    {
+     "id": "Colt_M4A1",
+     "name": "Colt M4A1",
+     "count": 1,
+     "icon": true
+    },
+    {
+     "id": "AR-15_Colt_A2_Stanag_556x45_20Rnd",
+     "name": "AR-15 Colt A2 Stanag 5.56x45mm 20Rnd",
+     "count": 2,
+     "icon": true
+    },
+    {
+     "id": "556x45_FMJ",
+     "name": "5.56x45mm FMJ",
+     "count": 60,
+     "icon": true
+    }
+   ],
+   "kind": "Story"
+  },
+  "0007": {
+   "title": "The First Horseman",
+   "maps": [
+    "Bunker"
+   ],
+   "steps": [
+    {
+     "title": "Destroy Food Containers",
+     "objectives": [
+      "Go to the food storage area and destroy food containers."
+     ]
+    },
+    {
+     "title": "Extract",
+     "objectives": []
+    }
+   ],
+   "briefing": [
+    "OBSERVER: Unfortunately, I am away and cannot record the briefing at this time, I'm dealing with other matters, the same matter. I won't be gone long and should be back by the time you are in the field, so you can still call with updates and observations. Below is your brief.",
+    "From: KSENIA MYRONOVA. Жук [she means VLF] hide in their cave and eat like rats. The food is stolen from the hard-working Vietnamese people. It is food for war and for murder, not surviving. Destroy their food boxes. Leave them nothing.",
+    "OBSERVER: It seems they are on a kick of starving out their enemies. Already, FANG is seeing signs of famine among the VLF populace; it seems the IGC wish to push them even further. In this line of work, it's on the less heinous side, but I guess you know that. Good luck, get out."
+   ],
+   "rewards": [
+    {
+     "id": "Cash",
+     "name": "Cash",
+     "count": 4500,
+     "icon": true
+    },
+    {
+     "id": "AK_545x39_Drum_95rnd",
+     "name": "AK 5.45x39mm Drum 95rnd",
+     "count": 1,
+     "icon": true
+    },
+    {
+     "id": "Nails",
+     "name": "Nails",
+     "count": 2,
+     "icon": true
+    },
+    {
+     "id": "GasCan",
+     "name": "Gas Can",
+     "count": 1,
+     "icon": true
+    }
+   ],
+   "kind": "Story"
+  },
+  "0008": {
+   "title": "Easy Job",
+   "maps": [
+    "Delta"
+   ],
+   "steps": [
+    {
+     "title": "Kill IGC Soldier",
+     "objectives": [
+      "Kill IGC soldiers at any location."
+     ]
+    },
+    {
+     "title": "Extract",
+     "objectives": []
+    }
+   ],
+   "briefing": [
+    "Sorry, I was away for the past two missions… I had to deal with… other business. But I want you to know that I have been reading your reports and watching closely. It's good work. Getting out of BUNKER is not easy. I’m glad you made it, truly. For future missions near civilian areas look around as FANG has gotten missing persons reports from locals. Just keep your eyes peeled.",
+    "Now to the matter at hand. The VLF sent two missions for you, but they were a bit odd. First, FANG received a mission request from LÂM ALEXANDRE, sharing his anger and assigning you to kill a good dozen IGC soldiers. He noted that he suspected the recent attacks on their food stores to be IGC. LÂM said something about retaliation and keeping the IGC in their place. What's good is that there is no sign they know that you carried it out. That's where it got weird. Just an hour after FANG received that mission request, VLF sent over another, by SỪNG TRÂU. It was clearly hastily written, but said:",
+    "Killing so many is wrong. We do not think IGC destroyed our food. We can show them force as LÂM says but kill no more than two.",
+    "So, leadership infighting appears to continue. What a mess. Your mission is to kill just two IGC soldiers on DELTA. This feels like too little, but you do as they say. It is the duty of FANG Operators to not ask questions and trust that FANG has their interest at heart. You’ve been doing well thus far and you can be sure I’m looking into this. Good luck and get out."
+   ],
+   "rewards": [
+    {
+     "id": "MarkedCoin",
+     "name": "Marked Coin",
+     "count": 2,
+     "icon": false
+    },
+    {
+     "id": "Hesco_Armor_Plate",
+     "name": "Hesco Armor Plate",
+     "count": 2,
+     "icon": true
+    }
+   ],
+   "kind": "Story"
+  },
+  "0008x5": {
+   "title": "Dirty Work",
+   "maps": [
+    "Outskirts"
+   ],
+   "steps": [
+    {
+     "title": "Find Construction Site And Place Explosive",
+     "objectives": [
+      "Find Construction Yard.",
+      "Place Bomb at marked position."
+     ]
+    },
+    {
+     "title": "Extract",
+     "objectives": []
+    }
+   ],
+   "place": "Construction Yard",
+   "questItems": [
+    "Bomb"
+   ],
+   "briefing": [
+    "The IGC has a mission for you, Leader ILYA MAMONTOV sent the message:",
+    "“Клыки [you], the иностранцы Security [Foreigner Security, UICS] construction projects continue and you наёмник [mercenary], go place explosives to slow down their expansions.”",
+    "The IGC soldiers spend most of their time guarding their own sector of OUTSKIRTS; they seem reluctant to leave their compound. As such the IGC has asked you to damage the ongoing UICS construction and slow down their progress. They have supplied the explosives; you are just doing the dirty work. FANG interests align in this mission. The messier the explosion, the more conflict, the more they need you. Good luck, and get out."
+   ],
+   "tips": [
+    "Buy the bombs at the marketplace."
+   ],
+   "rewards": [
+    {
+     "id": "RGO_Grenade",
+     "name": "RGO Grenade",
+     "count": 6,
+     "icon": true
+    }
+   ],
+   "kind": "Story"
+  },
+  "0009": {
+   "title": "Opening Eyes - Part 2",
+   "maps": [
+    "Delta"
+   ],
+   "steps": [
+    {
+     "title": "Antenna Piece",
+     "objectives": [
+      "Find & Retrieve the second Antenna Piece."
+     ]
+    },
+    {
+     "title": "Upgrade Intel Center",
+     "objectives": [
+      "Use second Antenna Piece to upgrade Intel Center."
+     ]
+    }
+   ],
+   "questItems": [
+    "Antenna Piece 2"
+   ],
+   "briefing": [
+    "FANG has set up and shipped the next piece of the antenna through the IGC on DELTA. Go now, look around, and find the truck, package 0102003. It will be in the same type of box and contain the second of the three parts for the satellite antenna. It's just as big as the other one so pack light and stay agile. Oh, and FANG wanted me to tell you that things were a bit rougher getting the package slipped into the supply stream due an intense passing storm.",
+    "Honestly, when I heard it I couldn’t believe FANG had lowered its standards and let a low quality trash employee who would be bothered by a storm, no matter how intense it might be, into their ranks. But I’ve been assured he has been dealt with. As a result of his shortcomings the antenna piece could be in the back of a different delivery truck, so dig a little. Good luck and, as you know, get out."
+   ],
+   "rewards": [
+    {
+     "id": "Cash",
+     "name": "Cash",
+     "count": 5100,
+     "icon": true
+    },
+    {
+     "id": "Surefire_SOCOM556-MONSTER_Suppressor",
+     "name": "Surefire SOCOM556-MONSTER Suppressor",
+     "count": 1,
+     "icon": true
+    },
+    {
+     "id": "Fortis_SHIFT_Vertical_Foregrip",
+     "name": "Fortis SHIFT Vertical Foregrip",
+     "count": 1,
+     "icon": true
+    }
+   ],
+   "kind": "Story"
+  },
+  "0010": {
+   "title": "Patrol Overlap",
+   "maps": [
+    "Quarry"
+   ],
+   "steps": [
+    {
+     "title": "Retrieve Documents",
+     "objectives": [
+      "Find & collect first blueprint.",
+      "Find & collect second blueprint."
+     ]
+    },
+    {
+     "title": "Hand In Documents",
+     "objectives": [
+      "Deliver first blueprint.",
+      "Deliver second blueprint."
+     ]
+    }
+   ],
+   "questItems": [
+    "Construction HxAxS Blueprint Layout Guide",
+    "Construction HxAxS Blueprint Materials List"
+   ],
+   "briefing": [
+    "The VLF and SỪNG TRÂU have another mission for you, responding to the many soldiers that were around the H.A.S., the Humanitarian Aid Site. FANG intelligence will only call it a patrol overlap, but SỪNG TRÂU seems intent on squeezing out every last detail from those buildings. He clearly sees some rot in those walls. Regardless, if he cares, you are there. Here is what he sent:",
+    "Cảm ơn sự cố gắng của anh. Tôi mong chúng ta sẽ được hợp tác dài lâu cùng nhau [he appreciates what you’ve done and sees a long road of corporation ahead]. I need more information about bọn tây [UICS] buildings. Go to location one, and location two. [I’ll tell you the places in a second] Get blueprints of building construction. I am worried by all of the antenna, tracking me, trying to find me. Bring back to me.",
+    "His directions were vague, but FANG has found the two locations he meant. Check each of them out and see what blueprints you can find for the H.A.S. You are being sent a little deeper into QUARRY than you might have previously explored, so plan ahead: close quarters, flashlight, etc. You’re going to be all over QUARRY, so try to minimize exposure. Good luck and get out."
+   ],
+   "rewards": [
+    {
+     "id": "Cash",
+     "name": "Cash",
+     "count": 5500,
+     "icon": true
+    },
+    {
+     "id": "Toolbox",
+     "name": "Toolbox",
+     "count": 1,
+     "icon": true
+    },
+    {
+     "id": "OldFlashlight",
+     "name": "Old Flashlight",
+     "count": 2,
+     "icon": true
+    },
+    {
+     "id": "Nylon_Fabric",
+     "name": "Nylon Fabric",
+     "count": 2,
+     "icon": true
+    }
+   ],
+   "kind": "Story"
+  },
+  "0013": {
+   "title": "Probation",
+   "maps": [
+    "Quarry"
+   ],
+   "steps": [
+    {
+     "title": "Kill UICS In Factory",
+     "objectives": [
+      "Kill UICS soldiers at factory."
+     ]
+    },
+    {
+     "title": "Download Data",
+     "objectives": [
+      "Download weather data at terminal."
+     ]
+    },
+    {
+     "title": "Extract",
+     "objectives": []
+    }
+   ],
+   "place": "Factory",
+   "briefing": [
+    "IGC has a new mission for you, but first, FANG has issued a warning:",
+    "FANG’s intelligence operations have had to go underground for the moment to avoid higher scrutiny. Our contacts’ last message was that a rogue figure’s movements in QUARRY were recorded and connected to a similar figure’s past actions in the area. While we do not think they know your name, or have linked it to the Operator they have hired on, they are building a profile, and we fear it won’t be long before they have made the connections.",
+    "What the fuck. Did. You. Do. Straying from optimal operation lines — killing non-targets — is dangerous. I just want to remind you who you work for. FANG is infamous the world over, spoken of highly in all the darkest corners and most secure rooms. The higher-ups have connects so deep they might as well be bloodlines. You've… you've threatened many lives with your carelessness, and now, your own. Deal with the consequences. These consequences, our informants report, come in the form of a specialized UICS sniper, known as MONSTERA. Monstera’s role is to hunt down anomalies. Spies. You. All I can say is watch your back while in QUARRY. Don’t die. By staying alive, you will prove that this mistake was just a small hiccup. But back to the matter at hand.",
+    "Leader ILYA MAMONTOV of the IGC is angry. Of course he is. When is he not? Just like the rest of the IGC leadership. His message reads as follows, I’ve unredacted just a small taste of the colorful language so you can get an idea of who you are dealing with:",
+    "Сволочь, Сука, Мудак, going where they do not belong, killing our people in the продовольственный банк [H.A.S.] They are hypocrites, lying about “good for the people”. They are invading and do not want us to notice. They think we will take this lying down, like bitches asleep. Do you know that they are doing evil tests? That they do research and walk around with antennas like bugs. They are the ones who are Блядь. [essentially whore] BLAH BLAH BLAH BBLBLALAHAIHBHBLAJ BPAHLBH ABLH BLAH BLAH BLAH BBLBLALAHAIHBHBLAJ BPAHLBH ABLH n lines is DANGEROUS. You've, you've threatened all of the lives involved, and now, your own.",
+    "He goes on for a while, but eventually ILYA MAMONTOV says:",
+    "QUARRY has a factory, it is beating heart of the Western Machine. Shoot anyone you like and stop their operations there. I know you FANG are vicious bastards.",
+    "So, shoot up the factory and draw some blood to satiate their bloodlust, I suppose.",
+    "There is something else FANG needs you to do while you are in the factory. In the office, there will be a terminal with important data related to the final operation of the satellite. Download the data there to your GCPS and submit it back to FANG. When prompted, you will need to enter a password. Luckily, FANG intelligence has sourced them for you. You can find them in a text document in the terminal. That’s all for now. Let this be your only failure. And get out."
+   ],
+   "rewards": [
+    {
+     "id": "Cash",
+     "name": "Cash",
+     "count": 8000,
+     "icon": true
+    },
+    {
+     "id": "MarkedCoin",
+     "name": "Marked Coin",
+     "count": 1,
+     "icon": false
+    },
+    {
+     "id": "Remington_M700",
+     "name": "Remington M700",
+     "count": 1,
+     "icon": true
+    },
+    {
+     "id": "x338_AP",
+     "name": ".338 AP",
+     "count": 30,
+     "icon": true
+    },
+    {
+     "id": "M700_PGW_Timberwolf_Suppressor",
+     "name": "M700 PGW Timberwolf Suppressor",
+     "count": 1,
+     "icon": true
+    }
+   ],
+   "kind": "Story"
+  },
+  "0011": {
+   "title": "Misplaced Judgement",
+   "maps": [
+    "Quarry"
+   ],
+   "steps": [
+    {
+     "title": "Clear Area",
+     "objectives": [
+      "Kill all enemies near the docks."
+     ]
+    },
+    {
+     "title": "Turn In Missing Supplies.",
+     "objectives": [
+      "Buy \"Missing Supplies\" from the marketplace and turn them in."
+     ]
+    }
+   ],
+   "questItems": [
+    "Basic Machine Parts"
+   ],
+   "briefing": [
+    "IGC KSENIA MYRONOVA has found and identified the empty crates from both of the smuggled antenna pieces and has blamed them, luckily, on the UICS. She sent the following:",
+    "This is KSENIA MYRONOVA of the Iron Guard Corps. There are more rats in Vietnam. This time from UICS. They have stolen out of our trucks. These western fuckers did it twice. Adfasdkjjf lkdas f dsakfjdsk fkdasj fkasd jj kj kfdj k I think they keep some supplies in a small river building. Clear them out. Confirm the stolen supplies and bring them back.",
+    "Alright, clear out the small Quarry Docks like the IGC asked, but as you know there are no supplies that the UICS stole. FANG did well in setting up the packages to place the blame on the UICS. In anticipation of this moment, FANG has kept the items they replaced when smuggling the antenna pieces. The “missing supplies” have been routed to you via the VLF in the marketplace. While FANG has withheld making a judgment about what the missing supplies are for, they seem to be parts for a substation or other similar facility. Probably something the IGC stole from elsewhere. Just make sure to get the parts from the marketplace; they are called “basic machine parts,” and then turn them into the IGC when you get back from the field. Good luck, and get out."
+   ],
+   "rewards": [
+    {
+     "id": "Cash",
+     "name": "Cash",
+     "count": 6000,
+     "icon": true
+    },
+    {
+     "id": "BathroomCleaner",
+     "name": "Bathroom Cleaner",
+     "count": 1,
+     "icon": true
+    },
+    {
+     "id": "Soap",
+     "name": "Soap",
+     "count": 1,
+     "icon": false
+    },
+    {
+     "id": "ShavingCream",
+     "name": "Shaving Cream",
+     "count": 1,
+     "icon": true
+    },
+    {
+     "id": "D3CRX_Unarmored_Rig",
+     "name": "D3CRX Unarmored Rig",
+     "count": 2,
+     "icon": true
+    }
+   ],
+   "kind": "Story"
+  },
+  "0012": {
+   "title": "Active Listening",
+   "maps": [
+    "Delta"
+   ],
+   "steps": [
+    {
+     "title": "Bug The Warehouse",
+     "objectives": [
+      "Place the bugs at the warehouse."
+     ]
+    },
+    {
+     "title": "Clear H.A.S.",
+     "objectives": [
+      "Kill all enemies at the overrun H.A.S."
+     ]
+    },
+    {
+     "title": "Extract",
+     "objectives": []
+    }
+   ],
+   "questItems": [
+    "Bug"
+   ],
+   "briefing": [
+    "The UICS at last has more missions for you. Finally! I’ll tell you, the Handlers were getting worried that it took them this long to ask for your services. The message comes from DALIA SLOAN; she sent it over in English. The mission:",
+    "[From] DALIA SLOAN // [to] FANG Operator // Operation Lock: IGC has removed our bugs from the two isolated warehouses we had been monitoring. We respect the privacy of the locals, and it is important to us that our intelligence remains limited to areas of concern. In following that creed, find the two locked warehouses with steel doors, and only place a bug across from each.",
+    "FANG had to wait to give this to you, and, in that time, they sent over another mission.",
+    "[From] DALIA SLOAN // [to] FANG Operator // Operation Key: Troops in the surrounding area have moved in on our Humanitarian Aid Sites. If they are allowed to remain in control of our Aid Site, it would result in an elevated starvation risk for the civilian population we are trying to serve. IGC has taken one of our bigger buildings in the DELTA region, and we need you to retake it, remove the IGC soldier presence, and return it to the UICS aid activities.",
+    "They really cash in all at once don’t they? Find and bug those warehouses of concern. Their location away from the main warehouse district does make them noteworthy, I suppose, but beyond that being in the field will have to tell. Watch open sightlines on the streets and take out the IGC on the H.A.S. they have taken over. Good luck, stay safe, and get out."
+   ],
+   "tips": [
+    "Buy the bugs from the marketplace."
+   ],
+   "rewards": [
+    {
+     "id": "Cash",
+     "name": "Cash",
+     "count": 6000,
+     "icon": true
+    },
+    {
+     "id": "MarkedCoin",
+     "name": "Marked Coin",
+     "count": 3,
+     "icon": false
+    },
+    {
+     "id": "AK-104",
+     "name": "AK-104",
+     "count": 2,
+     "icon": true
+    },
+    {
+     "id": "Fuel",
+     "name": "Fuel",
+     "count": 1,
+     "icon": true
+    }
+   ],
+   "kind": "Story"
+  },
+  "0014": {
+   "title": "24/7 Live Feed",
+   "maps": [
+    "Delta"
+   ],
+   "steps": [
+    {
+     "title": "Place Cameras",
+     "objectives": [
+      "Place the cameras at the marked locations."
+     ]
+    },
+    {
+     "title": "Extract",
+     "objectives": []
+    }
+   ],
+   "questItems": [
+    "Surveillance Camera"
+   ],
+   "briefing": [
+    "UICS CHARLES BARRELL has a follow-up mission based on your work placing bugs for them. A quick note, FANG is having external difficulties getting the third piece of the satellite antenna to you. They are working to resolve the issues, but this time have a good team on it. Be patient and just stay on task. Alright, looks like UICS might have found something on DELTA:",
+    "[From] CHARLES BARRELL // [to] FANG Operator // Operation Tree-House: There is odd activity leading out from the center of DELTA towards an old building in an inactive area of the region. Our records and reconnaissance show that the building is an abandoned Market astir with a new purpose — which purpose, however, is unknown. It seems to be frequented by a concerning combination of IGC and the general Vietnamese populace. Previous passes by intelligence have identified a foot trail leading away from the building as a main location of activity. We have provided you with 5 cameras, connected to our servers, to place at specific locations along the trail for 24-hour monitoring.",
+    "Huh…VLF SỪNG TRÂU also had you check up on the Market a while back too... Anyway, place the five cameras the UICS provided at the designated vantage points along the foot trail behind the previously-abandoned Market on DELTA. Good luck and get out."
+   ],
+   "tips": [
+    "Buy the cameras at the marketplace."
+   ],
+   "rewards": [
+    {
+     "id": "Cash",
+     "name": "Cash",
+     "count": 5300,
+     "icon": true
+    },
+    {
+     "id": "MarkedCoin",
+     "name": "Marked Coin",
+     "count": 2,
+     "icon": false
+    },
+    {
+     "id": "OldRadio",
+     "name": "Old Radio",
+     "count": 1,
+     "icon": true
+    }
+   ],
+   "kind": "Story"
+  },
+  "0015": {
+   "title": "Destruction of Private Property",
+   "maps": [
+    "Quarry"
+   ],
+   "steps": [
+    {
+     "title": "Destroy Generator",
+     "objectives": [
+      "Destroy the generator near the H.A.S."
+     ]
+    },
+    {
+     "title": "Retrieve Keys",
+     "objectives": [
+      "Find & collect small H.A.S. key.",
+      "Find & collect medium H.A.S. key.",
+      "Find & collect large H.A.S. key."
+     ]
+    },
+    {
+     "title": "Extract",
+     "objectives": []
+    }
+   ],
+   "briefing": [
+    "VLF finally has their ducks in a row and wants you to actually do something about the H.A.S. It seems their paranoia has been validated. FANG looked over the blueprints that you brought back in your earlier mission. As you should have noticed from your explorations and the schematics, several of the larger H.A.S. have large, windowless back rooms that are locked. The documents hint that they were created to house research operations, of what kind FANG declined to assume. But the various antennas sprouting from the roof hint that perhaps they are attempting something related to the purpose of your assignment with FANG. Anyway, SỪNG TRÂU sent the following:",
+    "I am right. Leader LÂM said again and again not worry. But bọn tây and the Quân Liên Lục Địa [UICS] are after me. All the ăng ten [antennas] are trying to spy on người Việt. [the Vietnamese people] I need know what is inside. I looked at building plans, and there a way to enter the locked room. I need know what is inside. I looked at building plans, and there a way to enter the locked room. [this is all vietnamese here. Ok, it translates to: “A mechanical generator powers one of the H.A.S. One that is isolated from the military base on QUARRY. UICS thinks this makes it more resilient. If you shoot and destroy the generator, the door can be unlocked. Inside, I think you should find the keys to get past the doors in the other building.”] Do not speak of this to Leader LÂM, you stay quiet.",
+    "Destroy the generator near the electrically isolated H.A.S., infiltrate the back room, and make sure to get any keys you find there. Good luck and get out safely."
+   ],
+   "rewards": [
+    {
+     "id": "Cash",
+     "name": "Cash",
+     "count": 8200,
+     "icon": true
+    },
+    {
+     "id": "Duct_Tape",
+     "name": "Duct Tape",
+     "count": 2,
+     "icon": true
+    },
+    {
+     "id": "OldRadio",
+     "name": "Old Radio",
+     "count": 2,
+     "icon": true
+    },
+    {
+     "id": "45ACP_HS",
+     "name": ".45ACP HS",
+     "count": 90,
+     "icon": true
+    }
+   ],
+   "kind": "Story"
+  },
+  "0016": {
+   "title": "Need-To-Know",
+   "maps": [
+    "Quarry"
+   ],
+   "steps": [
+    {
+     "title": "Download Footage",
+     "objectives": [
+      "Download camera footage from Quarry at a terminal."
+     ]
+    },
+    {
+     "title": "Extract",
+     "objectives": []
+    }
+   ],
+   "briefing": [
+    "OBSERVER: Unfortunately, I am away and cannot record the briefing at this time, I'm dealing with other matters. I won’t be gone long and should be back by the time you are in the field, so you can still call with updates and observations. Below is your brief.",
+    "From: UICS: CHARLES BARRELL // FANG Operator// Operation Tree-House Down: Your work and placement of the cameras was commendable despite their rapid subsequent destruction. The UICS has learned a lot during their brief operation and will communicate when our plans have further need of your services.",
+    "OBSERVER: Judging by what they wrote, the footage from the cameras was very insightful. Unfortunately, they did not communicate to you or FANG what they saw. If what was captured is as valuable as they hint it to be, FANG needs to know. Hack into the terminal on QUARRY and download the footage. Good luck and get out."
+   ],
+   "rewards": [
+    {
+     "id": "Cash",
+     "name": "Cash",
+     "count": 4900,
+     "icon": true
+    },
+    {
+     "id": "PowerCable",
+     "name": "Power Cable",
+     "count": 2,
+     "icon": true
+    }
+   ],
+   "kind": "Story"
+  },
+  "0017": {
+   "title": "Looking Up to See Below",
+   "maps": [
+    "Bunker"
+   ],
+   "steps": [
+    {
+     "title": "Place USB",
+     "objectives": [
+      "Buy USB Drive at vendor & place it in Command Room."
+     ]
+    },
+    {
+     "title": "Download Data",
+     "objectives": [
+      "Download weather data at terminal."
+     ]
+    },
+    {
+     "title": "Extract",
+     "objectives": []
+    }
+   ],
+   "questItems": [
+    "USB Drive"
+   ],
+   "briefing": [
+    "OBSERVER: Unfortunately, I am away and cannot record the briefing at this time, I'm dealing with other matters. I won’t be gone long and should be back by the time you are in the field, so you can still call with updates and observations. Below is your brief.",
+    "From UICS: CHARLES BARRELL // FANG Operator // Operation Limelight: The footage from the cameras you placed surrounding the Market Building has revealed some involvement by VLF soldiers. Covertly deliver the provided USB drive, with a copy of the footage, to the command room on BUNKER. Avoid being seen.",
+    "OBSERVER: FANG looked at the footage themselves, and, indeed, it does show VLF soldiers. In the video, soldiers lead a line of locals out the back of the Market and along the trail where you placed the cameras. The people are then loaded onto a truck and driven off. FANG analysis determined it to be an IGC truck. It seems some treacherous soldiers have been at work. UICS cannot expose any internal VLF issues right now without it being seen with suspicion. Hence, FANG's involvement. Hopefully, VLF leadership takes action against the dirty segments in their ranks. I bet the next mission the VLF assigns you will be quite revealing; maybe you'll be asked to root them out yourself.",
+    "Also, FANG needs you to get to a terminal while you are in BUNKER and download the VLF’s data for the final satellite operation. Its just a little bit of information, but FANG wants me to tell you about the purpose of the downloads:",
+    "Each faction has access to historical weather data in areas that the satellite will not be able to cover. Obtaining this information will help ensure we have full coverage of the region.",
+    "For now, deliver the USB to the command room in BUNKER. Records show the room may not look like much, but UICS is sure the bosses will see it there. Oh, and don’t forget to download the weather data to your GCPS. Good luck and get out"
+   ],
+   "rewards": [
+    {
+     "id": "Cash",
+     "name": "Cash",
+     "count": 8400,
+     "icon": true
+    },
+    {
+     "id": "MarkedCoin",
+     "name": "Marked Coin",
+     "count": 1,
+     "icon": false
+    },
+    {
+     "id": "Bunker_Large_Safe_key",
+     "name": "Bunker Large Safe Key",
+     "count": 1,
+     "icon": true
+    },
+    {
+     "id": "DLSR_Camera",
+     "name": "DLSR Camera",
+     "count": 1,
+     "icon": true
+    }
+   ],
+   "kind": "Story"
+  },
+  "0018": {
+   "title": "Throwing Stones",
+   "maps": [
+    "Quarry"
+   ],
+   "steps": [
+    {
+     "title": "Kill UICS",
+     "objectives": [
+      "Kill UICS soldiers on Quarry."
+     ]
+    },
+    {
+     "title": "Extract",
+     "objectives": []
+    }
+   ],
+   "briefing": [
+    "VLF has assigned you a mission. My other tasks have been resolved for the moment, and I can be fully present, though I have been watching. A quick recap to ensure we are on the same page: You were sent to get a copy of the footage from the trail cameras, and through it both the UICS and FANG found evidence that the VLF was involved at the market. You dropped off a USB with the footage, hoping the VLF would deal with their own internal issues. Now, SỪNG TRÂU has assigned you a mission, though it’s not the response I am sure either of us expected. Here is what he said:",
+    "I am impressed that you have not told others what you do for me. You do good by keeping up appearances by work with Leader LÂM also. Lực lượng An ninh Liên lục địa [the UICS] have crossed the line. They attack the Mặt Trận Giải Phóng Việt Nam [VLF]. They say they here to help our people but spy bọn tây left traces. They kill anh em giải phóng [Liberation Brothers] and adskjflkasdjf dskfjkldsj fk dkjfkdf kdjfkdjfkdjfkd fjj. Fight back!",
+    "He did not address the footage at all, and FANG has not noted large amounts of UICS slaughter in the way he implies. Those “traces” are probably the USB drive you left, though he’s still playing his cards close to his chest. Given their infighting, it may be that LÂM ALEXANDRE has not seen the footage if SỪNG TRÂU got to it first. It could be that SỪNG TRÂU is waiting before dealing with their internal problems… I’m sure you will be contacted to deal with those problems when the time comes. You’ve certainly become invaluable to him. Congrats. Anyway, your mission: take out a significant number of UICS. If you have ethical concerns, feel free to purge the especially violent ideologues among them. Good luck and get out."
+   ],
+   "rewards": [
+    {
+     "id": "Cash",
+     "name": "Cash",
+     "count": 1300,
+     "icon": true
+    },
+    {
+     "id": "MarkedCoin",
+     "name": "Marked Coin",
+     "count": 3,
+     "icon": false
+    }
+   ],
+   "kind": "Story"
+  },
+  "0019": {
+   "title": "Hot Trail",
+   "maps": [
+    "Delta"
+   ],
+   "steps": [
+    {
+     "title": "Retreive Paper",
+     "objectives": [
+      "Find & collect Troop Movement Paper"
+     ]
+    },
+    {
+     "title": "Download Data",
+     "objectives": [
+      "Download weather data at terminal."
+     ]
+    },
+    {
+     "title": "Hand In Documents",
+     "objectives": [
+      "Deliver troop movement paper."
+     ]
+    }
+   ],
+   "questItems": [
+    "Troop Movement Paper"
+   ],
+   "briefing": [
+    "VLF Leader LÂM ALEXANDRE has sent a mission where he seems worried about IGC movements. His eyes are turned towards DELTA and the IGC in a way that your previous VLF missions have not been. It could be a more genuine addressing of the military threat that the IGC poses to the VLF. This is what he sent:",
+    "I know SỪNG TRÂU uses you for many missions. You will do this for me. Get the papers on troop movement from the command housing on DELTA. While SỪNG TRÂU does not care about or enemy, I do.",
+    "It’s short. Seems a bit operational. A bit too normal a response if he had seen the footage or heard about what it contained from the other VLF leadership. It's certainly something to note. Also, FANG wants you to use this opportunity to download the last of the faction weather data. I’ve been authorized to share the following:",
+    "The last piece of the satellite antenna is inbound through the same IGC trucks. It will not arrive for several days. Given the imminent completion of the antenna, it is now important that you know about its operation. The satellite that will periodically orbit over Vietnam reads, among other things, temperature data. This is the same reason you are acquiring each faction’s regional weather data. Due to the positioning of the satellite, its readings cannot cover the full region needed. The data you have been collecting fills in those gaps. These specific temperature readings include the W-Band, 75 to 110 GHz, our primary region of interest. Upon completing the satellite connection, FANG will be able to spot anomalies in the region.",
+    "FANG are still being cagey, aren't they? But what you need to complete is clear. Quick recap: DELTA, command housing papers, communication building, download GCPS temperature data, good luck, get out."
+   ],
+   "rewards": [
+    {
+     "id": "Cash",
+     "name": "Cash",
+     "count": 8750,
+     "icon": true
+    },
+    {
+     "id": "MarkedCoin",
+     "name": "Marked Coin",
+     "count": 4,
+     "icon": false
+    },
+    {
+     "id": "High_Cut_LSHZ_Helmet",
+     "name": "High Cut LSHZ Helmet",
+     "count": 1,
+     "icon": true
+    }
+   ],
+   "kind": "Story"
+  },
+  "0020": {
+   "title": "Opening Eyes - Part 3",
+   "maps": [
+    "Delta"
+   ],
+   "steps": [
+    {
+     "title": "Antenna Piece",
+     "objectives": [
+      "Find & Retrieve the third Antenna Piece."
+     ]
+    }
+   ],
+   "briefing": [
+    "It is finally time. The third and final piece to get the satellite connection online is en route and should be in the same trucks in box 0610001. FANG reported that each earlier stage of getting it to you was a success. All that's left is for you to locate the truck and bring back the part. It's smaller than the others, but still don't go in with a full pack. FANG also finally sees fit to tell you the following:",
+    "FANG has many partners. Your assignment in Vietnam was ordered by the international company, TELOCK. You may have already seen their presence. While primarily they operate in logistics, the reason you are here is to find a piece of equipment from their medical branch. This equipment is used in hospitals for important procedures, but, due to its high-powered nature, it can be used for harm in the wrong hands. Its use creates small spikes in frequency bands that both the faction weather data and the satellite pick up. Tracking down that medical equipment will be your next focus once the antenna is operational.",
+    "Sometimes their level of “professionalism” really gets in the way. I think this is the kind of information you should have known earlier. At least now you know what you’re doing here. But you are not quite there yet. Get this last piece. Good luck, get out."
+   ],
+   "rewards": [
+    {
+     "id": "Cash",
+     "name": "Cash",
+     "count": 8900,
+     "icon": true
+    },
+    {
+     "id": "MarkedCoin",
+     "name": "Marked Coin",
+     "count": 1,
+     "icon": false
+    },
+    {
+     "id": "Graphics_Card",
+     "name": "Graphics Card",
+     "count": 1,
+     "icon": true
+    },
+    {
+     "id": "Mining_Battery",
+     "name": "Mining Battery",
+     "count": 1,
+     "icon": true
+    }
+   ],
+   "kind": "Story"
+  },
+  "0021": {
+   "title": "Hide and Seek",
+   "maps": [
+    "Quarry"
+   ],
+   "steps": [
+    {
+     "title": "Antenna Piece",
+     "objectives": [
+      "Find & Retrieve the third Antenna Piece."
+     ]
+    },
+    {
+     "title": "Upgrade Intel Center",
+     "objectives": [
+      "Use third Antenna Piece to upgrade Intel Center."
+     ]
+    }
+   ],
+   "questItems": [
+    "Antenna Piece 3"
+   ],
+   "briefing": [
+    "The person responsible for the oversight in transportation of the antenna pieces has been dealt with. FANG is now certain that the shipment was intercepted by UICS before it ever reached DELTA. It is most likely in a shipping container near the QUARRY military base. At least, that is FANG’s best guess. Once again, you are still looking for box 0610001. It will look similar to the last two. Watch your six extremely carefully. You are close. Good luck, get out."
+   ],
+   "rewards": [
+    {
+     "id": "Cash",
+     "name": "Cash",
+     "count": 10000,
+     "icon": true
+    },
+    {
+     "id": "EOTECH_CNVDT_1x_Thermal_Scope",
+     "name": "EOTECH CNVDT 1x Thermal Scope",
+     "count": 1,
+     "icon": true
+    },
+    {
+     "id": "Wartech-TV-110_Armored_Rig",
+     "name": "Wartech-TV-110 Armored Rig",
+     "count": 1,
+     "icon": false
+    }
+   ],
+   "kind": "Story"
+  },
+  "0022": {
+   "title": "Sweet Tooth",
+   "maps": [
+    "Delta"
+   ],
+   "steps": [
+    {
+     "title": "Hand In Items",
+     "objectives": []
+    }
+   ],
+   "briefing": [
+    "FANG wants you to get the satellite antenna installed as soon as possible, but something else has come up first. Until this is resolved, FANG is pausing work on the satellite antenna installation. FANG sent the following:",
+    "Footage captured from the cameras you placed on DELTA have revealed the identity of one of the individuals — SỪNG TRÂU. If he is involved to the degree we think, the least of his crimes include human trafficking while employing the use of the IGC truck shipping routes. At this time, FANG needs any further actions against him to come from the UICS, but they seem hesitant, so you will need to convince them with more evidence. A defining characteristic of SỪNG TRÂU is his obsession with HỔ ĐÒ cigarettes, possibly going so far as to use them for his secret message system. Even more peculiar, his favorite snack, a condensed creamer. He seems particularly fond of a label-misprint edition. This quirk is also known by the UICS. FANG believes both the cigarettes and creamer could be present in two important locations and may be helpful in convincing the UICS of his involvement.",
+    "I've been instructed to relay the rest myself. Almost like they acknowledge it requires a more personal touch sometimes. Anyway…",
+    "The first location is the Market. Investigate thoroughly and bring back any items that match the above descriptions.",
+    "The second location is a spacious alley elsewhere on DELTA. Video forensics has linked several trafficked locals to their previous routines around that area. FANG believes that the space may be used as a part of a trafficking operation that involves sending locals to the Market.",
+    "Well… that concludes what I’ve been required to communicate. No wonder SỪNG TRÂU didn’t act on the information you delivered. If he is indeed responsible for human trafficking, he must have kept the footage from getting out. Just…. This job can get to you if you are not careful, working for people like him. Also, how weird is this guy’s taste! Condensed cream? His taste is definitely odd, but UICS knows that about him too.",
+    "But, to summarize, confirm if it really is him by searching the alley and Market, finding SỪNG TRÂU’s personal clues, and turning the items over to FANG and UICS in the safehouse. Good luck and get out."
+   ],
+   "rewards": [
+    {
+     "id": "Cash",
+     "name": "Cash",
+     "count": 20000,
+     "icon": true
+    },
+    {
+     "id": "762x51_M62",
+     "name": "7.62x51mm M62",
+     "count": 40,
+     "icon": true
+    }
+   ],
+   "kind": "Story"
+  },
+  "0023": {
+   "title": "Root Canal",
+   "maps": [
+    "Bunker"
+   ],
+   "steps": [
+    {
+     "title": "Kill Sừng Trâu",
+     "objectives": []
+    },
+    {
+     "title": "Extract",
+     "objectives": []
+    }
+   ],
+   "briefing": [
+    "Your effort collecting cans wasn’t for nothing, Operator. The UICS has agreed that there needs to be action, and the evidence you’ve sent has corroborated their own findings. They have given the following mission:",
+    "[From] DALIA SLOAN // [to] FANG Operator // Operation Out of The Basement: SỪNG TRÂU of the VLF has been engaged in the human trafficking of Vietnamese locals. While they approach the Market and walk out willingly, evidence shows they are coerced with starvation and a promise of food, all under the name of a scientific “study.” VLF food stores have been running low, and our Humanitarian Aid Sites have been met with hostility, preventing local people from coming to us for food. Once they have been guided out of the market, they board a truck that delivers the people to the locked warehouses elsewhere on DELTA. The bugs you placed there were essential in making this connection. The purpose of this system is unclear, but working with the IGC and the starvation of his own people is enough to condemn SỪNG TRÂU. Kill him.",
+    "Removing SỪNG TRÂU will no doubt be a great gift to Red River. How many of those missing person posters have you seen that could all be linked to this? When he's not committing war crimes, SỪNG TRÂU usually operates in the center of BUNKER. Time is of the essence, so terminate him now at BUNKER. Good luck, kill him, and get out."
+   ],
+   "rewards": [
+    {
+     "id": "Cash",
+     "name": "Cash",
+     "count": 30000,
+     "icon": true
+    },
+    {
+     "id": "MarkedCoin",
+     "name": "Marked Coin",
+     "count": 8,
+     "icon": false
+    }
+   ],
+   "kind": "Story"
+  },
+  "0002_A": {
+   "title": "Reconnaissance - Bunker",
+   "maps": [
+    "Bunker"
+   ],
+   "steps": [
+    {
+     "title": "Locate Areas",
+     "objectives": [
+      "Find the Cave.",
+      "Find Food Storage.",
+      "Find the Med Bay.",
+      "Find the Control Room.",
+      "Find the Industrial Zone."
+     ]
+    }
+   ],
+   "briefing": [
+    "Explore and get familiar with Bunker!"
+   ],
+   "rewards": [
+    {
+     "id": "Cash",
+     "name": "Cash",
+     "count": 2000,
+     "icon": true
+    }
+   ],
+   "kind": "Reconnaissance"
+  },
+  "0002_B": {
+   "title": "Reconnaissance - Delta",
+   "maps": [
+    "Delta"
+   ],
+   "steps": [
+    {
+     "title": "Locate Areas",
+     "objectives": [
+      "Find Eastern Village.",
+      "Find Western Village.",
+      "Find Train Depot.",
+      "Find School.",
+      "Find Warehouse."
+     ]
+    }
+   ],
+   "briefing": [
+    "Explore and get familiar with Delta!"
+   ],
+   "rewards": [
+    {
+     "id": "Cash",
+     "name": "Cash",
+     "count": 2000,
+     "icon": true
+    }
+   ],
+   "kind": "Reconnaissance"
+  },
+  "0002_C": {
+   "title": "Reconnaissance - Quarry",
+   "maps": [
+    "Quarry"
+   ],
+   "steps": [
+    {
+     "title": "Locate Areas",
+     "objectives": [
+      "Find Quarry.",
+      "Find Fishing Village.",
+      "Find Military Base.",
+      "Find Factory.",
+      "Find Cave."
+     ]
+    }
+   ],
+   "briefing": [
+    "Explore and get familiar with Quarry!"
+   ],
+   "rewards": [
+    {
+     "id": "Cash",
+     "name": "Cash",
+     "count": 2000,
+     "icon": true
+    }
+   ],
+   "kind": "Reconnaissance"
+  },
+  "0002_D": {
+   "title": "Reconnaissance - Outskirts",
+   "maps": [
+    "Outskirts"
+   ],
+   "steps": [
+    {
+     "title": "Locate Areas",
+     "objectives": [
+      "Find Construction Yard.",
+      "Find Gas Station.",
+      "Find Lumber Warehouse.",
+      "Find Train Station.",
+      "Find Warehouse Compound."
+     ]
+    }
+   ],
+   "briefing": [
+    "Explore and get familiar with Outskirts!"
+   ],
+   "rewards": [
+    {
+     "id": "Cash",
+     "name": "Cash",
+     "count": 2000,
+     "icon": true
+    }
+   ],
+   "kind": "Reconnaissance"
+  },
+  "0003_A": {
+   "title": "Reconnaissance - Traders",
+   "maps": [
+    "Bunker",
+    "Delta",
+    "Outskirts",
+    "Quarry"
+   ],
+   "steps": [
+    {
+     "title": "Trade with all Traders",
+     "objectives": [
+      "Trade with each trader."
+     ]
+    }
+   ],
+   "briefing": [
+    "Explore and get familiar with Outskirts!"
+   ],
+   "rewards": [
+    {
+     "id": "Cash",
+     "name": "Cash",
+     "count": 2000,
+     "icon": true
+    }
+   ],
+   "kind": "Reconnaissance"
+  }
+ }
+}

@@ -284,3 +284,53 @@ table.cmp { width: 100%; border-collapse: collapse; }
   .canvas-wrap { min-height: 0; height: 62vh; height: 62svh; flex: none; }
   .maps-right .summary { min-height: 0; }
 }
+
+/* missions: the story tree (left) and the mission details */
+.side.missions-side { width: 540px; padding-right: 8px; }
+.missions-side .hint.top { margin: 0 0 8px; padding-top: 0; }
+.tree { display: flex; flex-direction: column; align-items: center; padding: 4px 0 16px; }
+.tseq { display: flex; flex-direction: column; align-items: center; width: 100%; }
+.vl { width: 2px; height: 26px; background: var(--border); flex: none; }
+.vl.fill { flex: 1; min-height: 14px; }
+.tstep { position: relative; display: flex; justify-content: center; width: 100%; }
+.tm { width: 212px; display: flex; align-items: center; gap: 4px; background: var(--row); border: 1px solid var(--border);
+  border-left: 4px solid var(--dim); padding: 5px 8px 5px 2px; cursor: pointer; outline: none; }
+.tm:hover, .tchip:hover { background: var(--row-hover); border-color: var(--dim); }
+.tm.on, .tchip.on { background: var(--accent-dark); border-color: var(--accent); }
+.tm:focus-visible, .tchip:focus-visible { border-color: var(--accent); }
+.tm .no { width: 28px; flex: none; text-align: center; color: var(--faint); font-weight: 600; }
+.tm .tt { min-width: 0; display: flex; flex-direction: column; }
+.tm .tt b { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tm .tt small { font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tchips { position: absolute; left: calc(50% + 106px + 16px); top: 0; display: flex; flex-direction: column; gap: 5px; }
+.tchip { position: relative; font-size: 12px; color: var(--dim); background: var(--panel); border: 1px solid var(--border);
+  padding: 2px 8px; white-space: nowrap; cursor: pointer; outline: none; }
+.tchip::before { content: ""; position: absolute; right: 100%; top: 50%; width: 16px; border-top: 1px dashed var(--faint); }
+.tbr { position: relative; display: flex; width: 100%; }
+.tbr::before, .tbr::after { content: ""; position: absolute; left: var(--edge); right: var(--edge); height: 2px; background: var(--border); }
+.tbr::before { top: 0; } .tbr::after { bottom: 0; }
+.tcol { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; }
+.twait { width: calc(100% - 32px); display: flex; flex-direction: column; align-items: center; padding: 4px 0 8px; }
+.twait .bar { width: 100%; height: 4px; background: var(--changed); }
+.twait span { font-size: 12px; color: var(--changed); margin-top: 2px; }
+.twait::after { content: ""; width: 2px; height: 10px; background: var(--border); }
+.tend { border: 1px solid var(--accent); background: var(--panel); color: var(--accent); font-size: 12px; padding: 4px 12px; }
+.missions-content .back { display: none; }
+.mmap { font-weight: 600; margin-bottom: 2px; }
+.orow { position: relative; padding: 4px 14px 4px 34px; }
+.orow::before { content: ""; position: absolute; left: 14px; top: 50%; width: 10px; height: 10px; margin-top: -5px; background: var(--accent); }
+.orow.q { color: var(--dim); } .orow.q::before { background: var(--faint); }
+.orow:hover { background: var(--row-hover); }
+.mtip { color: var(--changed); font-weight: 600; margin: 0 0 12px; }
+.row.rrow { grid-template-columns: 44px 1fr 90px; }
+.row.rrow .icon span { color: var(--faint); font-weight: 600; }
+details.brief p { margin: 6px 0 8px; }
+@media (max-width: 820px) {
+  .side.missions-side { width: auto; padding-right: 12px; }
+  .tm { width: min(212px, 44vw); }
+  .tm .tt b { white-space: normal; overflow: visible; }
+  .tchips { position: static; flex-direction: row; flex-wrap: wrap; justify-content: center; margin-top: 4px; }
+  .tchip::before { display: none; }
+  .tstep { flex-direction: column; align-items: center; }
+  .missions-content .back { display: inline-block; margin: 4px 0; }
+}

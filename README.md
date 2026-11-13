@@ -1,8 +1,8 @@
 # IRR Companion
 
 **A small companion app for [Incursion Red River](https://store.steampowered.com/app/2116120/): create and
-compare AI presets, build console commands without typing them, plan your hideout upgrades and find
-resources on the maps.**
+compare AI presets, build console commands without typing them, plan your hideout upgrades, find
+resources on the maps and follow the story missions.**
 
 One portable `.exe`, nothing to install, nothing written to the game's files.
 
@@ -16,12 +16,13 @@ One portable `.exe`, nothing to install, nothing written to the game's files.
 | **TRADERS** | What the traders met in raids (Lt Moroz, Cpt Hale, Voss, Ba Tran) can have in stock, with the chance and the price of every item (weapons left out). |
 | **HIDEOUT** | See the cost of every hideout upgrade with the game icons, track your progress and get a shopping list. |
 | **MAPS** | Player spawns (the infill locations you pick when deploying), resource spawn points, extraction points, safes and locked doors (with the key they need) on the game maps, and a heatmap of where any item can spawn. |
+| **MISSIONS** | The story missions as a tree, in the order the game gives them (branches side by side), with what to do in each one, the rewards and the briefing. |
 
 ## Web version
 
 A web version runs in the browser, nothing to install, on a PC or a phone:
 **[irr-companion.seigneurguerande.fr](https://irr-companion.seigneurguerande.fr)**. It has every tab of the desktop
-app (PRESETS, COMMANDS, WEAPONS, TRADERS, HIDEOUT, MAPS) with the same game data, and is published from this
+app (PRESETS, COMMANDS, WEAPONS, TRADERS, HIDEOUT, MAPS, MISSIONS) with the same game data, and is published from this
 repository on GitHub Pages.
 
 What you make on the web (presets, favorite commands, weapon builds, hideout progress) is kept in that browser.
@@ -222,6 +223,23 @@ spawn point placed in the map files, the player spawns, the extraction points, t
 
 The map placement is the one of the in-game PDA map: centre of the map volume and its *MapSize*.
 
+### Story missions
+
+The **MISSIONS** tab draws the FANG story (the missions *Observer* gives you) as a tree, read from the game's
+mission graph:
+
+- **The order**: 26 story missions from *Mole Hunt* to *Root Canal*, top to bottom. Where the story splits, the two
+  branches are side by side: the game gives both at the same time. A yellow bar means the next mission waits until
+  every story mission given so far is done.
+- **Side missions**: the reconnaissance missions (explore Delta, Quarry, Outskirts, Bunker, meet the traders) are
+  shown next to the mission that gives them.
+- **Click a mission**: its map (and place), the steps to do in order with their objectives, the quest items, tips
+  (*Buy the bombs at the marketplace*), the rewards with their icons, and the briefing (closed by default: it tells
+  the story).
+- The number of enemies to kill is not in the text: the game shows it.
+
+![The story missions](docs/missions.png)
+
 ## How to use
 
 **Make an AI preset**
@@ -338,9 +356,9 @@ domain, *Settings > Pages > Custom domain* and a CNAME record at the registrar p
 
 | Path | Content |
 |---|---|
-| `src/` | the WinForms app (C# 7.3, .NET Framework 4.6.2): `MainForm.cs` (PRESETS editor and compare), `CommandsPanel.cs`, `WeaponsPanel.cs`, `TradersPanel.cs`, `HideoutPanel.cs`, `MapsPanel.cs`, data models (`Preset.cs`, `Commands.cs`, `Weapons.cs`, `Traders.cs`, `Hideout.cs`, `Maps.cs`, `Loot.cs`), `ShareCode.cs`, `Theme.cs` / `Controls.cs` (dark UI) |
-| `web/` | the web version: `index.html`, `css/app.css`, `js/app.js` (tabs, helpers), one module per tab: `js/presets.js` (editor, share codes, compare), `js/commands.js`, `js/weapons.js`, `js/traders.js`, `js/hideout.js`, `js/maps.js` |
-| `src/Resources/` | data generated from the game (used by both versions): `defaults.json`, `commands.json`, `weapons.json`, `traders.json`, `loot.json`, `hideout.json`, `maps.json`, `icons/`, `maps/` |
+| `src/` | the WinForms app (C# 7.3, .NET Framework 4.6.2): `MainForm.cs` (PRESETS editor and compare), `CommandsPanel.cs`, `WeaponsPanel.cs`, `TradersPanel.cs`, `HideoutPanel.cs`, `MapsPanel.cs`, `MissionsPanel.cs`, data models (`Preset.cs`, `Commands.cs`, `Weapons.cs`, `Traders.cs`, `Hideout.cs`, `Maps.cs`, `Loot.cs`, `Missions.cs`), `ShareCode.cs`, `Theme.cs` / `Controls.cs` (dark UI) |
+| `web/` | the web version: `index.html`, `css/app.css`, `js/app.js` (tabs, helpers), one module per tab: `js/presets.js` (editor, share codes, compare), `js/commands.js`, `js/weapons.js`, `js/traders.js`, `js/hideout.js`, `js/maps.js`, `js/missions.js` |
+| `src/Resources/` | data generated from the game (used by both versions): `defaults.json`, `commands.json`, `weapons.json`, `traders.json`, `loot.json`, `hideout.json`, `maps.json`, `missions.json`, `icons/`, `maps/` |
 | `tools/` | Python scripts that read the game files and check the app (see below), test share codes in `tools/testdata/` |
 | `.claude/skills/update-irr-tool/` | step-by-step procedure to update the app after a game patch |
 | `.github/workflows/build.yml` | builds the exe on every push, publishes a release for `v*` tags |
@@ -368,6 +386,7 @@ release - is the Claude Code skill [`.claude/skills/update-irr-tool/SKILL.md`](.
 | `build_hideout.py` | `src/Resources/hideout.json`: costs and requirements of every hideout unit level |
 | `build_icons.py` | `src/Resources/icons/`: icons of the hideout items, map keys, weapons, parts and ammo, cash and materials (+ `EXTRA_ITEMS`) |
 | `build_maps.py` | `src/Resources/maps.json` and `maps/*.jpg`: resource and extraction points, player spawn zones and their infill names, safes and locked doors with their keys, minimaps and their bounds |
+| `build_missions.py` | `src/Resources/missions.json`: order of the story missions (mission graph `MG_MainStory`), steps and objectives, briefings, rewards, side missions they give |
 | `irr_sharecode.py` | decode / encode share codes from the command line |
 
 Game files are extracted from the paks with [repak](https://github.com/trumank/repak), for example
