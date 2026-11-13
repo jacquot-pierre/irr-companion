@@ -152,7 +152,7 @@ The interface was only checked on screenshots; nothing was clicked yet.
 - [ ] `v1.5.0` release: the exe and the notes are on the release page; the next release is offered by UPDATE AVAILABLE
       and installs itself (check from a v1.5.0 exe).
 - [ ] `v1.5.1` release: a v1.5.0 exe shows UPDATE AVAILABLE and installs v1.5.1; the app opens on MAPS.
-- [ ] `v1.6.0` release: player spawns on the maps; check in game where Riverside and Warehouse (Quarry) put you.
+- [x] `v1.6.0` release: player spawns on the maps; Riverside and Warehouse (Quarry) checked in game (2026-11-13).
 - [ ] `v1.7.0` release: weapon stats; compare a few builds with the game's weapon inspect (totals, rounding).
 - [ ] `v1.7.1` release: locked doors of Delta (8) and Quarry (27) open with the map's General Key in game.
 - [ ] Delete the old local folder `Documents\IRRPresetTool` once everything is in this repository.

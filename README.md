@@ -194,7 +194,7 @@ spawn point placed in the map files, the player spawns, the extraction points, t
 
 - **Player spawns**: where each *INFILL LOCATION* of the deploy tab puts you (blue, with its name), e.g. *Train
   Track, Highway, Lakeside, Logs* on Delta. Your squad starts around that point. On Quarry the game files do not say
-  which zone is *Riverside* and which is *Warehouse*: they are named from their place and marked with a "?".
+  which zone is *Riverside* and which is *Warehouse*: they are named from their place (checked in game).
 - **Filters**: show or hide Concrete, Food, Metal, Oil, player spawns, extraction points, compact safes, large safes,
   HAS doors and locked doors (with their count).
 - **Safes and doors**: hover one to see the key it needs, with the key's icon (e.g. *Outskirts Large Safe Key*,

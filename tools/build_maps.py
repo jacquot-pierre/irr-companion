@@ -19,7 +19,7 @@ Where the data comes from (cooked with unversioned properties):
   The names offered in game ("INFILL LOCATION" of the deploy tab) are the InfillLocations (TArray<FName>) of the map
   setup Blueprints/MissionSystem/DataAssets/Maps/MD_<Map>; the game picks the zone whose tag is that name. Zones whose
   tag differs from every infill name (typo: "Tunnelystem"; placeholder: "SpawnZoneD") get the closest name, or the
-  one given in SPAWN_GUESSES (shown as a guess).
+  one given in SPAWN_NAMES (checked in game).
 - Minimaps: each BP_IRRMiniMapVolume_C actor gives a centre (SceneComponent RelativeLocation), a half size
   (BoxComponent BoxExtent, index 0) and its texture T_LVL_<Map>_Minimap_*. Several volumes = several floors
   (Bunker). Image orientation: world +X is up, +Y is right (checked against the buildings and the quarry).
@@ -61,12 +61,14 @@ MINIMAPS = 'Test_C/Content/Blueprints/MissionSystem/Textures/Minimaps/'
 RESOURCES = ['Concrete', 'Food', 'Metal', 'Oil']
 MAP_MARGIN = 200  # MapMargins default of BP_IRRMiniMapVolume
 MAP_SETUPS = 'Test_C/Content/Blueprints/MissionSystem/DataAssets/Maps/'
-# Spawn zones whose tag matches no infill name and cannot be told apart by the tag: (map, rounded x, y) -> name,
-# from the place on the minimap. Quarry: two zones are tagged "SpawnZoneD"; the one on the river bank is Riverside.
-SPAWN_GUESSES = {
+# Spawn zones whose tag matches no infill name and cannot be told apart by the tag: (map, rounded x, y) -> name.
+# Quarry: two zones are tagged "SpawnZoneD"; the one on the river bank is Riverside (named from their place on the
+# minimap, confirmed in game 2026-11-13). A zone named from SPAWN_GUESSES would be shown with a "?" (none today).
+SPAWN_NAMES = {
     ('Quarry', -90078, -47848): 'Riverside',
     ('Quarry', -53408, -79037): 'Warehouse',
 }
+SPAWN_GUESSES = {}  # same, not checked in game yet: shown with a "?"
 KEYS_DIR = 'Test_C/Content/Blueprints/InventorySystem/Items/Keys/'
 KEY_TAG = 'Inventory.Items.Keys.'
 # Locked things shown on the maps: class -> kind. A door's key is the one set on the placed actor, else the one of its
@@ -169,7 +171,7 @@ def infill_names(tmp, name):
 
 
 def name_spawns(map_name, spawns, infill, problems):
-    """Gives each spawn zone its in-game infill name: same tag, else a close spelling, else SPAWN_GUESSES."""
+    """Gives each spawn zone its in-game infill name: same tag, else a close spelling, else SPAWN_NAMES / SPAWN_GUESSES."""
     import difflib
     left = list(infill)
     for sp in spawns:
@@ -186,10 +188,11 @@ def name_spawns(map_name, spawns, infill, problems):
     for sp in spawns:
         if 'name' in sp:
             continue
-        g = SPAWN_GUESSES.get((map_name, sp['x'], sp['y']))
+        g = SPAWN_NAMES.get((map_name, sp['x'], sp['y'])) or SPAWN_GUESSES.get((map_name, sp['x'], sp['y']))
         if g and g in left:
             sp['name'] = g
-            sp['guessed'] = True
+            if (map_name, sp['x'], sp['y']) not in SPAWN_NAMES:
+                sp['guessed'] = True  # shown with a "?" until checked in game
             left.remove(g)
         else:
             sp['name'] = sp['tag']

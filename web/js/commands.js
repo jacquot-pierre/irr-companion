@@ -80,11 +80,11 @@ export async function mountCommands(view) {
     const items = entries();
     list.replaceChildren(...items.map(entry => {
       const f = entry.line !== undefined ? entry : null;
-      if (f) return el('div.centry.favorite' + (entry === selected ? '.on' : ''), { onclick: () => select(entry) },
+      if (f) return el('div.centry.favorite' + (entry === selected ? '.on' : ''), { onclick: () => { select(entry); toBuilder(); } },
         el('div.t', { text: '★  ' + f.label }), el('div.c', { text: f.line }));
       const c = entry;
       const args = c.args.map(a => a.optional ? '[' + a.name + ']' : '<' + a.name + '>').join(' ');
-      return el('div.centry' + (entry === selected ? '.on' : ''), { onclick: () => select(entry), title: c.desc },
+      return el('div.centry' + (entry === selected ? '.on' : ''), { onclick: () => { select(entry); toBuilder(); }, title: c.desc },
         el('div.t', null, el('span', { text: c.title }),
           el('span.tags' + (c.warn ? '.warn' : ''), { text: (c.host ? 'HOST  ' : '') + (c.warn ? '⚠  ' : '') + (isFavCmd(c) ? '★' : '') })),
         el('div.c', { text: c.cmd + (args ? '  ' + args : '') }));
@@ -295,6 +295,9 @@ export async function mountCommands(view) {
       saveBtn.textContent = changed ? 'SAVE *' : 'SAVE';
     }
   }
+
+  // phones: the builder is under the list, show it when a command is picked
+  function toBuilder() { if (window.matchMedia('(max-width: 820px)').matches) builder.scrollIntoView({ block: 'start' }); }
 
   function select(entry, keepScroll) {
     selected = entry;

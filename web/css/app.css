@@ -227,7 +227,9 @@ table.cmp { width: 100%; border-collapse: collapse; }
 @media (max-width: 820px) {
   .tabs { flex-wrap: wrap; }
   .tabs a { padding: 8px 10px; }
-  main > .content, main > .side, main > .cmdlist { flex: none; overflow: visible; }
+  main > .content, main > .side { flex: none; overflow: visible; }
+  /* the command list keeps its own scroll (max 50vh), else it runs over the builder below it */
+  main > .cmdlist { flex: none; overflow-y: auto; }
   .wtop .name { min-width: 0; width: 100%; }
   table.cmp { display: block; overflow-x: auto; }
   .refbar select, .cmpbar select { width: auto; max-width: 100%; }

@@ -1320,8 +1320,7 @@
      "y": -47848,
      "z": 923,
      "floor": 0,
-     "name": "Riverside",
-     "guessed": true
+     "name": "Riverside"
     },
     {
      "tag": "SpawnZoneD",
@@ -1329,8 +1328,7 @@
      "y": -79037,
      "z": 5124,
      "floor": 0,
-     "name": "Warehouse",
-     "guessed": true
+     "name": "Warehouse"
     }
    ],
    "locks": [
