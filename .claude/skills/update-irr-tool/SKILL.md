@@ -306,7 +306,11 @@ docstring of the script, which says where each value is read.
 
 ## 8. Regenerate and build
 
+`build_commands.py` also reads the mission names of `irr.Mission.Start` from `<work>/Test_C/Config/DefaultGame.ini`
+(extract it first; run `build_missions.py` before, for the story order):
+
 ```
+repak unpack -o <work> -f -i Test_C/Config/DefaultGame.ini "<paks>\pakchunk0-Windows.pak"
 python -I tools/build_commands.py tools/item_paths.txt <work>
 dotnet build src -c Debug
 python -I tools/check_roundtrip.py

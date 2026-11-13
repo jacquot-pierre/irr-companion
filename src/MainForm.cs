@@ -1318,6 +1318,8 @@ namespace IRRCompanion
             shot("commands_item");
             _commandsPanel.TestSelect(4, "irr.Item.Add", "HK_MP5_9x19_30rnd_magazine");
             shot("commands_item_add");
+            _commandsPanel.TestSelect(5, "irr.Mission.Start", "Opening Eyes - Part 2");
+            shot("commands_mission");
             _commandsPanel.TestSelect(3, "irr.Player.Invulnerable");
             shot("commands_player");
             _commandsPanel.TestSelect(6, "irr.AI.Headlamps", "2");

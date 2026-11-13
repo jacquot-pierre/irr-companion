@@ -18,7 +18,8 @@ Console commands (the values were read from the game files, not tried in game):
 - [ ] `irr.World.SetHideoutUnitLevel`: unit names (`Stash`, `Generator`…) and level range.
 - [ ] Commands marked **HOST**: really host only? Which Essentials work as a client in multiplayer?
 - [ ] Every Essential command works in the released game (some debug commands may be disabled in Shipping).
-- [ ] `irr.Mission.Start`: list of mission names that work (could become a list in the app).
+- [ ] `irr.Mission.Start "Opening Eyes - Part 2"`: the names of the game's DebugMissions list (now a list in the
+      app) start the mission, quotes accepted; does a story mission started this way continue the story?
 
 Share codes:
 
@@ -173,6 +174,7 @@ The interface was only checked on screenshots; nothing was clicked yet.
 - [ ] Weapon builder: share a build (copy / paste the build as text).
 
 - [ ] Support `IRR2-` share codes (seen in the game's text, format unknown - probably compressed).
-- [ ] List of mission names and operation ids for `irr.Mission.Start` / `irr.Operations.Start`.
+- [x] List of mission names for `irr.Mission.Start` (DebugMissions of DefaultGame.ini).
+- [ ] List of operation ids for `irr.Operations.Start`.
 - [ ] Show an item's display name and icon next to its internal name.
 - [ ] Unit tests for the share code checksum and the command line builder.

@@ -8,6 +8,9 @@ weather lists come from Blueprints/MissionSystem/DataAssets/Maps/MD_<Map>.uasset
 item_paths.txt is the list of item definition assets (`repak list pakchunk*.pak | grep /ID_`).
 <work> (the extraction folder of build_weapons.py) gives the rows of the vendor table
 (Vendor/DT_Vendor_Old) for irr.Item.Add; without it the rows of the current commands.json are kept.
+<work>/Test_C/Config/DefaultGame.ini (repak unpack -o <work> -i Test_C/Config/DefaultGame.ini pakchunk0-Windows.pak)
+gives the names irr.Mission.Start accepts (the DebugMissions of IRRMissionSystemSettings); without it the list of
+the current commands.json is kept. The story missions are listed in story order (src/Resources/missions.json).
 
 Argument kinds understood by the tool:
   toggle   0/1 (OFF/ON)               int / float  number (min/max -> slider)
@@ -215,8 +218,10 @@ c('irr.World.SetFactionReputation', I, 'Set faction reputation', 'Set reputation
 
 # ---------------------------------------------------------------- Missions & Operations
 M = 'Missions & Operations'
-c('irr.Mission.Start', M, 'Start mission', 'Start a debug mission by name (Project Settings > Mission System > DebugMissions).',
-  [text('Mission name')])
+c('irr.Mission.Start', M, 'Start mission',
+  'Start a mission by its name: the story missions, the reconnaissance missions and the FANG assignments (the game\'s '
+  'debug mission list). Useful when a story mission does not come.',
+  [text('Mission name')])  # the list of names is set by main() (debug_missions)
 c('irr.Mission.CompleteTracked', M, 'Complete tracked missions', 'Complete currently tracked missions.')
 c('irr.Mission.FailTracked', M, 'Fail tracked missions', 'Fail currently tracked missions.')
 c('irr.Mission.ResetTracked', M, 'Reset tracked missions', 'Reset currently tracked missions.')
@@ -388,7 +393,7 @@ def load_items(path):
 
 def load_rows(inv):
     """[[row, item], ...] of the vendor table, in table order (a row of an item preset gives the preset's item)."""
-    if not inv:
+    if not inv or not os.path.isdir(inv):
         if os.path.exists(OUT):
             with open(OUT, encoding='utf-8') as f:
                 return json.load(f).get('rows', [])
@@ -403,6 +408,50 @@ def load_rows(inv):
     return rows
 
 
+def debug_missions(work):
+    """Choice options [[name, label], ...] of irr.Mission.Start: the DebugMissions of DefaultGame.ini, story missions
+    first in story order ("12. Opening Eyes - Part 2"), then side missions, then assignments. Test entries left out."""
+    import re
+    ini = os.path.join(work, 'Test_C', 'Config', 'DefaultGame.ini') if work else None
+    if not ini or not os.path.exists(ini):
+        if os.path.exists(OUT):
+            with open(OUT, encoding='utf-8') as f:
+                for x in json.load(f)['commands']:
+                    if x['cmd'] == 'irr.Mission.Start' and x['args'][0].get('options'):
+                        return x['args'][0]['options']
+        return None
+    entries = re.findall(r'^\+DebugMissions=\(Name="([^"]+)",MissionSetup="[^"]*/(\w+)\.\w+"\)', open(ini, encoding='utf-8-sig').read(), re.M)
+    if not entries:
+        raise SystemExit('build_commands: no DebugMissions in ' + ini)
+    story = {}
+    mpath = os.path.join(HERE, '..', 'src', 'Resources', 'missions.json')
+    if os.path.exists(mpath):
+        md = json.load(open(mpath, encoding='utf-8'))
+
+        def walk(items):
+            for it in items:
+                if 'branches' in it:
+                    for br in it['branches']:
+                        walk(br)
+                else:
+                    story['DA_FANG_OBSERVER_' + it['id']] = len(story) + 1
+        walk(md['story'])
+    seen, out = set(), []
+    for name, asset in entries:
+        if name in seen or asset.endswith('_Test'):
+            continue
+        seen.add(name)
+        if asset in story:
+            out.append((0, story[asset], name, '%d. %s' % (story[asset], name)))
+        elif asset.startswith('DA_FANG_OBSERVER_'):
+            out.append((1, 0, name, name + ' (side mission)'))
+        else:
+            kind = {'KIA': 'elimination', 'EXT': 'extraction', 'OPR': 'operation', 'RET': 'retrieve'}.get(name.split('_')[0], '')
+            out.append((2, 0, name, name + ' (' + (kind + ' ' if kind else '') + 'assignment)'))
+    out.sort(key=lambda x: (x[0], x[1], x[2]))
+    return [[n, label] for _, _, n, label in out]
+
+
 def main():
     items_path = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, 'item_paths.txt')
     inv = os.path.join(sys.argv[2], 'Test_C', 'Content', 'Blueprints', 'InventorySystem') if len(sys.argv) > 2 else None
@@ -412,6 +461,11 @@ def main():
     for x in CMDS: assert x['cat'] in CATEGORIES, x['cat']
     assert not set(n.lower() for n in names) & set(n.lower() for n in OMITTED), 'command both listed and omitted'
     maps = load_maps()
+    missions = debug_missions(sys.argv[2] if len(sys.argv) > 2 else None)
+    if missions:
+        start = next(x for x in CMDS if x['cmd'] == 'irr.Mission.Start')
+        start['args'] = [choice('Mission name', missions, missions[0][0], editable=True,
+                                help='Name of the mission as the game lists it (the number is its place in the story).')]
     doc = {
         'weatherIndexBase': WEATHER_INDEX_BASE,
         'maps': [{'name': m, 'weathers': [{'name': w, 'weight': p} for w, p in ws]} for m, ws in maps],
@@ -424,7 +478,7 @@ def main():
     }
     with open(OUT, 'w', encoding='utf-8', newline='\n') as f:
         json.dump(doc, f, ensure_ascii=False, indent=1)
-    print('%d commands, %d essentials, %d items, %d vendor rows -> %s' % (len(CMDS), len(ESSENTIALS), len(doc['items']), len(doc['rows']), os.path.normpath(OUT)))
+    print('%d commands, %d essentials, %d items, %d vendor rows, %d missions -> %s' % (len(CMDS), len(ESSENTIALS), len(doc['items']), len(doc['rows']), len(missions or []), os.path.normpath(OUT)))
 
 
 if __name__ == '__main__':

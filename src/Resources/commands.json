@@ -871,12 +871,232 @@
    "cmd": "irr.Mission.Start",
    "cat": "Missions & Operations",
    "title": "Start mission",
-   "desc": "Start a debug mission by name (Project Settings > Mission System > DebugMissions).",
+   "desc": "Start a mission by its name: the story missions, the reconnaissance missions and the FANG assignments (the game's debug mission list). Useful when a story mission does not come.",
    "args": [
     {
      "name": "Mission name",
-     "kind": "text",
-     "default": ""
+     "kind": "choice",
+     "options": [
+      [
+       "Mole Hunt",
+       "1. Mole Hunt"
+      ],
+      [
+       "Hindered Research",
+       "2. Hindered Research"
+      ],
+      [
+       "Shipping and Handling",
+       "3. Shipping and Handling"
+      ],
+      [
+       "No Sleep In Vietnam",
+       "4. No Sleep In Vietnam"
+      ],
+      [
+       "Opening Eyes - Part 1",
+       "5. Opening Eyes - Part 1"
+      ],
+      [
+       "The Westerners",
+       "6. The Westerners"
+      ],
+      [
+       "Guerrilla Marketing",
+       "7. Guerrilla Marketing"
+      ],
+      [
+       "Snake In The Grass",
+       "8. Snake In The Grass"
+      ],
+      [
+       "The First Horseman",
+       "9. The First Horseman"
+      ],
+      [
+       "Easy Job",
+       "10. Easy Job"
+      ],
+      [
+       "Dirty Work",
+       "11. Dirty Work"
+      ],
+      [
+       "Opening Eyes - Part 2",
+       "12. Opening Eyes - Part 2"
+      ],
+      [
+       "Patrol Overlap",
+       "13. Patrol Overlap"
+      ],
+      [
+       "Probation",
+       "14. Probation"
+      ],
+      [
+       "Misplaced Judgement",
+       "15. Misplaced Judgement"
+      ],
+      [
+       "Active Listening",
+       "16. Active Listening"
+      ],
+      [
+       "24/7 Live Feed",
+       "17. 24/7 Live Feed"
+      ],
+      [
+       "Destruction of Private Property",
+       "18. Destruction of Private Property"
+      ],
+      [
+       "Need-To-Know",
+       "19. Need-To-Know"
+      ],
+      [
+       "Looking Up to See Below",
+       "20. Looking Up to See Below"
+      ],
+      [
+       "Throwing Stones",
+       "21. Throwing Stones"
+      ],
+      [
+       "Hot Trail",
+       "22. Hot Trail"
+      ],
+      [
+       "Opening Eyes - Part 3",
+       "23. Opening Eyes - Part 3"
+      ],
+      [
+       "Hide and Seek",
+       "24. Hide and Seek"
+      ],
+      [
+       "Sweet Tooth",
+       "25. Sweet Tooth"
+      ],
+      [
+       "Root Canal",
+       "26. Root Canal"
+      ],
+      [
+       "Reconnaissance - Part Bunker",
+       "Reconnaissance - Part Bunker (side mission)"
+      ],
+      [
+       "Reconnaissance - Part Delta",
+       "Reconnaissance - Part Delta (side mission)"
+      ],
+      [
+       "Reconnaissance - Part Outskirts",
+       "Reconnaissance - Part Outskirts (side mission)"
+      ],
+      [
+       "Reconnaissance - Part Quarry",
+       "Reconnaissance - Part Quarry (side mission)"
+      ],
+      [
+       "Reconnaissance - Traders",
+       "Reconnaissance - Traders (side mission)"
+      ],
+      [
+       "EXT_140_RR",
+       "EXT_140_RR (extraction assignment)"
+      ],
+      [
+       "EXT_271_RR",
+       "EXT_271_RR (extraction assignment)"
+      ],
+      [
+       "EXT_665_RR",
+       "EXT_665_RR (extraction assignment)"
+      ],
+      [
+       "KIA_101_RR",
+       "KIA_101_RR (elimination assignment)"
+      ],
+      [
+       "KIA_180_RR",
+       "KIA_180_RR (elimination assignment)"
+      ],
+      [
+       "KIA_225_RR",
+       "KIA_225_RR (elimination assignment)"
+      ],
+      [
+       "KIA_333_RR",
+       "KIA_333_RR (elimination assignment)"
+      ],
+      [
+       "KIA_454_RR",
+       "KIA_454_RR (elimination assignment)"
+      ],
+      [
+       "KIA_523_RR",
+       "KIA_523_RR (elimination assignment)"
+      ],
+      [
+       "KIA_580_RR",
+       "KIA_580_RR (elimination assignment)"
+      ],
+      [
+       "KIA_756_RR",
+       "KIA_756_RR (elimination assignment)"
+      ],
+      [
+       "KIA_901_RR",
+       "KIA_901_RR (elimination assignment)"
+      ],
+      [
+       "OPR_205_RR",
+       "OPR_205_RR (operation assignment)"
+      ],
+      [
+       "OPR_453_RR",
+       "OPR_453_RR (operation assignment)"
+      ],
+      [
+       "OPR_700_RR",
+       "OPR_700_RR (operation assignment)"
+      ],
+      [
+       "OPR_999_RR",
+       "OPR_999_RR (operation assignment)"
+      ],
+      [
+       "RET_266_RR",
+       "RET_266_RR (retrieve assignment)"
+      ],
+      [
+       "RET_267_RR",
+       "RET_267_RR (retrieve assignment)"
+      ],
+      [
+       "RET_297_RR",
+       "RET_297_RR (retrieve assignment)"
+      ],
+      [
+       "RET_511_RR",
+       "RET_511_RR (retrieve assignment)"
+      ],
+      [
+       "RET_512_RR",
+       "RET_512_RR (retrieve assignment)"
+      ],
+      [
+       "RET_622_RR",
+       "RET_622_RR (retrieve assignment)"
+      ],
+      [
+       "RET_623_RR",
+       "RET_623_RR (retrieve assignment)"
+      ]
+     ],
+     "default": "Mole Hunt",
+     "editable": true,
+     "help": "Name of the mission as the game lists it (the number is its place in the story)."
     }
    ]
   },
