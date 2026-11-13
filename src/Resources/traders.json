@@ -160,89 +160,89 @@
      "chance": 1.0,
      "items": [
       {
+       "id": "Generator",
+       "weight": 6.0,
+       "chance": 0.6845
+      },
+      {
        "id": "Earth_Globe",
        "weight": 4.0,
-       "chance": 0.5649
+       "chance": 0.5369
       },
       {
        "id": "Boardgame",
        "weight": 4.0,
-       "chance": 0.5649
+       "chance": 0.5369
       },
       {
        "id": "Canned_TunaMix",
        "weight": 4.0,
-       "chance": 0.5649
+       "chance": 0.5369
       },
       {
        "id": "Beer_BiaSaigon_Bottle",
        "weight": 4.0,
-       "chance": 0.5649
+       "chance": 0.5369
       },
       {
        "id": "Compass",
        "weight": 3.0,
-       "chance": 0.4629
+       "chance": 0.4369
       },
       {
        "id": "Antique_Water_Pitcher",
        "weight": 3.0,
-       "chance": 0.4629
+       "chance": 0.4369
       },
       {
        "id": "SoccerTrophy",
        "weight": 3.0,
-       "chance": 0.4629
+       "chance": 0.4369
       },
       {
        "id": "DLSR_Camera",
        "weight": 3.0,
-       "chance": 0.4629
+       "chance": 0.4369
       },
       {
        "id": "Motherboard",
        "weight": 3.0,
-       "chance": 0.4629
-      },
-      {
-       "id": "Generator",
-       "weight": 2.0,
-       "chance": 0.3367
+       "chance": 0.4369
       },
       {
        "id": "RebarCutter",
        "weight": 2.0,
-       "chance": 0.3367
+       "chance": 0.3156
       },
       {
        "id": "Graphics_Card",
        "weight": 2.0,
-       "chance": 0.3367
+       "chance": 0.3156
       },
       {
        "id": "Military_Laptop",
        "weight": 1.0,
-       "chance": 0.1831
+       "chance": 0.1704
       },
       {
        "id": "CatFigure",
        "weight": 1.0,
-       "chance": 0.1831
+       "chance": 0.1704
       },
       {
        "id": "GoldenRing",
        "weight": 1.0,
-       "chance": 0.1831
+       "chance": 0.1704
       },
       {
        "id": "GoldenWateringCan",
        "weight": 1.0,
-       "chance": 0.1831
+       "chance": 0.1704
       },
       {
        "id": "GoldenBangle",
        "weight": 1.0,
-       "chance": 0.1831
+       "chance": 0.1704
       }
      ]
     }
@@ -552,89 +552,89 @@
      "chance": 1.0,
      "items": [
       {
+       "id": "Generator",
+       "weight": 6.0,
+       "chance": 0.6845
+      },
+      {
        "id": "Earth_Globe",
        "weight": 4.0,
-       "chance": 0.5649
+       "chance": 0.5369
       },
       {
        "id": "Boardgame",
        "weight": 4.0,
-       "chance": 0.5649
+       "chance": 0.5369
       },
       {
        "id": "Canned_TunaMix",
        "weight": 4.0,
-       "chance": 0.5649
+       "chance": 0.5369
       },
       {
        "id": "Beer_BiaSaigon_Bottle",
        "weight": 4.0,
-       "chance": 0.5649
+       "chance": 0.5369
       },
       {
        "id": "Compass",
        "weight": 3.0,
-       "chance": 0.4629
+       "chance": 0.4369
       },
       {
        "id": "Antique_Water_Pitcher",
        "weight": 3.0,
-       "chance": 0.4629
+       "chance": 0.4369
       },
       {
        "id": "SoccerTrophy",
        "weight": 3.0,
-       "chance": 0.4629
+       "chance": 0.4369
       },
       {
        "id": "DLSR_Camera",
        "weight": 3.0,
-       "chance": 0.4629
+       "chance": 0.4369
       },
       {
        "id": "Motherboard",
        "weight": 3.0,
-       "chance": 0.4629
-      },
-      {
-       "id": "Generator",
-       "weight": 2.0,
-       "chance": 0.3367
+       "chance": 0.4369
       },
       {
        "id": "RebarCutter",
        "weight": 2.0,
-       "chance": 0.3367
+       "chance": 0.3156
       },
       {
        "id": "Graphics_Card",
        "weight": 2.0,
-       "chance": 0.3367
+       "chance": 0.3156
       },
       {
        "id": "Military_Laptop",
        "weight": 1.0,
-       "chance": 0.1831
+       "chance": 0.1704
       },
       {
        "id": "CatFigure",
        "weight": 1.0,
-       "chance": 0.1831
+       "chance": 0.1704
       },
       {
        "id": "GoldenRing",
        "weight": 1.0,
-       "chance": 0.1831
+       "chance": 0.1704
       },
       {
        "id": "GoldenWateringCan",
        "weight": 1.0,
-       "chance": 0.1831
+       "chance": 0.1704
       },
       {
        "id": "GoldenBangle",
        "weight": 1.0,
-       "chance": 0.1831
+       "chance": 0.1704
       }
      ]
     }
@@ -1474,89 +1474,89 @@
      "chance": 1.0,
      "items": [
       {
+       "id": "Generator",
+       "weight": 6.0,
+       "chance": 0.6845
+      },
+      {
        "id": "Earth_Globe",
        "weight": 4.0,
-       "chance": 0.5649
+       "chance": 0.5369
       },
       {
        "id": "Boardgame",
        "weight": 4.0,
-       "chance": 0.5649
+       "chance": 0.5369
       },
       {
        "id": "Canned_TunaMix",
        "weight": 4.0,
-       "chance": 0.5649
+       "chance": 0.5369
       },
       {
        "id": "Beer_BiaSaigon_Bottle",
        "weight": 4.0,
-       "chance": 0.5649
+       "chance": 0.5369
       },
       {
        "id": "Compass",
        "weight": 3.0,
-       "chance": 0.4629
+       "chance": 0.4369
       },
       {
        "id": "Antique_Water_Pitcher",
        "weight": 3.0,
-       "chance": 0.4629
+       "chance": 0.4369
       },
       {
        "id": "SoccerTrophy",
        "weight": 3.0,
-       "chance": 0.4629
+       "chance": 0.4369
       },
       {
        "id": "DLSR_Camera",
        "weight": 3.0,
-       "chance": 0.4629
+       "chance": 0.4369
       },
       {
        "id": "Motherboard",
        "weight": 3.0,
-       "chance": 0.4629
-      },
-      {
-       "id": "Generator",
-       "weight": 2.0,
-       "chance": 0.3367
+       "chance": 0.4369
       },
       {
        "id": "RebarCutter",
        "weight": 2.0,
-       "chance": 0.3367
+       "chance": 0.3156
       },
       {
        "id": "Graphics_Card",
        "weight": 2.0,
-       "chance": 0.3367
+       "chance": 0.3156
       },
       {
        "id": "Military_Laptop",
        "weight": 1.0,
-       "chance": 0.1831
+       "chance": 0.1704
       },
       {
        "id": "CatFigure",
        "weight": 1.0,
-       "chance": 0.1831
+       "chance": 0.1704
       },
       {
        "id": "GoldenRing",
        "weight": 1.0,
-       "chance": 0.1831
+       "chance": 0.1704
       },
       {
        "id": "GoldenWateringCan",
        "weight": 1.0,
-       "chance": 0.1831
+       "chance": 0.1704
       },
       {
        "id": "GoldenBangle",
        "weight": 1.0,
-       "chance": 0.1831
+       "chance": 0.1704
       }
      ]
     }
