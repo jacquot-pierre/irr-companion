@@ -1,21 +1,23 @@
-// MAPS tab: minimaps with resource / player spawn / extraction / lock markers and the item heatmap (same data as the desktop app).
+// MAPS tab: minimaps with resource / player spawn / trader / extraction / lock markers and the item heatmap (same data as the desktop app).
 import { data, el, iconUrl, pct, showTip, hideTip, escapeHtml, debounce } from './app.js?v=dev';
 
 const COLORS = {
-  Concrete: '#aaa69c', Food: '#8bc34a', Metal: '#5da9e9', Oil: '#f0a040', Extraction: '#00e676', PlayerSpawn: '#4fc3f7',
+  Concrete: '#aaa69c', Food: '#8bc34a', Metal: '#5da9e9', Oil: '#f0a040', Extraction: '#00e676', PlayerSpawn: '#4fc3f7', Trader: '#f06292',
   CompactSafe: '#f0c85a', LargeSafe: '#ff8c28', HasDoor: '#ba78dc', LockedDoor: '#ef5350',
 };
 const LABELS = {
-  Extraction: 'Extraction points', PlayerSpawn: 'Player spawns', CompactSafe: 'Compact safes', LargeSafe: 'Large safes', HasDoor: 'HAS doors', LockedDoor: 'Locked doors',
+  Extraction: 'Extraction points', PlayerSpawn: 'Player spawns', Trader: 'Traders', CompactSafe: 'Compact safes', LargeSafe: 'Large safes', HasDoor: 'HAS doors', LockedDoor: 'Locked doors',
 };
 const SINGLE = { Extraction: 'Extraction point', CompactSafe: 'Compact safe', LargeSafe: 'Large safe', HasDoor: 'HAS door', LockedDoor: 'Locked door' };
 const LOCKS = ['CompactSafe', 'LargeSafe', 'HasDoor', 'LockedDoor'];
+const FACTIONS = { IGC: 'Iron Guard Corps', UICS: 'United Intercontinental Security', VLF: 'Vietnamese Liberation Front' };
+const LABELED = new Set(['PlayerSpawn', 'Trader']);  // drawn with their name
 
 export async function mountMaps(view) {
   const [md, loot] = await Promise.all([data('maps.json'), data('loot.json')]);
   const keys = Object.fromEntries(md.keys.map(k => [k.tag, k]));
   const resources = md.resources;
-  const types = resources.map(r => r.type).concat(['PlayerSpawn', 'Extraction'], LOCKS);
+  const types = resources.map(r => r.type).concat(['PlayerSpawn', 'Trader', 'Extraction'], LOCKS);
   const shown = new Set(types);
   const maps = md.maps.map(m => ({
     name: m.name, floors: m.floors,
@@ -23,6 +25,7 @@ export async function mountMaps(view) {
       m.resources.map(p => ({ ...p })),
       m.extractions.map(p => ({ ...p, type: 'Extraction' })),
       (m.spawns || []).map(p => ({ ...p, type: 'PlayerSpawn' })),
+      (m.traders || []).map(p => ({ ...p, type: 'Trader' })),
       m.locks.map(p => ({ ...p, type: p.kind })),
     ),
   }));
@@ -43,7 +46,7 @@ export async function mountMaps(view) {
     el('div.m-maps', null, el('div.section', { text: 'Map' }), mapList, floorBox),
     el('div.m-find', null, el('div.section', { text: 'Find an item' }), el('div.find', null, findInput, clearBtn), datalist),
     el('div.m-filters', null, el('div.section', { text: 'Show' }), filterBox),
-    el('div.hint.m-hint', { text: 'Wheel / pinch: zoom · drag: move · double-click / double-tap: fit. Blue: player spawns (pick one when you deploy). Hover or tap a point for its chance or the key it needs. Find an item: where it can spawn (estimate from the loot settings).' }),
+    el('div.hint.m-hint', { text: 'Wheel / pinch: zoom · drag: move · double-click / double-tap: fit. Blue: player spawns (pick one when you deploy), pink: traders. Hover or tap a point for its chance or the key it needs. Find an item: where it can spawn (estimate from the loot settings).' }),
   );
   const title = el('div.title');
   const summary = el('div.summary');
@@ -172,6 +175,16 @@ export async function mountMaps(view) {
       ctx.beginPath(); ctx.ellipse(x, y + r * 0.53, r * 0.55, r * 0.55, 0, Math.PI, 0); ctx.fill();
       return;
     }
+    if (type === 'Trader') {
+      // pink disc with a "$" (a trader to buy and sell)
+      ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = dark;
+      ctx.font = '700 ' + Math.round(r * 1.25) + 'px ' + getComputedStyle(document.body).fontFamily;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText('$', x, y + r * 0.06);
+      ctx.textAlign = 'start';
+      return;
+    }
     if (type === 'Extraction') {
       ctx.beginPath(); ctx.moveTo(x, y - r * 1.15); ctx.lineTo(x + r, y + r * 0.75); ctx.lineTo(x - r, y + r * 0.75); ctx.closePath();
       ctx.fill(); ctx.stroke();
@@ -196,7 +209,7 @@ export async function mountMaps(view) {
 
   function visiblePoints() {
     const multi = map.floors.length > 1;
-    return map.points.filter(p => shown.has(p.type) && (!multi || p.floor === floorIndex) && (!heatItem || p.type === 'Extraction' || p.type === 'PlayerSpawn'));
+    return map.points.filter(p => shown.has(p.type) && (!multi || p.floor === floorIndex) && (!heatItem || p.type === 'Extraction' || p.type === 'PlayerSpawn' || p.type === 'Trader'));
   }
 
   function draw() {
@@ -216,11 +229,11 @@ export async function mountMaps(view) {
       if (x < -r || y < -r || x > W + r || y > H + r) continue;
       marker(p.type, x, y, r, false);
     }
-    // names of the spawn zones next to their marker
+    // names of the spawn zones and traders next to their marker
     ctx.font = '600 13px ' + getComputedStyle(document.body).fontFamily;
     ctx.textBaseline = 'middle';
     for (const p of pts) {
-      if (p.type !== 'PlayerSpawn' || !p.name || p === hover) continue;
+      if (!LABELED.has(p.type) || !p.name || p === hover) continue;
       const [x, y] = screen(p);
       const label = p.name + (p.guessed ? ' ?' : '');
       const w = ctx.measureText(label).width + 8;
@@ -228,7 +241,7 @@ export async function mountMaps(view) {
       if (bx + w > W - 2) bx = x - r - 4 - w;  // no room on the right
       ctx.fillStyle = 'rgba(20,18,16,.8)';
       ctx.fillRect(bx, y - 10, w, 20);
-      ctx.fillStyle = COLORS.PlayerSpawn;
+      ctx.fillStyle = COLORS[p.type];
       ctx.fillText(label, bx + 4, y + 1);
     }
     if (hover) { const [x, y] = screen(hover); marker(hover.type, x, y, r * 1.35, true); }
@@ -386,6 +399,8 @@ export async function mountMaps(view) {
 
   function tipHtml(p) {
     if (p.type === 'Extraction') return '<b style="color:' + COLORS.Extraction + '">Extraction point</b>';
+    if (p.type === 'Trader') return '<b style="color:' + COLORS.Trader + '">' + escapeHtml(p.name || 'Trader') + '</b>Trader of the ' +
+      escapeHtml(p.faction) + (FACTIONS[p.faction] ? ' (' + FACTIONS[p.faction] + ')' : '') + '<br><i>What it can have in stock: TRADERS tab.</i>';
     if (p.type === 'PlayerSpawn') return '<b style="color:' + COLORS.PlayerSpawn + '">' + escapeHtml(p.name || 'Player spawn') +
       '</b>Player spawn: pick it when you deploy.<br>Your squad starts around this point.' +
       (p.guessed ? '<br><i>Name guessed from the place: the game files do not say.</i>' : '');

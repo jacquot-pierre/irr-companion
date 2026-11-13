@@ -54,8 +54,9 @@ Weapon builder (compatibility read from the game files):
 
 Traders (read from the trader presets DA_Trader_IGC / UICS / VLF):
 
-- [ ] Traders and maps: Cpt Hale on Quarry, Voss on Outskirts (both UICS stock), Ba Tran on Bunker (VLF) are read
-      from the maps; Lt Moroz (IGC) on Delta is a guess (`TRADER_MAPS` / `MAP_GUESSED` in `tools/build_traders.py`).
+- [x] Traders and maps: all four read from the maps (Lt Moroz on Delta found in a World Partition cell, 2026-11-13).
+- [ ] Trader positions on the MAPS tab match the game, especially Ba Tran on Bunker (floor 3, just outside the drawn
+      plan: the minimap may not draw that room).
 - [ ] Hand-in prices of the quest crates at the traders (BP_RaidTrader price overrides): Chemical Crate 800,
       Data Storage Crate 760, Weapon Crate 690 - not shown in the app yet.
 - [ ] The 35 "always in stock" barter items (60 units) really are in every stock.

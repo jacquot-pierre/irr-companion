@@ -15,7 +15,7 @@ One portable `.exe`, nothing to install, nothing written to the game's files.
 | **WEAPONS** | Build a weapon from the parts that fit it, as in the gunsmith, see its stats change with every part, save your builds and copy the `additem` line that gives the whole build. |
 | **TRADERS** | What the traders met in raids (Lt Moroz, Cpt Hale, Voss, Ba Tran) can have in stock, with the chance and the price of every item (weapons left out). |
 | **HIDEOUT** | See the cost of every hideout upgrade with the game icons, track your progress and get a shopping list. |
-| **MAPS** | Player spawns (the infill locations you pick when deploying), resource spawn points, extraction points, safes and locked doors (with the key they need) on the game maps, and a heatmap of where any item can spawn. |
+| **MAPS** | Player spawns (the infill locations you pick when deploying), traders, resource spawn points, extraction points, safes and locked doors (with the key they need) on the game maps, and a heatmap of where any item can spawn. |
 | **MISSIONS** | The story missions as a tree, in the order the game gives them (branches side by side), with what to do in each one, the rewards and the briefing. |
 
 ## Web version
@@ -151,7 +151,7 @@ presets, with the chance of every item. Weapons are left out (only the chance of
 
 | Trader | Faction | Map |
 |---|---|---|
-| Lt Moroz | IGC | Delta (our guess: the map places it through another file) |
+| Lt Moroz | IGC | Delta |
 | Cpt Hale | UICS | Quarry |
 | Voss | UICS | Outskirts (same stock as Cpt Hale) |
 | Ba Tran | VLF | Bunker |
@@ -195,7 +195,9 @@ spawn point placed in the map files, the player spawns, the extraction points, t
 - **Player spawns**: where each *INFILL LOCATION* of the deploy tab puts you (blue, with its name), e.g. *Train
   Track, Highway, Lakeside, Logs* on Delta. Your squad starts around that point. On Quarry the game files do not say
   which zone is *Riverside* and which is *Warehouse*: they are named from their place (checked in game).
-- **Filters**: show or hide Concrete, Food, Metal, Oil, player spawns, extraction points, compact safes, large safes,
+- **Traders**: where Lt Moroz (Delta), Cpt Hale (Quarry), Voss (Outskirts) and Ba Tran (Bunker) stand (pink, with their
+  name); hover one for its faction. What they sell is in the TRADERS tab.
+- **Filters**: show or hide Concrete, Food, Metal, Oil, player spawns, traders, extraction points, compact safes, large safes,
   HAS doors and locked doors (with their count).
 - **Safes and doors**: hover one to see the key it needs, with the key's icon (e.g. *Outskirts Large Safe Key*,
   *HAS-0410-A key*). Only doors that open with a key are shown.
@@ -386,7 +388,7 @@ release - is the Claude Code skill [`.claude/skills/update-irr-tool/SKILL.md`](.
 | `build_traders.py` | `src/Resources/traders.json`: stock of each trader (trader presets `Presets/Container/Traders/DA_Trader_*`), the chance of every item and its market price (vendor table) |
 | `build_hideout.py` | `src/Resources/hideout.json`: costs and requirements of every hideout unit level |
 | `build_icons.py` | `src/Resources/icons/`: icons of the hideout items, map keys, weapons, parts and ammo, cash and materials (+ `EXTRA_ITEMS`) |
-| `build_maps.py` | `src/Resources/maps.json` and `maps/*.jpg`: resource and extraction points, player spawn zones and their infill names, safes and locked doors with their keys, minimaps and their bounds |
+| `build_maps.py` | `src/Resources/maps.json` and `maps/*.jpg`: resource and extraction points, player spawn zones and their infill names, traders, safes and locked doors with their keys, minimaps and their bounds |
 | `build_missions.py` | `src/Resources/missions.json`: order of the story missions (mission graph `MG_MainStory`), steps and objectives, briefings, rewards, side missions they give |
 | `irr_sharecode.py` | decode / encode share codes from the command line |
 

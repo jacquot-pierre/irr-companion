@@ -20,6 +20,11 @@ Where the data comes from (cooked with unversioned properties):
   setup Blueprints/MissionSystem/DataAssets/Maps/MD_<Map>; the game picks the zone whose tag is that name. Zones whose
   tag differs from every infill name (typo: "Tunnelystem"; placeholder: "SpawnZoneD") get the closest name, or the
   one given in SPAWN_NAMES (checked in game).
+- Traders: BP_RaidTrader_<x>_C actors (RelativeLocation of their Root SceneComponent, index 5). Bunker places its
+  trader in the persistent level; Delta, Quarry and Outskirts place it with the PLI_InRaidTrader prefab, whose actors
+  end up in a World Partition cell (Maps/.../LVL_<Map>/_Generated_/*.umap, world positions): the cells that name
+  BP_RaidTrader are read too. Trader name = the Trader.<name> tag of the blueprint
+  Blueprints/InventorySystem/BaseActors/Trader/BP_RaidTrader_<x>; faction = the first part of <x> (IGC, UICS, VLF).
 - Minimaps: each BP_IRRMiniMapVolume_C actor gives a centre (SceneComponent RelativeLocation), a half size
   (BoxComponent BoxExtent, index 0) and its texture T_LVL_<Map>_Minimap_*. Several volumes = several floors
   (Bunker). Image orientation: world +X is up, +Y is right (checked against the buildings and the quarry).
@@ -75,6 +80,7 @@ KEY_TAG = 'Inventory.Items.Keys.'
 # class (BP_Door_Delta_Locked / BP_Door_Quarry_Locked hold "<Map>.General Key" in their class defaults); doors
 # with neither never open and are left out.
 DOORS_DIR = 'Test_C/Content/Blueprints/InteractionSystem/Actors/Door/'
+TRADERS_DIR = 'Test_C/Content/Blueprints/InventorySystem/BaseActors/Trader/'
 LOCKS = {
     'BP_LootContainer_Safe_01_C': 'CompactSafe',
     'BP_LootContainer_Safe_02_C': 'LargeSafe',
@@ -340,6 +346,36 @@ def class_keys(tmp):
     return out
 
 
+def trader_names(tmp):
+    """Trader class (BP_RaidTrader_X_C) -> its Trader.<name> tag (blueprints of BaseActors/Trader)."""
+    out = {}
+    for path in glob.glob(os.path.join(tmp, TRADERS_DIR.replace('/', os.sep), 'BP_RaidTrader_*.uasset')):
+        tags = [n for n in package_full(path)[0] if n.startswith('Trader.')]
+        if len(tags) == 1:
+            out[os.path.basename(path)[:-7] + '_C'] = tags[0][len('Trader.'):]
+    return out
+
+
+def read_traders(L, names, floors, map_name, problems):
+    """Trader actors of a level or cell: [{'name', 'faction', 'x', 'y', 'z', 'floor'}]."""
+    out = []
+    for i, e in enumerate(L.exports, 1):
+        cls = e['class']
+        if not (cls.startswith('BP_RaidTrader_') and cls.endswith('_C')):
+            continue
+        root = [c for c in L.children(i) if c['class'] == 'SceneComponent' and c['name'] == 'Root']
+        try:
+            x, y, z = L.first_vector(root[0], LOCATION_INDEX['SceneComponent'])
+        except Exception as ex:  # noqa: BLE001
+            problems.append('%s: trader %s skipped (%s)' % (map_name, cls, ex))
+            continue
+        if cls not in names:
+            problems.append('%s: trader %s without a Trader.<name> tag' % (map_name, cls))
+        out.append({'name': names.get(cls, cls[len('BP_RaidTrader_'):-2]), 'faction': cls[len('BP_RaidTrader_'):-2].split('_')[0],
+                    'x': round(x), 'y': round(y), 'z': round(z), 'floor': floor_of(z, floors)})
+    return out
+
+
 def floor_of(z, floors):
     inside = [f for f in floors if abs(z - f['centerZ']) <= f['extentZ'] + 50]
     pool = inside or floors
@@ -358,6 +394,10 @@ def main():
         wanted += [f for f in files if f.startswith(MINIMAPS) and '_Mask' not in f]
         wanted += [f for f in files if f.startswith(KEYS_DIR) and '/ID_' in f]
         wanted += [f for f in files if f.startswith(DOORS_DIR) and '/BP_Door_' in f]
+        wanted += [f for f in files if f.startswith(TRADERS_DIR) and '/BP_RaidTrader_' in f]
+        # World Partition cells of the maps: their headers first (to find the cells that place a trader)
+        cells = [f for _, lvl in MAPS for f in files if f.startswith(lvl + '/_Generated_/') and f.endswith('.umap')]
+        wanted += cells
         wanted += [MAP_SETUPS + 'MD_%s.%s' % (n, ext) for n, _ in MAPS for ext in ('uasset', 'uexp')]
         for _, lvl in MAPS:
             wanted += [lvl + '.umap', lvl + '.uexp']
@@ -367,6 +407,10 @@ def main():
         print('resource defaults:', defaults)
         keys = key_items(tmp)
         door_keys = class_keys(tmp)
+        tnames = trader_names(tmp)
+        print('trader blueprints:', tnames)
+        trader_cells = [c for c in cells if b'BP_RaidTrader' in open(os.path.join(tmp, c.replace('/', os.sep)), 'rb').read()]
+        extract(repak, files, [c[:-5] + '.uexp' for c in trader_cells], tmp)
         print('door classes with a key:', door_keys)
         print('%d key items' % len(keys))
         os.makedirs(OUT_IMG, exist_ok=True)
@@ -487,7 +531,13 @@ def main():
                         problems.append('%s: extraction skipped (%s)' % (name, ex))
                         continue
                     extractions.append({'x': round(x), 'y': round(y), 'z': round(z), 'floor': floor_of(z, floors)})
+            traders = read_traders(L, tnames, floors, name, problems)
             L.f.close()
+            for c in trader_cells:
+                if c.startswith(lvl + '/'):
+                    CL = Level(os.path.join(tmp, c.replace('/', os.sep)))
+                    traders += read_traders(CL, tnames, floors, name, problems)
+                    CL.f.close()
             name_spawns(name, spawns, infill_names(tmp, name), problems)
             counts = {t: sum(1 for p in points if p['type'] == t) for t in RESOURCES}
             print('%-10s %d floor(s), %d resource points %s, %d extraction(s)' % (name, len(floors), len(points), counts, len(extractions)))
@@ -496,6 +546,7 @@ def main():
             for l in locks:
                 lk[l['kind']] = lk.get(l['kind'], 0) + 1
             print('           locks %s' % lk)
+            print('           traders %s' % ', '.join('%s (%s, %d, %d, floor %d)' % (t['name'], t['faction'], t['x'], t['y'], t['floor']) for t in traders))
             maps_out.append({
                 'name': name,
                 'floors': [{'name': f['name'], 'image': f['image'], 'centerX': round(f['centerX']), 'centerY': round(f['centerY']),
@@ -504,6 +555,7 @@ def main():
                 'extractions': extractions,
                 'spawns': spawns,
                 'locks': locks,
+                'traders': traders,
             })
         for f in sorted(old_images - set(images_done.values())):
             os.remove(os.path.join(OUT_IMG, f))

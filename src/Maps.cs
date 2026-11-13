@@ -39,10 +39,12 @@ namespace IRRCompanion
 
     public sealed class MapPoint
     {
-        /// <summary>Concrete, Food, Metal, Oil, Extraction, PlayerSpawn, or a lock kind (CompactSafe, LargeSafe, HasDoor, LockedDoor).</summary>
+        /// <summary>Concrete, Food, Metal, Oil, Extraction, PlayerSpawn, Trader, or a lock kind (CompactSafe, LargeSafe, HasDoor, LockedDoor).</summary>
         public string Type;
-        /// <summary>Name of a player spawn zone, as offered when deploying ("Train Track"...).</summary>
+        /// <summary>Name of a player spawn zone, as offered when deploying ("Train Track"...), or of a trader ("Lt Moroz").</summary>
         public string Name;
+        /// <summary>Faction of a trader: IGC, UICS, VLF.</summary>
+        public string Faction;
         /// <summary>Spawn zone named from its place on the map: the game files do not say which infill name it is.</summary>
         public bool Guessed;
         /// <summary>Key gameplay tag needed (locks only).</summary>
@@ -51,8 +53,9 @@ namespace IRRCompanion
         public int Floor;
         public bool IsExtraction { get { return Type == MapData.Extraction; } }
         public bool IsPlayerSpawn { get { return Type == MapData.PlayerSpawn; } }
+        public bool IsTrader { get { return Type == MapData.Trader; } }
         public bool IsLock { get { return Key != null; } }
-        public bool IsResource { get { return !IsExtraction && !IsPlayerSpawn && !IsLock; } }
+        public bool IsResource { get { return !IsExtraction && !IsPlayerSpawn && !IsTrader && !IsLock; } }
     }
 
     public sealed class KeyInfo
@@ -85,6 +88,11 @@ namespace IRRCompanion
     {
         public const string Extraction = "Extraction";
         public const string PlayerSpawn = "PlayerSpawn";
+        public const string Trader = "Trader";
+        public static readonly Dictionary<string, string> FactionNames = new Dictionary<string, string>
+        {
+            { "IGC", "Iron Guard Corps" }, { "UICS", "United Intercontinental Security" }, { "VLF", "Vietnamese Liberation Front" },
+        };
         public static readonly string[] LockKinds = { "CompactSafe", "LargeSafe", "HasDoor", "LockedDoor" };
         public static readonly Dictionary<string, KeyInfo> Keys = new Dictionary<string, KeyInfo>();
 
@@ -94,6 +102,7 @@ namespace IRRCompanion
             {
                 case Extraction: return "Extraction points";
                 case PlayerSpawn: return "Player spawns";
+                case Trader: return "Traders";
                 case "CompactSafe": return "Compact safes";
                 case "LargeSafe": return "Large safes";
                 case "HasDoor": return "HAS doors";
@@ -108,6 +117,7 @@ namespace IRRCompanion
             {
                 case Extraction: return "Extraction point";
                 case PlayerSpawn: return "Player spawn";
+                case Trader: return "Trader";
                 case "CompactSafe": return "Compact safe";
                 case "LargeSafe": return "Large safe";
                 case "HasDoor": return "HAS door";
@@ -142,6 +152,8 @@ namespace IRRCompanion
                     map.Points.Add(new MapPoint { Type = p.Str("type"), X = p.Num("x"), Y = p.Num("y"), Z = p.Num("z"), Floor = (int)p.Num("floor") });
                 foreach (JObj p in m.Arr("extractions"))
                     map.Points.Add(new MapPoint { Type = Extraction, X = p.Num("x"), Y = p.Num("y"), Z = p.Num("z"), Floor = (int)p.Num("floor") });
+                foreach (JObj p in m.Arr("traders") ?? new List<object>())
+                    map.Points.Add(new MapPoint { Type = Trader, Name = p.Str("name"), Faction = p.Str("faction"), X = p.Num("x"), Y = p.Num("y"), Z = p.Num("z"), Floor = (int)p.Num("floor") });
                 foreach (JObj p in m.Arr("spawns") ?? new List<object>())
                     map.Points.Add(new MapPoint { Type = PlayerSpawn, Name = p.Str("name"), Guessed = Equals(p["guessed"], true), X = p.Num("x"), Y = p.Num("y"), Z = p.Num("z"), Floor = (int)p.Num("floor") });
                 foreach (JObj p in m.Arr("locks") ?? new List<object>())

@@ -48,12 +48,12 @@ OUT = os.path.join(HERE, '..', 'src', 'Resources', 'traders.json')
 # Trader preset suffix -> faction (as in the hideout data)
 TRADERS = [('IGC', 'Iron Guard Corps'), ('UICS', 'United Intercontinental Security'), ('VLF', 'Vietnamese Liberation Front')]
 TIERS = ['Inventory.Rarity Types.Tier %d' % i for i in range(1, 5)]
-# Trader blueprint -> map. Found in the persistent levels (2026-11-11): Quarry places BP_RaidTrader_UICS(_Quarry),
-# Outskirts BP_RaidTrader_UICS_Outskirts, Bunker BP_RaidTrader_VLF (prefab PLI_InRaidTrader). Delta places a
-# BP_RaidTrader through another package: the IGC trader is the only one left, so Delta is our guess (MAP_GUESSED).
+# Trader blueprint -> map. Found in the levels (2026-11-13): Bunker places BP_RaidTrader_VLF in its persistent level;
+# Delta (IGC), Quarry (UICS_Quarry) and Outskirts (UICS_Outskirts) place theirs with the PLI_InRaidTrader prefab, in a
+# World Partition cell of the map (their positions are in maps.json, tools/build_maps.py).
 TRADER_MAPS = {'BP_RaidTrader_UICS_Quarry': 'Quarry', 'BP_RaidTrader_UICS_Outskirts': 'Outskirts',
                'BP_RaidTrader_VLF': 'Bunker', 'BP_RaidTrader_IGC': 'Delta'}
-MAP_GUESSED = {'BP_RaidTrader_IGC'}
+MAP_GUESSED = set()  # traders whose map is a guess (shown "probably")
 
 
 # ------------------------------------------------------------------ unversioned reader

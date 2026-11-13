@@ -25,6 +25,7 @@ namespace IRRCompanion
 
         public static readonly Color ExtractionColor = Color.FromArgb(0, 230, 118);
         public static readonly Color SpawnColor = Color.FromArgb(79, 195, 247);
+        public static readonly Color TraderColor = Color.FromArgb(240, 98, 146);
 
         public MapCanvas()
         {
@@ -121,7 +122,8 @@ namespace IRRCompanion
                 DrawMarker(g, p.Type, c, hot ? r * 1.35f : r, hot);
             }
             foreach (var p in _points)
-                if (p.IsPlayerSpawn && !string.IsNullOrEmpty(p.Name) && p != _hover) DrawLabel(g, p.Name + (p.Guessed ? " ?" : ""), Screen(p), r);
+                if ((p.IsPlayerSpawn || p.IsTrader) && !string.IsNullOrEmpty(p.Name) && p != _hover)
+                    DrawLabel(g, p.Name + (p.Guessed ? " ?" : ""), Screen(p), r, p.IsTrader ? TraderColor : SpawnColor);
             if (_hover != null) DrawTooltip(g, _hover, Screen(_hover));
         }
 
@@ -131,6 +133,7 @@ namespace IRRCompanion
             {
                 case MapData.Extraction: return ExtractionColor;
                 case MapData.PlayerSpawn: return SpawnColor;
+                case MapData.Trader: return TraderColor;
                 case "CompactSafe": return Color.FromArgb(240, 200, 90);
                 case "LargeSafe": return Color.FromArgb(255, 140, 40);
                 case "HasDoor": return Color.FromArgb(186, 120, 220);
@@ -158,6 +161,17 @@ namespace IRRCompanion
                     g.FillEllipse(b, c.X - hr, c.Y - rr * 0.55f, 2 * hr, 2 * hr);
                     g.FillPie(b, c.X - rr * 0.55f, c.Y - rr * 0.02f, rr * 1.1f, rr * 1.1f, 180, 180);
                 }
+                return;
+            }
+            if (type == MapData.Trader)
+            {
+                // pink disc with a "$" (a trader to buy and sell)
+                using (var b = new SolidBrush(col)) g.FillEllipse(b, c.X - rr, c.Y - rr, 2 * rr, 2 * rr);
+                using (var pen = new Pen(dark, hot ? 2.4f : 1.6f)) g.DrawEllipse(pen, c.X - rr, c.Y - rr, 2 * rr, 2 * rr);
+                using (var f = new Font("Segoe UI", rr * 1.15f, FontStyle.Bold, GraphicsUnit.Pixel))
+                using (var b = new SolidBrush(dark))
+                using (var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
+                    g.DrawString("$", f, b, new RectangleF(c.X - rr, c.Y - rr + rr * 0.05f, 2 * rr, 2 * rr), sf);
                 return;
             }
             if (type == MapData.Extraction)
@@ -202,14 +216,14 @@ namespace IRRCompanion
             }
         }
 
-        /// <summary>Name of a spawn zone, on a dark box to the right of its marker.</summary>
-        private void DrawLabel(Graphics g, string text, PointF c, int r)
+        /// <summary>Name of a spawn zone or trader, on a dark box to the right of its marker.</summary>
+        private void DrawLabel(Graphics g, string text, PointF c, int r, Color color)
         {
             var sz = TextRenderer.MeasureText(g, text, Theme.Bold);
             var box = new Rectangle((int)(c.X + r + Theme.S(4)), (int)(c.Y - sz.Height / 2f) - Theme.S(1), sz.Width + Theme.S(6), sz.Height + Theme.S(2));
             if (box.Right > Width - 2) box.X = (int)(c.X - r - Theme.S(4)) - box.Width;  // no room on the right
             using (var b = new SolidBrush(Color.FromArgb(200, 20, 18, 16))) g.FillRectangle(b, box);
-            TextRenderer.DrawText(g, text, Theme.Bold, box, SpawnColor, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPrefix);
+            TextRenderer.DrawText(g, text, Theme.Bold, box, color, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPrefix);
         }
 
         private static GraphicsPath RoundRect(RectangleF r, float rad)
@@ -239,6 +253,14 @@ namespace IRRCompanion
                 lines.Add(new KeyValuePair<string, Font>("Your squad starts around this point.", Theme.Small));
                 if (p.Guessed)
                     lines.Add(new KeyValuePair<string, Font>("Name guessed from the place: the game files do not say.", Theme.Small));
+            }
+            else if (p.IsTrader)
+            {
+                string full;
+                MapData.FactionNames.TryGetValue(p.Faction ?? "", out full);
+                lines.Add(new KeyValuePair<string, Font>(p.Name ?? "Trader", Theme.Bold));
+                lines.Add(new KeyValuePair<string, Font>("Trader of the " + p.Faction + (full != null ? " (" + full + ")" : ""), Theme.Body));
+                lines.Add(new KeyValuePair<string, Font>("What it can have in stock: TRADERS tab.", Theme.Small));
             }
             else if (p.IsLock)
             {
@@ -513,7 +535,7 @@ namespace IRRCompanion
 
             var showHeader = new SectionHeader("Show") { BackColor = Theme.Panel, Height = Theme.S(40) };
             var filterBox = new Panel { Dock = DockStyle.Top, BackColor = Theme.Panel };
-            var types = MapData.Resources.Select(r => r.Type).Concat(new[] { MapData.PlayerSpawn, MapData.Extraction }).Concat(MapData.LockKinds).ToList();
+            var types = MapData.Resources.Select(r => r.Type).Concat(new[] { MapData.PlayerSpawn, MapData.Trader, MapData.Extraction }).Concat(MapData.LockKinds).ToList();
             for (int i = types.Count - 1; i >= 0; i--)
             {
                 var f = new FilterRow(types[i]);
@@ -584,8 +606,8 @@ namespace IRRCompanion
             foreach (var f in _filters) f.CountText = m.Count(f.Type, multi ? fi : -1).ToString(CultureInfo.InvariantCulture);
             foreach (var f in _filters) f.Invalidate();
             var shown = new HashSet<string>(_filters.Where(f => f.Checked).Select(f => f.Type));
-            // with a heatmap only the spawns and extraction points stay, the other markers would hide it
-            var pts = m.Points.Where(p => shown.Contains(p.Type) && (!multi || p.Floor == fi) && (_heatItem == null || p.IsExtraction || p.IsPlayerSpawn)).ToList();
+            // with a heatmap only the spawns, traders and extraction points stay, the other markers would hide it
+            var pts = m.Points.Where(p => shown.Contains(p.Type) && (!multi || p.Floor == fi) && (_heatItem == null || p.IsExtraction || p.IsPlayerSpawn || p.IsTrader)).ToList();
             _title.Text = m.Name.ToUpperInvariant() + (multi ? "  ·  " + floor.Name.ToUpperInvariant() : "") +
                           (_heatItem != null ? "  ·  " + _heatItem.Name.ToUpperInvariant() : "");
             _canvas.SetContent(floor, pts);
