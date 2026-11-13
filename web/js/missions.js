@@ -28,7 +28,10 @@ export async function mountMissions(view) {
 
   const mapColor = m => m.maps.length === 1 ? MAP_COLORS[m.maps[0]] || 'var(--dim)' : 'var(--dim)';
   const mapText = m => m.maps.length >= 4 ? 'Any map' : m.maps.join(' / ');
-  const chipText = m => '+ ' + m.title.replace('Reconnaissance - ', 'Recon ');
+  const shortTitle = m => m.title.replace('Reconnaissance - ', 'Recon ');
+  const chipText = m => (m.blocksStory ? '! ' : '+ ') + shortTitle(m);
+  // side missions the game counts as story missions (bStoryMission): they hold the waits after the mission that gives them
+  const blockers = m => all.filter(x => x.blocksStory && x.givenBy && ms[x.givenBy].number < m.number);
 
   let selected = ms[d.story[0].id];
   const nodes = new Map();  // mission id -> element
@@ -42,7 +45,9 @@ export async function mountMissions(view) {
     box.style.borderLeftColor = mapColor(m);
     nodes.set(m.id, box);
     const chips = (m.unlocks || []).filter(id => ms[id]).map(id => {
-      const c = el('div.tchip', { tabindex: 0, text: chipText(ms[id]), title: ms[id].title + ': side mission, given with ' + m.title + '.',
+      const c = el('div.tchip' + (ms[id].blocksStory ? '.blocks' : ''), { tabindex: 0, text: chipText(ms[id]),
+        title: ms[id].title + ': side mission, given with ' + m.title + '.' +
+          (ms[id].blocksStory ? ' The game counts it as a story mission: the yellow bars wait until it is done.' : ''),
         onclick: () => select(ms[id]), onkeydown: e => { if (e.key === 'Enter') select(ms[id]); } });
       nodes.set(id, c);
       return c;
@@ -52,7 +57,8 @@ export async function mountMissions(view) {
 
   function seq(items) {
     const out = [];
-    const wait = () => el('div.twait', null, el('div.bar'), el('span', { text: 'waits until all the story missions above are done' }));
+    const wait = m => el('div.twait', null, el('div.bar'), el('span', { text: 'waits until all the story missions above are done' +
+      (blockers(m).length ? ', and ' + blockers(m).map(shortTitle).join(', ') : '') }));
     for (const it of items) {
       if (it.branches) {
         // lines: down to the top bar, one per branch, then from the bottom bar down
@@ -63,7 +69,7 @@ export async function mountMissions(view) {
         continue;
       }
       const m = ms[it.id];
-      if (m.waitAll) out.push(wait());
+      if (m.waitAll) out.push(wait(m));
       else if (out.length) out.push(el('div.vl'));
       out.push(node(m));
     }
@@ -85,11 +91,13 @@ export async function mountMissions(view) {
     const m = selected;
     for (const [id, e] of nodes) e.classList.toggle('on', id === m.id);
     const when = [];
-    if (m.givenBy || !m.number) when.push((m.kind || 'Side') + ' side mission, given with ' + titleOf(m.givenBy) + '.');
+    if (m.givenBy || !m.number) when.push((m.kind || 'Side') + ' side mission, given with ' + titleOf(m.givenBy) + '.' +
+      (m.blocksStory ? '' : ' Not needed for the story.'));
     else {
       when.push('Story mission ' + m.number + ' of ' + storyCount + '.');
       when.push(m.after.length ? 'Comes after ' + m.after.map(titleOf).join(' / ') + '.' : 'The first mission.');
-      if (m.waitAll) when.push('Waits until all the story missions given before it are done (both branches).');
+      if (m.waitAll) when.push('Waits until all the story missions given before it are done (both branches)' +
+        (blockers(m).length ? ', and ' + blockers(m).map(x => x.title).join(', ') + ' if it is still in progress' : '') + '.');
       if (m.unlocks?.length) when.push('Also gives the side missions ' + m.unlocks.map(titleOf).join(', ') + '.');
     }
     const steps = [];
@@ -105,6 +113,7 @@ export async function mountMissions(view) {
     const out = [
       el('button.btn.back', { text: '▲ Story tree', onclick: () => (nodes.get(m.id) || tree).scrollIntoView({ block: 'center' }) }),
       el('h1', { text: (m.number ? m.number + '.  ' : '') + m.title.toUpperCase() }),
+      m.blocksStory ? el('p.mtip', { text: 'Needed for the story: the game counts it as a story mission, so the story stops at the next yellow bar until it is done.' }) : null,
       el('div.mmap', { text: mapText(m) + (m.place ? ' · ' + m.place : ''), style: 'color:' + mapColor(m) }),
       el('p.lead', { text: when.join(' ') }),
       el('div.card', null, el('div.head', null, el('span.t', { text: 'WHAT TO DO' }),
@@ -122,7 +131,7 @@ export async function mountMissions(view) {
       el('summary', null, el('span.gt', { text: 'BRIEFING' }), el('span.ghint', { text: 'the story told by Observer (spoilers)' })),
       m.briefing.map(p => el('p', { text: p }))));
     out.push(el('p.hint', { text: 'Read from the game\'s mission files. The kill counts are shown in game only.' }));
-    content.replaceChildren(...out.flat());
+    content.replaceChildren(...out.flat().filter(Boolean));
     content.scrollTop = 0;
   }
 

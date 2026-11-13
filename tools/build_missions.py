@@ -26,6 +26,13 @@ Where the data comes from (Blueprints/MissionSystem, cooked with unversioned pro
   preset (DA_*, a weapon or magazine preset: its item is the ID_* import of the preset package). The count is the
   int32 18 bytes after the last -1.0 double of the entry (checked: cash 2400 for "Shipping and Handling").
   The objective counts ({count}) are not decoded: the text leaves the number out.
+- The story flag: bStoryMission of the setup. The setup properties, in the order of their unversioned index (read
+  from the PropPointers of the setup class in the exe): 0 Faction, 1 Agent, 2 MissionType, 3 MissionImage,
+  4 MissionInfo, 5 bStoryMission, 6 bPersist, 7 MaxRaids, 8 RewardItemPresets, 9 FactionRewards, 10 XPReward,
+  11 bReset, 12 SpawnData, 13 SupportedPlayerSpawns, 14 Sequences, 15-17 OnStarted/OnCompleted/OnFailedEvents.
+  A bool is only in the property header: index 5 present (and not zero) = true. The wait of the story graph
+  (AllStoryMissionsCompleted) checks the missions in progress that have it: a side mission with the flag
+  (Reconnaissance - Traders) holds the story until it is done ("blocksStory" in the json).
 Every unexpected layout stops the script.
 """
 import glob
@@ -223,6 +230,33 @@ def ordered(blob, children):
     return best + [c for c in sorted(children) if c not in best]
 
 
+PROP_STORY, PROP_SEQUENCES = 5, 14  # unversioned indexes of bStoryMission and Sequences in the setup
+
+
+def setup_props(b):
+    """Unversioned header of a setup -> (indexes present, indexes flagged zero)."""
+    o, i, frags = 0, 0, []
+    while True:
+        v = struct.unpack_from('<H', b, o)[0]
+        o += 2
+        frags.append((v & 0x7f, v >> 9, bool(v & 0x80)))
+        if v & 0x100:
+            break
+    nz = sum(n for _, n, z in frags if z)
+    mask = int.from_bytes(b[o:o + (nz + 7) // 8], 'little') if nz else 0
+    present, zeros, zi = set(), set(), 0
+    for skip, n, z in frags:
+        i += skip
+        for _ in range(n):
+            if z:
+                if mask >> zi & 1:
+                    zeros.add(i)
+                zi += 1
+            present.add(i)
+            i += 1
+    return present, zeros
+
+
 def mission(path, items):
     names, imports, exports = package_full(path)
     d = open(path[:-6] + 'uexp', 'rb').read()
@@ -285,6 +319,10 @@ def mission(path, items):
     if tips:
         out['tips'] = tips
     out['rewards'] = rewards(blob[s - 1], imports, items)
+    present, zeros = setup_props(blob[s - 1])
+    if PROP_SEQUENCES not in present:
+        fail(mid + ': setup header not understood (no Sequences at index %d)' % PROP_SEQUENCES)
+    out['storyFlag'] = PROP_STORY in present and PROP_STORY not in zeros
     return mid, out
 
 
@@ -408,6 +446,11 @@ def main():
                 fail('mission asset not found: ' + mid)
             k, m = mission(path, items)
             m['kind'] = SIDE_KIND if mid in side else 'Story'
+            flag = m.pop('storyFlag')
+            if mid in side and flag:
+                m['blocksStory'] = True  # counted by the waits of the story
+            elif mid not in side and not flag:
+                print('warning: story mission %s without the story flag' % mid)
             if mid in unlocks:
                 m['unlocks'] = unlocks[mid]
             missions[k] = m
@@ -417,6 +460,7 @@ def main():
             f.write('\n')
         n_story = len(list(flat(order)))
         print('wrote %s: %d story missions, %d side missions, achievement %s' % (OUT, n_story, len(side), achievement))
+        print('side missions that hold the story:', [m['title'] for m in missions.values() if m.get('blocksStory')])
         for mid, m in missions.items():
             print('  %-8s %-34s %-9s %d steps, %d rewards' % (mid, m['title'], '/'.join(m['maps']), len(m['steps']), len(m['rewards'])))
     finally:

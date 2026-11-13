@@ -90,6 +90,8 @@ Missions (read from the mission graph and the mission files):
 - [ ] Branches: are both branches given at the same time, and does *Dirty Work* come as soon as one branch is done
       (no "wait for all" before it in the graph, unlike *Opening Eyes - Part 2*)?
 - [ ] Reconnaissance missions: given when the mission that gives them starts or when it ends?
+- [ ] *Reconnaissance - Traders* (bStoryMission) holds the story: once done, *Opening Eyes - Part 2* comes after
+      *Dirty Work* (a player was stuck there with it in progress, 2026-11-13).
 - [ ] Rewards match the game (counts, e.g. 2 QSZ-92 for *Shipping and Handling*; the item wins over a preset when an
       entry has both, e.g. .338 AP x 30 for *Probation*).
 

@@ -22,7 +22,7 @@ namespace IRRCompanion
         private readonly List<Node> _nodes = new List<Node>();
         private readonly List<Point[]> _lines = new List<Point[]>();
         private readonly List<Point[]> _chipLines = new List<Point[]>();
-        private readonly List<Rectangle> _bars = new List<Rectangle>();
+        private readonly List<KeyValuePair<Rectangle, string>> _bars = new List<KeyValuePair<Rectangle, string>>();
         private Rectangle _end;
         private Node _hot;
         private Mission _selected;
@@ -124,7 +124,9 @@ namespace IRRCompanion
                     // synchronisation bar: every line above ends on it
                     var bar = new Rectangle(x0 + Theme.S(16), y + Theme.S(4), width - Theme.S(32), Theme.S(4));
                     foreach (var a in anchors) _lines.Add(new[] { a, new Point(a.X, bar.Y) });
-                    _bars.Add(bar);
+                    var blockers = MissionData.Blockers(m);
+                    _bars.Add(new KeyValuePair<Rectangle, string>(bar, "waits until all the story missions above are done" +
+                        (blockers.Count > 0 ? ", and " + string.Join(", ", blockers.Select(MissionData.ShortTitle)) : "")));
                     anchors = new List<Point> { new Point(cx, bar.Bottom) };
                     y = bar.Bottom + Theme.S(26);
                 }
@@ -138,7 +140,7 @@ namespace IRRCompanion
                 {
                     Mission side;
                     if (!MissionData.Missions.TryGetValue(id, out side)) continue;
-                    var ts = TextRenderer.MeasureText(ChipText(side), Theme.Small);
+                    var ts = TextRenderer.MeasureText(ChipText(side), side.BlocksStory ? Theme.Bold : Theme.Small);
                     var cr = new Rectangle(r.Right + Theme.S(18), chipY, ts.Width + Theme.S(16), Theme.S(23));
                     _nodes.Add(new Node { Rect = cr, Mission = side, Chip = true });
                     _chipLines.Add(new[] { new Point(r.Right, cr.Y + cr.Height / 2), new Point(cr.X, cr.Y + cr.Height / 2) });
@@ -158,7 +160,7 @@ namespace IRRCompanion
             TextRenderer.DrawText(g, text, font, r, color, flags);
         }
 
-        private static string ChipText(Mission m) { return "+ " + m.Title.Replace("Reconnaissance - ", "Recon "); }
+        private static string ChipText(Mission m) { return (m.BlocksStory ? "! " : "+ ") + MissionData.ShortTitle(m); }
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -171,11 +173,12 @@ namespace IRRCompanion
             using (var p = new Pen(Theme.TextFaint, 1) { DashStyle = DashStyle.Dash })
                 foreach (var l in _chipLines) g.DrawLines(p, l);
             g.SmoothingMode = SmoothingMode.None;
-            foreach (var b in _bars)
+            foreach (var kv in _bars)
             {
+                var b = kv.Key;
                 using (var br = new SolidBrush(Theme.Changed)) g.FillRectangle(br, b);
-                Txt(g, "waits until all the story missions above are done", Theme.Small,
-                    new Rectangle(b.X, b.Bottom + Theme.S(2), b.Width, Theme.S(18)), Theme.Changed, TextFormatFlags.HorizontalCenter | TextFormatFlags.NoPrefix);
+                Txt(g, kv.Value, Theme.Small, new Rectangle(b.X - Theme.S(12), b.Bottom + Theme.S(2), b.Width + Theme.S(24), Theme.S(18)), Theme.Changed,
+                    TextFormatFlags.HorizontalCenter | TextFormatFlags.NoPrefix | TextFormatFlags.EndEllipsis);
             }
             foreach (var n in _nodes) DrawNode(g, n);
             using (var br = new SolidBrush(Theme.Panel)) g.FillRectangle(br, _end);
@@ -191,11 +194,14 @@ namespace IRRCompanion
             var r = n.Rect;
             var mc = MissionData.MapColor(m);
             using (var b = new SolidBrush(sel ? Theme.AccentDark : hot ? Theme.RowHover : n.Chip ? Theme.Panel : Theme.Row)) g.FillRectangle(b, r);
-            using (var p = new Pen(sel ? Theme.Accent : hot ? Theme.TextDim : Theme.Border)) g.DrawRectangle(p, r.X, r.Y, r.Width - 1, r.Height - 1);
+            // a side mission that holds the story: yellow like the waits it holds
+            bool blocks = n.Chip && m.BlocksStory;
+            using (var p = new Pen(sel ? Theme.Accent : blocks ? Theme.Changed : hot ? Theme.TextDim : Theme.Border)) g.DrawRectangle(p, r.X, r.Y, r.Width - 1, r.Height - 1);
             const TextFormatFlags f = TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPrefix;
             if (n.Chip)
             {
-                Txt(g, ChipText(m), Theme.Small, new Rectangle(r.X + Theme.S(8), r.Y, r.Width - Theme.S(10), r.Height), sel ? Theme.Text : Theme.TextDim, f);
+                Txt(g, ChipText(m), blocks ? Theme.Bold : Theme.Small, new Rectangle(r.X + Theme.S(8), r.Y, r.Width - Theme.S(10), r.Height),
+                    blocks ? Theme.Changed : sel ? Theme.Text : Theme.TextDim, f);
                 return;
             }
             using (var b = new SolidBrush(mc)) g.FillRectangle(b, r.X + 1, r.Y + 1, Theme.S(4), r.Height - 2);
@@ -224,7 +230,8 @@ namespace IRRCompanion
                 Cursor = n != null ? Cursors.Hand : Cursors.Default;
                 Invalidate();
                 string t = n == null ? null : n.Chip
-                    ? n.Mission.Title + ": side mission, given with " + MissionData.Missions[n.Mission.GivenBy].Title + "."
+                    ? n.Mission.Title + ": side mission, given with " + MissionData.Missions[n.Mission.GivenBy].Title + "." +
+                      (n.Mission.BlocksStory ? " The game counts it as a story mission: the yellow bars wait until it is done." : "")
                     : "Story mission " + n.Mission.Number + ": " + n.Mission.Title + " (" + n.Mission.MapText + ")";
                 if (t != _tipText) { _tipText = t; _tip.SetToolTip(this, t); }
             }
@@ -372,14 +379,26 @@ namespace IRRCompanion
             string where = (m.Maps.Count >= 4 ? "Any map" : m.MapText) + (m.Place != null ? " · " + m.Place : "");
             var when = new List<string>();
             if (m.IsSide)
-                when.Add(m.Kind + " side mission, given with " + (m.GivenBy != null ? MissionData.Missions[m.GivenBy].Title : "?") + ".");
+                when.Add(m.Kind + " side mission, given with " + (m.GivenBy != null ? MissionData.Missions[m.GivenBy].Title : "?") + "." +
+                         (m.BlocksStory ? "" : " Not needed for the story."));
             else
             {
                 when.Add("Story mission " + m.Number + " of " + MissionData.Missions.Values.Count(x => !x.IsSide) + ".");
                 when.Add(m.After.Count == 0 ? "The first mission." : "Comes after " + string.Join(" / ", m.After.Select(id => MissionData.Missions[id].Title)) + ".");
-                if (m.WaitAll) when.Add("Waits until all the story missions given before it are done (both branches).");
+                if (m.WaitAll)
+                {
+                    var blockers = MissionData.Blockers(m);
+                    when.Add("Waits until all the story missions given before it are done (both branches)" +
+                             (blockers.Count > 0 ? ", and " + string.Join(", ", blockers.Select(x => x.Title)) + " if it is still in progress" : "") + ".");
+                }
                 if (m.Unlocks.Count > 0) when.Add("Also gives the side missions " + Names(m.Unlocks) + ".");
             }
+            if (m.BlocksStory)
+                items.Add(new WrapLabel
+                {
+                    Text = "Needed for the story: the game counts it as a story mission, so the story stops at the next yellow bar until it is done.",
+                    Font = Theme.Bold, ForeColor = Theme.Changed, BackColor = Theme.Back, Padding = new Padding(0, 0, 0, Theme.S(4)),
+                });
             var mapLine = new Label { Text = where, Dock = DockStyle.Top, Height = Theme.S(24), Font = Theme.Bold, ForeColor = MissionData.MapColor(m), BackColor = Theme.Back, UseMnemonic = false };
             items.Add(mapLine);
             items.Add(new WrapLabel { Text = string.Join(" ", when), Font = Theme.Body, ForeColor = Theme.TextDim, BackColor = Theme.Back, Padding = new Padding(0, 0, 0, Theme.S(10)) });

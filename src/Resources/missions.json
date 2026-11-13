@@ -1646,7 +1646,8 @@
      "icon": true
     }
    ],
-   "kind": "Reconnaissance"
+   "kind": "Reconnaissance",
+   "blocksStory": true
   }
  }
 }

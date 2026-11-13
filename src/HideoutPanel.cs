@@ -113,7 +113,7 @@ namespace IRRCompanion
                 _extra.SetBounds(right - _extraWidth, 0, _extraWidth, Height);
                 right -= _extraWidth + Theme.S(8);
             }
-            int nw = Math.Min(Math.Max(0, right - x), TextRenderer.MeasureText(_name.Text, _name.Font).Width + Theme.S(8));
+            int nw = Math.Min(Math.Max(0, right - x), TextRenderer.MeasureText(_name.Text, _name.Font, Size.Empty, TextFormatFlags.NoPrefix).Width + Theme.S(8));  // NoPrefix: "Find & Retrieve" is not cut
             _name.SetBounds(x, 0, nw, Height);
             _detail.SetBounds(x + nw + Theme.S(4), 0, Math.Max(0, right - x - nw - Theme.S(4)), Height);
         }

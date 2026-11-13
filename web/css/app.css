@@ -306,6 +306,7 @@ table.cmp { width: 100%; border-collapse: collapse; }
 .tchip { position: relative; font-size: 12px; color: var(--dim); background: var(--panel); border: 1px solid var(--border);
   padding: 2px 8px; white-space: nowrap; cursor: pointer; outline: none; }
 .tchip::before { content: ""; position: absolute; right: 100%; top: 50%; width: 16px; border-top: 1px dashed var(--faint); }
+.tchip.blocks { color: var(--changed); border-color: var(--changed); font-weight: 600; }
 .tbr { position: relative; display: flex; width: 100%; }
 .tbr::before, .tbr::after { content: ""; position: absolute; left: var(--edge); right: var(--edge); height: 2px; background: var(--border); }
 .tbr::before { top: 0; } .tbr::after { bottom: 0; }

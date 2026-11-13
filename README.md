@@ -232,7 +232,8 @@ mission graph:
   branches are side by side: the game gives both at the same time. A yellow bar means the next mission waits until
   every story mission given so far is done.
 - **Side missions**: the reconnaissance missions (explore Delta, Quarry, Outskirts, Bunker, meet the traders) are
-  shown next to the mission that gives them.
+  shown next to the mission that gives them. *Reconnaissance - Traders* is yellow: the game counts it as a story
+  mission, so the yellow bars wait for it too (the other ones are not needed for the story).
 - **Click a mission**: its map (and place), the steps to do in order with their objectives, the quest items, tips
   (*Buy the bombs at the marketplace*), the rewards with their icons, and the briefing (closed by default: it tells
   the story).

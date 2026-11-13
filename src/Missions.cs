@@ -39,6 +39,9 @@ namespace IRRCompanion
         /// <summary>Missions that come right before it (ids), and the mission that gives it (side missions).</summary>
         public readonly List<string> After = new List<string>();
         public string GivenBy;
+        /// <summary>A side mission the game counts as a story mission (bStoryMission): the waits of the story
+        /// (yellow bars) hold until it is done. Reconnaissance - Traders today.</summary>
+        public bool BlocksStory;
         public bool IsSide { get { return Number == 0; } }
         public string MapText { get { return Maps.Count >= 4 ? "Any map" : string.Join(" / ", Maps); } }
         public override string ToString() { return Title; }
@@ -84,7 +87,7 @@ namespace IRRCompanion
             foreach (var id in all.Keys)
             {
                 var o = all.Obj(id);
-                var m = new Mission { Id = id, Title = o.Str("title"), Kind = o.Str("kind"), Place = o.Str("place") };
+                var m = new Mission { Id = id, Title = o.Str("title"), Kind = o.Str("kind"), Place = o.Str("place"), BlocksStory = o["blocksStory"] is bool && (bool)o["blocksStory"] };
                 foreach (var x in o.Arr("maps")) m.Maps.Add((string)x);
                 foreach (JObj st in o.Arr("steps"))
                 {
@@ -110,6 +113,15 @@ namespace IRRCompanion
                     if (Missions.TryGetValue(u, out side)) side.GivenBy = m.Id;
                 }
         }
+
+        /// <summary>Side missions that hold the wait before story mission m: given by a mission before it.</summary>
+        public static List<Mission> Blockers(Mission m)
+        {
+            return Missions.Values.Where(x => x.BlocksStory && x.GivenBy != null && Missions[x.GivenBy].Number < m.Number).ToList();
+        }
+
+        /// <summary>"Recon Traders".</summary>
+        public static string ShortTitle(Mission m) { return m.Title.Replace("Reconnaissance - ", "Recon "); }
 
         private static void Strings(JObj o, string key, List<string> into)
         {

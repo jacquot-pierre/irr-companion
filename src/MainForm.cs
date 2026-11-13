@@ -1373,6 +1373,10 @@ namespace IRRCompanion
             shot("missions");
             _missionsPanel.TestShow("0013", true);
             shot("missions_briefing");
+            _missionsPanel.TestShow("0003_A", false);
+            shot("missions_traders");
+            _missionsPanel.TestShow("0009", false);
+            shot("missions_wait");
             _missionsPanel.TestShow("0002_B", false);
             shot("missions_side");
             ShowView(0);
