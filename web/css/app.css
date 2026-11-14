@@ -337,3 +337,29 @@ details.brief p { margin: 6px 0 8px; }
   .tstep { flex-direction: column; align-items: center; }
   .missions-content .back { display: inline-block; margin: 4px 0; }
 }
+
+/* items: price table */
+.itable { display: flex; flex-direction: column; }
+.irow { display: grid; grid-template-columns: 44px minmax(0, 1fr) repeat(5, 104px); gap: 0 8px; align-items: center;
+  background: var(--row); padding: 2px 12px 2px 10px; margin-bottom: 2px; }
+.irow:hover { background: var(--row-hover); }
+.irow.ihead { background: transparent; position: sticky; top: -8px; z-index: 1; background: var(--back); border-bottom: 1px solid var(--accent);
+  padding-top: 6px; padding-bottom: 4px; font-size: 12px; color: var(--dim); }
+.irow.ihead > div { cursor: pointer; } .irow.ihead b { font-weight: 400; }
+.irow.ihead > div:hover { color: var(--text); }
+.iname { min-width: 0; display: flex; flex-direction: column; }
+.iname span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.iname small, .pc small { font-size: 11px; color: var(--faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pc { text-align: right; display: flex; flex-direction: column; min-width: 0; }
+.pc.none { color: var(--faint); }
+.pc.cash b { color: var(--changed); } .pc.coins b { color: #5da9e9; } .pc.gain b { color: var(--higher); } .pc.unsure b { color: var(--faint); }
+.itable .caption { padding-top: 12px; border-bottom: 1px solid var(--track); margin-bottom: 4px; }
+.list .item.cat span:first-child { font-weight: 600; }
+@media (max-width: 820px) {
+  .irow { grid-template-columns: 38px minmax(0, 1fr) repeat(5, minmax(0, 1fr)); grid-template-areas: "i n n n n n" "i a b c d e"; padding: 4px 8px; }
+  .irow > :nth-child(1) { grid-area: i; } .irow > :nth-child(2) { grid-area: n; }
+  .irow > :nth-child(3) { grid-area: a; } .irow > :nth-child(4) { grid-area: b; } .irow > :nth-child(5) { grid-area: c; }
+  .irow > :nth-child(6) { grid-area: d; } .irow > :nth-child(7) { grid-area: e; }
+  .irow.ihead { grid-template-areas: "i a b c d e"; font-size: 10px; } .irow.ihead .iname { display: none; }
+  .pc b { font-size: 12px; } .pc small { font-size: 10px; }
+}

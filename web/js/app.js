@@ -7,6 +7,7 @@ import { mountCommands } from './commands.js?v=dev';
 import { mountHideout } from './hideout.js?v=dev';
 import { mountPresets } from './presets.js?v=dev';
 import { mountMissions } from './missions.js?v=dev';
+import { mountItems } from './items.js?v=dev';
 
 const cache = {};
 
@@ -193,7 +194,7 @@ export function splitLine(line) {
 }
 
 // ---------------------------------------------------------------- router
-const tabs = { presets: mountPresets, commands: mountCommands, weapons: mountWeapons, traders: mountTraders, hideout: mountHideout, maps: mountMaps, missions: mountMissions };
+const tabs = { presets: mountPresets, commands: mountCommands, weapons: mountWeapons, traders: mountTraders, hideout: mountHideout, maps: mountMaps, missions: mountMissions, items: mountItems };
 const view = document.getElementById('view');
 let current = null, unmount = null;
 

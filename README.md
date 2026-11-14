@@ -13,6 +13,7 @@ One portable `.exe`, nothing to install, nothing written to the game's files.
 | **PRESETS** | Create AI presets from the game difficulties, with the same settings as the in-game menu, compare them and get the share code to paste in the game. |
 | **COMMANDS** | Build any of the game's 151 console commands with a few clicks, copy it, keep your favorites. |
 | **WEAPONS** | Build a weapon from the parts that fit it, as in the gunsmith, see its stats change with every part, save your builds and copy the `additem` line that gives the whole build. |
+| **ITEMS** | Every item of the game by category, with its price at the market, at the black market and at the raid traders, and what the market or a trader pays you for it. |
 | **TRADERS** | What the traders met in raids (Lt Moroz, Cpt Hale, Voss, Ba Tran) can have in stock, with the chance and the price of every item (weapons left out). |
 | **HIDEOUT** | See the cost of every hideout upgrade with the game icons, track your progress and get a shopping list. |
 | **MAPS** | Player spawns (the infill locations you pick when deploying), traders, resource spawn points, extraction points, safes and locked doors (with the key they need) on the game maps, and a heatmap of where any item can spawn. |
@@ -22,7 +23,7 @@ One portable `.exe`, nothing to install, nothing written to the game's files.
 
 A web version runs in the browser, nothing to install, on a PC or a phone:
 **[irr-companion.seigneurguerande.fr](https://irr-companion.seigneurguerande.fr)**. It has every tab of the desktop
-app (PRESETS, COMMANDS, WEAPONS, TRADERS, HIDEOUT, MAPS, MISSIONS) with the same game data, and is published from this
+app (PRESETS, COMMANDS, WEAPONS, TRADERS, ITEMS, HIDEOUT, MAPS, MISSIONS) with the same game data, and is published from this
 repository on GitHub Pages.
 
 What you make on the web (presets, favorite commands, weapon builds, hideout progress) is kept in that browser.
@@ -167,6 +168,25 @@ presets, with the chance of every item. Weapons are left out (only the chance of
 - **Find an item**: type part of a name to see which trader can have it.
 
 ![Traders](docs/traders.png)
+
+### Item prices
+
+The **ITEMS** tab lists the 840 items of the game by category (weapons, weapon parts, ammunition, gear, medical, food,
+barter, keys, quest items...), read from the game's vendor table and vendor settings:
+
+- **Market**: the price to buy it at the market, and the faction loyalty level the market asks for (*UICS loyalty 25*).
+- **Black market**: its price in Marked Coins.
+- **Trader**: the price at a raid trader (the market price: no trader sets its own prices) and which traders can have
+  it in stock (weapons are not listed).
+- **Sell**: what the market pays you: the price x the share of its category (weapons 35 %, parts 45 %, gear and ammo
+  40 %, barter 80 %, keys 20 %, others 60 %). A grey price with "?": the game files say the item cannot be sold at
+  the market (most barter items), to check in game.
+- **Trader pays**: what a raid trader gives you for the quest crates (Chemical Crate 800, Data Storage Crate 760,
+  Weapon Crate 690).
+- Weapons are priced new, with their default parts; ammunition per round. Click a column to sort, hover a row for the
+  details, search an item by name.
+
+![Item prices](docs/items.png)
 
 ### Hideout upgrades
 
@@ -359,9 +379,9 @@ domain, *Settings > Pages > Custom domain* and a CNAME record at the registrar p
 
 | Path | Content |
 |---|---|
-| `src/` | the WinForms app (C# 7.3, .NET Framework 4.6.2): `MainForm.cs` (PRESETS editor and compare), `CommandsPanel.cs`, `WeaponsPanel.cs`, `TradersPanel.cs`, `HideoutPanel.cs`, `MapsPanel.cs`, `MissionsPanel.cs`, data models (`Preset.cs`, `Commands.cs`, `Weapons.cs`, `Traders.cs`, `Hideout.cs`, `Maps.cs`, `Loot.cs`, `Missions.cs`), `ShareCode.cs`, `Theme.cs` / `Controls.cs` (dark UI) |
-| `web/` | the web version: `index.html`, `css/app.css`, `js/app.js` (tabs, helpers), one module per tab: `js/presets.js` (editor, share codes, compare), `js/commands.js`, `js/weapons.js`, `js/traders.js`, `js/hideout.js`, `js/maps.js`, `js/missions.js` |
-| `src/Resources/` | data generated from the game (used by both versions): `defaults.json`, `commands.json`, `weapons.json`, `traders.json`, `loot.json`, `hideout.json`, `maps.json`, `missions.json`, `icons/`, `maps/` |
+| `src/` | the WinForms app (C# 7.3, .NET Framework 4.6.2): `MainForm.cs` (PRESETS editor and compare), `CommandsPanel.cs`, `WeaponsPanel.cs`, `TradersPanel.cs`, `HideoutPanel.cs`, `MapsPanel.cs`, `MissionsPanel.cs`, `ItemsPanel.cs`, data models (`Preset.cs`, `Commands.cs`, `Weapons.cs`, `Traders.cs`, `Hideout.cs`, `Maps.cs`, `Loot.cs`, `Missions.cs`, `Items.cs`), `ShareCode.cs`, `Theme.cs` / `Controls.cs` (dark UI) |
+| `web/` | the web version: `index.html`, `css/app.css`, `js/app.js` (tabs, helpers), one module per tab: `js/presets.js` (editor, share codes, compare), `js/commands.js`, `js/weapons.js`, `js/traders.js`, `js/hideout.js`, `js/maps.js`, `js/missions.js`, `js/items.js` |
+| `src/Resources/` | data generated from the game (used by both versions): `defaults.json`, `commands.json`, `weapons.json`, `traders.json`, `loot.json`, `hideout.json`, `maps.json`, `missions.json`, `items.json`, `icons/`, `maps/` |
 | `tools/` | Python scripts that read the game files and check the app (see below), test share codes in `tools/testdata/` |
 | `.claude/skills/update-irr-tool/` | step-by-step procedure to update the app after a game patch |
 | `.github/workflows/build.yml` | builds the exe on every push, publishes a release for `v*` tags |
@@ -390,6 +410,7 @@ release - is the Claude Code skill [`.claude/skills/update-irr-tool/SKILL.md`](.
 | `build_icons.py` | `src/Resources/icons/`: icons of the hideout items, map keys, weapons, parts and ammo, cash and materials (+ `EXTRA_ITEMS`) |
 | `build_maps.py` | `src/Resources/maps.json` and `maps/*.jpg`: resource and extraction points, player spawn zones and their infill names, traders, safes and locked doors with their keys, minimaps and their bounds |
 | `build_missions.py` | `src/Resources/missions.json`: order of the story missions (mission graph `MG_MainStory`), steps and objectives, briefings, rewards, side missions they give |
+| `build_items.py` | `src/Resources/items.json`: every item with its category, market / black market / trader prices, sell price (vendor settings multipliers) and trader hand-in prices |
 | `irr_sharecode.py` | decode / encode share codes from the command line |
 
 Game files are extracted from the paks with [repak](https://github.com/trumank/repak), for example

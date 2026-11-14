@@ -96,6 +96,14 @@ Missions (read from the mission graph and the mission files):
 - [ ] Rewards match the game (counts, e.g. 2 QSZ-92 for *Shipping and Handling*; the item wins over a preset when an
       entry has both, e.g. .338 AP x 30 for *Probation*).
 
+Item prices (ITEMS tab):
+
+- [ ] Sell price at the market = price x the multiplier of the category (Weapons 0.35, Barter 0.8...): check one item
+      of a few categories in game (a weapon is worth less when damaged: the tab assumes new).
+- [ ] Barter items, keys, keycards: the vendor table says they cannot be sold at the market
+      (bCanBeSoldInStockMarket false) although Barter has a 0.8 multiplier: can they be sold, at which price?
+- [ ] Raid traders sell at the market price (no PriceMultiplier set in the files, the game's default assumed to be 1).
+
 Advanced settings (not in the game menu):
 
 - [ ] A preset with changed advanced values imports in game and the bots behave accordingly (e.g. a high

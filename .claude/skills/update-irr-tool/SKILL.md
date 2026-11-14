@@ -267,6 +267,20 @@ textures, some in BC7 - modes 0 and 2 are not decoded, the script says so if one
 `read_texture` / `decode`. Look at a few new icons before committing. Icons are added little by little:
 to ship more, add item names to `EXTRA_ITEMS`.
 
+## 7h. Item prices (ITEMS tab)
+
+```
+python -I tools/build_items.py <work>
+```
+
+Same extraction as 7d; run it after `build_traders.py`, then `build_icons.py` (it ships an icon for every item of
+`items.json`), then `build_items.py` again (the `icon` flags). It prints the sell multipliers of
+`Settings/DA_VendorSettings` (default 0.6; Weapons 0.35, Attachments 0.45, Gear 0.4, Barter 0.8, Ammunition 0.4,
+Keys 0.2, Currency 1 today), the trader hand-in prices (3 quest crates) and the counts (840 items, 20 without a price,
+667 sold at the market, 479 at the black market, 219 at a trader). It stops with `build_items: …` if a trader
+blueprint sets its own prices or a buy price override appears (show them), or if the vendor settings layout changed.
+A new top category of item tags: add it to `CATEGORIES`.
+
 ## 7c. Resource maps
 
 ```
@@ -375,6 +389,7 @@ It is published by `.github/workflows/pages.yml` when `main` is pushed.
 - [ ] `build_loot.py`: places per map reviewed, no warning; heatmap screenshots look right
 - [ ] `build_icons.py` run; new icons look right
 - [ ] `build_maps.py`: every map found, point counts reviewed, no warning; MAPS screenshots show points on buildings
+- [ ] `build_items.py` (after traders, again after icons): counts reviewed, no `build_items:` error; ITEMS screenshots reviewed
 - [ ] `build_missions.py` (after weapons / traders / loot, for the item names): story and side mission counts reviewed, no `build_missions:` error; MISSIONS screenshots reviewed
 - [ ] Debug build, screenshots reviewed; Release build clean
 - [ ] Version bumped, README updated, change summary given to the user

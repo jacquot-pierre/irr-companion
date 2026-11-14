@@ -66,6 +66,7 @@ namespace IRRCompanion
         private WeaponsPanel _weaponsPanel;
         private TradersPanel _tradersPanel;
         private MissionsPanel _missionsPanel;
+        private ItemsPanel _itemsPanel;
         private Segmented _viewSwitch;
         private TextBox _name, _author, _desc;
         private Label _status, _info, _unsaved;
@@ -298,9 +299,9 @@ namespace IRRCompanion
             title.SizeChanged += (s, e) => version.Location = new Point(title.Right + Theme.S(8), title.Bottom - version.Height - Theme.S(3));
             version.Location = new Point(title.Right + Theme.S(8), title.Bottom - version.Height - Theme.S(3));
             // Views: 0 presets editor, 1 compare (opened from the editor, no tab of its own), 2 commands, 3 weapons,
-            // 4 hideout, 5 maps, 6 traders, 7 missions. Tab i shows view TabViews[i].
-            _viewSwitch = new Segmented("PRESETS", "COMMANDS", "WEAPONS", "TRADERS", "HIDEOUT", "MAPS", "MISSIONS") { Selected = 0, BackColor = Theme.Row };
-            _viewSwitch.Size = new Size(Theme.S(735), Theme.S(36));
+            // 4 hideout, 5 maps, 6 traders, 7 missions, 8 items. Tab i shows view TabViews[i].
+            _viewSwitch = new Segmented("PRESETS", "COMMANDS", "WEAPONS", "TRADERS", "ITEMS", "HIDEOUT", "MAPS", "MISSIONS") { Selected = 0, BackColor = Theme.Row };
+            _viewSwitch.Size = new Size(Theme.S(800), Theme.S(36));
             _viewSwitch.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             _viewSwitch.OptionClicked += (s, e) => ShowView(TabViews[_viewSwitch.ClickedIndex]);
             // UPDATE AVAILABLE (hidden until a newer release is found): blinks; click = download and restart
@@ -442,6 +443,7 @@ namespace IRRCompanion
             _weaponsPanel = new WeaponsPanel(_tip, SetStatus) { Visible = false };
             _tradersPanel = new TradersPanel(_tip) { Visible = false };
             _missionsPanel = new MissionsPanel(_tip) { Visible = false };
+            _itemsPanel = new ItemsPanel(_tip) { Visible = false };
 
             Controls.Add(_editPanel);
             Controls.Add(_comparePanel);
@@ -451,6 +453,7 @@ namespace IRRCompanion
             Controls.Add(_weaponsPanel);
             Controls.Add(_tradersPanel);
             Controls.Add(_missionsPanel);
+            Controls.Add(_itemsPanel);
             Controls.Add(side);
             Controls.Add(statusBar);
             Controls.Add(header);
@@ -1192,7 +1195,7 @@ namespace IRRCompanion
 
         private void SetStatus(string s) { _status.Text = s; }
 
-        private static readonly int[] TabViews = { 0, 2, 3, 6, 4, 5, 7 };
+        private static readonly int[] TabViews = { 0, 2, 3, 6, 8, 4, 5, 7 };
 
         private void ShowView(int index)
         {
@@ -1205,6 +1208,7 @@ namespace IRRCompanion
             _mapsPanel.Visible = index == 5;
             _tradersPanel.Visible = index == 6;
             _missionsPanel.Visible = index == 7;
+            _itemsPanel.Visible = index == 8;
             _side.Visible = index < 2;
             if (index == 2) ActiveControl = _commandsPanel.List;
             if (index == 3) ActiveControl = _weaponsPanel.List;
@@ -1212,6 +1216,7 @@ namespace IRRCompanion
             if (index == 5) ActiveControl = _mapsPanel.Canvas;
             if (index == 6) ActiveControl = _tradersPanel.List;
             if (index == 7) ActiveControl = _missionsPanel.Tree;
+            if (index == 8) ActiveControl = _itemsPanel.List;
             if (index == 1)
             {
                 RefreshCombos();
@@ -1368,6 +1373,13 @@ namespace IRRCompanion
             _mapsPanel.TestHeat("Quarry", "Bandage");
             shot("maps_heat_bandage");
             _mapsPanel.TestClearHeat();
+            ShowView(8);
+            _itemsPanel.TestShow(1, null, -1);
+            shot("items_weapons");
+            _itemsPanel.TestShow(9, null, 3);
+            shot("items_barter_sell");
+            _itemsPanel.TestShow(0, "crate", -1);
+            shot("items_search");
             ShowView(7);
             _missionsPanel.TestShow("0001", false);
             shot("missions");
